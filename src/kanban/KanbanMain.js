@@ -3,13 +3,14 @@ import KanbanBoard from "./KanbanBoard";
 import Navigator from "../dashboard/navigator/Navigator";
 import TopBar from "./TopBar";
 import data from "./data.json";
+import "./KanbanMain.scss";
+
 
 class KanbanMain extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="container-fluid">
-          <div className="row content">
+        <div className="container-fluid kanbanMain">
+          <div className="row content ">
             {/* 네비게이션바 */}
             <div className="navibar">
               <Navigator />
@@ -23,7 +24,6 @@ class KanbanMain extends Component {
             </div>
           </div>
         </div>
-      </div>
     );
   }
 }
