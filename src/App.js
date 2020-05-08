@@ -10,7 +10,8 @@ import KanbanMain from "./kanban/KanbanMain";
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Profile from './profile/Profile';
-import ProfileSetting from './profile/ProfileSetting';
+import Notification from './notification/Notification';
+
 
 function App() {
   return (
@@ -23,7 +24,10 @@ function App() {
 
         {/* 프로필설정 */}
         <Route path="/profile" exact component={Profile} />
-        <Route path="/profile/setting" exact component={ProfileSetting} />
+
+    {/* 알림설정 */}
+        <Route path="/notification" exact component={Notification} />
+
         {/* 업무속성 */}
         <Route path="/home" exact component={Setting} />
         <Route path="/comment" exact component={Comment} />
