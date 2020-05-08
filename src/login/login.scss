@@ -1,0 +1,32 @@
+
+#root {
+	height: 100%;
+}
+.Login {
+	height: 100%;
+	text-align: center;
+	&:before {
+		content: "";
+		display: inline-block;
+		width: 1px;
+		height: 100%;
+		margin-right: 0;
+		vertical-align: middle;
+	}
+}
+.loginBox {
+	display: inline-block;
+	vertical-align: middle;
+	width: 300px;
+	padding: 20px;
+	border: 2px solid #666;
+	border-radius: 10px;
+}
+form .loginItems {
+	width: 200px;
+	font-size: 12pt;
+}
+Button.loginButtons {
+	width: 200px;
+	font-size: 12pt;
+}
