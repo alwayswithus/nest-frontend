@@ -6,7 +6,7 @@ export default class DashboardTopbar extends React.Component {
         return (
             <div id="DashboardTopbar">
                 <div className="topBar">
-                    <img src="images/nest.png" id="nest-logo" />
+                    
                     <nav className="navbar navbar-default">
                         <div className="container-fluid">
                             <form class="navbar-form navbar-left" action="">

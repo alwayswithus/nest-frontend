@@ -16,15 +16,23 @@
 	.nav-list {
 		text-align: center;
 		list-style: none;
-		margin-top: 65px;
+		margin-top: -14px;
 		
 		.nav-item {
 			padding: 16px 0;
 			transition: 0.1s ease-in-out transform;
 			
+
 			.link {
 				color: #fff;
 				text-decoration: none;
+				
+				#nest-logo {
+					color: darkgray;
+					width: 47px;
+					height: 63px;
+					
+				}
 
 				.icon {
 					font-size: 1.5em;
