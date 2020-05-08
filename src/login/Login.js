@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"
 import Input from "@material-ui/core/Input";
 
-import { Button } from "@material-ui/core";
+import { Button, InputLabel } from "@material-ui/core";
 
 import "./login.scss"
 
@@ -27,6 +28,8 @@ const Login = () => {
         <div className="loginBox">
           <img style={{width:"150px", height:"150px"}} src="images/nest-logo-black.png" />
           <form onSubmit={login}>
+            <InputLabel id="loginText">Log In</InputLabel>
+            <br/>
             <Input
                     className="loginItems"
                     name="email"
@@ -52,9 +55,13 @@ const Login = () => {
 				  </form>
 
           <br/>
-          <Button className="loginButtons">회원가입 하기</Button>
+          <Link to="/signup">
+            <Button className="loginButtons" id="SignUpBtn">회원가입 하기</Button>
+          </Link>
           <br/>
-          <Button className="loginButtons">비밀번호 찾기</Button>
+          <Link to="/pwfind">
+            <Button className="loginButtons" id="PwFindBtn">비밀번호 찾기</Button>
+          </Link>
         </div>
       </div>
     </>
