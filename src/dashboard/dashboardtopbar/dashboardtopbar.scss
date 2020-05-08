@@ -4,7 +4,7 @@
         position: fixed;
         width: 100%;
         padding-left: 6.2rem;
-        z-index: 2;
+        z-index: -1;
     
         .navbar {
             border-radius: 0;
@@ -23,16 +23,6 @@
                     height: 32px;
                 }
             }
-        }
-
-        #nest-logo {
-            color: darkgray;
-            z-index: 1;
-            position: absolute;
-            left: 7px;
-            bottom: 6px;
-            width: 47px;
-            height: 63px;
         }
     }
 }

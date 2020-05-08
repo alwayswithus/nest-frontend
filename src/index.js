@@ -9,7 +9,7 @@ ReactDOM.render(
   <React.StrictMode>
     <div className="mainIndex">
     </div>
-    <KanbaMain />
+    <Dashboard />
   </React.StrictMode>,
   document.getElementById("root")
 );

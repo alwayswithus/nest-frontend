@@ -7,6 +7,15 @@ export default class Navigator extends React.Component {
             <div className='Navigator'>
                 <div className="navigation">
                     <ul className="nav-list">
+
+                        {/*<!-- nest -->*/}
+                        <li className="nav-item">
+                            <a href="#" className="link">
+                                <img src="images/nest.png" id="nest-logo" /><br />
+                                <h5>Nest</h5>
+                            </a>
+                        </li>
+                        
                         {/*<!-- About link -->*/}
                         <li className="nav-item">
                             <a href="#" className="link">
@@ -50,6 +59,8 @@ export default class Navigator extends React.Component {
                                 <span className="label">Slack</span>
                             </a>
                         </li >
+
+                        
                     </ul >
                 </div >
             </div >
