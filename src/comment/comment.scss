@@ -1,0 +1,51 @@
+.Comment{
+    .profileImg{
+        display: inline-block;
+
+        .img-circle{ 
+            border-radius: 50%; 
+            width:50px;
+            height: 50%;
+        }
+    }
+    .Frame {
+        display: inline-block;
+        height: 20px;
+        width:30px;
+        .CommentLayout  { 
+            display: inline-block; 
+            position: absolute; 
+            height: 50px;
+
+            .name { 
+                font-size: 1.2rem; 
+                margin-left:10px; 
+                margin-right:10px; 
+                display: inline-block;
+            }
+
+            .ab { 
+                font-size: 1.2rem; 
+                margin-left:5px; 
+                display: inline-block;
+            }
+
+            .button { 
+                margin-left:100px; 
+                display:inline-block;
+                vertical-align: middle;
+                margin-top: 4.5px;
+                li { 
+                    width:30px; 
+                    display: inline-block; 
+                }
+            }
+        }
+        .text{
+            font-size: 1rem; 
+            margin:20px 10px; 
+            display: inline; 
+            position: absolute;
+        }
+    }
+}
