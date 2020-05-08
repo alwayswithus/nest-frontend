@@ -1,0 +1,38 @@
+#DashboardTopbar {
+    
+    .topBar {
+        position: fixed;
+        width: 100%;
+        padding-left: 6.2rem;
+        z-index: 2;
+    
+        .navbar {
+            border-radius: 0;
+
+            .container-fluid {
+                padding-left: 0;
+                padding-right: 0;
+
+                .form-control {
+                    background-image: url(/images/search.png);
+                    background-position: 5px center;
+                    background-repeat: no-repeat;
+                    padding-left: 40px;
+                    border: 1px solid #2e3238;
+                    width: 100%;
+                    height: 32px;
+                }
+            }
+        }
+
+        #nest-logo {
+            color: darkgray;
+            z-index: 1;
+            position: absolute;
+            left: 7px;
+            bottom: 6px;
+            width: 47px;
+            height: 63px;
+        }
+    }
+}
