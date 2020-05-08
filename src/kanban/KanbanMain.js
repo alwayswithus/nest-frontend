@@ -4,7 +4,7 @@ import Navigator from "../dashboard/navigator/Navigator";
 import TopBar from "./TopBar";
 import data from "./data.json";
 
-class KanbaMain extends Component {
+class KanbanMain extends Component {
   render() {
     return (
       <div className="App">
@@ -28,4 +28,4 @@ class KanbaMain extends Component {
   }
 }
 
-export default KanbaMain;
+export default KanbanMain;
