@@ -1,0 +1,60 @@
+/* @font-face { 
+    font-family: 'BMDOHYEON'; 
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff'); 
+    font-weight: normal; 
+    font-style: normal; 
+} */
+
+.Navigation{
+    .navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .nav-link.active {
+        color: rgba(0,0,0,.5);
+        margin:auto 20px;
+    }
+
+    .navbar {
+        font-size: 1.5rem;
+    }
+}
+
+.Home{
+    .TodoInsert {
+        input { 
+            background: #D8D8D8; 
+            border:none; 
+            font-size: 1.5rem; 
+        }
+
+        button { 
+            border:none; 
+            outline:none;
+            background: none;
+            margin-right: 1%;
+        }
+
+        Button:hover { 
+            border:0px;
+        }
+    }
+
+    table td { 
+        align-items: center;
+        width:70px; 
+    }
+
+    table { 
+        margin:10px;
+
+        h5{
+            margin:0px;
+        }
+    }
+}
+
+.Important{
+    .imp-select { 
+        width: 50; 
+        height: 20px;
+        font-size: 1.25rem;
+        border-radius: 0.5rem;
+    }
+}
