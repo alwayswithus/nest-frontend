@@ -1,0 +1,76 @@
+[
+  {
+    "no": 1,
+    "title": "계획",
+    "tasks": [
+      {
+        "no": 1,
+        "contents": "계획된 업무 1",
+        "todoList": [
+          {
+            "id": 1,
+            "text": "리액트의 기초 알아보기",
+            "checked": true
+          },
+          {
+            "id": 1,
+            "text": "컴포넌트 스타일링해 보기",
+            "checked": true
+          },
+          {
+            "id": 1,
+            "text": "일정 관리 앱 만들어 보기",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 2",
+        "todoList": []
+      }
+    ]
+  },
+  {
+    "no": 2,
+    "title": "진행",
+    "tasks": [
+      {
+        "no": 1,
+        "contents": "진행 업무 1",
+        "todoList": [          {
+            "id": 1,
+            "text": "할일 체크",
+            "checked": false
+          }]
+      },
+      {
+        "no": 2,
+        "contents": "진행 업무 2",
+        "todoList": []
+      }
+    ]
+  },
+  {
+    "no": 3,
+    "title": "완료",
+    "tasks": [
+      {
+        "no": 1,
+        "contents": "완료 업무 1",
+        "todoList": []
+      }
+    ]
+  },
+  {
+    "no": 4,
+    "title": "기타",
+    "tasks": [
+      {
+        "no": 1,
+        "contents": "기타 업무 1",
+        "todoList": []
+      }
+    ]
+  }
+]
