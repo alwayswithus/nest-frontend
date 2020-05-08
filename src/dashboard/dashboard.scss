@@ -15,6 +15,7 @@
             .project-list {
                 margin: 20px 100px 20px 100px;   
                 background-color: #E7E7E7;
+                opacity: 0.8;
 
                 .fa-arrow-down {
                     color: #B7B8B9;
@@ -29,7 +30,10 @@
                 }
             }
 
-            
+            .project-list:hover {
+                background-color: #8798A8;
+                cursor: pointer;
+            }
         }
     }
 
@@ -48,10 +52,20 @@
     .panel-group .panel-default {
         width: 245px;
         height: 160px;
+        border: 0;
+
+    }
+
+    .projects:hover {
+        transition: 0.5s ease-in-out transform;
+        transform: scale(1.1);
+		transform-origin: center center;
+        cursor: pointer;
     }
     
     .panel-group .panel-header .project-title {
         display: inline-block;
+        color: black;
         font-weight: bold;
         margin-top: 5px;
         margin-left: 3px;
@@ -81,6 +95,7 @@
     .panel-group .panel-footer .update-task {
         float: right;
         margin: 0;
+        color: black;
     }
     
     .panel-group .panel-footer h6 {
@@ -94,6 +109,7 @@
     
     .fa-cog {
         float: right;
+        color: black;
     }
     
     .progress {
@@ -101,20 +117,24 @@
         margin-bottom: 0;
         border-radius: 4px;
     }
+
+    .panel-group .new-project {
+        cursor:pointer;
+    }
+
+    .panel-group .new-project:hover {
+        background-color: #76AFE4;
+        color: #FFFFFF;
+    }
     
     .panel-group .new-project-body {
         padding-top: 62px;
-        padding-left: 108px;
-    }
-    
-    .panel-group .new-project-footer {
-        padding-left: 60px;
-        padding-right: 67px;
-        padding-top: 0;
-    }
-    
-    .panel-group .new-project-footer h6 {
+        padding-left: 10px;
         text-align: center;
+    }
+    
+    .panel-group .new-project-body .new-project-name {
+        
         font-weight: bold;
     }
 }

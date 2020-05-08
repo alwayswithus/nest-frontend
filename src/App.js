@@ -11,7 +11,7 @@ import KanbanMain from "./kanban/KanbanMain";
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Profile from './profile/Profile';
-
+import Notification from './notification/Notification';
 
 function App() {
   return (
@@ -24,6 +24,9 @@ function App() {
 
         {/* 프로필설정 */}
         <Route path="/profile" exact component={Profile} />
+
+        {/* 알림설정 */}
+        <Route path="/notification" exact component={Notification} />
 
         {/* 업무속성 */}
         <Route path="/home" exact component={Home} />
