@@ -1,21 +1,27 @@
 * {
-	margin: 0;
-	padding: 0;
-	
+  margin: 0;
+  padding: 0;
 }
 
 html {
-	height: 100%;
-	
+  height: 100%;
 }
 
 body {
-	height: 100%;
-	background-color:  #E7E7E7;
-	font-size: 14px;
-	position: relative;
-	font-family: 'Roboto', sans-serif;
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	background-image: url(/images/ko.jpg);
+  height: 100%;
+  background-color: #e7e7e7;
+  font-size: 14px;
+  position: relative;
+  font-family: "Roboto", sans-serif;
+  background-size: 100% 100%;
+}
+.mainIndex {
+  background-image: url(/images/ko.jpg);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
 }
