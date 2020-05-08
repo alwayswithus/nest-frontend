@@ -5,9 +5,8 @@ import "./TaskList.scss";
 class TaskList extends Component {
   render() {
     const taskComponents = [];
-    this.props.taskList.tasks.forEach((task) => taskComponents.push(
-        <Task no={task.no} contents={task.contents} todoList={task.todoList} />
-      )
+    this.props.taskList.tasks.forEach((task) =>
+      taskComponents.push(<Task task={task} />)
     );
     return (
       <>
@@ -15,7 +14,7 @@ class TaskList extends Component {
           <div className="panel panel-primary">
             <div className="panel-heading">{this.props.taskList.title}</div>
           </div>
-          {taskComponents}
+          <div className="tasks">{taskComponents}</div>
         </div>
       </>
     );

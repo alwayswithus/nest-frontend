@@ -1,17 +1,32 @@
 .task {
-  .task-title {
+  .task-top {
     .point {
-        .fa-circle{
-            color:#f6b6b4;
+      display: inline;
+      .fa-circle {
+        color: #f6b6b4;
+      }
+    }
+    .setting {
+      float: right;
+      .btn {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        .fa-ellipsis-v {
+          color: #777777;
         }
       }
+    }
+  }
+  .task-title {
     .title {
       .doneCheck {
         vertical-align: -2px;
         margin: 0;
-        
       }
     }
   }
-
+  .task-date{
+    color: #27b6ba;
+  }
 }
