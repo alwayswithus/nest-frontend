@@ -2,10 +2,15 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import './Main.scss';
 import Important from './Important';
+import Navigation from './Navigation';
+import Header from './file/Header';
 
 const Home = (props) => {
     return (
+        
         <div className="Home">
+            <Header name='김우경' date='2020.05.06'/>
+            <Navigation />
             <div style={{fontSize:'1.3rem'}}>설명 추가</div>
             <hr style={{marginBottom:'20px'}}/>
             <table>
