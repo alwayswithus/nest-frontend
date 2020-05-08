@@ -1,0 +1,27 @@
+.File {
+    .FileMenu{
+        align-items: center;
+
+        .btn .btn-info{
+            color: black;
+            margin: 8px 0px;
+        }
+
+        .navbar-form .navbar-left{
+            .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                width: 120px;
+            }
+        }
+    }
+
+    table td { 
+        align-items: center;
+        width:200px; 
+    }
+
+    table { 
+        margin:10px;
+    }
+}
