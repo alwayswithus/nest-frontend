@@ -20,7 +20,7 @@ class ProfileNav extends Component {
 
     return (
       <div className="ProfileNav">
-        <b>계정설정</b>
+        <h3><b>계정설정</b></h3>
         <Navbar className="navsbar" style={styleNav} variant="light">
           <Nav activeKey={location.pathname}>
             <Nav.Link className="nav-link" href="/profile">프로필</Nav.Link>

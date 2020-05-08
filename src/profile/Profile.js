@@ -7,7 +7,7 @@ const Profile = (props) => {
     return (
         <>
             <Navigator />
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', backgroundColor:'#E7E7E7'}}>
                 <div className="Profile">
                     <ProfileNav />
                     <div className="profileLayout">

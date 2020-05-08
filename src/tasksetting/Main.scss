@@ -17,14 +17,17 @@
 }
 
 .Home{
+    background-color: #FFFFE8;
     .TodoInsert {
         input { 
-            background: #D8D8D8; 
+            background: #D8D8D8;
             border:none; 
+            border-radius: 2px;; 
             font-size: 1.5rem; 
+            width: 250px;
         }
 
-        button { 
+        Button { 
             border:none; 
             outline:none;
             background: none;
@@ -38,14 +41,18 @@
 
     table td { 
         align-items: center;
-        width:70px; 
+        width: 30px; 
     }
 
     table { 
+        Button{
+            background: none;
+        }
         margin:10px;
 
         h5{
             margin:0px;
+            width:100px;
         }
     }
 }

@@ -3,6 +3,8 @@
   padding-top: 63px;
   padding-left: 7.2rem;
   display: block;
+  height: 100%;
+  
 
   .input-group {
     padding-left: 20px;
@@ -22,6 +24,7 @@
   .taskList {
     display: inline-flex;
     padding-top: 40px;
+    height: 100%;
 
     .cardPlus {
       width: 300px;
