@@ -1,51 +1,20 @@
 .Comment{
-    .profileImg{
-        display: inline-block;
-
-        .img-circle{ 
-            border-radius: 50%; 
-            width:50px;
-            height: 50%;
+    box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
+    background-color: silver;
+}
+.CommentList{
+    .media{
+        img{
+            max-width: 50px;
         }
-    }
-    .Frame {
-        display: inline-block;
-        height: 20px;
-        width:30px;
-        .CommentLayout  { 
-            display: inline-block; 
-            position: absolute; 
-            height: 50px;
 
-            .name { 
-                font-size: 1.2rem; 
-                margin-left:10px; 
-                margin-right:10px; 
-                display: inline-block;
+        .media-body{
+            span{
+                margin: 1%;
             }
-
-            .ab { 
-                font-size: 1.2rem; 
-                margin-left:5px; 
-                display: inline-block;
+            p{
+                text-align:justify;
             }
-
-            .button { 
-                margin-left:100px; 
-                display:inline-block;
-                vertical-align: middle;
-                margin-top: 4.5px;
-                li { 
-                    width:30px; 
-                    display: inline-block; 
-                }
-            }
-        }
-        .text{
-            font-size: 1rem; 
-            margin:20px 10px; 
-            display: inline; 
-            position: absolute;
         }
     }
 }

@@ -3,28 +3,21 @@ import './comment.scss';
 
 const CommentList = () => {
     return (
-        <div className="Comment">
-            <div className="profileImg">
-                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-            </div>
-            <div className="Frame">
-                <div className="CommentLayout">
-                    <div className="name">
-                        이름
-                    </div>
-                    <div className="ab">
-                        2 분전
-                    </div>
-                    <div className="button">
-                        <li><button><i class="far fa-thumbs-up thumsup"></i></button></li>
-                        <li><button><i class="fas fa-pen"></i></button></li>
-                        <li><button><i class="far fa-trash-alt"></i></button></li>
-                    </div>
-                </div>
-                <div className="text">
-                    dfdfdfd<br/>
-                    dfdfdf<br/>
-                    dfdfdfd
+        <div className="CommentList">
+            <div className="media">
+                <a class="pull-left" href="#"><img class="img-circle" src="/images/unnamed.jpg" alt="" /></a>
+                <div className="media-body">
+                    <span className="media-heading">이름</span>
+                    <span className="media-heading">2분전</span>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <ul className="list-unstyled list-inline media-detail pull-left">
+                        <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                        <li><i class="fa fa-thumbs-up"></i>13</li>
+                    </ul>
+                    <ul className="list-unstyled list-inline media-detail pull-right">
+                        <li class=""><a href="">Like</a></li>
+                        <li class=""><a href="">Reply</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

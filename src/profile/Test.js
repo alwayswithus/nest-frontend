@@ -9,8 +9,8 @@ const Test = (props) => {
     // }
 
     const onChanged = (e) => {
-        console.log(e.target.a);
-        // const visible = e.target.className === 'fa-arrow-circle-down';
+        const visible = e.target.className === 'collapsed';
+        console.log( e.target);
         setVisible(visible);
     }
     return (
@@ -18,7 +18,9 @@ const Test = (props) => {
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"> 비밀번호 </a>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                 비밀번호 
+                </a>
                 </h4>
                 </div>
                 <div id="collapse1" class="panel-collapse collapse in">
@@ -57,8 +59,7 @@ const Test = (props) => {
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a onClick={onChanged} data-toggle="collapse" data-parent="#accordion" href="#collapse4">알림 설정 </a>
-                    
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">알림 설정</a>
                 </h4>
                 </div>
                 <div id="collapse4" class="panel-collapse collapse">
