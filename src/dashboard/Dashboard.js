@@ -70,6 +70,7 @@ const Dashboard = () => {
 
         {/* 메인 영역 */}
         <div className="mainArea">
+
           <div className="col-sm-24 project-list" onClick={showDetails}>
             {arrow}
             <h3>내가 속한 프로젝트 (1)</h3>
@@ -85,15 +86,18 @@ const Dashboard = () => {
                 <div className="new-project-name">새 프로젝트</div>
               </div>
             </div>
-
+            
+            {/* Add Project Modal */}
             <div className="modal fade" id="add-project" role="dialog">
               <div className="modal-dialog">
+
                 {/* Add Project Modal content */}
                 <div className="modal-content">
                   <form action="">
+
                     {/* Add Project Modal header */}
                     <div className="modal-header add-project-header">
-                      <button type="button" className="close" data-dismiss="modal">&times;</button>
+                      <button type="button" className="close" aria-hidden="true" data-dismiss="modal">&times;</button>
                       <h4 className="modal-title add-project-title">새 프로젝트</h4>
                     </div>
 
@@ -103,37 +107,39 @@ const Dashboard = () => {
                         <h5>제목</h5>
                         <input type="text" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
 
-                        <h5 style={{ display: "inline" }}>설명 <h6 style={{ display: "inline" }}>(선택사항)</h6></h5>
+                        <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                         <input type="text" className="form-control modal-body-description" /><br />
 
-                        <h5 style={{ display: "inline" }}>프로젝트 멤버 <h6 style={{ display: "inline" }}>(선택사항)</h6></h5>
+                        <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                         <div className="modal-body-member">
-                          <button type="button" className="btn btn-info btn-lg" data-toggle="modal" data-target="#add-project-member">
+                          <a data-toggle="modal" href="#add-project-member" className="btn btn-info btn-lg">
                             <i className="fas fa-plus fa-sm"></i>
-                          </button>
-
-                          <div className="modal fade" id="add-project-member" role="dialog">
-                            <div className="modal-dialog">
-                              <div className="modal-content">
-                                <div className="modal-header">
-                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          </a>
                         </div>
                       </div>
                     </div>
 
                     {/* Add Project Modal footer */}
                     <div className="modal-footer add-project-footer">
-                      <input type="submit" id="add-project-submit" className="form-control" value="완료" />
+                      <input type="submit" id="add-project-submit" className="btn btn-default" value="완료" />
                     </div>
                   </form>
                 </div>
               </div>
             </div>
+
+            {/* Add Project Member Modal */}
+            <div className="modal fade" id="add-project-member" role="dialog">
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
