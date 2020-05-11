@@ -4,7 +4,7 @@
 #root {
 	height: 100%;
 }
-.Login {
+.SignUp {
 	height: 100%;
 	text-align: center;
 	&:before {
@@ -16,7 +16,7 @@
 		vertical-align: middle;
 	}
 }
-.loginBox {
+.SignUpBox {
 	display: inline-block;
 	vertical-align: middle;
 	width: 300px;
@@ -25,15 +25,11 @@
 	border-radius: 10px;
 	background-color: #e7e7e7;
 }
-form .loginItems {
-	width: 200px;
+form .SignUpItems {
 	font-size: 12pt;
 }
-Button.loginButtons {
-	width: 200px;
-	font-size: 12pt;
-}
-#loginText {
+
+#signUpText {
 	color: #000;
 	font-size: 14pt;
 	font-weight: bold;

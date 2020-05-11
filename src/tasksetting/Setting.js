@@ -5,6 +5,7 @@ import Important from './Important';
 import Navigation from './Navigation';
 import Header from '../file/Header';
 
+
 const Setting = (props) => {
     const ButtonStyle = {
         backgroundColor:'none'
@@ -54,5 +55,5 @@ const Setting = (props) => {
         </div>
     )
 }
-
 export default Setting;
+

@@ -14,8 +14,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-textarea-autosize": "^7.1.2",
-    "react-timezone": "^2.4.0",
-    "react-timezone-picker": "^1.0.8"
+    "react-tabbordion": "^1.0.5",
+
   },
   "scripts": {
     "start": "react-scripts start",

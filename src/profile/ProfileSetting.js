@@ -19,7 +19,6 @@ const ProfileSetting = (props) => {
             document.getElementById("form").style.display = 'none';
         }
         console.log(document.getElementById("form").style.display);
-
     }
 
     return (
@@ -76,3 +75,4 @@ const ProfileSetting = (props) => {
 }
 
 export default ProfileSetting;
+

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Navigator from './navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
@@ -24,6 +25,7 @@ const Dashboard = () => {
 
           <div className="panel-group">
             <div className="panel panel-default projects">
+              <a href="/kanbanMain">
               <div className="panel-header">
                 <span className="project-title">
                   myiste 프로젝트
@@ -42,7 +44,7 @@ const Dashboard = () => {
                     <li><a href="#">상태없음</a></li>
                   </ul>
                 </div>
-                <i className="fas fa-cog fa-2x"></i>
+                <a href="/"><i className="fas fa-cog fa-2x"></i></a>
               </div>
               <div className="panel-footer">
                 <span className="update-date"><h6>최초 업데이트 : 5월 27일 14:00</h6></span>
@@ -54,17 +56,16 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
+              </a>
             </div>
           </div>
 
           {/* 새 프로젝트 */}
           <div className="panel-group">
-            <div className="panel panel-default">
+            <div className="panel panel-default new-project">
               <div className="panel-body new-project-body">
-                <i className="fas fa-plus fa-2x"></i>
-              </div>
-              <div className="panel-footer new-project-footer">
-                <h6>새 프로젝트</h6>
+                <i className="fas fa-plus fa-2x"></i><br />
+                <div className="new-project-name">새 프로젝트</div>
               </div>
             </div>
           </div>

@@ -6,13 +6,14 @@ import File from './file/File';
 import { BrowserRouter } from "react-router-dom";
 
 import Comment from './comment/Comment';
-import ProfileMain from './profile/ProfileMain';
 import KanbanMain from "./kanban/KanbanMain";
 import Login from "./login/Login";
+import SignUp from "./signup/SignUp";
+import PwFind from "./pwfind/PwFind";
 import Dashboard from "./dashboard/Dashboard";
 import Profile from './profile/Profile';
-import ProfileSetting from "./profile/ProfileSetting";
-
+import Notification from './notification/Notification';
+import ProfileSetting from './profile/ProfileSetting';
 
 function App() {
   return (
@@ -23,12 +24,22 @@ function App() {
         {/*메인 */}
         <Route path="/" exact component={Login} />
 
+        {/*회원 */}
+        <Route path="/signup" exact component={SignUp} />
+        <Route path="/pwfind" exact component={PwFind} />
+
+
         {/* 프로필설정 */}
         <Route path="/profile" exact component={Profile} />
         <Route path="/profileset" exact component={ProfileSetting} />
 
         {/* 업무속성 */}
         <Route path="/setting" exact component={Setting} />
+        {/* 알림설정 */}
+        <Route path="/notification" exact component={Notification} />
+
+        {/* 업무속성 */}
+        <Route path="/home" exact component={Setting} />
         <Route path="/comment" exact component={Comment} />
         <Route path="/file" exact component={File} />
 
@@ -38,8 +49,6 @@ function App() {
         {/* 대시보드 */}
         <Route path="/dashboard" exact component={Dashboard} />
 
-
-        <ProfileMain />
       </BrowserRouter>
 
     </div>

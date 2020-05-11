@@ -22,12 +22,108 @@
             "text": "일정 관리 앱 만들어 보기",
             "checked": false
           }
-        ]
+        ],
+        "tag": [
+          {
+            "name": "tagA"
+          },
+          {
+            "name": "tagB"
+          }
+        ],
+        "startDate":"5월 1일",
+        "endDate":"5월 15일"
       },
       {
         "no": 2,
         "contents": "계획된 업무 2",
-        "todoList": []
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 3",
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 4",
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 5",
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 6",
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 7",
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "contents": "계획된 업무 8",
+        "todoList": [],
+        "tag": [
+          {
+            "name": "tagC"
+          },
+          {
+            "name": "tagD"
+          }
+        ]
       }
     ]
   },
@@ -38,16 +134,27 @@
       {
         "no": 1,
         "contents": "진행 업무 1",
-        "todoList": [          {
+        "todoList": [
+          {
             "id": 1,
             "text": "할일 체크",
             "checked": false
-          }]
+          }
+        ],
+        "tag": [
+          {
+            "name": "tagE"
+          },
+          {
+            "name": "tagF"
+          }
+        ]
       },
       {
         "no": 2,
         "contents": "진행 업무 2",
-        "todoList": []
+        "todoList": [],
+        "tag": []
       }
     ]
   },
@@ -58,7 +165,8 @@
       {
         "no": 1,
         "contents": "완료 업무 1",
-        "todoList": []
+        "todoList": [],
+        "tag": []
       }
     ]
   },
@@ -69,7 +177,8 @@
       {
         "no": 1,
         "contents": "기타 업무 1",
-        "todoList": []
+        "todoList": [],
+        "tag": []
       }
     ]
   }

@@ -26,7 +26,7 @@ export default class Navigator extends React.Component {
 
                         {/*<!-- Notification link -->*/}
                         <li className="nav-item">
-                            <a href="#" className="link">
+                            <a href="/notification" className="link">
                                 <i className="far fa-bell icon"></i>
                                 <br />
                                 <span className="label">Notification</span>
@@ -44,7 +44,7 @@ export default class Navigator extends React.Component {
 
                         {/*<!-- Projects link-- >*/}
                         <li className="nav-item">
-                            <a href="#" className="link">
+                            <a href="/dashboard" className="link">
                                 <i className="fas fa-tasks icon"></i>
                                 <br />
                                 <span className="label">Projects</span>
