@@ -16,7 +16,7 @@ const Notification = () => {
                             <div className="notice-header-title-month">
                                 <span className="notice-header-title-month-text">MAY</span>
                             </div>
-                            <div classNmae="notice-header-title-day">
+                            <div className="notice-header-title-day">
                                 <span className="notice-header-title-day-text">8</span>
                             </div>
                         </div>

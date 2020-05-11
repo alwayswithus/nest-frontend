@@ -22,6 +22,11 @@
                     margin-left: 20px;
                 }
 
+                .fa-arrow-right {
+                    color: #B7B8B9;
+                    margin-left: 20px;
+                }
+
                 h3 {
                     color: #B7B8B9;
                     margin-left: 20px;
@@ -136,6 +141,43 @@
     .panel-group .new-project-body .new-project-name {
         
         font-weight: bold;
+    }
+
+    .modal-content {
+        
+        .add-project-header {
+            text-align: center;
+            
+            .add-project-title {
+                font-weight: bold;
+            }
+        }
+
+        .add-project-body {
+            
+            .modal-body-title {
+                margin-top: 6px;
+            }
+        
+            .modal-body-description {
+                margin-top: 6px;
+            }
+        
+            .modal-body-member {
+                margin-top: 6px;
+        
+            }
+        }
+
+        .add-project-footer {
+            text-align: center;
+    
+            #add-project-submit {
+                
+                color: white;
+                background-color: #8798A8;
+            }
+        }
     }
 }
     

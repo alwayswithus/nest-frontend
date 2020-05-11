@@ -21,17 +21,14 @@
 		.nav-item {
 			padding: 16px 0;
 			transition: 0.1s ease-in-out transform;
+			color: #fff;
+			text-decoration: none;
+			cursor: pointer;
 			
-
-			.link {
-				color: #fff;
-				text-decoration: none;
-				
 				#nest-logo {
 					color: darkgray;
 					width: 47px;
 					height: 63px;
-					
 				}
 
 				.icon {
@@ -48,7 +45,7 @@
 					transition: 0.2s ease-in-out opacity;
 					color: #fff;
 				}
-			}
+			
 		}
 
 		.nav-item:hover {
