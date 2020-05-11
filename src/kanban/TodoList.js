@@ -11,10 +11,13 @@ class TodoList extends Component {
             <div className="todoList">
               {todoItem &&
                 todoItem.map((todo) => (
-                  <div className="text">
+                  <>
+                  <div className="todo">
                     <input type="checkbox" className="doneCheck"></input>
-                    {todo.text}
-                  </div>
+                    <div className="text">&nbsp;{todo.text} </div>
+                   
+                  </div><hr></hr>
+                  </>
                 ))}
             </div>
           ) : (
