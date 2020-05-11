@@ -1,4 +1,7 @@
 .task {
+  .task-item{
+    padding: 5px 0px 0px 0px;
+  }
   .task-top {
     .point {
       display: inline;
@@ -17,6 +20,11 @@
         }
       }
     }
+    .dropdown-menu {
+      left: -110px;
+      top: -3px;
+      min-width: 100px;
+    }
   }
   .task-title {
     .title {
@@ -26,7 +34,19 @@
       }
     }
   }
-  .task-date{
-    color: #27b6ba;
+  .task-date {
+    color: #48535e;
+  }
+  .task-bottom {
+    color:rgb(199, 199, 199);
+    .count {
+      float: left;
+      i {
+        padding-right: 15px;
+      }
+    }
+    .userCocunt{
+      float: right;
+    }
   }
 }
