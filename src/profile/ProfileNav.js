@@ -24,7 +24,7 @@ class ProfileNav extends Component {
         <Navbar className="navsbar" style={styleNav} variant="light">
           <Nav activeKey={location.pathname}>
             <Nav.Link className="nav-link" href="/profile">프로필</Nav.Link>
-            <Nav.Link className="nav-link" href="/profile/setting">설정</Nav.Link>
+            <Nav.Link className="nav-link" href="/profileset">설정</Nav.Link>
           </Nav>
         </Navbar>
       </div>
