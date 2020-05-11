@@ -18,7 +18,7 @@ const bg = {
 ReactDOM.render(
   
   <React.StrictMode>
-    <div className="mainIndex" style={bg}>
+    <div className="mainIndex" >
     </div>
     <App />
   </React.StrictMode>,
