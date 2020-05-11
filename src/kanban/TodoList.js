@@ -9,7 +9,7 @@ class TodoList extends Component {
         <div>
           {todoItem.length > 0 ? (
             <div className="todoList">
-              {todoItem &&
+              {todoItem && 
                 todoItem.map((todo) => (
                   <>
                   <div className="todo">
