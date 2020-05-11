@@ -73,7 +73,7 @@ export default class Navigator extends React.Component {
 
                             {/* Nest Introduce Modal footer */}
                             <div className="modal-footer justify-content-center flex-column flex-md-row">
-                                <button type="button" className="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal" onClick={ modalReset.bind(this) }>Close</button>
+                                <button type="button" className="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
