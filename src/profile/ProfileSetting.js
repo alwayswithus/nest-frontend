@@ -9,7 +9,16 @@ const ProfileSetting = (props) => {
     const [visible, setVisible] = useState(true);
 
     const FoldEvent = () => {
-        setVisible(!visible);
+        //onsole.log(visible)
+        if(visible == true && document.getElementById("form").style.display === 'none')
+        {
+            setVisible(!visible);
+            document.getElementById("form").style.display = 'block';
+        } else {
+            setVisible(!visible);
+            document.getElementById("form").style.display = 'none';
+        }
+        console.log(document.getElementById("form").style.display);
     }
 
     return (
@@ -22,14 +31,14 @@ const ProfileSetting = (props) => {
                         <div className='profileSet'>
                             <Test />
                             <div className = "PasswordSet">
-                                <div className="password">
+                                <div  onClick={FoldEvent} className="password">
                                     <span><h4><b>비밀번호</b></h4></span>
-                                    <div onClick={FoldEvent}>
+                                    <div>
                                         {visible ? 
                                         <i class="fas fa-arrow-circle-down fa-2x" /> : <i class="fas fa-arrow-circle-up fa-2x"/>}
                                     </div>
                                 </div>
-                                <form className="passwordForm">
+                                <form id="form" style={{display: 'none'}} className="passwordForm">
                                     <div className="Current-pass">
                                         <span>현재 비밀번호</span><br/>
                                         <input />
@@ -42,11 +51,20 @@ const ProfileSetting = (props) => {
                                         <span>새 비밀번호 확인</span><br/>
                                         <input />
                                     </div>
+                                    <input type="submit" />
                                 </form>
                             </div>
                             <div className = "TimeSet">
-                                <h4><b>시간설정</b></h4>
-                                <TimeZone />
+                                <div onClick={FoldEvent} className="timeZone">
+                                    <h4><b>시간설정</b></h4>
+                                    <div>
+                                        {visible ? 
+                                        <i class="fas fa-arrow-circle-down fa-2x" /> : <i class="fas fa-arrow-circle-up fa-2x"/>}
+                                    </div>
+                                </div>
+                                <div id="form" style={{display: 'none'}}>
+                                    타임존
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -57,3 +75,4 @@ const ProfileSetting = (props) => {
 }
 
 export default ProfileSetting;
+

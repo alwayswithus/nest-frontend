@@ -1,3 +1,19 @@
+
+.panel-group{
+    form {
+        div{
+            padding: 0.5% 0%;
+        }
+
+        input{
+            margin-top: 5px;
+            border:1px solid #CBCBCB;
+            border-radius: 3px;
+            width:250px;
+            height:25px;
+        }
+    }
+}
 .Profile{
     .profileLayout{
         .profileSet{
@@ -15,6 +31,12 @@
                         float:right;
                     }
                 }
+
+
+                #form{
+                    display: none;
+                }
+
                 div{
                     padding: 0.5% 0%;
                 }

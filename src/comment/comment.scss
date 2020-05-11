@@ -1,51 +1,116 @@
 .Comment{
-    .profileImg{
-        display: inline-block;
+    box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
+    width:632px;
+    // height:150px;
+    margin:50px auto;
+    hr {
+        border: 2px solid black;
+        margin:0;
+    }
+}
 
-        .img-circle{ 
-            border-radius: 50%; 
-            width:50px;
-            height: 50%;
+.Comment-input{
+    background-color: white;
+    width:632px;
+    // height:100px;
+    button{
+        border:none;
+        border-radius: 2px;
+        width:50px;
+        height:30px;
+        background-color: #27B6BA;
+        color: white;
+    }
+    form{
+        .InputForm{
+            height:auto;
+            textarea{
+                height:auto;
+                resize: none;
+                width:632px;
+                // overflow: hidden;
+            }
         }
     }
-    .Frame {
-        display: inline-block;
-        height: 20px;
-        width:30px;
-        .CommentLayout  { 
-            display: inline-block; 
-            position: absolute; 
-            height: 50px;
-
-            .name { 
-                font-size: 1.2rem; 
-                margin-left:10px; 
-                margin-right:10px; 
-                display: inline-block;
-            }
-
-            .ab { 
-                font-size: 1.2rem; 
-                margin-left:5px; 
-                display: inline-block;
-            }
-
-            .button { 
-                margin-left:100px; 
-                display:inline-block;
-                vertical-align: middle;
-                margin-top: 4.5px;
-                li { 
-                    width:30px; 
-                    display: inline-block; 
-                }
+    .Bottom-bar{
+        margin: 2% 2% 0;
+        height:40px;
+        ul {
+            display: inline-block;
+            li a{
+                color: black;
             }
         }
-        .text{
-            font-size: 1rem; 
-            margin:20px 10px; 
-            display: inline; 
-            position: absolute;
+
+    }
+}
+
+.CommentList{
+    background-color: #F3F4F5;
+    height:400px;
+    overflow: auto;
+    .media{
+        padding:1%;
+        img{
+            max-width: 35px;
+        }
+
+        .media-body{
+            span{
+                margin-top: 1%;
+                margin-bottom: 1%;
+                margin-right: 10%;
+            }
+            p{
+                margin: 1%;
+                text-align:justify;
+                word-break: break-word;
+            }
+            ul li a{
+                color: black;
+                [data-tooltip-text]:hover {
+                    position: relative;
+                }
+                
+                [data-tooltip-text]::after {
+                    -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+                    -moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+                    transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+                
+                    background-color: rgba(0, 0, 0, 0.8);
+                
+                  -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+                    -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+                    box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+                    
+                  -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    border-radius: 5px;
+                    
+                    color: #FFFFFF;
+                    font-size: 12px;
+                    // margin-bottom: 1%;
+                    padding: 7px 12px;
+                    position: absolute;
+                    width: auto;
+                    min-width: 50px;
+                    max-width: 300px;
+                    word-wrap: break-word;
+                
+                    z-index:200;
+                
+                    opacity: 0;
+                    left: -9999px;
+                    // top: 1%;
+                    
+                    content: attr(data-tooltip-text);
+                }
+                
+                [data-tooltip-text]:hover:after {
+                    left: 0;
+                    opacity: 1;
+                }
+            }
         }
     }
 }

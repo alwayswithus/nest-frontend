@@ -5,7 +5,8 @@ import Important from './Important';
 import Navigation from './Navigation';
 import Header from '../file/Header';
 
-const Home = (props) => {
+
+const Setting = (props) => {
     const ButtonStyle = {
         backgroundColor:'none'
     }
@@ -14,7 +15,7 @@ const Home = (props) => {
             <Header name='김우경' date='2020.05.06'/>
             <Navigation />
             <div style={{fontSize:'1.3rem'}}>설명 추가</div>
-            <hr style={{marginBottom:'20px'}}/>
+            <hr style={{marginBottom:'20px', color:'#555555'}}/>
             <table>
                 <tr>
                     <td><i class="fas fa-calendar-week"></i></td>
@@ -54,5 +55,5 @@ const Home = (props) => {
         </div>
     )
 }
+export default Setting;
 
-export default Home;
