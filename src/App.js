@@ -14,6 +14,7 @@ import Dashboard from "./dashboard/Dashboard";
 import Profile from './profile/Profile';
 import Notification from './notification/Notification';
 import ProfileSetting from './profile/ProfileSetting';
+import ProjectSetting from './projectsetting/ProjectSetting'
 
 function App() {
   return (
@@ -48,6 +49,9 @@ function App() {
 
         {/* 대시보드 */}
         <Route path="/dashboard" exact component={Dashboard} />
+
+        {/* 프로젝트 세팅*/}
+        <Route path="/projectset" exact component={ProjectSetting} />
 
       </BrowserRouter>
 
