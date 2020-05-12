@@ -18,16 +18,16 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const login = e => {
-    e.preventDefault();
-  };
+  // const login = e => {
+  //   e.preventDefault();
+  // };
 
   return (
     <>
       <div className="Login">
         <div className="loginBox">
           <img style={{width:"150px", height:"150px"}} src="images/nest-logo-black.png" />
-          <form onSubmit={login}>
+          <form /*onSubmit={login}*/ action="/dashboard" /*method="POST"*/ >
             <InputLabel id="loginText">Log In</InputLabel>
             <br/>
             <Input

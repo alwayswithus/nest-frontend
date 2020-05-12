@@ -7,9 +7,13 @@ import { BrowserRouter } from "react-router-dom";
 
 import Comment from './comment/Comment';
 import KanbanMain from "./kanban/KanbanMain";
+
 import Login from "./login/Login";
 import SignUp from "./signup/SignUp";
 import PwFind from "./pwfind/PwFind";
+
+import Gantt from "./gantt/Gantt";
+
 import Dashboard from "./dashboard/Dashboard";
 import Profile from './profile/Profile';
 import Notification from './notification/Notification';
@@ -48,6 +52,9 @@ function App() {
 
         {/* 대시보드 */}
         <Route path="/dashboard" exact component={Dashboard} />
+
+        {/* 간트차트 */}
+        <Route path="/gantt" exact component={Gantt} />
 
       </BrowserRouter>
 
