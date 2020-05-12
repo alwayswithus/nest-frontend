@@ -12,6 +12,7 @@
 	transition: 0.2s ease-in-out left;
 	box-shadow: 3px 0 6px rgba(0, 0, 0, 0.1);
 	z-index: 1;
+	border: 0;
 	
 	.nav-list {
 		text-align: center;
@@ -19,12 +20,19 @@
 		margin-top: -14px;
 		
 		.nav-item {
-			padding: 16px 0;
+			padding: 11px 0;
 			transition: 0.1s ease-in-out transform;
 			color: #fff;
 			text-decoration: none;
 			cursor: pointer;
-			
+
+				.nav-item-profile {
+					display: block;
+					width: 63px;
+					height: 59px;
+					border-radius: 50px;
+				}
+
 				#nest-logo {
 					color: darkgray;
 					width: 47px;
@@ -45,13 +53,18 @@
 					transition: 0.2s ease-in-out opacity;
 					color: #fff;
 				}
-			
+		}
+		
+		.nav-item:nth-child(1) {
+			margin-top: 5px;
 		}
 
+		.nav-item:nth-child(2):hover {
+			transform: translate(5px, 5px);
+		}
 		.nav-item:hover {
-			transform: scale(1.2);
+			transform: scale(1.4);
 			transform-origin: center center;
-
 			.label {
 				opacity: 1;
 			}
