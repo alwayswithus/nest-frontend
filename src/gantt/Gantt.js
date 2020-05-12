@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navigator from "../dashboard/navigator/Navigator";
-import TopBar from "../kanban/TopBar";
+import TopBar from "../kanban/topBar/TopBar";
 
 import TimeLine from "react-gantt-timeline";
 import "./gantt.css";
