@@ -1,3 +1,4 @@
+
 import React, { Component, useState } from "react";
 import Task from "./Task";
 import "./TaskList.scss";
@@ -8,7 +9,6 @@ class TaskList extends Component {
     this.props.taskList.tasks.forEach((task) =>
       taskComponents.push(<Task task={task} />)
     );
-
     return (
       <>
         <div className="taskCategory">

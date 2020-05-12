@@ -8,7 +8,9 @@ class TagList extends Component {
     this.props.tagList.forEach((t) => tagComponents.push(<Tag tag={t} />));
     return (
       <>
+
         <div className="tags">{tagComponents}</div>
+
       </>
     );
   }

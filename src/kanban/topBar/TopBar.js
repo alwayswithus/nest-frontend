@@ -17,10 +17,10 @@ class TopBar extends Component {
                 <div className="topCenterIn">
                   <ul className="nav navbar-nav">
                     <li className="active">
-                      <a href="#">업무</a>
+                      <a href="/kanbanMain">업무</a>
                     </li>
                     <li>
-                      <a href="#">타임라인</a>
+                      <a href="/gantt">타임라인</a>
                     </li>
                     <li>
                       <a href="#">파일</a>
