@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TaskList from "./TaskList";
+import TaskList from "./task/TaskList";
 import "./KanbanBoard.scss";
 
 class KanbanBoard extends Component {
