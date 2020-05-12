@@ -1,0 +1,60 @@
+/* @font-face { 
+    font-family: 'BMDOHYEON'; 
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff'); 
+    font-weight: normal; 
+    font-style: normal; 
+} */
+
+.Navigation{
+    .navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .nav-link.active {
+        color: rgba(0,0,0,.5);
+        margin:auto 20px;
+    }
+
+    .navbar {
+        font-size: 1.5rem;
+    }
+}
+
+.ProjectSet{
+    background-color: #FFFFE8;
+    width: 632px;
+    float: right;
+    margin-top: 10%;
+    .setList {
+        ul{
+            li{
+                margin:0 0 5% 5%;
+                list-style: none;
+                div{
+                    display: inline-block;
+                    button{
+                        background:none;
+                    }
+                    h5{
+                        width: 120px;
+                    }
+                }
+                .link button{
+                    margin-left:5%;
+                    background-color: #E6E8EC;
+                    color: #828282;
+                    border-radius: 3px;
+                    padding:3%;
+                    width:150px;
+                }
+                
+            }
+        }
+    }
+}
+
+.Important{
+    .imp-select { 
+        width: 50; 
+        height: 20px;
+        font-size: 1.25rem;
+        border-radius: 0.5rem;
+    }
+}
+

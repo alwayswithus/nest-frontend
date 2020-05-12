@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './profile.scss';
+import './profilenav.scss';
 import { Navbar, Nav } from "react-bootstrap";
 import { withRouter } from 'react-router-dom';
 
@@ -19,15 +19,17 @@ class ProfileNav extends Component {
         }
 
     return (
-      <div className="ProfileNav">
+      <>
+        <div className="ProfileNav">
         <h3><b>계정설정</b></h3>
-        <Navbar className="navsbar" style={styleNav} variant="light">
-          <Nav activeKey={location.pathname}>
-            <Nav.Link className="nav-link" href="/profile">프로필</Nav.Link>
-            <Nav.Link className="nav-link" href="/profileset">설정</Nav.Link>
-          </Nav>
-        </Navbar>
-      </div>
+          <Navbar className="navsbar" style={styleNav} variant="light">
+            <Nav activeKey={location.pathname}>
+              <Nav.Link style={{color:'black' }}className="nav-link" href="/profile">프로필</Nav.Link>
+              <Nav.Link style={{color:'black'}} className="nav-link" href="/profileset">설정</Nav.Link>
+            </Nav>
+          </Navbar>
+        </div>
+      </>
         );
     }
 };

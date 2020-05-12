@@ -4,8 +4,8 @@ import CommentInput from "./CommentInput";
 const Comment = () => {
     return (
         <div className="Comment">
-            <CommentInput />
             <CommentList />
+            <CommentInput />
         </div>
     );
 }

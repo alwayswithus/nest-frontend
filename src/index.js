@@ -9,6 +9,7 @@ import Login from "./login/Login"
 import * as serviceWorker from "./serviceWorker";
 import "./index.css";
 import App from './App';
+import ModalCalendar from "./calendar/ModalCalendarEnd";
 
 const img = 'images/ko.jpg';
 const bg = {
