@@ -18,6 +18,7 @@ import Dashboard from "./dashboard/Dashboard";
 import Profile from './profile/Profile';
 import Notification from './notification/Notification';
 import ProfileSetting from './profile/ProfileSetting';
+import ProjectSetting from './projectsetting/ProjectSetting'
 
 function App() {
   return (
@@ -55,6 +56,9 @@ function App() {
 
         {/* 간트차트 */}
         <Route path="/gantt" exact component={Gantt} />
+
+        {/* 프로젝트 세팅*/}
+        <Route path="/projectset" exact component={ProjectSetting} />
 
       </BrowserRouter>
 

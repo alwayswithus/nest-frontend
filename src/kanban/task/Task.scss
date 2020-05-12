@@ -1,5 +1,10 @@
 .task {
-  .task-item{
+  .panel:hover {
+    cursor: pointer;
+    background-color: rgb(255, 245, 245);
+  }
+
+  .task-item {
     padding: 5px 0px 0px 0px;
   }
   .task-top {
@@ -38,14 +43,16 @@
     color: #48535e;
   }
   .task-bottom {
-    color:rgb(199, 199, 199);
+
+    color: rgb(199, 199, 199);
+
     .count {
       float: left;
       i {
         padding-right: 15px;
       }
     }
-    .userCocunt{
+    .userCocunt {
       float: right;
     }
   }

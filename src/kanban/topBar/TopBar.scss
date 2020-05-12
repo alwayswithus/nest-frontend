@@ -1,21 +1,28 @@
 .topBar {
-    position: fixed;
-    width: 100%;
-    padding-left: 6.2rem;
+  position: fixed;
+  width: 100%;
+  padding-left: 6.2rem;
 
-    .navbar {
-      border-radius: 0px;
+  .navbar {
+    border-radius: 0px;
   }
-  
-    .topCenterOut {
-      text-align: center;
-      height: 0px;
-  
-      .topCenterIn {
-        display: inline-block;
+
+  .topCenterOut {
+    text-align: center;
+    height: 0px;
+
+    .topCenterIn {
+      display: inline-block;
+      .active {
+        a {
+          background-color: #f8f8f8;
+          border-bottom: 3px solid #8798a8;
+          padding-bottom: 12px;
+        }
       }
     }
-    .gearIcon {
-      padding: 9px;
-    }
   }
+  .gearIcon {
+    padding: 9px;
+  }
+}

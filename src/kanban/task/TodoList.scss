@@ -1,24 +1,33 @@
 .todoList {
   border: 1px solid #8798a8;
   border-radius: 6px;
+  background-color: white;
   
   .todo {
     padding-left: 10px;
     display: flex;
     font-size: 12px;
-    .doneCheck{
-        margin: 3px 0px 3px -3px;
+
+    &:hover {
+      background-color: #e2e2e259;
     }
-    .text{
-        border-left: 1px dashed red;
-        margin:2px 0 0 5px;
+    .doneCheck {
+      margin: 3px 0px 3px -3px;
+      cursor: pointer;
+      &:hover {
+        border: 1px solid black;
+      }
+    }
+    .text {
+      border-left: 1px dashed red;
+      margin: 2px 0 0 5px;
     }
   }
-  hr{
+  hr {
     margin-top: 0px;
     margin-bottom: 0px;
     width: 230px;
     margin-left: 10px;
-    color:red;
-}
+    color: red;
+  }
 }

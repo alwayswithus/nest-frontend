@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './navigator.scss';
 
 export default class Navigator extends React.Component {
@@ -9,50 +9,40 @@ export default class Navigator extends React.Component {
                     <ul className="nav-list">
 
                         {/*<!-- nest -->*/}
-                        <li className="nav-item" data-toggle="modal" data-target="#nest-introduce">                      
-                            <img src="images/nest.png" id="nest-logo" /><br />
-                            <h6>Nest</h6>                    
+                        <li className="nav-item" data-toggle="modal" data-target="#nest-introduce">
+                            <img src="images/nest.png" id="nest-logo" />
                         </li>
 
                         {/*<!-- About link -->*/}
-                        <li className="nav-item">                    
-                            <i className="fas fa-user icon"></i><br />
-                            <span className="label">About Me</span>     
+                        <li className="nav-item" data-toggle="popover" id="popoverExample">
+                            <img className="nav-item-profile" src="images/unnamed.jpg"></img><br />
                         </li>
 
                         {/*<!-- Notification link -->*/}
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="tooltip" title="Notification">
                             <a href="/notification" className="link">
                                 <i className="far fa-bell icon"></i>
-                                <br />
-                                <span className="label">Notification</span>
                             </a>
                         </li>
 
                         {/*<!-- Calendar link -->*/}
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="tooltip" title="Calendar">
                             <a href="#" className="link">
                                 <i className="fas fa-calendar-alt icon"></i>
-                                <br />
-                                <span className="label">Calendar</span>
                             </a>
                         </li>
 
                         {/*<!-- Projects link-- >*/}
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="tooltip" title="Projects">
                             <a href="/dashboard" className="link">
                                 <i className="fas fa-tasks icon"></i>
-                                <br />
-                                <span className="label">Projects</span>
                             </a>
                         </li >
 
-                        {/*< !--Testimonials link-- >*/}
-                        <li className="nav-item">
+                        {/*< !-- Slack link-- >*/}
+                        <li className="nav-item" data-toggle="tooltip" title="Slack">
                             <a href="#" className="link">
                                 <i className="fas fa-comment-dots icon"></i>
-                                <br />
-                                <span className="label">Slack</span>
                             </a>
                         </li >
                     </ul >
@@ -80,5 +70,14 @@ export default class Navigator extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+        window.jQuery('#popoverExample').popover({
+            html: true,
+            title: "<h1><strong>HTML</strong> inside <code>the</code> <em>popover</em></h1>",
+            content: "Blabla <br> <h2>Cool stuff!</h2>",
+            html: true
+        });
     }
 }

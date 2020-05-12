@@ -2,19 +2,45 @@
   margin: 10px;
   width: 300px;
 
+  .panel {
+    margin-bottom: 3px;
+  }
   .panel-primary {
     border-color: #f0d7d2;
   }
   .panel-heading {
     background-color: #f0d7d2;
     border-color: #f0d7d2;
-    color: #6a7074;
+    .taskList-head {
+      display: flex;
+      .Icon {
+        color: rgb(151, 151, 151);
+        &:hover {
+          color: rgb(53, 53, 53);
+          cursor: pointer;
+        }
+      }
+      .head-title {
+        flex: 7;
+        color: #4f5558;
+        font-weight: bold;
+        i {
+          display: none;
+        }
+        &:hover i {
+          display: inline;
+        }
+      }
+      .head-insertBtn {
+        flex: 1;
+        text-align: right;
+      }
+      .head-deleteBtn {
+        flex: 1;
+        text-align: right;
+      }
+    }
   }
-
-  .panel {
-    margin-bottom: 3px;
-  }
-
   .tasks {
     overflow: auto;
     overflow-x: hidden;
@@ -24,7 +50,7 @@
     width: 10px;
   }
   .tasks::-webkit-scrollbar-thumb {
-    background-color: #B4B8BA;
+    background-color: #b4b8ba;
     border-radius: 10px;
     background-clip: padding-box;
     border: 2px solid transparent;
