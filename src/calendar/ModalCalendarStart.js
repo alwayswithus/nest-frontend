@@ -25,6 +25,7 @@ class ModalCalendarStart extends Component {
           moment={this.state.moment}
           onChange={this.handleChange}
         />
+        
         <input type='text' value={this.state.moment.format('YYYY-MM-DD HH:mm')} readOnly />
       </div>
     );

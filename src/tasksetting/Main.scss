@@ -5,19 +5,12 @@
     font-style: normal; 
 } */
 
-.Navigation{
-    .navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .nav-link.active {
-        color: rgba(0,0,0,.5);
-        margin:auto 20px;
-    }
-
-    .navbar {
-        font-size: 1.5rem;
-    }
-}
-
 .Home{
     background-color: #FFFFE8;
+    width:632px;
+    float: right;
+    margin-top: 43px;
+    clear: both;
     .TodoInsert {
         input { 
             background: #D8D8D8;
@@ -38,23 +31,51 @@
             border:0px;
         }
     }
-
-    table td { 
-        align-items: center;
-        width: 30px; 
+    ul{
+        li{
+            margin:10% 0 5% 5%;
+            list-style: none;
+            Button{
+                background: none;
+            }
+            .Member-list{
+                width:300px;
+                border: 2px solid black;
+                .Member{
+                    border:none;
+                    border-radius: 5px;
+                    background-color: #E6E8EC;
+                    margin:2%;
+                    padding:1%;
+                    width:80px;
+                    display: inline-block;
+                    cursor: pointer;
+                    img{
+                        width:20px;
+                    }
+                    span{
+                        padding-top: 1%;
+                    }
+                }
+        
+                .Member:hover{
+                    border:none;
+                    border-radius: 5px;
+                    background-color: #D7D7D7;
+                    margin:2%;
+                    padding:1%;
+                    width:80px;
+                    img{
+                        width:20px;
+                    }
+                    span{
+                        padding-top: 1%;
+                    }
+                }
+            }
+        }
     }
 
-    table { 
-        Button{
-            background: none;
-        }
-        margin:10px;
-
-        h5{
-            margin:0px;
-            width:100px;
-        }
-    }
 }
 
 .Important{

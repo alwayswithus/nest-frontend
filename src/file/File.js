@@ -2,10 +2,12 @@ import React from 'react';
 import './file.scss';
 import FileList from './FileList'
 import Button from 'react-bootstrap/Button';
+import Navigation from '../tasksetting/Navigation';
 
 const File = () => {
     return (
         <div className="File">
+            <Navigation />
             <div className="FileMenu">
                 <form className="navbar-form navbar-left">
                         <div className="input-group">

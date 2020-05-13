@@ -1,0 +1,19 @@
+.Navigation{
+    background-color: white;
+    margin-top: 18px;
+    a{
+        font-size: 1.5rem;
+        color:black;
+        #setting {
+            width:'180px';
+            text-align:'center';
+            border-bottom:'3px solid #27B6BA';
+        }
+    }
+
+    #nav-item--setting{
+        width:'205px';
+        text-align:'center';
+        border-bottom:'3px solid #27B6BA';
+    }
+}

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Navigator from './navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
+import ProjectSetting from '../projectsetting/ProjectSetting';
 
 export default class Dashboard extends React.Component {
 
@@ -12,7 +13,19 @@ export default class Dashboard extends React.Component {
       panelGroup: "",
       arrow: <i className="fas fa-arrow-right"></i>,
       details: true,
-      url: ""
+      url: "",
+      setOn:true
+    }
+  }
+
+  onConfigClick() {
+    this.setState({
+      setOn:!this.state.setOn
+    })
+    if(this.state.setOn){
+      document.getElementById('projectSet').style.display='block'
+    } else{
+      document.getElementById('projectSet').style.display='none'
     }
   }
 
@@ -52,7 +65,7 @@ export default class Dashboard extends React.Component {
                       <li><a href="#">상태없음</a></li>
                     </ul>
                   </div>
-                  <a href=""><i className="fas fa-cog fa-2x"></i></a>
+                  <a href="#"><i onClick={this.onConfigClick.bind(this)} className="fas fa-cog fa-2x"></i></a>
                 </div>
                 <div className="panel-footer">
                   <span className="update-date"><h6>최초 업데이트 : 5월 27일 14:00</h6></span>
@@ -91,7 +104,10 @@ export default class Dashboard extends React.Component {
           <DashboardTopbar />
 
           {/* 메인 영역 */}
-          <div className="mainArea" style={ {backgroundImage: `url(${this.state.url})`} }>
+          <div className="mainArea">
+            <div id="projectSet" style={{display:'none', backgroundImage: `url(${this.state.url})`}}>
+              <ProjectSetting setOn={this.state.setOn}/>
+            </div>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
               {this.state.arrow}
               <h3>내가 속한 프로젝트 (1)</h3>

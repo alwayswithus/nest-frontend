@@ -1,24 +1,42 @@
-import React, {Component} from 'react';
-import './Main.scss';
+import React, { Component } from 'react';
+import './TaskSetNav.scss';
 import { Navbar, Nav } from "react-bootstrap";
 import { withRouter } from 'react-router-dom';
 
 class Navigation extends Component {
-    render(){
-        const { location } = this.props;
-        console.log(this.props);
+  
+  constructor(){
+    super(...arguments);
+    this.state= {
+      navigation:
+      <>
+      </>
+    }
+  }
+
+  render() {
+    const NavLink= {
+      width:'205px', 
+      textAlign:'center',
+      backgroundColor:'none'
+    }
+
     return (
       <div className="Navigation">
-        <Navbar className="navsbar" bg="light" variant="light">
-          <Nav activeKey={location.pathname}>
-            <Nav.Link className="nav-link" href="/">속성</Nav.Link>
-            <Nav.Link className="nav-link" href="/comment">코멘트</Nav.Link>
-            <Nav.Link className="nav-link" href="/file">파일 & 링크</Nav.Link>
-          </Nav>
-        </Navbar>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+              <a id='setting' className="nav-link" style={{ textAlign:'center', borderBottom:'3px solid #27B6BA'}} href="#">속성 </a>
+            </li>
+            <li class="nav-item">
+              <a id='comment' className="nav-link" style={{ textAlign:'center', borderBottom:'none'}} href="/comment">코멘트</a>
+            </li>
+            <li class="nav-item">
+              <a id='file' className="nav-link" style={{ textAlign:'center', borderBottom:'none'}} href="/file">파일 & 링크</a>
+            </li>
+        </ul>
       </div>
-        );
-    }
+    );
+  }
 };
 
 export default withRouter(Navigation);

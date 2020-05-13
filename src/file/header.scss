@@ -1,0 +1,17 @@
+.Header{
+    background-color: white;
+    width:632px;
+    height:120px;
+    float: right;
+    margin-top: 100px;
+    .Header-list{
+        h2, span{
+            margin:2%;
+            padding:2%;
+        }
+        span{
+            font-size: 1.0rem;
+            color:#B6B6B6
+        }
+    }
+}
