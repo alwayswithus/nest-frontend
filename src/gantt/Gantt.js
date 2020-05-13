@@ -3,34 +3,31 @@ import Navigator from "../dashboard/navigator/Navigator";
 import TopBar from "../kanban/topBar/TopBar";
 
 import TimeLine from "react-gantt-timeline";
-import "./gantt.css";
+import "./gantt.scss";
 
 class Gantt extends Component {
     constructor(props) {
         super(props);
-        // let d1 = new Date();
-        // let d2 = new Date();
-        // let d3 = new Date();
-        // let d4 = new Date();
 
         let data = [
             {
                 id: 1,
+                no: 1,
                 start: "2020-05-08",
                 end: "2020-06-09",
-                name: "Demo Task 1"
+                name: "업무 1"
             },
             {
                 id: 2,
                 start: "2020-05-07",
-                end: "2020-05-12",
-                name: "Demo Task 2",
+                end: "2020-05-09",
+                name: "업무 2",
                 color: "#2020ff"
             },
             {
                 id: 3,
                 start: "2020-05-07",
-                end: "2020-05-12",
+                end: "2020-05-17",
                 name: "업무 이름",
                 color: "red"
             }
@@ -39,6 +36,7 @@ class Gantt extends Component {
         ];
 
         this.state = { data: data, links: [] };
+        
     }
     genID() {
         function S4() {
@@ -72,12 +70,17 @@ class Gantt extends Component {
         item.start = props.start;
         item.end = props.end;
         this.setState({ data: [...this.state.data] });
-        //console.log(item.start+", "+item.end);
+        console.log(item.start+", "+item.end);
+        console.log(item);
     };
     onCreateLink = item => {
         let newLink = this.createLink(item.start, item.end);
         this.setState({ links: [...this.state.links, newLink] });
     };
+
+    onClickTask = e => {
+
+    }
 
     render() {
         return (
@@ -103,6 +106,8 @@ class Gantt extends Component {
                                     links={this.state.links}
                                     onUpdateTask={this.onUpdateTask}
                                     onCreateLink={this.onCreateLink}
+                                    nonEditableName={true}
+                                    mode={"month"}
                                 />
                             </div>
                         </div>
