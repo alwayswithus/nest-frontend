@@ -8,7 +8,7 @@ import Header from '../file/Header';
 
 const Setting = (props) => {
     const ButtonStyle = {
-        backgroundColor: 'none'
+        background: 'none'
     }
     return (
         <div style={{ height: '100%'}}>
@@ -22,7 +22,7 @@ const Setting = (props) => {
                     <li>
                         <div style={{ display: 'inline-block' }}><i class="fas fa-calendar-week"></i></div>
                         <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
-                        <div style={{ display: 'inline-block' }}><Button style={ButtonStyle} variant=""> <i class="fas fa-plus fa-1x"></i> </Button> </div>
+                        <div style={{ display: 'inline-block' }}><Button variant=""> <i class="fas fa-plus fa-1x"></i> </Button> </div>
                     </li>
                     <li>
                         <div style={{ float: 'left' }}><i class="fas fa-user-plus"></i></div>
