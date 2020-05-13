@@ -11,15 +11,10 @@ import "./index.css";
 import App from './App';
 import ModalCalendar from "./calendar/ModalCalendarEnd";
 
-const img = 'images/ko.jpg';
-const bg = {
-            backgroundImage: `url(${img})`
-          };
-
 ReactDOM.render(
   
   <React.StrictMode>
-    <div className="mainIndex" >
+    <div className="mainIndex">
     </div>
     <App />
   </React.StrictMode>,
