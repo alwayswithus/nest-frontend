@@ -40,16 +40,6 @@ class Task extends Component {
                       </li>
                       <li className="divider"></li>
                       <li>
-                        <a href="#">'진행' 이동</a>
-                      </li>
-                      <li>
-                        <a href="#">'완료' 이동</a>
-                      </li>
-                      <li>
-                        <a href="#">'기타' 이동</a>
-                      </li>
-                      <li className="divider"></li>
-                      <li>
                         <a href="#">업무 삭제</a>
                       </li>
                     </ul>

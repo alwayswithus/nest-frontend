@@ -4,7 +4,7 @@
     "title": "계획",
     "tasks": [
       {
-        "no": 1,
+        "no": 10,
         "contents": "계획된 업무 1",
         "todoList": [
           {
@@ -31,11 +31,11 @@
             "name": "tagB"
           }
         ],
-        "startDate":"5월 1일",
-        "endDate":"5월 15일"
+        "startDate": "5월 1일",
+        "endDate": "5월 15일"
       },
       {
-        "no": 2,
+        "no": 20,
         "contents": "계획된 업무 2",
         "todoList": [],
         "tag": [
@@ -48,7 +48,7 @@
         ]
       },
       {
-        "no": 2,
+        "no": 20,
         "contents": "계획된 업무 3",
         "todoList": [],
         "tag": [
@@ -61,7 +61,7 @@
         ]
       },
       {
-        "no": 2,
+        "no": 20,
         "contents": "계획된 업무 4",
         "todoList": [],
         "tag": [
@@ -74,7 +74,7 @@
         ]
       },
       {
-        "no": 2,
+        "no": 20,
         "contents": "계획된 업무 5",
         "todoList": [],
         "tag": [
@@ -87,34 +87,8 @@
         ]
       },
       {
-        "no": 2,
+        "no": 20,
         "contents": "계획된 업무 6",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 2,
-        "contents": "계획된 업무 7",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 2,
-        "contents": "계획된 업무 8",
         "todoList": [],
         "tag": [
           {
@@ -132,7 +106,7 @@
     "title": "진행",
     "tasks": [
       {
-        "no": 1,
+        "no": 10,
         "contents": "진행 업무 1",
         "todoList": [
           {
@@ -151,7 +125,7 @@
         ]
       },
       {
-        "no": 2,
+        "no": 20,
         "contents": "진행 업무 2",
         "todoList": [],
         "tag": []
@@ -163,7 +137,7 @@
     "title": "완료",
     "tasks": [
       {
-        "no": 1,
+        "no": 10,
         "contents": "완료 업무 1",
         "todoList": [],
         "tag": []
@@ -175,7 +149,7 @@
     "title": "기타",
     "tasks": [
       {
-        "no": 1,
+        "no": 10,
         "contents": "기타 업무 1",
         "todoList": [],
         "tag": []
