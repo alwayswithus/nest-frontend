@@ -13,6 +13,7 @@ export default class Dashboard extends React.Component {
       panelGroup: "",
       arrow: <i className="fas fa-arrow-right"></i>,
       details: true,
+      url: "",
       setOn:true
     }
   }
@@ -26,6 +27,13 @@ export default class Dashboard extends React.Component {
     } else{
       document.getElementById('projectSet').style.display='none'
     }
+  }
+
+  callbackChangeBackground(url) {
+    console.log(url);
+    this.setState({
+      url: url
+    })
   }
 
   showDetails() {
@@ -89,7 +97,7 @@ export default class Dashboard extends React.Component {
         <div className="container-fluid">
           {/* 사이드바 */}
           <div className="sidebar">
-            <Navigator />
+            <Navigator callbackChangeBackground={ {change: this.callbackChangeBackground.bind(this) } }/>
           </div>
 
           {/* 탑바 */}
@@ -97,14 +105,14 @@ export default class Dashboard extends React.Component {
 
           {/* 메인 영역 */}
           <div className="mainArea">
-            <div id="projectSet" style={{display:'none'}}>
+            <div id="projectSet" style={{display:'none', backgroundImage: `url(${this.state.url})`}}>
               <ProjectSetting setOn={this.state.setOn}/>
             </div>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
               {this.state.arrow}
               <h3>내가 속한 프로젝트 (1)</h3>
             </div>
-
+            
             {this.state.panelGroup}
 
             {/* 새 프로젝트 */}
@@ -160,7 +168,7 @@ export default class Dashboard extends React.Component {
 
                 {/* Add Project Modal footer */}
                 <div className="modal-footer add-project-footer">
-                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="완료" />
+                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" />
                 </div>
               </form>
             </div>
