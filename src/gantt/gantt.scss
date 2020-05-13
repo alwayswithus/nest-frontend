@@ -1,0 +1,48 @@
+html {
+	height: 100%;
+	margin: 0;
+	box-sizing: border-box;
+}
+canvas {
+	height: 100%;
+	margin: 0;
+}
+body {
+	height: 100%;
+	margin: 0;
+}
+#react-container {
+	height: 100%;
+	margin: 0;
+}
+#routeContainer {
+	height: 100%;
+	margin: 0;
+}
+* {
+	box-sizing: inherit;
+	&:before {
+		box-sizing: inherit;
+	}
+	&:after {
+		box-sizing: inherit;
+	}
+}
+.app-container {
+	padding: 50px 5px 5px 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+.time-line-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	margin: 10px;
+}
