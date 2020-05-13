@@ -24,6 +24,7 @@ class ModalCalendar extends Component {
     return (
       <div>
         <ModalCalendarStart />
+        <div style={{display:'inline-block', padding:'10px'}}/>
         <ModalCalendarEnd />
       </div>
     );

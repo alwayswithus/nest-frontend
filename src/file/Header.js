@@ -1,14 +1,15 @@
 import React from 'react';
-import './file.scss';
+import './header.scss';
+import Navigation from '../tasksetting/Navigation';
 
 const Header = (props) => {
     return (
-        <div>
-            <div>
-                <h1>Project Name</h1>
-                작성자 : {props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {props.date}
+        <div className="Header">
+            <div className="Header-list">
+                <h2><b>Project Name</b></h2>
+                <span>작성자 : {props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {props.date}</span>
             </div>
-            <hr style={{marginTop:'10px'}}/>
+            <Navigation />
         </div>
     )
 }

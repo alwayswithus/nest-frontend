@@ -5,29 +5,62 @@
     font-style: normal; 
 } */
 
-.Navigation{
-    .navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .nav-link.active {
-        color: rgba(0,0,0,.5);
-        margin:auto 20px;
-    }
-
-    .navbar {
-        font-size: 1.5rem;
-    }
-}
 
 .ProjectSet{
-    background-color: #FFFFE8;
+    background-color: #F3F4F5;
     width: 632px;
-    float: right;
-    margin-top: 10%;
+    height: calc(100% - 220px);
+    box-shadow: -60px -50px 50px -90px #000000,
+                60px 0px 50px -90px #000000;
+    position: absolute;
+    right:0px;
+    top:220px;
+    overflow: scroll;
+    overflow-x: hidden;
+    hr{
+        margin:0px;
+    }
     .setList {
         ul{
             li{
-                margin:0 0 5% 5%;
+                margin:10% 0 5% 5%;
                 list-style: none;
+                .Member-list{
+                    width:300px;
+                    
+                    .Member{
+                        border:none;
+                        border-radius: 5px;
+                        background-color: #E6E8EC;
+                        margin:2%;
+                        padding:1%;
+                        width:80px;
+                        display: inline-block;
+                        cursor: pointer;
+                        img{
+                            width:20px;
+                        }
+                        span{
+                            padding-top: 1%;
+                        }
+                    }
+
+                    .Member:hover{
+                        border:none;
+                        border-radius: 5px;
+                        background-color: #D7D7D7;
+                        margin:2%;
+                        padding:1%;
+                        width:80px;
+                        img{
+                            width:20px;
+                        }
+                        span{
+                            padding-top: 1%;
+                        }
+                    }
+                }
                 div{
-                    display: inline-block;
                     button{
                         background:none;
                     }
