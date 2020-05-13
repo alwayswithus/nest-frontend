@@ -11,8 +11,16 @@ export default class Dashboard extends React.Component {
     this.state = {
       panelGroup: "",
       arrow: <i className="fas fa-arrow-right"></i>,
-      details: true
+      details: true,
+      url: ""
     }
+  }
+
+  callbackChangeBackground(url) {
+    console.log(url);
+    this.setState({
+      url: url
+    })
   }
 
   showDetails() {
@@ -44,7 +52,7 @@ export default class Dashboard extends React.Component {
                       <li><a href="#">상태없음</a></li>
                     </ul>
                   </div>
-                  <a href="#"><i className="fas fa-cog fa-2x"></i></a>
+                  <a href=""><i className="fas fa-cog fa-2x"></i></a>
                 </div>
                 <div className="panel-footer">
                   <span className="update-date"><h6>최초 업데이트 : 5월 27일 14:00</h6></span>
@@ -76,20 +84,19 @@ export default class Dashboard extends React.Component {
         <div className="container-fluid">
           {/* 사이드바 */}
           <div className="sidebar">
-            <Navigator />
+            <Navigator callbackChangeBackground={ {change: this.callbackChangeBackground.bind(this) } }/>
           </div>
 
           {/* 탑바 */}
           <DashboardTopbar />
 
           {/* 메인 영역 */}
-          <div className="mainArea">
-
+          <div className="mainArea" style={ {backgroundImage: `url(${this.state.url})`} }>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
               {this.state.arrow}
               <h3>내가 속한 프로젝트 (1)</h3>
             </div>
-
+            
             {this.state.panelGroup}
 
             {/* 새 프로젝트 */}
@@ -145,7 +152,7 @@ export default class Dashboard extends React.Component {
 
                 {/* Add Project Modal footer */}
                 <div className="modal-footer add-project-footer">
-                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="완료" />
+                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" />
                 </div>
               </form>
             </div>
