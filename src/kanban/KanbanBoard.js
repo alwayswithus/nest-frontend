@@ -4,10 +4,9 @@ import "./KanbanBoard.scss";
 
 class KanbanBoard extends Component {
 
-  
-
   render() {
     const allTaskList = this.props.tasks;
+
     return (
       <>
         <div className="kanbanBoard">
@@ -23,6 +22,7 @@ class KanbanBoard extends Component {
           <div className="taskList">
             {allTaskList.map((task) => (
               <TaskList
+                key={task.no}
                 taskList={task}
                 taskCallbacks={this.props.taskCallbacks}
               />

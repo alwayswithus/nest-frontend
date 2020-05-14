@@ -10,7 +10,7 @@ class Tag extends Component {
 
     return (
       <>
-        <span class="label label-default tagLabel" style={tagStyle}>{this.props.tag.name}</span>&nbsp;
+        <span className="label label-default tagLabel" style={tagStyle}>{this.props.tag.name}</span>&nbsp;
       </>
     );
   }
