@@ -11,17 +11,7 @@ module.exports = {
             test: /\.js$/,
             exclude: /node_modules/,
             loader: 'babel-loader'
-        }, {
-            test: /\.css$/,
-            loader: [{
-                loader: 'style-loader'
-                }, {
-                loader: 'css-loader',
-                options: {
-                    modules: true
-                }
-            }]
-    }]},
+        }]},
     devServer: {
         contentBase: path.resolve('public'),
         host: '0.0.0.0',

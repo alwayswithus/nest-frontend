@@ -12,12 +12,8 @@ import App from './App';
 import ModalCalendar from "./calendar/ModalCalendarEnd";
 
 ReactDOM.render(
-  
-  <React.StrictMode>
-    <div className="mainIndex">
-    </div>
-    <App />
-  </React.StrictMode>,
+
+    <App />,
   document.getElementById("root")
 );
 

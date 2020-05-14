@@ -6,6 +6,7 @@ const CommentList = () => {
         <div className="CommentList">
             <div className="media">
                 <a class="pull-left" href="#"><img class="img-circle" src="/images/unnamed.jpg" alt="" /></a>
+                {/* 코멘트 내용 시작 - 1 */}
                 <div className="media-body">
                     <span className="media-heading"><b>이름</b></span>
                     <span className="media-heading">2분전</span>
@@ -25,6 +26,7 @@ const CommentList = () => {
                     </ul>
                 </div>
             </div>
+            {/* 코멘트 내용 시작 - 2*/}
             <div className="media">
                 <a class="pull-left" href="#"><img class="img-circle" src="/images/unnamed.jpg" alt="" /></a>
                 <div className="media-body">

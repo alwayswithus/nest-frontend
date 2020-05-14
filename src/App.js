@@ -38,13 +38,11 @@ function App() {
         <Route path="/profile" exact component={Profile} />
         <Route path="/profileset" exact component={ProfileSetting} />
 
-        {/* 업무속성 */}
-        <Route path="/setting" exact component={Setting} />
         {/* 알림설정 */}
         <Route path="/notification" exact component={Notification} />
 
         {/* 업무속성 */}
-        <Route path="/home" exact component={Setting} />
+        <Route path="/setting" exact component={Setting} />
         <Route path="/comment" exact component={Comment} />
         <Route path="/file" exact component={File} />
 

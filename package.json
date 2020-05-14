@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.9.6",
     "@material-ui/core": "^4.9.13",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "babel-loader": "^8.1.0",
     "moment": "^2.25.3",
     "node-sass": "^4.14.1",
     "rc-datetime-picker": "^1.6.1",
@@ -18,7 +20,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-tabbordion": "^1.0.5",
-    "react-textarea-autosize": "^7.1.2"
+    "react-textarea-autosize": "^7.1.2",
+    "webpack": "^4.43.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,6 +46,5 @@
   },
   "devDependencies": {
     "react-addons-update": "^15.6.2",
-    "webpack-cli": "^3.3.11"
   }
 }
