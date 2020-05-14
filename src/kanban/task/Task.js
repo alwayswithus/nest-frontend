@@ -13,8 +13,8 @@ class Task extends Component {
     this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
   }
 
-  test(){
-console.log(this.props.task.contents)
+  test() {
+    console.log(this.props.task.contents);
   }
   render() {
     const taskItem = this.props.task;
@@ -25,7 +25,12 @@ console.log(this.props.task.contents)
 
     return (
       <>
-        <div className="task" data-toggle="modal" data-target={`#kanban-setting-${taskItem.no}`} onClick={this.test.bind(this)}>
+        <div
+          className="task"
+          data-toggle="modal"
+          data-target={`#kanban-setting-${taskItem.no}`}
+          onClick={this.test.bind(this)}
+        >
           <div className="panel panel-primary" style={labelStyle}>
             <div className="panel-body">
               <div className="task-item task-top">
@@ -67,10 +72,13 @@ console.log(this.props.task.contents)
               </div>
 
               <div className="task-itemtask-todoList">
-                <TodoList todoList={taskItem.todoList} />
+                <TodoList
+                  key={taskItem.todoList.id}
+                  todoList={taskItem.todoList}
+                />
               </div>
               <div className="task-item task-tag">
-                <TagList tagList={taskItem.tag} />
+                <TagList key={taskItem.tag.id} tagList={taskItem.tag} />
               </div>
               <div className="task-item task-date">
                 <Date
@@ -93,15 +101,33 @@ console.log(this.props.task.contents)
         </div>
         {/* Project Setting Modal */}
         <div className="project-setting-dialog">
-          <div class="modal fade  come-from-modal right" id={`kanban-setting-${taskItem.no}`} tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document" style={ {width: "670px"} }>
+          <div
+            class="modal fade  come-from-modal right"
+            id={`kanban-setting-${taskItem.no}`}
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+          >
+            <div
+              class="modal-dialog"
+              role="document"
+              style={{ width: "670px" }}
+            >
               <div class="modal-content">
                 <div class="modal-body">
-                  <Setting taskContents={taskItem.contents}/>
+                  <Setting taskContents={taskItem.contents} />
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    Save changes
+                  </button>
                 </div>
               </div>
             </div>

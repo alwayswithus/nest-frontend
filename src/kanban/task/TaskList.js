@@ -7,6 +7,7 @@ class TaskList extends Component {
   constructor() {
     super(...arguments);
     this.state = {
+      title: this.props.taskList.title,
       keyword: this.props.taskList.title,
       showEditNameInput: false,
       viewTaskInsertArea: false,
@@ -26,6 +27,7 @@ class TaskList extends Component {
 
   // Task List 이름 수정시 글자 수 limit
   onInputChanged(event) {
+    console.log(event.target.value);
     this.setState({
       keyword: event.target.value.substr(0, 13),
     });
@@ -72,13 +74,19 @@ class TaskList extends Component {
   deleteTaskList() {
     if (window.confirm("업무 목록을 삭제하시겠습니까?")) {
       this.props.taskCallbacks.deleteList(this.props.taskList.no);
+      this.setState({
+        keyword: this.props.taskList.title,
+      });
     }
   }
+
   getSnapshotBeforeUpdate(props) {
+    console.log(".........!");
     return props;
   }
+
   render() {
-    const keyword = this.getSnapshotBeforeUpdate(this.props.taskList.title);
+    //const keyword = this.getSnapshotBeforeUpdate(this.props.taskList.title);
     return (
       <>
         <div className="taskCategory">
@@ -86,6 +94,7 @@ class TaskList extends Component {
             <div className="panel-heading">
               <div className="taskList-head">
                 <div className="head-title">
+                  {/* task list 이름 수정 state*/}
                   {this.state.showEditNameInput ? (
                     <input
                       className="newTaskListName"
@@ -97,16 +106,21 @@ class TaskList extends Component {
                     />
                   ) : (
                     <div>
-                      {keyword} &nbsp;
-                      <i
-                        class="far fa-edit Icon"
-                        onClick={this.editNameInputState.bind(this)}
-                      />
+                      {this.state.keyword} &nbsp; {/* 받아올 키워드  */}
+                      {this.state.taskInsertState ? (
+                        ""
+                      ) : (
+                        <i
+                          className="far fa-edit Icon"
+                          onClick={this.editNameInputState.bind(this)}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
+                {/* task list 이름 수정 시 버튼 유무*/}
                 {this.state.showEditNameInput ? (
-                  <></>
+                  ""
                 ) : (
                   <>
                     {this.state.taskInsertState ? (
@@ -115,13 +129,13 @@ class TaskList extends Component {
                       <>
                         <div className="head-insertBtn">
                           <i
-                            class="fas fa-plus Icon"
+                            className="fas fa-plus Icon"
                             onClick={this.showTaskInsertArea.bind(this)}
                           ></i>
                         </div>
                         <div className="head-deleteBtn">
                           <i
-                            class="far fa-trash-alt Icon"
+                            className="far fa-trash-alt Icon"
                             onClick={this.deleteTaskList.bind(this)}
                           ></i>
                         </div>
@@ -131,6 +145,7 @@ class TaskList extends Component {
                 )}
               </div>
             </div>
+            {/* task 추가 시 입력 창 state*/}
             {this.state.taskInsertState ? (
               <div className="taskInsertArea">
                 <div className="taskInsertForm">
@@ -145,14 +160,14 @@ class TaskList extends Component {
                 <div className="taskInsertBtn">
                   <button
                     type="button"
-                    class="btn cancel"
+                    className="btn cancel"
                     onClick={this.noneTaskInsertArea.bind(this)}
                   >
                     취소
                   </button>
                   <button
                     type="button"
-                    class="btn comfirm"
+                    className="btn comfirm"
                     onClick={this.addTask.bind(this)}
                   >
                     만들기
@@ -163,9 +178,10 @@ class TaskList extends Component {
               ""
             )}
           </div>
-          <div className="tasks"  >
+          <div className="tasks">
             {this.props.taskList.tasks.map((task) => (
               <Task
+                key={task.no}
                 taskListId={this.props.taskList.no}
                 task={task}
                 taskCallbacks={this.props.taskCallbacks}
@@ -173,7 +189,6 @@ class TaskList extends Component {
             ))}
           </div>
         </div>
-        
       </>
     );
   }

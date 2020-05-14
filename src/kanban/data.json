@@ -8,26 +8,27 @@
         "contents": "계획된 업무 1",
         "todoList": [
           {
-            "id": 1,
+            "id": 1000,
             "text": "리액트의 기초 알아보기",
             "checked": true
           },
           {
-            "id": 1,
+            "id": 2000,
             "text": "컴포넌트 스타일링해 보기",
             "checked": true
           },
           {
-            "id": 1,
+            "id": 3000,
             "text": "일정 관리 앱 만들어 보기",
             "checked": false
           }
         ],
         "tag": [
           {
+            "id":111,
             "name": "tagA"
           },
-          {
+          {"id":112,
             "name": "tagB"
           }
         ],
@@ -40,61 +41,10 @@
         "todoList": [],
         "tag": [
           {
+            "id":121,
             "name": "tagC"
           },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 13,
-        "contents": "계획된 업무 3",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 14,
-        "contents": "계획된 업무 4",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 15,
-        "contents": "계획된 업무 5",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 16,
-        "contents": "계획된 업무 6",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
+          {"id":122,
             "name": "tagD"
           }
         ]
@@ -110,16 +60,16 @@
         "contents": "진행 업무 1",
         "todoList": [
           {
-            "id": 1,
+            "id": 2100,
             "text": "할일 체크",
             "checked": false
           }
         ],
         "tag": [
-          {
+          {"id":211,
             "name": "tagE"
           },
-          {
+          {"id":212,
             "name": "tagF"
           }
         ]

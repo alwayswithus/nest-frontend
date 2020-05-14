@@ -5,10 +5,10 @@ import Button from 'react-bootstrap/Button';
 import Navigation from '../tasksetting/Navigation';
 import Header from './Header';
 
-const File = () => {
+const File = (props) => {
     return (
         <>
-            <Header />
+            <Header taskContents={props.taskContents}/>
             <div className="File">
                 <div className="FileMenu">
                     <form className="navbar-form navbar-left">
