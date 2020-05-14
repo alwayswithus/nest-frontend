@@ -1,12 +1,15 @@
 .File {
     width:632px;
-    background-color: #E7E7E7;
+    background-color: #F3F4F5;
+    float:right;
+    margin-top: 43px;
+    height: calc(100% - 43px);
+    clear:both;
     hr{
         border: 0.5px solid #DFDFDF;
     }
     .FileMenu{
         align-items: center;
-
         .btn .btn-info{
             color: black;
             margin: 8px 0px;
