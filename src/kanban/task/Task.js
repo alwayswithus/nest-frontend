@@ -2,19 +2,35 @@ import React, { Component } from "react";
 import TodoList from "./TodoList";
 import TagList from "./TagList";
 import Date from "./Date";
+import Setting from "../../tasksetting/Setting";
 import "./Task.scss";
 
 class Task extends Component {
+  deleteTask() {
+    this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
+  }
+  copyTask() {
+    this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
+  }
+
+  test() {
+    console.log(this.props.task.contents);
+  }
   render() {
     const taskItem = this.props.task;
     const labelColor = "#F75496";
     const labelStyle = {
-      borderLeft: `5px solid ${labelColor}`
+      borderLeft: `5px solid ${labelColor}`,
     };
 
     return (
       <>
-        <div className="task">
+        <div
+          className="task"
+          data-toggle="modal"
+          data-target={`#kanban-setting-${taskItem.no}`}
+          onClick={this.test.bind(this)}
+        >
           <div className="panel panel-primary" style={labelStyle}>
             <div className="panel-body">
               <div className="task-item task-top">
@@ -40,7 +56,9 @@ class Task extends Component {
                       </li>
                       <li className="divider"></li>
                       <li>
-                        <a href="#">업무 삭제</a>
+                        <a href="#" onClick={this.deleteTask.bind(this)}>
+                          업무 삭제
+                        </a>
                       </li>
                     </ul>
                   </div>
@@ -54,10 +72,13 @@ class Task extends Component {
               </div>
 
               <div className="task-itemtask-todoList">
-                <TodoList todoList={taskItem.todoList} />
+                <TodoList
+                  key={taskItem.todoList.id}
+                  todoList={taskItem.todoList}
+                />
               </div>
               <div className="task-item task-tag">
-                <TagList tagList={taskItem.tag} />
+                <TagList key={taskItem.tag.id} tagList={taskItem.tag} />
               </div>
               <div className="task-item task-date">
                 <Date
@@ -73,6 +94,40 @@ class Task extends Component {
                 </div>
                 <div className="userCocunt">
                   <i className="fas fa-user"> 3</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Project Setting Modal */}
+        <div className="project-setting-dialog">
+          <div
+            class="modal fade  come-from-modal right"
+            id={`kanban-setting-${taskItem.no}`}
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+          >
+            <div
+              class="modal-dialog"
+              role="document"
+              style={{ width: "670px" }}
+            >
+              <div class="modal-content">
+                <div class="modal-body">
+                  <Setting taskContents={taskItem.contents} />
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    Save changes
+                  </button>
                 </div>
               </div>
             </div>

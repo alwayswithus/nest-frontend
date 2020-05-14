@@ -3,9 +3,10 @@ import TaskList from "./task/TaskList";
 import "./KanbanBoard.scss";
 
 class KanbanBoard extends Component {
+
   render() {
     const allTaskList = this.props.tasks;
-    console.log(allTaskList);
+
     return (
       <>
         <div className="kanbanBoard">
@@ -20,13 +21,19 @@ class KanbanBoard extends Component {
           {/*task 리스트*/}
           <div className="taskList">
             {allTaskList.map((task) => (
-              <TaskList taskList={task} taskCallbacks ={this.props.taskCallbacks}/>
+              <TaskList
+                key={task.no}
+                taskList={task}
+                taskCallbacks={this.props.taskCallbacks}
+              />
             ))}
             <button type="button" className="btn btn-default cardPlus">
               + 추가
             </button>
           </div>
         </div>
+
+        
       </>
     );
   }

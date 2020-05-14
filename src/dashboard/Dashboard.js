@@ -4,33 +4,34 @@ import Navigator from './navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from '../projectsetting/ProjectSetting';
+import data from './data.json';
+import update from 'react-addons-update';
 
 export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
-      panelGroup: "",
-      arrow: <i className="fas fa-arrow-right"></i>,
+      projects: data,
       details: true,
       url: "",
-      setOn:true
+      setOn: true
     }
   }
 
   onConfigClick() {
     this.setState({
-      setOn:!this.state.setOn
+      setOn: !this.state.setOn
     })
-    if(this.state.setOn){
-      document.getElementById('projectSet').style.display='block'
-    } else{
-      document.getElementById('projectSet').style.display='none'
+    if (this.state.setOn) {
+      document.getElementById('projectSet').style.display = 'block'
+    } else {
+      document.getElementById('projectSet').style.display = 'none'
     }
   }
 
   callbackChangeBackground(url) {
-    console.log(url);
+
     this.setState({
       url: url
     })
@@ -40,55 +41,27 @@ export default class Dashboard extends React.Component {
     this.setState({
       details: !this.state.details
     })
-    if (this.state.details) {
-      this.setState({
-        arrow: <i className="fas fa-arrow-down"></i>,
-        panelGroup:
-          <div className="panel-group">
-            <div className="panel panel-default projects">
-              <a href="/kanbanMain">
-                <div className="panel-header">
-                  <span className="project-title">
-                    myiste 프로젝트
-              </span>
-                </div>
-                <div className="panel-body">
-                  <div className="btn-group">
-                    <button type="button" className="btn btn-primary btn-xs">상태없음</button>
-                    <button type="button" className="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown">
-                      <span className="caret"></span>
-                    </button>
-                    <ul className="dropdown-menu" role="menu">
-                      <li><a href="#">계획됨</a></li>
-                      <li><a href="#">진행중</a></li>
-                      <li><a href="#">완료됨</a></li>
-                      <li><a href="#">상태없음</a></li>
-                    </ul>
-                  </div>
-                  <a href="#"><i onClick={this.onConfigClick.bind(this)} className="fas fa-cog fa-2x"></i></a>
-                </div>
-                <div className="panel-footer">
-                  <span className="update-date"><h6>최초 업데이트 : 5월 27일 14:00</h6></span>
-                  <span className="update-task"><h6>7/16개 업무</h6></span>
-                  <div className="progress">
-                    <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
-                      aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>
-                      100% Complete (danger)
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-      })
-    }
-    else {
-      this.setState({
-        arrow: <i className="fas fa-arrow-right"></i>,
-        panelGroup: "",
-        details: !this.state.details
-      })
-    }
+  }
+
+  onAddProjectSubmit(event) {
+    event.preventDefault();
+
+    let project = {
+      project_no: this.state.projects.length + 1,
+      project_title: event.target.projectTitle.value,
+      project_desc: event.target.projectDesc.value,
+      project_start: Date.now(),
+      project_end: "",
+      project_status: "상태없음"
+    };
+
+    let newProjects = update(this.state.projects, {
+      $push: [project]
+    });
+
+    this.setState({
+      projects: newProjects
+    })
   }
 
   render() {
@@ -97,23 +70,70 @@ export default class Dashboard extends React.Component {
         <div className="container-fluid">
           {/* 사이드바 */}
           <div className="sidebar">
-            <Navigator callbackChangeBackground={ {change: this.callbackChangeBackground.bind(this) } }/>
+            <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
           </div>
 
           {/* 탑바 */}
           <DashboardTopbar />
 
           {/* 메인 영역 */}
-          <div className="mainArea">
-            <div id="projectSet" style={{display:'none', backgroundImage: `url(${this.state.url})`}}>
-              <ProjectSetting setOn={this.state.setOn}/>
-            </div>
+          <div id="projectSet" style={{ display: 'none' }}>
+            <ProjectSetting setOn={this.state.setOn} />
+          </div>
+          <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
-              {this.state.arrow}
+
+
+              {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
+
               <h3>내가 속한 프로젝트 (1)</h3>
             </div>
-            
-            {this.state.panelGroup}
+
+            {/* 프로젝트들 */}
+            <div className="panel-group">
+              {this.state.details ? this.state.projects.map((project) =>
+                <div className="panel panel-default projects">
+                  <a href="/kanbanMain">
+                    <div className="panel-header">
+                      <span className="project-title">
+                        {project.project_title}
+                      </span>
+                    </div>
+                    <div className="panel-body">
+                      <a href="#">
+                        <div className="btn-group">
+                          <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change" data-toggle="dropdown">
+                            &nbsp;&nbsp;{project.project_status}
+                            <span className="caret"></span>
+                          </button>
+                          <ul className="dropdown-menu" role="menu">
+                            <li>계획됨</li>
+                            <li>진행중</li>
+                            <li>완료됨</li>
+                            <li>상태없음</li>
+                          </ul>
+                        </div>
+                      </a>
+
+                      {/* Project Setting Click */}
+                      <a href="#">
+                        <i className="fas fa-cog fa-lg" onClick={this.onConfigClick.bind(this)}></i>
+                      </a>
+                    </div>
+                    <div className="panel-footer">
+                      <span className="update-date"><h6>최초 업데이트 : 5월 27일 14:00</h6></span>
+                      <span className="update-task"><h6>7/16개 업무</h6></span>
+                      <div className="progress">
+                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
+                          aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>
+                          100% Complete (danger)
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>) : ""
+              }
+            </div>
 
             {/* 새 프로젝트 */}
             <div className="panel-group" >
@@ -133,8 +153,7 @@ export default class Dashboard extends React.Component {
 
             {/* Add Project Modal content */}
             <div className="modal-content">
-              <form action="">
-
+              <div className="form group">
                 {/* Add Project Modal header */}
                 <div className="modal-header add-project-header">
                   <button type="button" className="close" data-dismiss="modal">&times;</button>
@@ -145,10 +164,10 @@ export default class Dashboard extends React.Component {
                 <div className="modal-body add-project-body">
                   <div className="form-group">
                     <h5>제목</h5>
-                    <input type="text" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
+                    <input type="text" name="projectTitle" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
 
                     <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
-                    <input type="text" className="form-control modal-body-description" /><br />
+                    <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
 
                     <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                     <div className="add-project-member-list">
@@ -168,9 +187,9 @@ export default class Dashboard extends React.Component {
 
                 {/* Add Project Modal footer */}
                 <div className="modal-footer add-project-footer">
-                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" />
+                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" data-dismiss="modal" onClick={this.onAddProjectSubmit.bind(this)} value="OK" />
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>

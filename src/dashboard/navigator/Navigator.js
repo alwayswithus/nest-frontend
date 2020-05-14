@@ -117,9 +117,11 @@ export default class Navigator extends React.Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <div className="text-center mt-4 user-logout">
-                                    <button className="btn btn-cyan mt-1">Logout <i className="fas fa-sign-in ml-1"></i></button>
-                                </div>
+                                <a href="/">
+                                    <div className="text-center mt-4 user-logout">
+                                        <button className="btn btn-cyan mt-1">Logout <i className="fas fa-sign-in ml-1"></i></button>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

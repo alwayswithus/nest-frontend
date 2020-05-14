@@ -4,30 +4,31 @@
     "title": "계획",
     "tasks": [
       {
-        "no": 10,
+        "no": 11,
         "contents": "계획된 업무 1",
         "todoList": [
           {
-            "id": 1,
+            "id": 1000,
             "text": "리액트의 기초 알아보기",
             "checked": true
           },
           {
-            "id": 1,
+            "id": 2000,
             "text": "컴포넌트 스타일링해 보기",
             "checked": true
           },
           {
-            "id": 1,
+            "id": 3000,
             "text": "일정 관리 앱 만들어 보기",
             "checked": false
           }
         ],
         "tag": [
           {
+            "id":111,
             "name": "tagA"
           },
-          {
+          {"id":112,
             "name": "tagB"
           }
         ],
@@ -35,66 +36,15 @@
         "endDate": "5월 15일"
       },
       {
-        "no": 20,
+        "no": 12,
         "contents": "계획된 업무 2",
         "todoList": [],
         "tag": [
           {
+            "id":121,
             "name": "tagC"
           },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 20,
-        "contents": "계획된 업무 3",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 20,
-        "contents": "계획된 업무 4",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 20,
-        "contents": "계획된 업무 5",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
-            "name": "tagD"
-          }
-        ]
-      },
-      {
-        "no": 20,
-        "contents": "계획된 업무 6",
-        "todoList": [],
-        "tag": [
-          {
-            "name": "tagC"
-          },
-          {
+          {"id":122,
             "name": "tagD"
           }
         ]
@@ -106,26 +56,26 @@
     "title": "진행",
     "tasks": [
       {
-        "no": 10,
+        "no": 21,
         "contents": "진행 업무 1",
         "todoList": [
           {
-            "id": 1,
+            "id": 2100,
             "text": "할일 체크",
             "checked": false
           }
         ],
         "tag": [
-          {
+          {"id":211,
             "name": "tagE"
           },
-          {
+          {"id":212,
             "name": "tagF"
           }
         ]
       },
       {
-        "no": 20,
+        "no": 22,
         "contents": "진행 업무 2",
         "todoList": [],
         "tag": []
@@ -137,7 +87,7 @@
     "title": "완료",
     "tasks": [
       {
-        "no": 10,
+        "no": 31,
         "contents": "완료 업무 1",
         "todoList": [],
         "tag": []
@@ -149,7 +99,7 @@
     "title": "기타",
     "tasks": [
       {
-        "no": 10,
+        "no": 41,
         "contents": "기타 업무 1",
         "todoList": [],
         "tag": []

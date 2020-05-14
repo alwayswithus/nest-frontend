@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+
+import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import './Main.scss';
 import Important from './Important';
@@ -10,9 +11,9 @@ class Setting extends Component {
         return (
             <div style={{ height: '100%' }}>
                 {/* 업무속성 헤더 */}
-                <div style={{ float: 'right' }}>
-                    <Header name='김우경' date='2020.05.06' />
-                </div>
+             <div style={{ float:'right'}}>
+                  <Header name='김우경' date='2020.05.06' taskContents={this.props.taskContents} />
+              </div>
 
                 {/* 업무속성 리스트 */}
                 <div className="Home">

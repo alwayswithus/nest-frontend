@@ -11,9 +11,11 @@ class KanbanMain extends Component {
     super(...arguments);
     this.state = {
       taskList: data,
+      url: "",
     };
   }
 
+  // task 추가
   callbackAddTask(taskListId, taskContents) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.no == taskListId
@@ -38,14 +40,48 @@ class KanbanMain extends Component {
       taskList: newTaskList,
     });
   }
+  // task 삭제
+  callbackDeleteTask(taskListId, taskId) {
+    const TaskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.no == taskListId
+    );
+
+    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.no == taskId
+    );
+
+    let newTaskList = update(this.state.taskList, {
+      [TaskListIndex]: {
+        tasks: {
+          $splice: [[TaskIndex, 1]],
+        },
+      },
+    });
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+  callbackChangeBackground(url) {
+    console.log(url);
+    this.setState({
+      url: url,
+    });
+  }
+  // task 복사
+  callbackCopyTask() {}
+
+  // task list 추가
+  callbackAddTaskList() {}
+
+  // task list 삭제
   callbackDeleteTaskList(taskListId) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.no == taskListId
     );
+
     let newTaskList = update(this.state.taskList, {
       $splice: [[TaskListIndex, 1]],
     });
-    console.log(newTaskList);
 
     this.setState({
       taskList: newTaskList,
@@ -54,10 +90,17 @@ class KanbanMain extends Component {
   render() {
     return (
       <div className="container-fluid kanbanMain">
-        <div className="row content ">
+        <div
+          className="row content "
+          style={{ backgroundImage: `url(${this.state.url})` }}
+        >
           {/* 네비게이션바 */}
           <div className="navibar">
-            <Navigator />
+            <Navigator
+              callbackChangeBackground={{
+                change: this.callbackChangeBackground.bind(this),
+              }}
+            />
           </div>
           {/*상단바*/}
           <TopBar />
@@ -68,7 +111,10 @@ class KanbanMain extends Component {
               tasks={this.state.taskList}
               taskCallbacks={{
                 add: this.callbackAddTask.bind(this),
-                delete: this.callbackDeleteTaskList.bind(this),
+                delete: this.callbackDeleteTask.bind(this),
+                copy: this.callbackCopyTask(this),
+                addList: this.callbackAddTaskList.bind(this),
+                deleteList: this.callbackDeleteTaskList.bind(this),
               }}
             />
           </div>

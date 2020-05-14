@@ -30,8 +30,10 @@
         &:hover i {
           display: inline;
         }
-        .newTaskListName{
+        .newTaskListName {
           width: 200px;
+          border: none;
+        border-radius: 3px;
         }
       }
       .head-insertBtn {
@@ -41,6 +43,37 @@
       .head-deleteBtn {
         flex: 1;
         text-align: right;
+      }
+    }
+  }
+  .taskInsertArea {
+    background-color: #f0d7d2;
+
+    .taskInsertForm {
+      padding: 0px 5px 0px 7px;
+      .textArea {
+        padding: 10px;
+        resize: none;
+        border: none;
+        border-radius: 5px;
+      }
+    }
+    .taskInsertBtn {
+      padding: 0px 1px 5px 180px;
+
+      .btn {
+        width: 50px;
+        padding: 3px 0 3px 0;
+        &:hover {
+          // background-color: rgb(197, 197, 197);
+          background-color: #F0B2B9;
+          color: white;
+        }
+      }
+      .cancel {
+      }
+      .comfirm {
+        margin: 0px 0px 0px 10px;
       }
     }
   }
