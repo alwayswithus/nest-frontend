@@ -9,8 +9,12 @@ class TaskList extends Component {
       keyword: this.props.taskList.title,
       showEditNameInput: false,
       viewTaskInsertArea: false,
+      taskInsertState: false,
+      taskContents: "",
     };
   }
+
+  taskList() {}
 
   // Task List 이름 수정(input 태그) 상태 변경
   editNameInputState() {
@@ -33,24 +37,47 @@ class TaskList extends Component {
     }
   }
 
+  showTaskInsertArea() {
+    this.setState({
+      taskInsertState: true,
+    });
+  }
+
+  noneTaskInsertArea() {
+    this.setState({
+      taskInsertState: false,
+    });
+  }
+
+  onTextAreaChanged(event) {
+    this.setState({
+      taskContents: event.target.value,
+    });
+  }
+
   // task 추가
   addTask() {
-    this.props.taskCallbacks.add(this.props.taskList.no, "test");
+    this.props.taskCallbacks.add(
+      this.props.taskList.no,
+      this.state.taskContents
+    );
+    this.setState({
+      taskContents: "",
+    });
+    this.noneTaskInsertArea();
   }
 
-  // task 삭제
+  // taskList 삭제
   deleteTaskList() {
     if (window.confirm("업무 목록을 삭제하시겠습니까?")) {
-      this.props.taskCallbacks.delete(this.props.taskList.no);
+      this.props.taskCallbacks.deleteList(this.props.taskList.no);
     }
   }
-
+  getSnapshotBeforeUpdate(props) {
+    return props;
+  }
   render() {
-    const taskComponents = [];
-    this.props.taskList.tasks.forEach((task) =>
-      taskComponents.push(<Task task={task} />)
-    );
-
+    const keyword = this.getSnapshotBeforeUpdate(this.props.taskList.title);
     return (
       <>
         <div className="taskCategory">
@@ -69,7 +96,7 @@ class TaskList extends Component {
                     />
                   ) : (
                     <div>
-                      {this.state.keyword} &nbsp;
+                      {keyword} &nbsp;
                       <i
                         class="far fa-edit Icon"
                         onClick={this.editNameInputState.bind(this)}
@@ -81,24 +108,69 @@ class TaskList extends Component {
                   <></>
                 ) : (
                   <>
-                    <div className="head-insertBtn">
-                      <i
-                        class="fas fa-plus Icon"
-                        onClick={this.addTask.bind(this)}
-                      ></i>
-                    </div>
-                    <div className="head-deleteBtn">
-                      <i
-                        class="far fa-trash-alt Icon"
-                        onClick={this.deleteTaskList.bind(this)}
-                      ></i>
-                    </div>
+                    {this.state.taskInsertState ? (
+                      ""
+                    ) : (
+                      <>
+                        <div className="head-insertBtn">
+                          <i
+                            class="fas fa-plus Icon"
+                            onClick={this.showTaskInsertArea.bind(this)}
+                          ></i>
+                        </div>
+                        <div className="head-deleteBtn">
+                          <i
+                            class="far fa-trash-alt Icon"
+                            onClick={this.deleteTaskList.bind(this)}
+                          ></i>
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>
             </div>
+            {this.state.taskInsertState ? (
+              <div className="taskInsertArea">
+                <div className="taskInsertForm">
+                  <textarea
+                    className="textArea"
+                    cols="35"
+                    rows="2"
+                    onChange={this.onTextAreaChanged.bind(this)}
+                    value={this.state.taskContents}
+                  ></textarea>
+                </div>
+                <div className="taskInsertBtn">
+                  <button
+                    type="button"
+                    class="btn cancel"
+                    onClick={this.noneTaskInsertArea.bind(this)}
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    class="btn comfirm"
+                    onClick={this.addTask.bind(this)}
+                  >
+                    만들기
+                  </button>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-          <div className="tasks">{taskComponents}</div>
+          <div className="tasks">
+            {this.props.taskList.tasks.map((task) => (
+              <Task
+                taskListId={this.props.taskList.no}
+                task={task}
+                taskCallbacks={this.props.taskCallbacks}
+              />
+            ))}
+          </div>
         </div>
       </>
     );

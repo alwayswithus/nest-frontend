@@ -14,6 +14,7 @@ class KanbanMain extends Component {
     };
   }
 
+  // task 추가
   callbackAddTask(taskListId, taskContents) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.no == taskListId
@@ -38,14 +39,43 @@ class KanbanMain extends Component {
       taskList: newTaskList,
     });
   }
+  // task 삭제
+  callbackDeleteTask(taskListId, taskId) {
+    const TaskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.no == taskListId
+    );
+
+    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.no == taskId
+    );
+
+    let newTaskList = update(this.state.taskList, {
+      [TaskListIndex]: {
+        tasks: {
+          $splice: [[TaskIndex, 1]],
+        },
+      },
+    });
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+
+  // task 복사
+  callbackCopyTask() {}
+
+  // task list 추가
+  callbackAddTaskList() {}
+
+  // task list 삭제
   callbackDeleteTaskList(taskListId) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.no == taskListId
     );
+
     let newTaskList = update(this.state.taskList, {
       $splice: [[TaskListIndex, 1]],
     });
-    console.log(newTaskList);
 
     this.setState({
       taskList: newTaskList,
@@ -68,7 +98,10 @@ class KanbanMain extends Component {
               tasks={this.state.taskList}
               taskCallbacks={{
                 add: this.callbackAddTask.bind(this),
-                delete: this.callbackDeleteTaskList.bind(this),
+                delete: this.callbackDeleteTask.bind(this),
+                copy: this.callbackCopyTask(this),
+                addList: this.callbackAddTaskList.bind(this),
+                deleteList: this.callbackDeleteTaskList.bind(this),
               }}
             />
           </div>
