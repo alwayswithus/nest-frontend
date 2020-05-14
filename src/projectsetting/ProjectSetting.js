@@ -52,7 +52,7 @@ class ProjectSetting extends Component {
     render() {
 
         return (
-            <div style={{ height: '100%', position: 'relative' }}>
+            <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
                 <ProjectHeader name='김우경' date='2020.05.06' />
 
@@ -102,6 +102,72 @@ class ProjectSetting extends Component {
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>test</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div>
+                                    <div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
+                                        <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <span>김우경</span>
+                                    </div><div className="Member">
                                         <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                         <span>김우경</span>
                                     </div>

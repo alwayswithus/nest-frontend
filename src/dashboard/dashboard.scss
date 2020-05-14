@@ -1,6 +1,15 @@
 .Dashboard {
     height: 100%;
 
+    #projectSet {
+        right: 0px;
+        z-index: 999;
+        display: inline-block;
+        position: fixed;
+        top: 57px;
+        width: 1px;
+        height: calc(100% - 58px);
+    }
     .container-fluid {
         padding-left: 0;
         padding-right: 0;
@@ -82,43 +91,49 @@
         margin-bottom: 8px;
     }
     
-    .panel-group .panel-body {
-        padding-top: 62px;
-        padding-left: 0;
-        padding-right: 10px;
-        padding-bottom: 8px;
+    .panel-group {
+        
+        .panel-default {
+        
+            .panel-body {
+                padding-top: 62px;
+                padding-left: 0;
+                padding-right: 10px;
+                padding-bottom: 8px;
 
-        .project-state {
-            padding-right: 1px;
-            border-right: 0px;
-        }
+                .project-state {
+                    padding-right: 1px;
+                    border-right: 0px;
+                }
 
-        .project-state-change {
-                
-            padding-left: 0;
-            padding-right: 2px;
-            border-left: 0px;
+                .project-state-change {
+                        
+                    padding-left: 0;
+                    padding-right: 2px;
+                    border-left: 0px;
 
-            .caret {
-                visibility: hidden;
+                    .caret {
+                        visibility: hidden;
+                    }
+                        
+                }
+                .project-state-change:hover {
+                        
+                    .caret {
+                        visibility: visible;
+                    }
+                }
+
+                .fa-cog {
+                    visibility: hidden;
+                }
             }
-                
         }
-        .project-state-change:hover {
-                
-            .caret {
+        
+        .panel-default:hover {
+            .fa-cog {
                 visibility: visible;
             }
-        }
-
-        .fa-cog {
-            visibility: hidden;
-        }
-    }
-
-    .panel-group:hover {
-        .fa-cog {
-            visibility: visible;
         }
     }
 
@@ -219,9 +234,11 @@
                     margin-left: 40px;
 
                     .join-project-member {
+                        height: 38px;
+                        margin-bottom: 10px;
                         margin-left: 10px;
                         display: inline-block;
-                        background-color: #f0d7d2;
+                        background-color: #C7C7C7;
                         padding-left: 5px;
                         padding-right: 5px;
                         padding-top: 5px;

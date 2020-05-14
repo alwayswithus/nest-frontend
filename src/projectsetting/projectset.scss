@@ -7,14 +7,14 @@
 
 
 .ProjectSet{
+    float: right;
     background-color: #F3F4F5;
     width: 632px;
-    height: calc(100% - 220px);
+    height: calc(100% - 120px);
     box-shadow: -60px -50px 50px -90px #000000,
                 60px 0px 50px -90px #000000;
     right:0px;
     top:220px;
-    overflow: scroll;
     overflow-x: hidden;
     hr{
         margin:0px;
