@@ -53,17 +53,23 @@ class ProjectSetting extends Component {
 
         return (
             <div style={{ height: '100%', position: 'relative' }}>
+                {/* 프로젝트 헤더 */}
                 <ProjectHeader name='김우경' date='2020.05.06' />
+
+                {/* 프로젝트 리스트 */}
                 <div className="ProjectSet" >
                     <hr />
                     <div style={{ color: '#60C7CA', fontSize: '1.3rem', padding: '3%' }}><b>설명 추가</b></div>
                     <hr style={{ marginBottom: '20px', color: '#555555' }} />
                     <div className="setList">
                         <ul>
+                            {/* 프로젝트상태 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
                                 <div style={{ display: 'inline-block' }}><ProjectStatus /> </div>
                             </li>
+
+                            {/* 마감일 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
@@ -82,6 +88,8 @@ class ProjectSetting extends Component {
                                 </div>
 
                             </li>
+                            
+                            {/* 프로젝트 멤버 */}
                             <li>
                                 <div style={{ float: 'left' }}>
                                     <h5>
@@ -91,6 +99,7 @@ class ProjectSetting extends Component {
                                 <div style={{ float: 'left' }}>
                                     <Button variant=""><i class="fas fa-plus fa-1x"></i> </Button>
                                 </div>
+                                {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     <div className="Member">
                                         <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
@@ -98,10 +107,14 @@ class ProjectSetting extends Component {
                                     </div>
                                 </div>
                             </li>
+                            
+                            {/* csv로 내보내기 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>csv로 내보내기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link"><button>csv로 내보내기</button></div>
                             </li>
+                            
+                            {/* 프로젝트 나가기 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 나가기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">
@@ -119,6 +132,8 @@ class ProjectSetting extends Component {
                                     </Dialog>
                                 </div>
                             </li>
+                            
+                            {/* 프로젝트 영구삭제 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 영구삭제</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">

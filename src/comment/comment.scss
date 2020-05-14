@@ -1,8 +1,10 @@
 .Comment{
     box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
     width:632px;
-    // height:150px;
-    margin:50px auto;
+    float:right;
+    margin:43px auto;
+    clear: both;
+
     hr {
         border: 2px solid black;
         margin:0;
@@ -47,8 +49,6 @@
 
 .CommentList{
     background-color: #F3F4F5;
-    height:400px;
-    overflow: auto;
     .media{
         padding:1%;
         img{

@@ -25,60 +25,12 @@ const Setting = (props) => {
                         <div style={{ display: 'inline-block' }}><Button variant=""> <i class="fas fa-plus fa-1x"></i> </Button> </div>
                     </li>
                     <li>
-                        <div style={{ float: 'left' }}><i class="fas fa-user-plus"></i></div>
+                        <div style={{ float: 'left',marginTop:'10px' }}><i class="fas fa-user-plus"></i></div>
                         <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                         <div style={{ float: 'left' }}>
                             <Button variant=""><i class="fas fa-plus fa-1x"></i></Button>
                         </div>
                         <div className="Member-list" style={{ display: 'inline-block' }}>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
-                            <div className="Member">
-                                <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                <span>김우경</span>
-                            </div>
                             <div className="Member">
                                 <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                 <span>김우경</span>

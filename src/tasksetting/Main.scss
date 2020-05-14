@@ -6,11 +6,15 @@
 } */
 
 .Home{
-    background-color: #FFFFE8;
+    background-color: #F3F4F5;
     width:632px;
+    height: calc(100% - 265px);
     float: right;
     margin-top: 43px;
     clear: both;
+    overflow: auto;
+    box-shadow: -60px -50px 50px -90px #000000,
+    60px 0px 50px -90px #000000;
     .TodoInsert {
         input { 
             background: #D8D8D8;
@@ -36,13 +40,19 @@
         li{
             margin:10% 0 5% 5%;
             list-style: none;
-            
-            Button{
-                background: none;
+            div{
+                margin:1%;
+                Button{
+                    background: none;
+                }
+
+                h5{
+                    width: 120px;
+                }
             }
+           
             .Member-list{
                 width:300px;
-                border: 2px solid black;
                 .Member{
                     border:none;
                     border-radius: 5px;
