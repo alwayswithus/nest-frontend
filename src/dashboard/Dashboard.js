@@ -4,13 +4,15 @@ import Navigator from './navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from '../projectsetting/ProjectSetting';
-import ProjectHeader from '../projectsetting/ProjectHeader';
+import data from './data.json';
+import update from 'react-addons-update';
 
 export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
+      projects: data,
       details: true,
       url: "",
       setOn: true
@@ -29,7 +31,7 @@ export default class Dashboard extends React.Component {
   }
 
   callbackChangeBackground(url) {
-    
+
     this.setState({
       url: url
     })
@@ -38,6 +40,27 @@ export default class Dashboard extends React.Component {
   showDetails() {
     this.setState({
       details: !this.state.details
+    })
+  }
+
+  onAddProjectSubmit(event) {
+    event.preventDefault();
+
+    let project = {
+      project_no: this.state.projects.length + 1,
+      project_title: event.target.projectTitle.value,
+      project_desc: event.target.projectDesc.value,
+      project_start: Date.now(),
+      project_end: "",
+      project_status: "상태없음"
+    };
+
+    let newProjects = update(this.state.projects, {
+      $push: [project]
+    });
+
+    this.setState({
+      projects: newProjects
     })
   }
 
@@ -54,10 +77,10 @@ export default class Dashboard extends React.Component {
           <DashboardTopbar />
 
           {/* 메인 영역 */}
+          <div id="projectSet" style={{ display: 'none' }}>
+            <ProjectSetting setOn={this.state.setOn} />
+          </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
-            <div id="projectSet" style={{ display: 'none' }}>
-              <ProjectSetting setOn={this.state.setOn} />
-            </div>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
 
 
@@ -66,20 +89,21 @@ export default class Dashboard extends React.Component {
               <h3>내가 속한 프로젝트 (1)</h3>
             </div>
 
-            {this.state.details ?
-              <div className="panel-group">
+            {/* 프로젝트들 */}
+            <div className="panel-group">
+              {this.state.details ? this.state.projects.map((project) =>
                 <div className="panel panel-default projects">
                   <a href="/kanbanMain">
                     <div className="panel-header">
                       <span className="project-title">
-                        myiste 프로젝트
-                    </span>
+                        {project.project_title}
+                      </span>
                     </div>
                     <div className="panel-body">
                       <a href="#">
                         <div className="btn-group">
                           <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change" data-toggle="dropdown">
-                            &nbsp;&nbsp;상태없음
+                            &nbsp;&nbsp;{project.project_status}
                             <span className="caret"></span>
                           </button>
                           <ul className="dropdown-menu" role="menu">
@@ -90,8 +114,10 @@ export default class Dashboard extends React.Component {
                           </ul>
                         </div>
                       </a>
+
+                      {/* Project Setting Click */}
                       <a href="#">
-                        <i className="fas fa-cog fa-lg" data-toggle="modal" data-target="#project-setting"></i>
+                        <i className="fas fa-cog fa-lg" onClick={this.onConfigClick.bind(this)}></i>
                       </a>
                     </div>
                     <div className="panel-footer">
@@ -105,8 +131,9 @@ export default class Dashboard extends React.Component {
                       </div>
                     </div>
                   </a>
-                </div>
-              </div> : ""}
+                </div>) : ""
+              }
+            </div>
 
             {/* 새 프로젝트 */}
             <div className="panel-group" >
@@ -126,8 +153,7 @@ export default class Dashboard extends React.Component {
 
             {/* Add Project Modal content */}
             <div className="modal-content">
-              <form action="">
-
+              <div className="form group">
                 {/* Add Project Modal header */}
                 <div className="modal-header add-project-header">
                   <button type="button" className="close" data-dismiss="modal">&times;</button>
@@ -138,10 +164,10 @@ export default class Dashboard extends React.Component {
                 <div className="modal-body add-project-body">
                   <div className="form-group">
                     <h5>제목</h5>
-                    <input type="text" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
+                    <input type="text" name="projectTitle" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
 
                     <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
-                    <input type="text" className="form-control modal-body-description" /><br />
+                    <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
 
                     <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                     <div className="add-project-member-list">
@@ -161,24 +187,7 @@ export default class Dashboard extends React.Component {
 
                 {/* Add Project Modal footer */}
                 <div className="modal-footer add-project-footer">
-                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" />
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        {/* Project Setting Modal */}
-        <div className="project-setting-dialog">
-          <div class="modal fade  come-from-modal right" id="project-setting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document" style={ {width: "670px"} }>
-              <div class="modal-content">
-                <div class="modal-body">
-                  <ProjectSetting/>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" data-dismiss="modal" onClick={this.onAddProjectSubmit.bind(this)} value="OK" />
                 </div>
               </div>
             </div>
