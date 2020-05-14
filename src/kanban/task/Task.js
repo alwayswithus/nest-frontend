@@ -5,11 +5,18 @@ import Date from "./Date";
 import "./Task.scss";
 
 class Task extends Component {
+  deleteTask() {
+    this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
+  }
+  copyTask() {
+    this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
+  }
+
   render() {
     const taskItem = this.props.task;
     const labelColor = "#F75496";
     const labelStyle = {
-      borderLeft: `5px solid ${labelColor}`
+      borderLeft: `5px solid ${labelColor}`,
     };
 
     return (
@@ -40,7 +47,9 @@ class Task extends Component {
                       </li>
                       <li className="divider"></li>
                       <li>
-                        <a href="#">업무 삭제</a>
+                        <a href="#" onClick={this.deleteTask.bind(this)}>
+                          업무 삭제
+                        </a>
                       </li>
                     </ul>
                   </div>
