@@ -29,7 +29,7 @@ export default class Dashboard extends React.Component {
   }
 
   callbackChangeBackground(url) {
-    console.log(url);
+    
     this.setState({
       url: url
     })
@@ -91,7 +91,7 @@ export default class Dashboard extends React.Component {
                         </div>
                       </a>
                       <a href="#">
-                        <i onClick={this.onConfigClick.bind(this)} className="fas fa-cog fa-lg" data-toggle="modal" data-target="#project-setting"></i>
+                        <i className="fas fa-cog fa-lg" data-toggle="modal" data-target="#project-setting"></i>
                       </a>
                     </div>
                     <div className="panel-footer">
@@ -171,15 +171,10 @@ export default class Dashboard extends React.Component {
         {/* Project Setting Modal */}
         <div className="project-setting-dialog">
           <div class="modal fade  come-from-modal right" id="project-setting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="document" style={ {width: "670px"} }>
               <div class="modal-content">
-                <div class="modal-header">
-                  {/* <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Modal title</h4> */}
-                  <ProjectHeader />
-                </div>
                 <div class="modal-body">
-                ...  
+                  <ProjectSetting/>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

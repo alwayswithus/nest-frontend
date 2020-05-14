@@ -11,6 +11,7 @@ class KanbanMain extends Component {
     super(...arguments);
     this.state = {
       taskList: data,
+      url:""
     };
   }
 
@@ -60,7 +61,12 @@ class KanbanMain extends Component {
       taskList: newTaskList,
     });
   }
-
+  callbackChangeBackground(url) {
+    console.log(url);
+    this.setState({
+      url: url,
+    });
+  }
   // task 복사
   callbackCopyTask() {}
 
@@ -84,10 +90,10 @@ class KanbanMain extends Component {
   render() {
     return (
       <div className="container-fluid kanbanMain">
-        <div className="row content ">
+        <div className="row content " style={{ backgroundImage: `url(${this.state.url})` }}>
           {/* 네비게이션바 */}
           <div className="navibar">
-            <Navigator />
+            <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }}/>
           </div>
           {/*상단바*/}
           <TopBar />
@@ -96,6 +102,7 @@ class KanbanMain extends Component {
             {/*칸반보드*/}
             <KanbanBoard
               tasks={this.state.taskList}
+              
               taskCallbacks={{
                 add: this.callbackAddTask.bind(this),
                 delete: this.callbackDeleteTask.bind(this),

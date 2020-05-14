@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TodoList from "./TodoList";
 import TagList from "./TagList";
 import Date from "./Date";
+import Setting from "../../tasksetting/Setting";
 import "./Task.scss";
 
 class Task extends Component {
@@ -12,6 +13,9 @@ class Task extends Component {
     this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
   }
 
+  test(){
+console.log(this.props.task.contents)
+  }
   render() {
     const taskItem = this.props.task;
     const labelColor = "#F75496";
@@ -21,7 +25,7 @@ class Task extends Component {
 
     return (
       <>
-        <div className="task">
+        <div className="task" data-toggle="modal" data-target={`#kanban-setting-${taskItem.no}`} onClick={this.test.bind(this)}>
           <div className="panel panel-primary" style={labelStyle}>
             <div className="panel-body">
               <div className="task-item task-top">
@@ -82,6 +86,22 @@ class Task extends Component {
                 </div>
                 <div className="userCocunt">
                   <i className="fas fa-user"> 3</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Project Setting Modal */}
+        <div className="project-setting-dialog">
+          <div class="modal fade  come-from-modal right" id={`kanban-setting-${taskItem.no}`} tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style={ {width: "670px"} }>
+              <div class="modal-content">
+                <div class="modal-body">
+                  <Setting taskContents={taskItem.contents}/>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
               </div>
             </div>

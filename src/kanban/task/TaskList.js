@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Task from "./Task";
+
 import "./TaskList.scss";
 
 class TaskList extends Component {
@@ -162,7 +163,7 @@ class TaskList extends Component {
               ""
             )}
           </div>
-          <div className="tasks">
+          <div className="tasks"  >
             {this.props.taskList.tasks.map((task) => (
               <Task
                 taskListId={this.props.taskList.no}
@@ -172,6 +173,7 @@ class TaskList extends Component {
             ))}
           </div>
         </div>
+        
       </>
     );
   }

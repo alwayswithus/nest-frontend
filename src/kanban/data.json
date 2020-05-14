@@ -4,7 +4,7 @@
     "title": "계획",
     "tasks": [
       {
-        "no": 10,
+        "no": 11,
         "contents": "계획된 업무 1",
         "todoList": [
           {
@@ -35,7 +35,7 @@
         "endDate": "5월 15일"
       },
       {
-        "no": 20,
+        "no": 12,
         "contents": "계획된 업무 2",
         "todoList": [],
         "tag": [
@@ -48,7 +48,7 @@
         ]
       },
       {
-        "no": 20,
+        "no": 13,
         "contents": "계획된 업무 3",
         "todoList": [],
         "tag": [
@@ -61,7 +61,7 @@
         ]
       },
       {
-        "no": 20,
+        "no": 14,
         "contents": "계획된 업무 4",
         "todoList": [],
         "tag": [
@@ -74,7 +74,7 @@
         ]
       },
       {
-        "no": 20,
+        "no": 15,
         "contents": "계획된 업무 5",
         "todoList": [],
         "tag": [
@@ -87,7 +87,7 @@
         ]
       },
       {
-        "no": 20,
+        "no": 16,
         "contents": "계획된 업무 6",
         "todoList": [],
         "tag": [
@@ -106,7 +106,7 @@
     "title": "진행",
     "tasks": [
       {
-        "no": 10,
+        "no": 21,
         "contents": "진행 업무 1",
         "todoList": [
           {
@@ -125,7 +125,7 @@
         ]
       },
       {
-        "no": 20,
+        "no": 22,
         "contents": "진행 업무 2",
         "todoList": [],
         "tag": []
@@ -137,7 +137,7 @@
     "title": "완료",
     "tasks": [
       {
-        "no": 10,
+        "no": 31,
         "contents": "완료 업무 1",
         "todoList": [],
         "tag": []
@@ -149,7 +149,7 @@
     "title": "기타",
     "tasks": [
       {
-        "no": 12,
+        "no": 41,
         "contents": "기타 업무 1",
         "todoList": [],
         "tag": []

@@ -3,6 +3,9 @@ import TaskList from "./task/TaskList";
 import "./KanbanBoard.scss";
 
 class KanbanBoard extends Component {
+
+  
+
   render() {
     const allTaskList = this.props.tasks;
     return (
@@ -29,6 +32,8 @@ class KanbanBoard extends Component {
             </button>
           </div>
         </div>
+
+        
       </>
     );
   }
