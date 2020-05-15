@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './header.scss';
-import Navigation from '../tasksetting/Navigation';
+import Navigation from '../TaskSetNav';
 
 class Header extends Component {
     render(){

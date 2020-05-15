@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './Main.scss';
+import './Setting.scss';
 
 class Important extends Component {
 

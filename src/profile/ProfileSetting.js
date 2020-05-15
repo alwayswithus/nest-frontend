@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import './profileset.scss';
 import ProfileNav from './ProfileNav';
-import Navigator from '../dashboard/navigator/Navigator';
+import Navigator from '../navigator/Navigator';
 import SettingList from './SettingList';
 
 const ProfileSetting = (props) => {

@@ -1,38 +1,36 @@
-import React, { Component, Fragment } from "react";
-import { Router, Route } from "react-router-dom";
+import React from "react";
+import { Route } from "react-router-dom";
 
-import Setting from './tasksetting/Setting';
-import File from './file/File';
+import Setting from "./project/kanban/tasksetting/setting/Setting";
+import File from "./project/kanban/tasksetting/file/File";
 import { BrowserRouter } from "react-router-dom";
 
-import Comment from './comment/Comment';
-import KanbanMain from "./kanban/KanbanMain";
+import Comment from "./project/kanban/tasksetting/comment/Comment";
+import KanbanMain from "./project/kanban/KanbanMain";
 
-import Login from "./login/Login";
-import SignUp from "./signup/SignUp";
-import PwFind from "./pwfind/PwFind";
+import Login from "./user/login/Login";
+import SignUp from "./user/signup/SignUp";
+import PwFind from "./user/pwfind/PwFind";
 
-import Gantt from "./gantt/Gantt";
+import Gantt from "./project/gantt/Gantt";
 
 import Dashboard from "./dashboard/Dashboard";
-import Profile from './profile/Profile';
-import Notification from './notification/Notification';
-import ProfileSetting from './profile/ProfileSetting';
-import ProjectSetting from './projectsetting/ProjectSetting'
+import Profile from "./profile/Profile";
+import Notification from "./notification/Notification";
+import ProfileSetting from "./profile/ProfileSetting";
+import ProjectSetting from "./dashboard/projectsetting/ProjectSetting";
 
 function App() {
+
   return (
     <div className="App">
-
       <BrowserRouter>
-
         {/*메인 */}
-        <Route path="/" exact component={Login} />
+        <Route  path="/nest" exact component={Login} />
 
         {/*회원 */}
         <Route path="/signup" exact component={SignUp} />
         <Route path="/pwfind" exact component={PwFind} />
-
 
         {/* 프로필설정 */}
         <Route path="/profile" exact component={Profile} />
@@ -57,9 +55,7 @@ function App() {
 
         {/* 프로젝트 세팅*/}
         <Route path="/projectset" exact component={ProjectSetting} />
-
       </BrowserRouter>
-
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import Navigator from './navigator/Navigator';
+import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
-import ProjectSetting from '../projectsetting/ProjectSetting';
+import ProjectSetting from './projectsetting/ProjectSetting';
 import data from './data.json';
 import update from 'react-addons-update';
 import PropTypes from 'prop-types';

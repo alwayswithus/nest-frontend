@@ -1,7 +1,7 @@
 import React from 'react';
 import './profile.scss';
 import ProfileNav from './ProfileNav';
-import Navigator from "../dashboard/navigator/Navigator";
+import Navigator from "../navigator/Navigator";
 
 const Profile = (props) => {
     return (
@@ -12,7 +12,7 @@ const Profile = (props) => {
                     <ProfileNav />
                     <div className="profileLayout">
                         <div className="profileImg">
-                            <img src="/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <img src="/assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                             <button><i class="fas fa-camera icon-camera"></i> &nbsp;사진업데이트</button>
                         </div>
                         <from className='profileInput'>
