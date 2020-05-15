@@ -97,7 +97,7 @@ export default class Dashboard extends React.Component {
 
               {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
 
-              <h3>내가 속한 프로젝트 (1)</h3>
+              <h3>내가 속한 프로젝트 ({ this.state.projects.length })</h3>
             </div>
 
             {/* Projects */}
