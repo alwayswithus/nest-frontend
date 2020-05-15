@@ -20,7 +20,7 @@ const SignUp = () => {
     <>
       <div className="SignUp">
         <div className="SignUpBox">
-          <img style={{width:"150px", height:"150px"}} src="images/nest-logo-black.png" />
+          <img style={{width:"150px", height:"150px"}} src="/assets/images/nest-logo-black.png" />
 
           <form onSubmit={SignUp}>
             <InputLabel id="signUpText">회원가입</InputLabel>

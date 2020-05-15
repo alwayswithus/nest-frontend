@@ -104,7 +104,7 @@ export default class Dashboard extends React.Component {
             <div className="panel-group">
               {this.state.details ? this.state.projects.map((project) =>
                 <div className="panel panel-default projects">
-                  <a href="/kanbanMain">
+                  <a href="/nest/kanbanMain">
                     <div className="panel-header">
                       <span className="project-title">
                         {project.project_title}
