@@ -30,7 +30,7 @@ export default class Navigator extends React.Component {
 
                             {/*<!-- Notification link -->*/}
                             <li className="nav-item" data-toggle="tooltip" title="Notification">
-                                <a href="/notification" className="link">
+                                <a href="/nest/notification" className="link">
                                     <i className="far fa-bell icon"></i>
                                 </a>
                             </li>
@@ -44,7 +44,7 @@ export default class Navigator extends React.Component {
 
                             {/*<!-- Projects link-- >*/}
                             <li className="nav-item" data-toggle="tooltip" title="Projects">
-                                <a href="/dashboard" className="link">
+                                <a href="/nest/dashboard" className="link">
                                     <i className="fas fa-tasks icon"></i>
                                 </a>
                             </li >
@@ -86,15 +86,15 @@ export default class Navigator extends React.Component {
                         </div>
                     </div>
                 </div>
-
-                {/* User Profile Modal */}
+                
+              {/* User Profile Modal */}
                 <div className="modal fade" id="use-profile" role="dialog" aria-labelledby="myModalLabel"
                     aria-hidden="true">
                     <div className="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
                         {/* Content */}
                         <div className="modal-content">
                             {/* Header */}
-                            <a href="/profile" className="profile-setting-page">
+                            <a href="/nest/profile" className="profile-setting-page">
                                 <div className="modal-header">
                                     <img src="assets/images/ko.jpg" alt="avatar" className="rounded-circle img-responsive" />
                                     <div className="text-center">
@@ -117,7 +117,7 @@ export default class Navigator extends React.Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <a href="/nest">
+                                <a href="/nest/">
                                     <div className="text-center mt-4 user-logout">
                                         <button className="btn btn-cyan mt-1">Logout <i className="fas fa-sign-in ml-1"></i></button>
                                     </div>
