@@ -25,7 +25,7 @@ export default class Navigator extends React.Component {
                         <div className="exclude-nest-li">
                             {/*<!-- About link -->*/}
                             <li className="nav-item" data-toggle="modal" data-target="#use-profile">
-                                <img className="nav-item-profile" src="images/ko.jpg"></img><br />
+                                <img className="nav-item-profile" src="assets/images/ko.jpg"></img><br />
                             </li>
 
                             {/*<!-- Notification link -->*/}
@@ -60,7 +60,7 @@ export default class Navigator extends React.Component {
                         </div>
                         <div className="nest-li">
                             <li className="nav-item" data-toggle="modal" data-target="#nest-introduce">
-                                <img src="images/nest.png" id="nest-logo" />
+                                <img src="assets/images/nest.png" id="nest-logo" />
                             </li>
                         </div>
                     </ul >
@@ -96,7 +96,7 @@ export default class Navigator extends React.Component {
                             {/* Header */}
                             <a href="/profile" className="profile-setting-page">
                                 <div className="modal-header">
-                                    <img src="images/ko.jpg" alt="avatar" className="rounded-circle img-responsive" />
+                                    <img src="assets/images/ko.jpg" alt="avatar" className="rounded-circle img-responsive" />
                                     <div className="text-center">
                                         <h4 className="mt-1 mb-2">Maria Doe</h4>
                                         <h5 className="mt-1 mb-2">youg1322@naver.com</h5>
@@ -107,17 +107,17 @@ export default class Navigator extends React.Component {
                             <div className="modal-body">
                                 <h4 className="mt-1 mb-2">배경화면 설정</h4>
                                 <div className="background-setting">
-                                    <img id="1" onClick={this.onBackGroundClick.bind(this)} src="images/abandoned-forest-industry-nature.jpg" alt="images/abandoned-forest-industry-nature.jpg" className={this.state.backgroundId === "1" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
-                                    <img id="2" onClick={this.onBackGroundClick.bind(this)} src="images/arizona-asphalt-beautiful-blue-sky.jpg" alt="images/arizona-asphalt-beautiful-blue-sky.jpg" className={this.state.backgroundId === "2" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
-                                    <img id="3" onClick={this.onBackGroundClick.bind(this)} src="images/sunray-through-trees.jpg" alt="images/sunray-through-trees.jpg" className={this.state.backgroundId === "3" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
-                                    <img id="4" onClick={this.onBackGroundClick.bind(this)} src="images/fire-wallpaper.jpg" alt="images/fire-wallpaper.jpg" className={this.state.backgroundId === "4" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="1" onClick={this.onBackGroundClick.bind(this)} src="assets/images/abandoned-forest-industry-nature.jpg" alt="assets/images/abandoned-forest-industry-nature.jpg" className={this.state.backgroundId === "1" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="2" onClick={this.onBackGroundClick.bind(this)} src="assets/images/arizona-asphalt-beautiful-blue-sky.jpg" alt="assets/images/arizona-asphalt-beautiful-blue-sky.jpg" className={this.state.backgroundId === "2" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="3" onClick={this.onBackGroundClick.bind(this)} src="assets/images/sunray-through-trees.jpg" alt="assets/images/sunray-through-trees.jpg" className={this.state.backgroundId === "3" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="4" onClick={this.onBackGroundClick.bind(this)} src="assets/images/fire-wallpaper.jpg" alt="assets/images/fire-wallpaper.jpg" className={this.state.backgroundId === "4" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
                                     <div className="btn background-setting-button">
                                         더 보기
                                     </div>
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <a href="/">
+                                <a href="/nest">
                                     <div className="text-center mt-4 user-logout">
                                         <button className="btn btn-cyan mt-1">Logout <i className="fas fa-sign-in ml-1"></i></button>
                                     </div>

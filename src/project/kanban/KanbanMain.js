@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import update from "react-addons-update";
 import KanbanBoard from "./KanbanBoard";
-import Navigator from "../dashboard/navigator/Navigator";
-import TopBar from "./topBar/TopBar";
+import Navigator from "../../navigator/Navigator";
+import TopBar from "../topBar/TopBar";
 import data from "./data.json";
 import "./KanbanMain.scss";
 

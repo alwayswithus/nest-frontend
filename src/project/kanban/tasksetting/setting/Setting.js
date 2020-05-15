@@ -1,10 +1,10 @@
 
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
-import './Main.scss';
+import './Setting.scss';
 import Important from './Important';
 import Header from '../file/Header';
-import taskData from '../kanban/data.json';
+import taskData from '../../data.json';
 
 class Setting extends Component {
     render() {

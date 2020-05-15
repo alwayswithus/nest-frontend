@@ -2,20 +2,27 @@ import React, { Component } from "react";
 import TodoList from "./TodoList";
 import TagList from "./TagList";
 import Date from "./Date";
-import Setting from "../../tasksetting/Setting";
+import Setting from "../tasksetting/setting/Setting";
 import "./Task.scss";
 
 class Task extends Component {
-  deleteTask() {
+
+
+  deleteTask(event) {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
+    window.jQuery(document.body).removeClass('modal-open');
+    window.jQuery(".modal-backdrop").remove();
   }
   copyTask() {
     this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
   }
 
   test() {
-    console.log(this.props.task.contents);
+    this.setState({
+      open:true
+    })
   }
+
   render() {
     const taskItem = this.props.task;
     const labelColor = "#F75496";

@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigator from '../dashboard/navigator/Navigator';
+import Navigator from '../navigator/Navigator';
 import './notification.scss';
 
 const Notification = () => {
