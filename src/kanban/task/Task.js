@@ -102,7 +102,7 @@ class Task extends Component {
         {/* Project Setting Modal */}
         <div className="project-setting-dialog">
           <div
-            class="modal fade  come-from-modal right"
+            class="modal fade come-from-modal right"
             id={`kanban-setting-${taskItem.no}`}
             tabIndex="-1"
             role="dialog"
@@ -125,7 +125,7 @@ class Task extends Component {
                   >
                     Close
                   </button>
-                  <button type="submit" class="btn btn-primary">
+                  <button type="button" class="btn btn-primary" >
                     Save changes
                   </button>
                 </div>
