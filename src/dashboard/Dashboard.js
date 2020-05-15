@@ -6,6 +6,7 @@ import './dashboard.scss';
 import ProjectSetting from '../projectsetting/ProjectSetting';
 import data from './data.json';
 import update from 'react-addons-update';
+import PropTypes from 'prop-types';
 
 export default class Dashboard extends React.Component {
 
@@ -30,6 +31,7 @@ export default class Dashboard extends React.Component {
     }
   }
 
+  // 배경화면 설정 함수
   callbackChangeBackground(url) {
 
     this.setState({
@@ -37,12 +39,14 @@ export default class Dashboard extends React.Component {
     })
   }
 
+  // 화살표 펼치기, 숨기기 함수
   showDetails() {
     this.setState({
       details: !this.state.details
     })
   }
 
+  // 새 프로젝트 추가 함수
   onAddProjectSubmit(event) {
     event.preventDefault();
 
@@ -62,6 +66,13 @@ export default class Dashboard extends React.Component {
     this.setState({
       projects: newProjects
     })
+  }
+
+  // 새 프로젝트 Modal 제출 후 닫기 함수
+  onClose() {
+    document.getElementById('add-project').style.display = 'none'
+    window.jQuery(document.body).removeClass("modal-open");
+    window.jQuery(".modal-backdrop").remove();
   }
 
   render() {
@@ -89,7 +100,7 @@ export default class Dashboard extends React.Component {
               <h3>내가 속한 프로젝트 (1)</h3>
             </div>
 
-            {/* 프로젝트들 */}
+            {/* Projects */}
             <div className="panel-group">
               {this.state.details ? this.state.projects.map((project) =>
                 <div className="panel panel-default projects">
@@ -148,48 +159,51 @@ export default class Dashboard extends React.Component {
         </div>
 
         {/* Add Project Modal */}
-        <div className="modal fade" id="add-project" role="dialog" aria-labelledby="exampleModalCenterTitle">
+        <div className="modal fade" id="add-project" role="dialog" aria-labelledby="exampleModalCenterTitle" style={{display:'none'}}>
           <div className="modal-dialog modal-dialog-centered">
 
             {/* Add Project Modal content */}
             <div className="modal-content">
-              <div className="form group">
-                {/* Add Project Modal header */}
-                <div className="modal-header add-project-header">
-                  <button type="button" className="close" data-dismiss="modal">&times;</button>
-                  <h4 className="modal-title add-project-title">새 프로젝트</h4>
-                </div>
+              <form onSubmit={this.onAddProjectSubmit.bind(this)}>
+                <div className="form group">
+                  {/* Add Project Modal header */}
+                  <div className="modal-header add-project-header">
+                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                    <h4 className="modal-title add-project-title" >새 프로젝트</h4>
+                  </div>
 
-                {/* Add Project Modal body */}
-                <div className="modal-body add-project-body">
-                  <div className="form-group">
-                    <h5>제목</h5>
-                    <input type="text" name="projectTitle" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
+                  {/* Add Project Modal body */}
+                  <div className="modal-body add-project-body">
 
-                    <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
-                    <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
+                    <div className="form-group">
+                      <h5>제목</h5>
+                      <input type="text" name="projectTitle" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
 
-                    <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
-                    <div className="add-project-member-list">
-                      <div className="add-project-member-plus">
-                        <button type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
-                      </div>
-                      <div className="add-project-member-profile">
-                        <div className="join-project-member">
-                          <span><i className="fas fa-user-circle fa-2x"></i></span>
-                          <h4 style={{ display: "inline-block", marginTop: "0", marginLeft: "5px" }}>nest</h4>
-                          <span className="join-project-member-close" style={{ marginLeft: "5px" }}><i className="fas fa-times fa-lg"></i></span>
+                      <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
+                      <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
+
+                      <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
+                      <div className="add-project-member-list">
+                        <div className="add-project-member-plus">
+                          <button type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
+                        </div>
+                        <div className="add-project-member-profile">
+                          <div className="join-project-member">
+                            <span><i className="fas fa-user-circle fa-2x"></i></span>
+                            <h4 style={{ display: "inline-block", marginTop: "0", marginLeft: "5px" }}>nest</h4>
+                            <span className="join-project-member-close" style={{ marginLeft: "5px" }}><i className="fas fa-times fa-lg"></i></span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Add Project Modal footer */}
-                <div className="modal-footer add-project-footer">
-                  <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" data-dismiss="modal" onClick={this.onAddProjectSubmit.bind(this)} value="OK" />
+                  {/* Add Project Modal footer */}
+                  <div className="modal-footer add-project-footer">
+                    <input type="submit" id="add-project-submit" onClick={ this.onClose.bind(this) } className="btn btn-outline-primary btn-rounded" value="OK"/>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
