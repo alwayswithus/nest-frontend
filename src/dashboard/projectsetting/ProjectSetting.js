@@ -73,7 +73,7 @@ class ProjectSetting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i></Button>
+                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
                                     <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
                                         <DialogTitle onClose={this.handleClose.bind(this)}>
                                             <b>일정 설정</b>
@@ -97,7 +97,7 @@ class ProjectSetting extends Component {
                                     </h5>
                                 </div>
                                 <div style={{ float: 'left' }}>
-                                    <Button variant=""><i class="fas fa-plus fa-1x"></i> </Button>
+                                    <Button variant=""><i className="fas fa-plus fa-1x"></i> </Button>
                                 </div>
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
@@ -107,7 +107,7 @@ class ProjectSetting extends Component {
                                     </div>
                                     <div className="Member">
                                         <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
+                                        <span>yong80211@gmail.com</span>
                                     </div>
                                     
                                     <div className="Member">

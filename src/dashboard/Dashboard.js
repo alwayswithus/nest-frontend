@@ -15,6 +15,7 @@ export default class Dashboard extends React.Component {
     this.state = {
       projects: data,
       details: true,
+      addProjectMemberButton: false,
       url: "",
       setOn: true
     }
@@ -46,6 +47,12 @@ export default class Dashboard extends React.Component {
     })
   }
 
+  onAddProjectMember() {
+    this.setState({
+      addProjectMemberButton: !this.state.addProjectMemberButton
+    })
+  }
+
   // 새 프로젝트 추가 함수
   onAddProjectSubmit(event) {
     event.preventDefault();
@@ -56,7 +63,8 @@ export default class Dashboard extends React.Component {
       project_desc: event.target.projectDesc.value,
       project_start: Date.now(),
       project_end: "",
-      project_status: "상태없음"
+      project_status: "상태없음",
+      users: []
     };
 
     let newProjects = update(this.state.projects, {
@@ -93,18 +101,15 @@ export default class Dashboard extends React.Component {
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
-
-
               {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
-
-              <h3>내가 속한 프로젝트 ({ this.state.projects.length })</h3>
+              <h3>내가 속한 프로젝트 ({this.state.projects.length})</h3>
             </div>
 
             {/* Projects */}
             <div className="panel-group">
               {this.state.details ? this.state.projects.map((project) =>
-                <div className="panel panel-default projects">
-                  <a href="/nest/kanbanMain">
+                <div key={project.project_no} className="panel panel-default projects">
+                  <a href="/kanbanMain">
                     <div className="panel-header">
                       <span className="project-title">
                         {project.project_title}
@@ -159,7 +164,7 @@ export default class Dashboard extends React.Component {
         </div>
 
         {/* Add Project Modal */}
-        <div className="modal fade" id="add-project" role="dialog" aria-labelledby="exampleModalCenterTitle" style={{display:'none'}}>
+        <div className="modal fade" id="add-project" role="dialog" aria-labelledby="exampleModalCenterTitle" style={{ display: 'none' }}>
           <div className="modal-dialog modal-dialog-centered">
 
             {/* Add Project Modal content */}
@@ -185,22 +190,88 @@ export default class Dashboard extends React.Component {
                       <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                       <div className="add-project-member-list">
                         <div className="add-project-member-plus">
-                          <button type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
+                          <button onClick={this.onAddProjectMember.bind(this)} type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
                         </div>
-                        <div className="add-project-member-profile">
-                          <div className="join-project-member">
-                            <span><i className="fas fa-user-circle fa-2x"></i></span>
-                            <h4 style={{ display: "inline-block", marginTop: "0", marginLeft: "5px" }}>nest</h4>
-                            <span className="join-project-member-close" style={{ marginLeft: "5px" }}><i className="fas fa-times fa-lg"></i></span>
+                        <div className="join-project-member">
+                          <div className="Member">
+                            
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            
+                            <span>youg1322@naver.com</span>
                           </div>
+                          <div className="Member">
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <span>해용 한</span>
+                          </div>
+                          <div className="Member">
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <span>우경 김</span>
+                          </div>     
+                          <div className="Member">
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <span>인효 최</span>
+                          </div> 
+                          <div className="Member">
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <span>choi inhyo</span>
+                          </div>
+                          <div className="Member">
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <span>yong80211@gmail.com</span>
+                          </div>
+                          <div className="Member">
+                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                            <span>홍길동</span>
+                          </div>            
                         </div>
                       </div>
+
+                      {/* Add Project Member select */}
+                      {this.state.addProjectMemberButton ?
+                        <div className="container card-member">
+                          <div className="card">
+                            <div className="card-header">
+                              <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버</h6>
+                              <button type="button" className="close" style={{ lineHeight: "35px" }} onClick={this.onAddProjectMember.bind(this)} >&times;</button>
+                              <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
+                            </div>
+                            <div className="card-body">
+                              <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
+                              <div className="invite-card-member-list">
+                                <div className="invite-card-member">
+                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                  <span>홍길동</span>
+                                </div>
+                                <div className="invite-card-member">
+                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                  <span>인효 최</span>
+                                </div>
+                                <div className="invite-card-member">
+                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                  <span>해용 한</span>
+                                </div>
+                                <div className="invite-card-member">
+                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                  <span>길행 허</span>
+                                </div>
+                                <div className="invite-card-member">
+                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                  <span>우경 김</span>
+                                </div>
+                                <div className="invite-member">
+                                  <i class="fas fa-user-plus fa-2x"></i>
+                                  <span>멤버 초대하기</span>
+                                </div> 
+                              </div>
+                            </div>
+                          </div>
+                        </div> : ""}
                     </div>
                   </div>
 
                   {/* Add Project Modal footer */}
                   <div className="modal-footer add-project-footer">
-                    <input type="submit" id="add-project-submit" onClick={ this.onClose.bind(this) } className="btn btn-outline-primary btn-rounded" value="OK"/>
+                    <input type="submit" id="add-project-submit" onClick={this.onClose.bind(this)} className="btn btn-outline-primary btn-rounded" value="OK" />
                   </div>
                 </div>
               </form>

@@ -31,16 +31,19 @@
                         border:none;
                         border-radius: 5px;
                         background-color: #E6E8EC;
-                        margin:2%;
+                        margin: 0 2% 2%;
                         padding:1%;
-                        width:80px;
+                        width:auto;
                         display: inline-block;
                         cursor: pointer;
+
                         img{
-                            width:20px;
+                            width:29px;
+                            height: 29px;
+                            margin-right: 4px;
                         }
                         span{
-                            padding-top: 1%;
+                            padding-top: 1%;  
                         }
                     }
 
@@ -48,14 +51,17 @@
                         border:none;
                         border-radius: 5px;
                         background-color: #D7D7D7;
-                        margin:2%;
+                        margin: 0 2% 2%;
                         padding:1%;
-                        width:80px;
+                        width:auto;
                         img{
-                            width:20px;
+                            width:29px;
+                            height: 29px;
+                            margin-right: 4px;
                         }
                         span{
                             padding-top: 1%;
+                            
                         }
                     }
                 }
