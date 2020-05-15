@@ -14,6 +14,7 @@ class TaskList extends Component {
       taskInsertState: false,
       taskContents: "",
     };
+    
   }
 
   taskList() {}
@@ -27,7 +28,6 @@ class TaskList extends Component {
 
   // Task List 이름 수정시 글자 수 limit
   onInputChanged(event) {
-    console.log(event.target.value);
     this.setState({
       keyword: event.target.value.substr(0, 13),
     });
@@ -81,7 +81,6 @@ class TaskList extends Component {
   }
 
   getSnapshotBeforeUpdate(props) {
-    console.log(".........!");
     return props;
   }
 

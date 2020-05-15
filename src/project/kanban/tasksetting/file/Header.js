@@ -4,7 +4,6 @@ import Navigation from '../TaskSetNav';
 
 class Header extends Component {
     render(){
-        console.log("------->", this.props.taskContents);
     return (
         <div className="Header">
             <div className="Header-list">

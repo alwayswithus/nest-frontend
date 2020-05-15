@@ -122,7 +122,7 @@ class Task extends Component {
             >
               <div class="modal-content">
                 <div class="modal-body">
-                  <Setting taskContents={taskItem.contents} />
+                  <Setting task={taskItem} key={taskItem.no} />
                 </div>
                 <div class="modal-footer">
                   <button
