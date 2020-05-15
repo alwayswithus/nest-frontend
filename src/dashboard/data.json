@@ -5,7 +5,9 @@
         "project_desc": "mysite 만들어보자",
         "project_start": "20200513",
         "project_end": "20200514",
-        "project_status": "상태없음"
+        "project_status": "상태없음",
+
+        "users" : []
     },
     {
         "project_no": 2,
