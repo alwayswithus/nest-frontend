@@ -18,6 +18,16 @@
         "user_no": 4,
         "user_name": "김우경",
         "user_photo": "assets/images/unnamed.jpg"
+    },
+    {
+        "user_no": 5,
+        "user_name": "마이콜",
+        "user_photo": "assets/images/unnamed.jpg"
+    },
+    {
+        "user_no": "6",
+        "user_name": "둘리",
+        "user_photo": "assets/images/unnamed.jpg"
     }
 
 ]
