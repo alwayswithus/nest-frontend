@@ -13,11 +13,10 @@ class TaskList extends Component {
       viewTaskInsertArea: false,
       taskInsertState: false,
       taskContents: "",
+      IncompleteCount: this.props.taskList.tasks.length,
+      completeCount: 0,
     };
-    
   }
-
-  taskList() {}
 
   // Task List 이름 수정(input 태그) 상태 변경
   editNameInputState() {
@@ -179,17 +178,58 @@ class TaskList extends Component {
           </div>
           <div className="tasks">
             {this.props.taskList.tasks.map((task) => (
-              <Task
-                key={task.no}
-                taskListId={this.props.taskList.no}
-                task={task}
-                taskCallbacks={this.props.taskCallbacks}
-              />
+              <>
+                {task.checked ? (
+                  <></>
+                ) : (
+                  <>
+                    <Task
+                      key={task.no}
+                      taskListId={this.props.taskList.no}
+                      task={task}
+                      taskCallbacks={this.props.taskCallbacks}
+                    />
+                  </>
+                )}
+              </>
+            ))}
+
+            <div className="completeCountArea">
+              완료된 업무 {this.state.completeCount} / {this.state.IncompleteCount}
+            </div>
+
+            {this.props.taskList.tasks.map((task) => (
+              <>
+                {task.checked ? (
+                  <>
+                    <Task
+                      key={task.no}
+                      taskListId={this.props.taskList.no}
+                      task={task}
+                      taskCallbacks={this.props.taskCallbacks}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </>
             ))}
           </div>
         </div>
       </>
     );
+  }
+
+  componentDidMount() {
+    let count = 0;
+    this.props.taskList.tasks.map((task) => {
+      if (task.checked) {
+        count++;
+      }
+    });
+    this.setState({
+      completeCount: count,
+    });
   }
 }
 

@@ -110,7 +110,6 @@ export default class Dashboard extends React.Component {
     })
   }
 
-
   // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
   onCheckPoint(userNo, userName, userPhoto) {
     const userIndex = this.state.users.findIndex(
@@ -133,7 +132,6 @@ export default class Dashboard extends React.Component {
     const memberIndex = this.state.members.findIndex(
       (member) => member.member_no === memberNo
     );
-    console.log(memberIndex);
 
    let deleteMember = update(this.state.members, {
       $splice: [[memberIndex, 1]]
@@ -178,7 +176,7 @@ export default class Dashboard extends React.Component {
 
             {/* Projects */}
             <div className="panel-group">
-              {this.state.details ? this.state.projects && this.state.projects.map((project) =>
+              { this.state.details ? this.state.projects && this.state.projects.map((project) =>
                 <div key={project.projectNo} className="panel panel-default projects">
                   <a href="/kanbanMain">
                     <div className="panel-header">
@@ -218,8 +216,7 @@ export default class Dashboard extends React.Component {
                       </div>
                     </div>
                   </a>
-                </div>) : ""
-              }
+                </div>) : "" }
             </div>
 
             {/* 새 프로젝트 */}
@@ -275,8 +272,10 @@ export default class Dashboard extends React.Component {
                           </div>) }            
                         </div>
                       </div>
-                        { this.state.addProjectMemberButton ? 
-                        <ProjectMemberAdd callbackMembers={ {close: this.callbackCloseMember.bind(this), addMember: this.callbackCheckPoint.bind(this)} }/> : "" }
+                      
+                      {/* Add Project Member select */}
+                      { this.state.addProjectMemberButton ? 
+                        <ProjectMemberAdd callbackMembers={{ close: this.callbackCloseMember.bind(this), addMember: this.callbackCheckPoint.bind(this) }} /> : "" }
                     </div>
                   </div>
 
@@ -292,6 +291,7 @@ export default class Dashboard extends React.Component {
       </div>
     );
   }
+
   componentDidMount() {
     ApiService.fetchDashboard()
     .then(response => {
