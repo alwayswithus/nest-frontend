@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import './Projectheader.scss';
 
 class ProjectHeader extends Component  {
-    constructor() {
-        super(...arguments);
-    }
     
-    onCloseProjectSetting(event) {
-        event.target.value = true;
-        this.props.callbackCloseProjectSetting.close(event.target.value);
+    onCloseProjectSetting() {
+        this.props.callbackCloseProjectSetting.close(true);
 
     }
 

@@ -4,14 +4,11 @@ import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
-import projectData from './projectData.json';
 import userData from './userData.json';
 import update from 'react-addons-update';
 
-import PropTypes from 'prop-types';
 import ApiService from '../ApiService';
 
-// const DASHBOARD_API_URL = "http://localhost:8888/";
 const API_HEADERS = {
   'Content-Type' : 'application/json'
 }
@@ -22,7 +19,7 @@ export default class Dashboard extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      projects: projectData,          // 프로젝트 데이터
+      projects: null,                 // 프로젝트 데이터
       users: userData,                // 사용자 데이터
       
       members: [],                    // 각 프로젝트마다 참여하는 사용자들 목록 변수
@@ -31,7 +28,6 @@ export default class Dashboard extends React.Component {
       details: true,                  // 내가 속한 프로젝트를 클릭할 때마다 변하는 화살표 상태 변수
       addProjectMemberButton: false,  // 프로젝트에 참여하길 원하는 사용자들을 추가하기 위한 버튼 클릭 상태 변수
       setOn: true,                    // 프로젝트 설정을 보여주고 꺼주기 위한 상태 변수
-      dashboard:null,
       message:null
     }
   }
@@ -116,7 +112,7 @@ export default class Dashboard extends React.Component {
   // 프로젝트 멤버 삭제하는 함수
   onDelteMember(memberNo) {
     const memberIndex = this.state.members.findIndex(
-      (member) => member.member_no == memberNo
+      (member) => member.member_no === memberNo
     );
     console.log(memberIndex);
 
@@ -159,12 +155,12 @@ export default class Dashboard extends React.Component {
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
               {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
-              <h3>내가 속한 프로젝트 ({this.state.projects.length})</h3>
+              <h3>내가 속한 프로젝트 ({this.state.projects && this.state.projects.length})</h3>
             </div>
 
             {/* Projects */}
             <div className="panel-group">
-              {this.state.details ? this.state.dashboard && this.state.dashboard.map((project) =>
+              {this.state.details ? this.state.projects && this.state.projects.map((project) =>
                 <div key={project.projectNo} className="panel panel-default projects">
                   <a href="/kanbanMain">
                     <div className="panel-header">
@@ -194,7 +190,7 @@ export default class Dashboard extends React.Component {
                       </a>
                     </div>
                     <div className="panel-footer">
-              <span className="update-date"><h6>최초 업데이트 : {project.projectStart}</h6></span>
+                      <span className="update-date"><h6>최초 업데이트 : {project.projectStart}</h6></span>
                       <span className="update-task"><h6>7/16개 업무</h6></span>
                       <div className="progress">
                         <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
@@ -305,27 +301,12 @@ export default class Dashboard extends React.Component {
       </div>
     );
   }
-  componentDidMount(){
-  //   fetch(`${DASHBOARD_API_URL}/nest/dashboard`, {
-  //     method:'get',
-  //     headers:API_HEADERS
-  //   })
-
-  //   .then(response => {
-  //     this.setState({
-  //       dashboard:response.data.result
-  //     })
-  //   })
-  //   .catch(err => console.log('ERRRR',err))
-  //   console.log("@@@@@@@@@", this.state.dashboard)
-  // }
-
+  componentDidMount() {
     ApiService.fetchDashboard()
     .then(response => {
       this.setState({
-        dashboard:response.data.data
+        projects:response.data.data
       })
-      console.log("response:",this.state.dashboard);
     })
   }
 }
