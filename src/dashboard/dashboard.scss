@@ -225,7 +225,6 @@
                 .add-project-member-plus {
                     float: left;
                     
-                   
                     .add-project-member-button {
                         float: left;
                         color: white;
@@ -234,7 +233,11 @@
                 }  
                 
                 .join-project-member {
-                    height: 100%;
+                    overflow: scroll;
+                    position: absolute;
+                    width: 90%;
+                    left: 7%;
+                    height: 54%;
                     margin-left: 1%;
                     margin-bottom: 1%;
                     display: inline-block;
@@ -250,7 +253,7 @@
                         padding:1%;
                         width:auto;
                         display: inline-block;
-                        cursor: pointer;
+                        
 
                         img{
                             width:29px;
@@ -259,6 +262,15 @@
                         }
                         span{
                             padding-top: 1%;  
+                        }
+
+                        .delete-member {
+                            margin-left: 5px;
+                            cursor: pointer;
+
+                            .fa-times {
+                                color: grey;
+                            }
                         }
                     }
 
@@ -284,7 +296,7 @@
             
             .card-member {
                 position: absolute;
-                top: 63%;
+                top: 92%;
                 width: 60%;
                 background-color: #FFFFFF;
                 box-shadow: 0 3px 10px rgba(0,0,0,.5);
@@ -292,7 +304,7 @@
                 .find-member {
                     margin-bottom: 3px;
                 }
-
+                
                 .invite-card-member-list {
                     height: 300px;
                     overflow: scroll;

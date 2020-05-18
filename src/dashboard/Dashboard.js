@@ -1,23 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 
 import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
-import data from './data.json';
+import projectData from './projectData.json';
+import userData from './userData.json';
 import update from 'react-addons-update';
-import PropTypes from 'prop-types';
 
 export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
-      projects: data,
-      details: true,
-      addProjectMemberButton: false,
-      url: "",
-      setOn: true
+      
+      projects: projectData,          // 프로젝트 데이터
+      users: userData,                // 사용자 데이터
+      
+      members: [],                    // 각 프로젝트마다 참여하는 사용자들 목록 변수
+      url: "",                        // 배경화면 상태 변수
+      
+      details: true,                  // 내가 속한 프로젝트를 클릭할 때마다 변하는 화살표 상태 변수
+      addProjectMemberButton: false,  // 프로젝트에 참여하길 원하는 사용자들을 추가하기 위한 버튼 클릭 상태 변수
+      setOn: true                     // 프로젝트 설정을 보여주고 꺼주기 위한 상태 변수
     }
   }
 
@@ -25,16 +30,19 @@ export default class Dashboard extends React.Component {
     this.setState({
       setOn: !this.state.setOn
     })
-    if (this.state.setOn) {
-      document.getElementById('projectSet').style.display = 'block'
-    } else {
-      document.getElementById('projectSet').style.display = 'none'
-    }
+    document.getElementById('projectSet').style.display = 'block'
+  }
+
+  callbackCloseProjectSetting(setOn) {
+     this.setState({
+      setOn: setOn
+    })
+    document.getElementById('projectSet').style.display = 'none'
   }
 
   // 배경화면 설정 함수
   callbackChangeBackground(url) {
-
+    console.log(url)
     this.setState({
       url: url
     })
@@ -47,6 +55,7 @@ export default class Dashboard extends React.Component {
     })
   }
 
+  // ProjectMember 추가 버튼 이벤트 함수
   onAddProjectMember() {
     this.setState({
       addProjectMemberButton: !this.state.addProjectMemberButton
@@ -63,8 +72,7 @@ export default class Dashboard extends React.Component {
       project_desc: event.target.projectDesc.value,
       project_start: Date.now(),
       project_end: "",
-      project_status: "상태없음",
-      users: []
+      project_status: "상태없음"
     };
 
     let newProjects = update(this.state.projects, {
@@ -73,6 +81,40 @@ export default class Dashboard extends React.Component {
 
     this.setState({
       projects: newProjects
+    })
+  }
+
+  // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
+  onCheckPoint(userNo, userName, userPhoto) {
+    
+    let member = {
+      member_no: userNo,
+      member_name: userName,
+      member_photo: userPhoto
+    }
+
+    let newMember = update(this.state.members, {
+        $push: [member] 
+    })
+
+    this.setState({
+      members: newMember
+    })    
+  }
+
+  // 프로젝트 멤버 삭제하는 함수
+  onDelteMember(memberNo) {
+    const memberIndex = this.state.members.findIndex(
+      (member) => member.member_no == memberNo
+    );
+    console.log(memberIndex);
+
+   let deleteMember = update(this.state.members, {
+      $splice: [[memberIndex, 1]]
+    })
+
+    this.setState({
+      members: deleteMember
     })
   }
 
@@ -97,7 +139,7 @@ export default class Dashboard extends React.Component {
 
           {/* 메인 영역 */}
           <div id="projectSet" style={{ display: 'none' }}>
-            <ProjectSetting setOn={this.state.setOn} />
+            <ProjectSetting callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
@@ -192,37 +234,16 @@ export default class Dashboard extends React.Component {
                         <div className="add-project-member-plus">
                           <button onClick={this.onAddProjectMember.bind(this)} type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
                         </div>
+                        {/* 프로젝트 참여 멤버 */}
                         <div className="join-project-member">
-                          <div className="Member">
-                            
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            
-                            <span>youg1322@naver.com</span>
-                          </div>
-                          <div className="Member">
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            <span>해용 한</span>
-                          </div>
-                          <div className="Member">
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            <span>우경 김</span>
-                          </div>     
-                          <div className="Member">
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            <span>인효 최</span>
-                          </div> 
-                          <div className="Member">
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            <span>choi inhyo</span>
-                          </div>
-                          <div className="Member">
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            <span>yong80211@gmail.com</span>
-                          </div>
-                          <div className="Member">
-                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                            <span>홍길동</span>
-                          </div>            
+                          { this.state.members.map(member => 
+                          <div className="Member" key={ member.member_no }>                        
+                            <img src={ member.member_photo } className="img-circle" alt={ member.member_photo } />
+                            <span>{ member.member_name }</span>
+                            <span className="delete-member" onClick={ this.onDelteMember.bind(this, member.member_no) }>
+                              <i className="fas fa-times"></i>
+                            </span>
+                          </div>) }            
                         </div>
                       </div>
 
@@ -238,28 +259,16 @@ export default class Dashboard extends React.Component {
                             <div className="card-body">
                               <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
                               <div className="invite-card-member-list">
-                                <div className="invite-card-member">
-                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                  <span>홍길동</span>
-                                </div>
-                                <div className="invite-card-member">
-                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                  <span>인효 최</span>
-                                </div>
-                                <div className="invite-card-member">
-                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                  <span>해용 한</span>
-                                </div>
-                                <div className="invite-card-member">
-                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                  <span>길행 허</span>
-                                </div>
-                                <div className="invite-card-member">
-                                  <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                  <span>우경 김</span>
-                                </div>
+                                
+                                { this.state.users.map(user => 
+                                <div className="invite-card-member" key={ user.user_no }
+                                  id={ user.user_no } onClick={ this.onCheckPoint.bind(this, user.user_no, user.user_name, user.user_photo) }>
+                                  <img src={ user.user_photo } className="img-circle" alt={ user.user_photo }/>
+                                  <span>{ user.user_name }</span>
+                                </div>) }
+                                
                                 <div className="invite-member">
-                                  <i class="fas fa-user-plus fa-2x"></i>
+                                  <i className="fas fa-user-plus fa-2x"></i>
                                   <span>멤버 초대하기</span>
                                 </div> 
                               </div>
