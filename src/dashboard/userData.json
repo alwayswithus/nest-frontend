@@ -1,26 +1,22 @@
 [
     {
-        "user_no": 0,
-        "user_name": "yong80211@gmail.com",
-        "user_email": "yong80211@gmail.com",
-        "user_photo": "assets/images/unnamed.jpg"
-    },
-    {
         "user_no": 1,
-        "user_name": "최인효",
-        "user_email": "inhyo@naver.com",
+        "user_name": "yong80211@gmail.com",
         "user_photo": "assets/images/unnamed.jpg"
     },
     {
         "user_no": 2,
-        "user_name": "허길행",
-        "user_email": "coldthink@naver.com",
+        "user_name": "최인효",
         "user_photo": "assets/images/unnamed.jpg"
     },
     {
         "user_no": 3,
+        "user_name": "허길행",
+        "user_photo": "assets/images/unnamed.jpg"
+    },
+    {
+        "user_no": 4,
         "user_name": "김우경",
-        "user_email": "kim@naver.com",
         "user_photo": "assets/images/unnamed.jpg"
     }
 
