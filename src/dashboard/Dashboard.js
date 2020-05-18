@@ -91,13 +91,15 @@ export default class Dashboard extends React.Component {
   onAddProjectSubmit(event) {
     event.preventDefault();
     
+    console.log(event.target.projectTitle.value)
+
     let project = {
-      project_no: this.state.projects.length + 1,
-      project_title: event.target.projectTitle.value,
-      project_desc: event.target.projectDesc.value,
-      project_start: Date.now(),
-      project_end: "",
-      project_status: "상태없음",
+      projectNo: this.state.projects.length + 1,
+      projectTitle: event.target.projectTitle.value,
+      projectDesc: event.target.projectDesc.value,
+      projectStart: Date.now(),
+      projectEnd: "",
+      projectStatus: "상태없음",
       users:this.state.members
     };
 
@@ -108,50 +110,51 @@ export default class Dashboard extends React.Component {
     this.setState({
       projects: newProjects
     })
-  }
 
+  }
+  
   // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
   onCheckPoint(userNo, userName, userPhoto) {
     const userIndex = this.state.users.findIndex(
       (user) => user.user_no === userNo
-    )
+      )
+      
+      let checkUser = update(this.state.users, {
+        [userIndex] : {
+          user_check: { $set: !this.state.users[userIndex].user_check }
+        }
+      })
+      
+      this.setState({
+        users: checkUser
+      })
+    }
     
-    let checkUser = update(this.state.users, {
-      [userIndex] : {
-        user_check: { $set: !this.state.users[userIndex].user_check }
+    // 프로젝트 멤버 삭제하는 함수
+    onDelteMember(memberNo) {
+      const memberIndex = this.state.members.findIndex(
+        (member) => member.member_no === memberNo
+        );
+        
+        let deleteMember = update(this.state.members, {
+          $splice: [[memberIndex, 1]]
+        })
+        
+        this.setState({
+          members: deleteMember
+        })
       }
-    })
-
-    this.setState({
-      users: checkUser
-    })
-  }
-
-  // 프로젝트 멤버 삭제하는 함수
-  onDelteMember(memberNo) {
-    const memberIndex = this.state.members.findIndex(
-      (member) => member.member_no === memberNo
-    );
-
-   let deleteMember = update(this.state.members, {
-      $splice: [[memberIndex, 1]]
-    })
-
-    this.setState({
-      members: deleteMember
-    })
-  }
-
-  // 새 프로젝트 Modal 제출 후 닫기 함수
-  onClose() {
-    document.getElementById('add-project').style.display = 'none'
-    window.jQuery(document.body).removeClass("modal-open");
-    window.jQuery(".modal-backdrop").remove();
-  }
-  
-  render() {
-    console.log("dashboard : " + this.state.project)
-    return (
+      
+      // 새 프로젝트 Modal 제출 후 닫기 함수
+      onClose() {
+        document.getElementById('add-project').style.display = 'none'
+        window.jQuery(document.body).removeClass("modal-open");
+        window.jQuery(".modal-backdrop").remove();
+      }
+      
+      render() {
+        console.log("dashboard : " + this.state.projects)
+        return (
       <div className="Dashboard">
         <div className="container-fluid">
           {/* 사이드바 */}
@@ -166,6 +169,7 @@ export default class Dashboard extends React.Component {
           <div id="projectSet" style={{ display: 'none' }}>
             <ProjectSetting
                 project = {this.state.project}
+                members = { this.state.project.users && this.state.project.users }
                 callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -178,7 +182,7 @@ export default class Dashboard extends React.Component {
             <div className="panel-group">
               { this.state.details ? this.state.projects && this.state.projects.map((project) =>
                 <div key={project.projectNo} className="panel panel-default projects">
-                  <a href="/kanbanMain">
+                  <a href="/nest/kanbanMain">
                     <div className="panel-header">
                       <span className="project-title">
                         {project.projectTitle}

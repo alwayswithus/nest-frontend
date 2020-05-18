@@ -57,7 +57,6 @@ class ProjectMemberAdd extends Component {
             users: checkUser,
             members: addDeleteMember
         })
-        console.log(this.state.members)      
         this.props.callbackMembers.addMember(addDeleteMember);
     }
 
