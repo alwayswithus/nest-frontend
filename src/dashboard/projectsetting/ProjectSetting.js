@@ -16,6 +16,7 @@ class ProjectSetting extends Component {
         this.state = {
             Exist: false,
             Delete: false,
+
             show:false,
             memberListOpen: false
         }
@@ -25,7 +26,7 @@ class ProjectSetting extends Component {
         this.setState({
             Exist: false,
             Delete: false,
-            show:!this.state.show
+            show: !this.state.show
         })
     }
 
@@ -50,7 +51,7 @@ class ProjectSetting extends Component {
     }
 
     onSubmit(date) {
-        console.log("date:",date)
+        console.log("date:", date)
     }
 
     // + 버튼을 눌렀을 때 memberList 창이 뜸.
@@ -84,13 +85,13 @@ class ProjectSetting extends Component {
                                     <div style={{ display: 'inline-block' }}><ProjectStatus project = {this.props.project}/> </div>
                                 </li>
 
-                                {/* 마감일 */}
-                                <li>
-                                    <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
-                                    <div style={{ display: 'inline-block' }}>
-                                        <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i></Button>
-                                        {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)}/> : ""}
-                                        {/* <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
+                            {/* 마감일 */}
+                            <li>
+                                <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
+                                <div style={{ display: 'inline-block' }}>
+                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i></Button>
+                                    {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)} /> : ""}
+                                    {/* <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
                                             <DialogTitle onClose={this.handleClose.bind(this)}>
 
                                             <b>일정 설정</b>
@@ -101,7 +102,7 @@ class ProjectSetting extends Component {
                                             <Button variant="outlined" color="primary" onClick={this.handleClose.bind(this)}>닫기</Button>
                                             </DialogActions>
                                         </Dialog> */}
-                                    </div>
+                                </div>
 
                                 </li>
                                 
@@ -126,53 +127,53 @@ class ProjectSetting extends Component {
                                             {this.props.member}
                                         </div>
                                     </div>
-                                </li>
-                                
-                                {/* csv로 내보내기 */}
-                                <li>
-                                    <div style={{ display: 'inline-block' }}><h5><b>csv로 내보내기</b></h5></div>
-                                    <div style={{ display: 'inline-block' }} className="link"><button>csv로 내보내기</button></div>
-                                </li>
-                                
-                                {/* 프로젝트 나가기 */}
-                                <li>
-                                    <div style={{ display: 'inline-block' }}><h5><b>프로젝트 나가기</b></h5></div>
-                                    <div style={{ display: 'inline-block' }} className="link">
-                                        <button onClick={this.handleClickOpenExit.bind(this)} >프로젝트 나가기</button>
-                                        <Dialog onClose={this.handleClose.bind(this)} open={this.state.Exist}>
-                                            <DialogTitle onClose={this.handleClose.bind(this)}>
-                                                <h2><b>이 프로젝트 나가기</b></h2>
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                정말 이 프로젝트를 나가시겠습니까?
+                                </div>
+                            </li>
+
+                            {/* csv로 내보내기 */}
+                            <li>
+                                <div style={{ display: 'inline-block' }}><h5><b>csv로 내보내기</b></h5></div>
+                                <div style={{ display: 'inline-block' }} className="link"><button>csv로 내보내기</button></div>
+                            </li>
+
+                            {/* 프로젝트 나가기 */}
+                            <li>
+                                <div style={{ display: 'inline-block' }}><h5><b>프로젝트 나가기</b></h5></div>
+                                <div style={{ display: 'inline-block' }} className="link">
+                                    <button onClick={this.handleClickOpenExit.bind(this)} >프로젝트 나가기</button>
+                                    <Dialog onClose={this.handleClose.bind(this)} open={this.state.Exist}>
+                                        <DialogTitle onClose={this.handleClose.bind(this)}>
+                                            <h2><b>이 프로젝트 나가기</b></h2>
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            정말 이 프로젝트를 나가시겠습니까?
                                         </DialogContent>
-                                            <DialogActions>
-                                                <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white' }} onClick={this.handleClose.bind(this)}>닫기</Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    </div>
-                                </li>
-                                
-                                {/* 프로젝트 영구삭제 */}
-                                <li>
-                                    <div style={{ display: 'inline-block' }}><h5><b>프로젝트 영구삭제</b></h5></div>
-                                    <div style={{ display: 'inline-block' }} className="link">
-                                        <button onClick={this.handleClickOpenDel.bind(this)} style={{ backgroundColor: '#FF4040', color: 'white' }}>프로젝트 삭제하기</button>
-                                        <Dialog onClose={this.handleClose.bind(this)} open={this.state.Delete}>
-                                            <DialogTitle onClose={this.handleClose.bind(this)}>
-                                                <h2><b>프로젝트 삭제</b></h2>
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                정말 삭제하시겠습니까? Project Name이 영구 삭제됩니다.
+                                        <DialogActions>
+                                            <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white' }} onClick={this.handleClose.bind(this)}>닫기</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
+                            </li>
+
+                            {/* 프로젝트 영구삭제 */}
+                            <li>
+                                <div style={{ display: 'inline-block' }}><h5><b>프로젝트 영구삭제</b></h5></div>
+                                <div style={{ display: 'inline-block' }} className="link">
+                                    <button onClick={this.handleClickOpenDel.bind(this)} style={{ backgroundColor: '#FF4040', color: 'white' }}>프로젝트 삭제하기</button>
+                                    <Dialog onClose={this.handleClose.bind(this)} open={this.state.Delete}>
+                                        <DialogTitle onClose={this.handleClose.bind(this)}>
+                                            <h2><b>프로젝트 삭제</b></h2>
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            정말 삭제하시겠습니까? Project Name이 영구 삭제됩니다.
                                         </DialogContent>
-                                            <DialogActions>
-                                                <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white' }} onClick={this.handleClose.bind(this)}>닫기</Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                                        <DialogActions>
+                                            <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white' }} onClick={this.handleClose.bind(this)}>닫기</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
         )

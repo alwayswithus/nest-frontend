@@ -110,7 +110,22 @@ export default class Dashboard extends React.Component {
 
     this.setState({
       members: newMember
-    })    
+    })
+
+    
+    const userIndex = this.state.users.findIndex(
+      (user) => user.user_no === userNo
+    )
+    
+    let checkUser = update(this.state.users, {
+      [userIndex] : {
+        user_check: { $set: !this.state.users[userIndex].user_check }
+      }
+    })
+
+    this.setState({
+      users: checkUser
+    })
   }
 
   // 프로젝트 멤버 삭제하는 함수
@@ -128,6 +143,7 @@ export default class Dashboard extends React.Component {
       members: deleteMember
     })
   }
+
   // 새 프로젝트 Modal 제출 후 닫기 함수
   onClose() {
     document.getElementById('add-project').style.display = 'none'
@@ -254,7 +270,7 @@ export default class Dashboard extends React.Component {
                             <img src={ member.member_photo } className="img-circle" alt={ member.member_photo } />
                             <span>{ member.member_name }</span>
                             <span className="delete-member" onClick={ this.onDelteMember.bind(this, member.member_no) }>
-                              <i className="fas fa-times"></i>
+                            <i className="fas fa-times"></i>
                             </span>
                           </div>) }            
                         </div>
@@ -278,6 +294,7 @@ export default class Dashboard extends React.Component {
                                   id={ user.user_no } onClick={ this.onCheckPoint.bind(this, user.user_no, user.user_name, user.user_photo) }>
                                   <img src={ user.user_photo } className="img-circle" alt={ user.user_photo }/>
                                   <span>{ user.user_name }</span>
+                                  { user.user_check ? <i className="fas fa-check"></i> : "" }
                                 </div>) }
                                 
                                 <div className="invite-member">
