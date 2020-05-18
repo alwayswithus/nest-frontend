@@ -16,6 +16,38 @@
     box-shadow: -60px -50px 50px -90px #000000,
     60px 0px 50px -90px #000000;
     .TodoInsert {
+
+        .todoList {
+            border: none;
+            border-radius: 6px;
+            
+            .todo {
+                padding-left: 10px;
+                margin-bottom: 5%;
+                display: flex;
+                font-size: 12px;
+                
+                &:hover {
+                    background-color: #e2e2e259;
+                }
+                .doneCheck {
+                    // margin: 3px 0px 3px -3px;
+                    width: auto;
+                    cursor: pointer;
+                    &:hover {
+                        border: 1px solid black;
+                    }
+                }
+                li {
+                    background-color: white;
+                    border-left: 3px solid #FFA0A0;
+                    margin: 2px 0 0 5px;
+                    padding-left:2%;
+                    font-size: 1.25rem;
+              }
+            }
+          }
+          
         input { 
             background: #D8D8D8;
             border:none; 
