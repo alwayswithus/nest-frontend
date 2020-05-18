@@ -23,7 +23,6 @@ class Setting extends Component {
 
         return (
             <>
-            
                 <div style={{ height: '100%' }}>
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
