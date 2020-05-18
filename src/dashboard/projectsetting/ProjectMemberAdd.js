@@ -14,7 +14,7 @@ class ProjectMemberAdd extends Component {
 
     // ProjectMember 추가 버튼 이벤트 함수
     callbackClosemember() {
-        this.props.callbackCloseMember.close(false);
+        this.props.callbackMembers.close(false);
     }
 
     // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
@@ -25,7 +25,7 @@ class ProjectMemberAdd extends Component {
             member_name: userName,
             member_photo: userPhoto
         }
-        console.log("onCheckPoint : " + member.member_no)
+
         let newMember = update(this.state.members, {
             $push: [member]
         })
@@ -33,11 +33,10 @@ class ProjectMemberAdd extends Component {
         this.setState({
             members: newMember
         })
-
-        this.props.callbackCheckPoint.addMember(this.state.members);
+        console.log(this.state.members)
+        this.props.callbackMembers.addMember(newMember);
     }
 
-    
     render() {
         return (
             <div className="ProjectMemberAdd">
@@ -54,8 +53,10 @@ class ProjectMemberAdd extends Component {
                                 <div className="invite-card-member-list">
 
                                     {this.state.users.map(user =>
-                                        <div className="invite-card-member" key={user.user_no}
-                                            id={user.user_no} onClick={this.callbackCheckpoint.bind(this, user.user_no, user.user_name, user.user_photo)}>
+                                        <div className="invite-card-member" 
+                                            key={user.user_no}
+                                            id={user.user_no} 
+                                            onClick={this.callbackCheckpoint.bind(this, user.user_no, user.user_name, user.user_photo)}>
                                             <img src={user.user_photo} className="img-circle" alt={user.user_photo} />
                                             <span>{user.user_name}</span>
                                         </div>)}

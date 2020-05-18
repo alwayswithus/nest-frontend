@@ -64,10 +64,13 @@ export default class Dashboard extends React.Component {
     })
   }
 
+
+  // 멤버 리스트
   callbackCheckPoint(members) {
     this.setState({
       members: members
     })
+
   }
 
   // 화살표 펼치기, 숨기기 함수
@@ -94,7 +97,8 @@ export default class Dashboard extends React.Component {
       project_desc: event.target.projectDesc.value,
       project_start: Date.now(),
       project_end: "",
-      project_status: "상태없음"
+      project_status: "상태없음",
+      users:this.state.members
     };
 
     let newProjects = update(this.state.projects, {
@@ -109,22 +113,6 @@ export default class Dashboard extends React.Component {
 
   // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
   onCheckPoint(userNo, userName, userPhoto) {
-    
-    let member = {
-      member_no: userNo,
-      member_name: userName,
-      member_photo: userPhoto
-    }
-
-    let newMember = update(this.state.members, {
-        $push: [member] 
-    })
-
-    this.setState({
-      members: newMember
-    })
-
-    
     const userIndex = this.state.users.findIndex(
       (user) => user.user_no === userNo
     )
@@ -164,6 +152,7 @@ export default class Dashboard extends React.Component {
   }
   
   render() {
+    console.log("dashboard : " + this.state.project)
     return (
       <div className="Dashboard">
         <div className="container-fluid">
@@ -179,7 +168,6 @@ export default class Dashboard extends React.Component {
           <div id="projectSet" style={{ display: 'none' }}>
             <ProjectSetting
                 project = {this.state.project}
-                member = {this.state.member}
                 callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -287,36 +275,6 @@ export default class Dashboard extends React.Component {
                           </div>) }            
                         </div>
                       </div>
-
-                      {/* Add Project Member select */}
-                      {/* {this.state.addProjectMemberButton ?
-                        <div className="container card-member">
-                          <div className="card">
-                            <div className="card-header">
-                              <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버</h6>
-                              <button type="button" className="close" style={{ lineHeight: "35px" }} onClick={this.onAddProjectMember.bind(this)} >&times;</button>
-                              <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
-                            </div>
-                            <div className="card-body">
-                              <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
-                              <div className="invite-card-member-list">
-                                
-                                { this.state.users.map(user => 
-                                <div className="invite-card-member" key={ user.user_no }
-                                  id={ user.user_no } onClick={ this.onCheckPoint.bind(this, user.user_no, user.user_name, user.user_photo) }>
-                                  <img src={ user.user_photo } className="img-circle" alt={ user.user_photo }/>
-                                  <span>{ user.user_name }</span>
-                                  { user.user_check ? <i className="fas fa-check"></i> : "" }
-                                </div>) }
-                                
-                                <div className="invite-member">
-                                  <i className="fas fa-user-plus fa-2x"></i>
-                                  <span>멤버 초대하기</span>
-                                </div> 
-                              </div>
-                            </div>
-                          </div>
-                        </div> : ""} */}
                         { this.state.addProjectMemberButton ? 
                         <ProjectMemberAdd callbackMembers={ {close: this.callbackCloseMember.bind(this), addMember: this.callbackCheckPoint.bind(this)} }/> : "" }
                     </div>
