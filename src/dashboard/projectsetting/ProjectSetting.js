@@ -17,7 +17,7 @@ class ProjectSetting extends Component {
             Exist: false,
             Delete: false,
 
-            show:false,
+            show: false,
             memberListOpen: false
         }
     }
@@ -57,39 +57,39 @@ class ProjectSetting extends Component {
     // + 버튼을 눌렀을 때 memberList 창이 뜸.
     addMemberList() {
         this.setState({
-            memberListOpen:!this.state.memberListOpen
+            memberListOpen: !this.state.memberListOpen
         })
     }
 
     // x 버튼을 눌렀을 때 memberList창 닫음.(call back 함수)
     callbackCloseMember(state) {
         this.setState({
-            memberListOpen:state
+            memberListOpen: state
         })
     }
     render() {
         return (
-                <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
-                    {/* 프로젝트 헤더 */}
-                    <ProjectHeader project={this.props.project} name='김우경' callbackCloseProjectSetting={ this.props.callbackCloseProjectSetting }/>
-                    {/* 프로젝트 리스트 */}
-                    <div className="ProjectSet" >
-                        <hr />
-                        <div style={{ color: '#60C7CA', fontSize: '1.3rem', padding: '3%' }}><b>설명 추가</b></div>
-                        <hr style={{ marginBottom: '20px', color: '#555555' }} />
-                        <div className="setList">
-                            <ul>
-                                {/* 프로젝트상태 */}
-                                <li>
-                                    <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
-                                    <div style={{ display: 'inline-block' }}><ProjectStatus project = {this.props.project}/> </div>
-                                </li>
+            <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
+                {/* 프로젝트 헤더 */}
+                <ProjectHeader project={this.props.project} name='김우경' callbackCloseProjectSetting={this.props.callbackCloseProjectSetting} />
+                {/* 프로젝트 리스트 */}
+                <div className="ProjectSet" >
+                    <hr />
+                    <div style={{ color: '#60C7CA', fontSize: '1.3rem', padding: '3%' }}><b>설명 추가</b></div>
+                    <hr style={{ marginBottom: '20px', color: '#555555' }} />
+                    <div className="setList">
+                        <ul>
+                            {/* 프로젝트상태 */}
+                            <li>
+                                <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
+                                <div style={{ display: 'inline-block' }}><ProjectStatus project={this.props.project} /> </div>
+                            </li>
 
                             {/* 마감일 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i></Button>
+                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
                                     {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)} /> : ""}
                                     {/* <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
                                             <DialogTitle onClose={this.handleClose.bind(this)}>
@@ -104,28 +104,27 @@ class ProjectSetting extends Component {
                                         </Dialog> */}
                                 </div>
 
-                                </li>
-                                
-                                {/* 프로젝트 멤버 */}
-                                <li>
-                                    <div style={{ float: 'left' }}>
-                                        <h5>
-                                            <b>프로젝트멤버</b>
-                                        </h5>
+                            </li>
+
+                            {/* 프로젝트 멤버 */}
+                            <li>
+                                <div style={{ float: 'left' }}>
+                                    <h5>
+                                        <b>프로젝트멤버</b>
+                                    </h5>
+                                </div>
+                                <div style={{ float: 'left' }}>
+                                    <Button onClick={this.addMemberList.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                    <div>
+                                        {this.state.memberListOpen ? <ProjectMemberAdd callbackCloseMember={{ close: this.callbackCloseMember.bind(this) }} /> : ""}
                                     </div>
-                                    <div style={{ float: 'left' }}>
-                                        <Button onClick = {this.addMemberList.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i> </Button>
-                                        <div>
-                                            {this.state.memberListOpen ? <ProjectMemberAdd callbackCloseMember = {{ close : this.callbackCloseMember.bind(this)}} /> : ""}
-                                        </div>
-                                    </div>
-                                    {/* 프로젝트 멤버 리스트 */}
-                                    <div className="Member-list" style={{ display: 'inline-block' }}>
-                                        <div className="Member">
-                                            {/* <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                </div>
+                                {/* 프로젝트 멤버 리스트 */}
+                                <div className="Member-list" style={{ display: 'inline-block' }}>
+                                    <div className="Member">
+                                        {/* <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                             <span>test</span> */}
-                                            {this.props.member}
-                                        </div>
+                                        {this.props.member}
                                     </div>
                                 </div>
                             </li>
@@ -176,6 +175,7 @@ class ProjectSetting extends Component {
                         </ul>
                     </div>
                 </div>
+            </div>
         )
     }
 }

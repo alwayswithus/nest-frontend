@@ -13,19 +13,19 @@ class ProjectMemberAdd extends Component {
     }
 
     // ProjectMember 추가 버튼 이벤트 함수
-    onAddProjectMember() {
+    callbackClosemember() {
         this.props.callbackCloseMember.close(false);
     }
 
     // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
-    onCheckPoint(userNo, userName, userPhoto) {
+    callbackCheckpoint(userNo, userName, userPhoto) {
 
         let member = {
             member_no: userNo,
             member_name: userName,
             member_photo: userPhoto
         }
-        console.log("onCheckPoint : ")
+        console.log("onCheckPoint : " + member.member_no)
         let newMember = update(this.state.members, {
             $push: [member]
         })
@@ -33,7 +33,11 @@ class ProjectMemberAdd extends Component {
         this.setState({
             members: newMember
         })
+
+        this.props.callbackCheckPoint.addMember(this.state.members);
     }
+
+    
     render() {
         return (
             <div className="ProjectMemberAdd">
@@ -42,7 +46,7 @@ class ProjectMemberAdd extends Component {
                         <div className="card">
                             <div className="card-header">
                                 <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버</h6>
-                                <button type="button" className="close" style={{ lineHeight: "35px" }} onClick={this.onAddProjectMember.bind(this)} >&times;</button>
+                                <button type="button" className="close" style={{ lineHeight: "35px" }} onClick={this.callbackClosemember.bind(this)} >&times;</button>
                                 <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                             </div>
                             <div className="card-body">
@@ -51,7 +55,7 @@ class ProjectMemberAdd extends Component {
 
                                     {this.state.users.map(user =>
                                         <div className="invite-card-member" key={user.user_no}
-                                            id={user.user_no} onClick={this.onCheckPoint.bind(this, user.user_no, user.user_name, user.user_photo)}>
+                                            id={user.user_no} onClick={this.callbackCheckpoint.bind(this, user.user_no, user.user_name, user.user_photo)}>
                                             <img src={user.user_photo} className="img-circle" alt={user.user_photo} />
                                             <span>{user.user_name}</span>
                                         </div>)}

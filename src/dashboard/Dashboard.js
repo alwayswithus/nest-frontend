@@ -8,6 +8,7 @@ import userData from './userData.json';
 import update from 'react-addons-update';
 
 import ApiService from '../ApiService';
+import ProjectMemberAdd from './projectsetting/ProjectMemberAdd';
 
 const API_HEADERS = {
   'Content-Type' : 'application/json'
@@ -20,10 +21,9 @@ export default class Dashboard extends React.Component {
     super(...arguments);
     this.state = {
       projects: null,                 // 프로젝트 데이터
-      users: userData,                // 사용자 데이터
-      
-      members: [],                    // 각 프로젝트마다 참여하는 사용자들 목록 변수
       url: "",                        // 배경화면 상태 변수
+
+      members: [],
       
       details: true,                  // 내가 속한 프로젝트를 클릭할 때마다 변하는 화살표 상태 변수
       addProjectMemberButton: false,  // 프로젝트에 참여하길 원하는 사용자들을 추가하기 위한 버튼 클릭 상태 변수
@@ -55,6 +55,18 @@ export default class Dashboard extends React.Component {
   callbackChangeBackground(url) {
     this.setState({
       url: url
+    })
+  }
+
+  callbackCloseMember(addProjectMemberButton) {
+    this.setState({
+      addProjectMemberButton : addProjectMemberButton
+    })
+  }
+
+  callbackCheckPoint(members) {
+    this.setState({
+      members: members
     })
   }
 
@@ -277,7 +289,7 @@ export default class Dashboard extends React.Component {
                       </div>
 
                       {/* Add Project Member select */}
-                      {this.state.addProjectMemberButton ?
+                      {/* {this.state.addProjectMemberButton ?
                         <div className="container card-member">
                           <div className="card">
                             <div className="card-header">
@@ -304,7 +316,9 @@ export default class Dashboard extends React.Component {
                               </div>
                             </div>
                           </div>
-                        </div> : ""}
+                        </div> : ""} */}
+                        { this.state.addProjectMemberButton ? 
+                        <ProjectMemberAdd callbackMembers={ {close: this.callbackCloseMember.bind(this), addMember: this.callbackCheckPoint.bind(this)} }/> : "" }
                     </div>
                   </div>
 
