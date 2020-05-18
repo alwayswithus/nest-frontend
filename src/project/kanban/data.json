@@ -25,15 +25,17 @@
         ],
         "tag": [
           {
-            "id":111,
-            "name": "tagA"
+            "id": 111,
+            "name": "tagA",
+            "color":"rgb(154,208,194)"
           },
-          {"id":112,
-            "name": "tagB"
-          }
+          { "id": 112, "name": "tagB",
+            "color":"rgb(200,97,51)" }
         ],
         "startDate": "5월 1일",
-        "endDate": "5월 15일"
+        "endDate": "5월 15일",
+        "checked": false,
+        "label": "rgb(132,22,233)"
       },
       {
         "no": 12,
@@ -41,13 +43,47 @@
         "todoList": [],
         "tag": [
           {
-            "id":121,
-            "name": "tagC"
+            "id": 121,
+            "name": "tagC",
+            "color":"rgb(112,21,110)"
           },
-          {"id":122,
-            "name": "tagD"
-          }
-        ]
+          { "id": 122, "name": "tagD",
+            "color":"rgb(229,102,103)" }
+        ],
+        "checked": true,
+        "label": "rgb(202,119,172)"
+      },
+      {
+        "no": 13,
+        "contents": "계획된 업무 3",
+        "todoList": [],
+        "tag": [
+          {
+            "id": 121,
+            "name": "tag11",
+            "color":"rgb(99,167,91)"
+          },
+          { "id": 122, "name": "tag22",
+            "color":"rgb(16,154,200)" }
+        ],
+        "checked": false,
+        "label": "rgb(57,129,184)"
+      },
+      {
+        "no": 14,
+        "contents": "계획된 업무 4",
+        "todoList": [],
+        "tag": [
+          {
+            "id": 121,
+            "name": "tag33",
+            "color":"rgb(7,113,110)"
+          },
+          { "id": 122, "name": "tag44",
+            "color":"rgb(164,178,46)" }
+        ],
+        "checked": true,
+        "label": "rgb(181,125,178)"
       }
     ]
   },
@@ -66,19 +102,21 @@
           }
         ],
         "tag": [
-          {"id":211,
-            "name": "tagE"
-          },
-          {"id":212,
-            "name": "tagF"
-          }
-        ]
+          { "id": 211, "name": "tagE",
+            "color": "rgb(227,191,62)"},
+          { "id": 212, "name": "tagF",
+            "color": "rgb(86,223,248)"}
+        ],
+        "checked": false,
+        "label": "rgb(252,87,95)"
       },
       {
         "no": 22,
         "contents": "진행 업무 2",
         "todoList": [],
-        "tag": []
+        "tag": [],
+        "checked": false,
+        "label": "rgb(110,202,217)"
       }
     ]
   },
@@ -90,7 +128,9 @@
         "no": 31,
         "contents": "완료 업무 1",
         "todoList": [],
-        "tag": []
+        "tag": [],
+        "checked": false,
+        "label": "rgb(224,69,233)"
       }
     ]
   },
@@ -102,7 +142,9 @@
         "no": 41,
         "contents": "기타 업무 1",
         "todoList": [],
-        "tag": []
+        "tag": [],
+        "checked": false,
+        "label": "rgb(245,189,45)"
       }
     ]
   }

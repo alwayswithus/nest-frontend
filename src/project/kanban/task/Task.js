@@ -6,26 +6,26 @@ import Setting from "../tasksetting/setting/Setting";
 import "./Task.scss";
 
 class Task extends Component {
-
-
-  deleteTask(event) {
+  deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
-    window.jQuery(document.body).removeClass('modal-open');
+    window.jQuery(document.body).removeClass("modal-open");
     window.jQuery(".modal-backdrop").remove();
   }
   copyTask() {
     this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
+    window.jQuery(document.body).removeClass("modal-open");
+    window.jQuery(".modal-backdrop").remove();
   }
 
   test() {
     this.setState({
-      open:true
-    })
+      open: true,
+    });
   }
 
   render() {
     const taskItem = this.props.task;
-    const labelColor = "#F75496";
+    const labelColor = taskItem.label;
     const labelStyle = {
       borderLeft: `5px solid ${labelColor}`,
     };
@@ -59,7 +59,9 @@ class Task extends Component {
                     </button>
                     <ul className="dropdown-menu" role="menu">
                       <li>
-                        <a href="#">업무 복사</a>
+                        <a href="#" onClick={this.copyTask.bind(this)}>
+                          업무 복사
+                        </a>
                       </li>
                       <li className="divider"></li>
                       <li>
@@ -73,8 +75,23 @@ class Task extends Component {
               </div>
               <div className="task-item task-title">
                 <div className="title">
-                  <input type="checkbox" className="doneCheck"></input> &nbsp;
-                  <label>{taskItem.contents}</label>
+                  {taskItem.checked ? (
+                    <>
+                      <input
+                        type="checkbox"
+                        className="doneCheck"
+                        checked
+                      ></input>
+                      &nbsp;
+                      <del>{taskItem.contents}</del>
+                    </>
+                  ) : (
+                    <>
+                      <input type="checkbox" className="doneCheck"></input>
+                      &nbsp;
+                      <label>{taskItem.contents}</label>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -89,6 +106,7 @@ class Task extends Component {
               </div>
               <div className="task-item task-date">
                 <Date
+                key={taskItem.no}
                   startDate={taskItem.startDate}
                   endDate={taskItem.endDate}
                 />
@@ -132,7 +150,7 @@ class Task extends Component {
                   >
                     Close
                   </button>
-                  <button type="button" class="btn btn-primary" >
+                  <button type="button" class="btn btn-primary">
                     Save changes
                   </button>
                 </div>
