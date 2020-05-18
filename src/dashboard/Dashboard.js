@@ -28,14 +28,18 @@ export default class Dashboard extends React.Component {
       details: true,                  // 내가 속한 프로젝트를 클릭할 때마다 변하는 화살표 상태 변수
       addProjectMemberButton: false,  // 프로젝트에 참여하길 원하는 사용자들을 추가하기 위한 버튼 클릭 상태 변수
       setOn: true,                    // 프로젝트 설정을 보여주고 꺼주기 위한 상태 변수
-      message:null
+      message:null,
+      project : []
     }
   }
 
   
-  onConfigClick() {
+  onConfigClick(projectNo) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
+   
     this.setState({
-      setOn: !this.state.setOn
+      setOn: !this.state.setOn,
+      project: this.state.projects[projectIndex]
     })
     document.getElementById('projectSet').style.display = 'block'
   }
@@ -161,7 +165,10 @@ export default class Dashboard extends React.Component {
 
           {/* 메인 영역 */}
           <div id="projectSet" style={{ display: 'none' }}>
-            <ProjectSetting callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
+            <ProjectSetting
+                project = {this.state.project}
+                member = {this.state.member}
+                callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
@@ -197,7 +204,7 @@ export default class Dashboard extends React.Component {
 
                       {/* Project Setting Click */}
                       <a href="#">
-                        <i className="fas fa-cog fa-lg" onClick={this.onConfigClick.bind(this)}></i>
+                        <i className="fas fa-cog fa-lg" onClick={this.onConfigClick.bind(this, project.projectNo)} ></i>
                       </a>
                     </div>
                     <div className="panel-footer">
