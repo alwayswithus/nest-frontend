@@ -8,6 +8,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import ProjectMemberAdd from './ProjectMemberAdd';
 
 class ProjectSetting extends Component {
     constructor() {
@@ -15,7 +16,8 @@ class ProjectSetting extends Component {
         this.state = {
             Exist: false,
             Delete: false,
-            show:false
+            show:false,
+            memberListOpen: false
         }
     }
 
@@ -51,14 +53,24 @@ class ProjectSetting extends Component {
         console.log("date:",date)
     }
 
-    render() {
+    // + 버튼을 눌렀을 때 memberList 창이 뜸.
+    addMemberList() {
+        this.setState({
+            memberListOpen:!this.state.memberListOpen
+        })
+    }
 
+    // x 버튼을 눌렀을 때 memberList창 닫음.(call back 함수)
+    callbackCloseMember(state) {
+        this.setState({
+            memberListOpen:state
+        })
+    }
+    render() {
         return (
-            <>
-                <i class="fas fa-times"></i>
                 <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                     {/* 프로젝트 헤더 */}
-                    <ProjectHeader name='김우경' date='2020.05.06' callbackCloseProjectSetting={ this.props.callbackCloseProjectSetting }/>
+                    <ProjectHeader project={this.props.project} name='김우경' callbackCloseProjectSetting={ this.props.callbackCloseProjectSetting }/>
                     {/* 프로젝트 리스트 */}
                     <div className="ProjectSet" >
                         <hr />
@@ -69,7 +81,7 @@ class ProjectSetting extends Component {
                                 {/* 프로젝트상태 */}
                                 <li>
                                     <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
-                                    <div style={{ display: 'inline-block' }}><ProjectStatus /> </div>
+                                    <div style={{ display: 'inline-block' }}><ProjectStatus project = {this.props.project}/> </div>
                                 </li>
 
                                 {/* 마감일 */}
@@ -101,13 +113,17 @@ class ProjectSetting extends Component {
                                         </h5>
                                     </div>
                                     <div style={{ float: 'left' }}>
-                                        <Button variant=""><i class="fas fa-plus fa-1x"></i> </Button>
+                                        <Button onClick = {this.addMemberList.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i> </Button>
+                                        <div>
+                                            {this.state.memberListOpen ? <ProjectMemberAdd callbackCloseMember = {{ close : this.callbackCloseMember.bind(this)}} /> : ""}
+                                        </div>
                                     </div>
                                     {/* 프로젝트 멤버 리스트 */}
                                     <div className="Member-list" style={{ display: 'inline-block' }}>
                                         <div className="Member">
-                                            <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                            <span>test</span>
+                                            {/* <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                            <span>test</span> */}
+                                            {this.props.member}
                                         </div>
                                     </div>
                                 </li>
@@ -159,7 +175,6 @@ class ProjectSetting extends Component {
                         </div>
                     </div>
                 </div>
-            </>
         )
     }
 }
