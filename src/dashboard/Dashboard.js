@@ -8,12 +8,20 @@ import projectData from './projectData.json';
 import userData from './userData.json';
 import update from 'react-addons-update';
 
+import PropTypes from 'prop-types';
+import ApiService from '../ApiService';
+
+// const DASHBOARD_API_URL = "http://localhost:8888/";
+const API_HEADERS = {
+  'Content-Type' : 'application/json'
+}
+
+
 export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
-      
       projects: projectData,          // 프로젝트 데이터
       users: userData,                // 사용자 데이터
       
@@ -22,10 +30,13 @@ export default class Dashboard extends React.Component {
       
       details: true,                  // 내가 속한 프로젝트를 클릭할 때마다 변하는 화살표 상태 변수
       addProjectMemberButton: false,  // 프로젝트에 참여하길 원하는 사용자들을 추가하기 위한 버튼 클릭 상태 변수
-      setOn: true                     // 프로젝트 설정을 보여주고 꺼주기 위한 상태 변수
+      setOn: true,                    // 프로젝트 설정을 보여주고 꺼주기 위한 상태 변수
+      dashboard:null,
+      message:null
     }
   }
 
+  
   onConfigClick() {
     this.setState({
       setOn: !this.state.setOn
@@ -39,10 +50,9 @@ export default class Dashboard extends React.Component {
     })
     document.getElementById('projectSet').style.display = 'none'
   }
-
+  
   // 배경화면 설정 함수
   callbackChangeBackground(url) {
-    console.log(url)
     this.setState({
       url: url
     })
@@ -65,7 +75,7 @@ export default class Dashboard extends React.Component {
   // 새 프로젝트 추가 함수
   onAddProjectSubmit(event) {
     event.preventDefault();
-
+    
     let project = {
       project_no: this.state.projects.length + 1,
       project_title: event.target.projectTitle.value,
@@ -78,11 +88,12 @@ export default class Dashboard extends React.Component {
     let newProjects = update(this.state.projects, {
       $push: [project]
     });
-
+    
     this.setState({
       projects: newProjects
     })
   }
+
 
   // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
   onCheckPoint(userNo, userName, userPhoto) {
@@ -118,14 +129,18 @@ export default class Dashboard extends React.Component {
     })
   }
 
+
   // 새 프로젝트 Modal 제출 후 닫기 함수
   onClose() {
     document.getElementById('add-project').style.display = 'none'
     window.jQuery(document.body).removeClass("modal-open");
     window.jQuery(".modal-backdrop").remove();
   }
-
+  
   render() {
+    
+    console.log("Projects:" + this.state.projects);
+    console.log("dashboard" + this.state.dashboard);
     return (
       <div className="Dashboard">
         <div className="container-fluid">
@@ -149,19 +164,19 @@ export default class Dashboard extends React.Component {
 
             {/* Projects */}
             <div className="panel-group">
-              {this.state.details ? this.state.projects.map((project) =>
-                <div key={project.project_no} className="panel panel-default projects">
+              {this.state.details ? this.state.dashboard && this.state.dashboard.map((project) =>
+                <div key={project.projectNo} className="panel panel-default projects">
                   <a href="/kanbanMain">
                     <div className="panel-header">
                       <span className="project-title">
-                        {project.project_title}
+                        {project.projectTitle}
                       </span>
                     </div>
                     <div className="panel-body">
                       <a href="#">
                         <div className="btn-group">
                           <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change" data-toggle="dropdown">
-                            &nbsp;&nbsp;{project.project_status}
+                            &nbsp;&nbsp;{project.projectState}
                             <span className="caret"></span>
                           </button>
                           <ul className="dropdown-menu" role="menu">
@@ -179,7 +194,7 @@ export default class Dashboard extends React.Component {
                       </a>
                     </div>
                     <div className="panel-footer">
-                      <span className="update-date"><h6>최초 업데이트 : 5월 27일 14:00</h6></span>
+              <span className="update-date"><h6>최초 업데이트 : {project.projectStart}</h6></span>
                       <span className="update-task"><h6>7/16개 업무</h6></span>
                       <div className="progress">
                         <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
@@ -289,5 +304,28 @@ export default class Dashboard extends React.Component {
         </div>
       </div>
     );
+  }
+  componentDidMount(){
+  //   fetch(`${DASHBOARD_API_URL}/nest/dashboard`, {
+  //     method:'get',
+  //     headers:API_HEADERS
+  //   })
+
+  //   .then(response => {
+  //     this.setState({
+  //       dashboard:response.data.result
+  //     })
+  //   })
+  //   .catch(err => console.log('ERRRR',err))
+  //   console.log("@@@@@@@@@", this.state.dashboard)
+  // }
+
+    ApiService.fetchDashboard()
+    .then(response => {
+      this.setState({
+        dashboard:response.data.data
+      })
+      console.log("response:",this.state.dashboard);
+    })
   }
 }

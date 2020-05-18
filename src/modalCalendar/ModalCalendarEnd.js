@@ -11,11 +11,17 @@ class ModalCalendarEnd extends Component {
       start: moment(this.moment)
     };
   }
-
+  
   handleChange = (moment) => {
     this.setState({
       moment
     });
+  }
+  
+  EndDate(event) {
+    console.log(document.getElementById("test").value)
+    this.props.onSubmit(this.state.moment);  
+    
   }
 
   render() {
@@ -25,9 +31,8 @@ class ModalCalendarEnd extends Component {
           moment={this.state.moment}
           onChange={this.handleChange}
         />
-        <input type='text' value={this.state.moment.format('YYYY-MM-DD HH:mm')} readOnly />
+        <input id="test" onSubmit={this.EndDate.bind(this)} type='text' value={this.state.moment.format('YYYY-MM-DD HH:mm')}/>
        
-
       </div>
     );
   }

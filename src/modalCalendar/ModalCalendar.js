@@ -18,6 +18,7 @@ class ModalCalendar extends Component {
     this.setState({
       moment
     });
+    console.log("modalCalendar:" + this.state.moment)
   }
 
   render() {
@@ -25,7 +26,7 @@ class ModalCalendar extends Component {
       <div>
         <ModalCalendarStart />
         <div style={{display:'inline-block', padding:'10px'}}/>
-        <ModalCalendarEnd />
+        <ModalCalendarEnd onSubmit={this.props.onSubmit}/>
       </div>
     );
   }
