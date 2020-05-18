@@ -219,36 +219,141 @@
             }
             
             .add-project-member-list {
+                display: flex;
                 margin-top: 6px;
                 
                 .add-project-member-plus {
                     float: left;
-                   
+                    
                     .add-project-member-button {
+                        float: left;
                         color: white;
                         background-color: #8798A8;
                     }
                 }  
                 
-                .add-project-member-profile {
-                    margin-left: 40px;
+                .join-project-member {
+                    overflow: scroll;
+                    position: absolute;
+                    width: 90%;
+                    left: 7%;
+                    height: 54%;
+                    margin-left: 1%;
+                    margin-bottom: 1%;
+                    display: inline-block;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    border-radius: 4px;
 
-                    .join-project-member {
-                        height: 38px;
-                        margin-bottom: 10px;
-                        margin-left: 10px;
+                    .Member{
+                        border:none;
+                        border-radius: 5px;
+                        background-color: #E6E8EC;
+                        margin: 0 2% 2%;
+                        padding:1%;
+                        width:auto;
                         display: inline-block;
-                        background-color: #C7C7C7;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        padding-top: 5px;
-                        border-radius: 4px;
+                        
 
-                        .join-project-member-close {
-                            display: inline-block;
-                            cursor: pointer;
-                            margin-bottom: 5px;    
+                        img{
+                            width:29px;
+                            height: 29px;
+                            margin-right: 4px;
                         }
+                        span{
+                            padding-top: 1%;  
+                        }
+
+                        .delete-member {
+                            margin-left: 5px;
+                            cursor: pointer;
+
+                            .fa-times {
+                                color: grey;
+                            }
+                        }
+                    }
+
+                    .Member:hover{
+                        border:none;
+                        border-radius: 5px;
+                        background-color: #D7D7D7;
+                        margin: 0 2% 2%;
+                        padding:1%;
+                        width:auto;
+                        img{
+                            width:29px;
+                            height: 29px;
+                            margin-right: 4px;
+                        }
+                        span{
+                            padding-top: 1%;
+                            
+                        }
+                    }
+                }        
+            }
+            
+            .card-member {
+                position: absolute;
+                top: 92%;
+                width: 60%;
+                background-color: #FFFFFF;
+                box-shadow: 0 3px 10px rgba(0,0,0,.5);
+                
+                .find-member {
+                    margin-bottom: 3px;
+                }
+                
+                .invite-card-member-list {
+                    height: 300px;
+                    overflow: scroll;
+                    overflow-x: hidden;
+
+                    .invite-card-member {
+                        padding-top: 5px;
+                        border:none;                
+                        margin: 2% 0 0 0;
+                        padding:1%;
+                        width:auto;
+                        cursor: pointer;
+
+                        img{
+                            width:35px;
+                            height: 35px;
+                            margin-right: 10px;
+                        }
+                        span{
+                            padding-top: 1%;  
+                        }  
+                    }
+                    .invite-card-member:hover {
+                        background-color: #E3E3E3;
+                    }
+
+                    .invite-member {
+                        color: #27B6BA;
+                        padding-top: 5px;
+                        border:none;              
+                        margin: 2% 0 0 0;
+                        padding:1%;
+                        width:auto;
+                        cursor: pointer;
+
+                        .fa-user-plus {
+                            margin-top: 2px;
+                            margin-left: 5px;
+                            margin-right: 7px;
+                        }
+                        span{
+                            font-weight: bold;
+                            padding-top: 1%;  
+                        }
+                    }
+
+                    .invite-member:hover {
+                        color: #FFFFFF;
+                        background-color: #27B6BA;
                     }
                 }
             }
@@ -263,43 +368,6 @@
                 color: #FFFFFF;
                 background-color: #8798A8;
             }
-        }
-    }
-
-    .project-setting-dialog {
-        .come-from-modal.left .modal-dialog,
-        .come-from-modal.right .modal-dialog {
-            position: fixed;
-            margin: auto;
-            width: 320px;
-            height: 100%;
-            -webkit-transform: translate3d(0%, 0, 0);
-            -ms-transform: translate3d(0%, 0, 0);
-            -o-transform: translate3d(0%, 0, 0);
-            transform: translate3d(0%, 0, 0);
-        }
-
-        .come-from-modal.left .modal-content,
-        .come-from-modal.right .modal-content {
-            height: 100%;
-            overflow-y: auto;
-            border-radius: 0px;
-        }
-
-        .come-from-modal.left .modal-body,
-        .come-from-modal.right .modal-body {
-            padding: 15px 15px 80px;
-        }
-        .come-from-modal.right.fade .modal-dialog {
-            right: -320px;
-            -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
-            -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
-            -o-transition: opacity 0.3s linear, right 0.3s ease-out;
-            transition: opacity 0.3s linear, right 0.3s ease-out;
-        }
-
-        .come-from-modal.right.fade.in .modal-dialog {
-            right: 0;
         }
     }
 }

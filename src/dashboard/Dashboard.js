@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 
 import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
-import data from './data.json';
+import projectData from './projectData.json';
+import userData from './userData.json';
 import update from 'react-addons-update';
+
 import PropTypes from 'prop-types';
 import ApiService from '../ApiService';
 
@@ -14,15 +16,21 @@ const API_HEADERS = {
   'Content-Type' : 'application/json'
 }
 
+
 export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
-      projects: data,
-      details: true,
-      url: "",
-      setOn: true,
+      projects: projectData,          // 프로젝트 데이터
+      users: userData,                // 사용자 데이터
+      
+      members: [],                    // 각 프로젝트마다 참여하는 사용자들 목록 변수
+      url: "",                        // 배경화면 상태 변수
+      
+      details: true,                  // 내가 속한 프로젝트를 클릭할 때마다 변하는 화살표 상태 변수
+      addProjectMemberButton: false,  // 프로젝트에 참여하길 원하는 사용자들을 추가하기 위한 버튼 클릭 상태 변수
+      setOn: true,                    // 프로젝트 설정을 보여주고 꺼주기 위한 상태 변수
       dashboard:null,
       message:null
     }
@@ -33,16 +41,18 @@ export default class Dashboard extends React.Component {
     this.setState({
       setOn: !this.state.setOn
     })
-    if (this.state.setOn) {
-      document.getElementById('projectSet').style.display = 'block'
-    } else {
-      document.getElementById('projectSet').style.display = 'none'
-    }
+    document.getElementById('projectSet').style.display = 'block'
+  }
+
+  callbackCloseProjectSetting(setOn) {
+     this.setState({
+      setOn: setOn
+    })
+    document.getElementById('projectSet').style.display = 'none'
   }
   
   // 배경화면 설정 함수
   callbackChangeBackground(url) {
-    
     this.setState({
       url: url
     })
@@ -52,6 +62,13 @@ export default class Dashboard extends React.Component {
   showDetails() {
     this.setState({
       details: !this.state.details
+    })
+  }
+
+  // ProjectMember 추가 버튼 이벤트 함수
+  onAddProjectMember() {
+    this.setState({
+      addProjectMemberButton: !this.state.addProjectMemberButton
     })
   }
 
@@ -76,7 +93,43 @@ export default class Dashboard extends React.Component {
       projects: newProjects
     })
   }
-  
+
+
+  // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
+  onCheckPoint(userNo, userName, userPhoto) {
+    
+    let member = {
+      member_no: userNo,
+      member_name: userName,
+      member_photo: userPhoto
+    }
+
+    let newMember = update(this.state.members, {
+        $push: [member] 
+    })
+
+    this.setState({
+      members: newMember
+    })    
+  }
+
+  // 프로젝트 멤버 삭제하는 함수
+  onDelteMember(memberNo) {
+    const memberIndex = this.state.members.findIndex(
+      (member) => member.member_no == memberNo
+    );
+    console.log(memberIndex);
+
+   let deleteMember = update(this.state.members, {
+      $splice: [[memberIndex, 1]]
+    })
+
+    this.setState({
+      members: deleteMember
+    })
+  }
+
+
   // 새 프로젝트 Modal 제출 후 닫기 함수
   onClose() {
     document.getElementById('add-project').style.display = 'none'
@@ -101,21 +154,18 @@ export default class Dashboard extends React.Component {
 
           {/* 메인 영역 */}
           <div id="projectSet" style={{ display: 'none' }}>
-            <ProjectSetting setOn={this.state.setOn} />
+            <ProjectSetting callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
-
-
               {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
-
-              <h3>내가 속한 프로젝트 ({ this.state.projects.length })</h3>
+              <h3>내가 속한 프로젝트 ({this.state.projects.length})</h3>
             </div>
 
             {/* Projects */}
             <div className="panel-group">
               {this.state.details ? this.state.dashboard && this.state.dashboard.map((project) =>
-                <div className="panel panel-default projects">
+                <div key={project.projectNo} className="panel panel-default projects">
                   <a href="/kanbanMain">
                     <div className="panel-header">
                       <span className="project-title">
@@ -171,7 +221,7 @@ export default class Dashboard extends React.Component {
         </div>
 
         {/* Add Project Modal */}
-        <div className="modal fade" id="add-project" role="dialog" aria-labelledby="exampleModalCenterTitle" style={{display:'none'}}>
+        <div className="modal fade" id="add-project" role="dialog" aria-labelledby="exampleModalCenterTitle" style={{ display: 'none' }}>
           <div className="modal-dialog modal-dialog-centered">
 
             {/* Add Project Modal content */}
@@ -197,22 +247,55 @@ export default class Dashboard extends React.Component {
                       <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                       <div className="add-project-member-list">
                         <div className="add-project-member-plus">
-                          <button type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
+                          <button onClick={this.onAddProjectMember.bind(this)} type="button" className="form-control add-project-member-button"><i className="fas fa-plus"></i></button>
                         </div>
-                        <div className="add-project-member-profile">
-                          <div className="join-project-member">
-                            <span><i className="fas fa-user-circle fa-2x"></i></span>
-                            <h4 style={{ display: "inline-block", marginTop: "0", marginLeft: "5px" }}>nest</h4>
-                            <span className="join-project-member-close" style={{ marginLeft: "5px" }}><i className="fas fa-times fa-lg"></i></span>
-                          </div>
+                        {/* 프로젝트 참여 멤버 */}
+                        <div className="join-project-member">
+                          { this.state.members.map(member => 
+                          <div className="Member" key={ member.member_no }>                        
+                            <img src={ member.member_photo } className="img-circle" alt={ member.member_photo } />
+                            <span>{ member.member_name }</span>
+                            <span className="delete-member" onClick={ this.onDelteMember.bind(this, member.member_no) }>
+                              <i className="fas fa-times"></i>
+                            </span>
+                          </div>) }            
                         </div>
                       </div>
+
+                      {/* Add Project Member select */}
+                      {this.state.addProjectMemberButton ?
+                        <div className="container card-member">
+                          <div className="card">
+                            <div className="card-header">
+                              <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버</h6>
+                              <button type="button" className="close" style={{ lineHeight: "35px" }} onClick={this.onAddProjectMember.bind(this)} >&times;</button>
+                              <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
+                            </div>
+                            <div className="card-body">
+                              <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
+                              <div className="invite-card-member-list">
+                                
+                                { this.state.users.map(user => 
+                                <div className="invite-card-member" key={ user.user_no }
+                                  id={ user.user_no } onClick={ this.onCheckPoint.bind(this, user.user_no, user.user_name, user.user_photo) }>
+                                  <img src={ user.user_photo } className="img-circle" alt={ user.user_photo }/>
+                                  <span>{ user.user_name }</span>
+                                </div>) }
+                                
+                                <div className="invite-member">
+                                  <i className="fas fa-user-plus fa-2x"></i>
+                                  <span>멤버 초대하기</span>
+                                </div> 
+                              </div>
+                            </div>
+                          </div>
+                        </div> : ""}
                     </div>
                   </div>
 
                   {/* Add Project Modal footer */}
                   <div className="modal-footer add-project-footer">
-                    <input type="submit" id="add-project-submit" onClick={ this.onClose.bind(this) } className="btn btn-outline-primary btn-rounded" value="OK"/>
+                    <input type="submit" id="add-project-submit" onClick={this.onClose.bind(this)} className="btn btn-outline-primary btn-rounded" value="OK" />
                   </div>
                 </div>
               </form>

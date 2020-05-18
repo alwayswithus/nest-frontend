@@ -26,8 +26,8 @@ const Login = () => {
     <>
       <div className="Login">
         <div className="loginBox">
-          <img style={{width:"150px", height:"150px"}} src="assets/images/nest-logo-black.png" />
-          <form /*onSubmit={login}*/ action="/dashboard" /*method="POST"*/ >
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
+          <form /*onSubmit={login}*/ action="/nest/dashboard" /*method="POST"*/ >
             <InputLabel id="loginText">Log In</InputLabel>
             <br/>
             <Input
@@ -51,15 +51,15 @@ const Login = () => {
             <br/><br/>
 
             <Input className="loginItems" 
-            id="loginSubmit" type="submit" value="로그인"/>
+            id="loginSubmit" type="submit" value="로그인" />
 				  </form>
 
           <br/>
-          <Link to="/signup">
+          <Link to="/nest/signup">
             <Button className="loginButtons" id="SignUpBtn">회원가입 하기</Button>
           </Link>
           <br/>
-          <Link to="/pwfind">
+          <Link to="/nest/pwfind">
             <Button className="loginButtons" id="PwFindBtn">비밀번호 찾기</Button>
           </Link>
         </div>

@@ -31,32 +31,32 @@ function App() {
         <Route  path="/nest" exact component={Login} />
 
         {/*회원 */}
-        <Route path="/signup" exact component={SignUp} />
-        <Route path="/pwfind" exact component={PwFind} />
+        <Route path="/nest/signup" exact component={SignUp} />
+        <Route path="/nest/pwfind" exact component={PwFind} />
 
         {/* 프로필설정 */}
-        <Route path="/profile" exact component={Profile} />
-        <Route path="/profileset" exact component={ProfileSetting} />
+        <Route path="/nest/profile" exact component={Profile} />
+        <Route path="/nest/profileset" exact component={ProfileSetting} />
 
         {/* 알림설정 */}
-        <Route path="/notification" exact component={Notification} />
+        <Route path="/nest/notification" exact component={Notification} />
 
         {/* 업무속성 */}
-        <Route path="/setting" exact component={Setting} />
-        <Route path="/comment" exact component={Comment} />
-        <Route path="/file" exact component={File} />
+        <Route path="/nest/setting" exact component={Setting} />
+        <Route path="/nest/comment" exact component={Comment} />
+        <Route path="/nest/file" exact component={File} />
 
         {/*칸반보드 */}
-        <Route path="/kanbanMain" exact component={KanbanMain} />
+        <Route path="/nest/kanbanMain" exact component={KanbanMain} />
 
         {/* 대시보드 */}
         <Route path="/nest/dashboard" exact component={Dashboard} />
 
         {/* 간트차트 */}
-        <Route path="/gantt" exact component={Gantt} />
+        <Route path="/nest/gantt" exact component={Gantt} />
 
         {/* 프로젝트 세팅*/}
-        <Route path="/projectset" exact component={ProjectSetting} />
+        <Route path="/nest/projectset" exact component={ProjectSetting} />
       </BrowserRouter>
     </div>
   );

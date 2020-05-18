@@ -58,7 +58,7 @@ class ProjectSetting extends Component {
                 <i class="fas fa-times"></i>
                 <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                     {/* 프로젝트 헤더 */}
-                    <ProjectHeader name='김우경' date='2020.05.06' />
+                    <ProjectHeader name='김우경' date='2020.05.06' callbackCloseProjectSetting={ this.props.callbackCloseProjectSetting }/>
                     {/* 프로젝트 리스트 */}
                     <div className="ProjectSet" >
                         <hr />
@@ -80,6 +80,7 @@ class ProjectSetting extends Component {
                                         {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)}/> : ""}
                                         {/* <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
                                             <DialogTitle onClose={this.handleClose.bind(this)}>
+
                                             <b>일정 설정</b>
                                             </DialogTitle>
                                             <DialogContent>
