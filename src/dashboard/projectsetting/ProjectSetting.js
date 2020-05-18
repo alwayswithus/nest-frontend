@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ProjectMemberAdd from './ProjectMemberAdd';
+import update from 'react-addons-update';
 
 class ProjectSetting extends Component {
     constructor() {
@@ -18,7 +19,8 @@ class ProjectSetting extends Component {
             Delete: false,
 
             show: false,
-            memberListOpen: false
+            memberListOpen: false,
+            members: []
         }
     }
 
@@ -67,7 +69,30 @@ class ProjectSetting extends Component {
             memberListOpen: state
         })
     }
+
+    callbackAddMember(members) {
+        this.setState({
+            members:members
+        })
+    }
+
+    // 프로젝트 멤버 삭제하는 함수
+  onDelteMember(memberNo) {
+    const memberIndex = this.state.members.findIndex(
+      (member) => member.member_no === memberNo
+    );
+    console.log(memberIndex);
+
+   let deleteMember = update(this.state.members, {
+      $splice: [[memberIndex, 1]]
+    })
+
+    this.setState({
+      members: deleteMember
+    })
+  }
     render() {
+        console.log("projectSetting:" + this.state.members)
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
@@ -91,17 +116,6 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }}>
                                     <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
                                     {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)} /> : ""}
-                                    {/* <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
-                                            <DialogTitle onClose={this.handleClose.bind(this)}>
-
-                                            <b>일정 설정</b>
-                                            </DialogTitle>
-                                            <DialogContent>
-                                            </DialogContent>
-                                            <DialogActions>
-                                            <Button variant="outlined" color="primary" onClick={this.handleClose.bind(this)}>닫기</Button>
-                                            </DialogActions>
-                                        </Dialog> */}
                                 </div>
 
                             </li>
@@ -116,17 +130,26 @@ class ProjectSetting extends Component {
                                 <div style={{ float: 'left' }}>
                                     <Button onClick={this.addMemberList.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
                                     <div>
-                                        {this.state.memberListOpen ? <ProjectMemberAdd callbackCloseMember={{ close: this.callbackCloseMember.bind(this) }} /> : ""}
+                                        {this.state.memberListOpen ? <ProjectMemberAdd 
+                                                callbackMembers={{ 
+                                                    close: this.callbackCloseMember.bind(this),
+                                                    addMember : this.callbackAddMember.bind(this)}} /> : ""}
                                     </div>
                                 </div>
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
-                                    <div className="Member">
                                         {/* <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                             <span>test</span> */}
-                                        {this.props.member}
+                                        {this.state.members && this.state.members.map(member => 
+                                        <div className="Member">
+                                            <img src={member.member_photo} className="img-circle" alt="Cinque Terre" />
+                                            <span>{member.member_name}</span>
+                                            <span className="delete-member" onClick={ this.onDelteMember.bind(this, member.member_no) }>
+                                                <i className="fas fa-times"></i> 
+                                            </span>
+                                        </div>
+                                        )}
                                     </div>
-                                </div>
                             </li>
 
                             {/* csv로 내보내기 */}

@@ -57,7 +57,7 @@ class ProjectMemberAdd extends Component {
             users: checkUser,
             members: addDeleteMember
         })
-
+        console.log(this.state.members)      
         this.props.callbackMembers.addMember(addDeleteMember);
     }
 
@@ -75,7 +75,6 @@ class ProjectMemberAdd extends Component {
                         <div className="card-body">
                             <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
-
                                 {this.state.users.map(user =>
                                     <div className="invite-card-member" key={user.user_no}
                                         id={user.user_no} onClick={this.callbackCheckpoint.bind(this, user.user_no, user.user_name, user.user_photo)}>
@@ -83,7 +82,6 @@ class ProjectMemberAdd extends Component {
                                         <span>{user.user_name}</span>
                                         {user.user_check ? <i className="fas fa-check"></i> : ""}
                                     </div>)}
-
                                 <div className="invite-member">
                                     <i className="fas fa-user-plus fa-2x"></i>
                                     <span>멤버 초대하기</span>

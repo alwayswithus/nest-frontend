@@ -45,6 +45,15 @@
                         span{
                             padding-top: 1%;  
                         }
+
+                        .delete-member {
+                            margin-left: 5px;
+                            cursor: pointer;
+
+                            .fa-times {
+                                color: grey;
+                            }
+                        }
                     }
 
                     .Member:hover{

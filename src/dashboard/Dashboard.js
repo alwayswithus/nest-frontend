@@ -64,10 +64,13 @@ export default class Dashboard extends React.Component {
     })
   }
 
+
+  // 멤버 리스트
   callbackCheckPoint(members) {
     this.setState({
       members: members
     })
+
   }
 
   // 화살표 펼치기, 숨기기 함수
@@ -94,7 +97,8 @@ export default class Dashboard extends React.Component {
       project_desc: event.target.projectDesc.value,
       project_start: Date.now(),
       project_end: "",
-      project_status: "상태없음"
+      project_status: "상태없음",
+      users:this.state.members
     };
 
     let newProjects = update(this.state.projects, {
@@ -103,6 +107,23 @@ export default class Dashboard extends React.Component {
     
     this.setState({
       projects: newProjects
+    })
+  }
+
+  // 프로젝트에 참여하길 원하는 멤버들을 클릭할 때 발생하는 이벤트 함수
+  onCheckPoint(userNo, userName, userPhoto) {
+    const userIndex = this.state.users.findIndex(
+      (user) => user.user_no === userNo
+    )
+    
+    let checkUser = update(this.state.users, {
+      [userIndex] : {
+        user_check: { $set: !this.state.users[userIndex].user_check }
+      }
+    })
+
+    this.setState({
+      users: checkUser
     })
   }
 
@@ -129,6 +150,7 @@ export default class Dashboard extends React.Component {
   }
   
   render() {
+    console.log("dashboard : " + this.state.project)
     return (
       <div className="Dashboard">
         <div className="container-fluid">
@@ -144,7 +166,6 @@ export default class Dashboard extends React.Component {
           <div id="projectSet" style={{ display: 'none' }}>
             <ProjectSetting
                 project = {this.state.project}
-                member = {this.state.member}
                 callbackCloseProjectSetting={ {close: this.callbackCloseProjectSetting.bind(this)} } />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
