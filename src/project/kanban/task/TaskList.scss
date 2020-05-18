@@ -81,5 +81,11 @@
     overflow: auto;
     overflow-x: hidden;
     height: 95%;
+    .completeCountArea{
+      text-align: center;
+      background-color: #b4b8ba;
+      border-radius: 3px;
+      color: white;
+    }
   }
 }

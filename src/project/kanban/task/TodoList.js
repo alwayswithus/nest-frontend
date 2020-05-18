@@ -8,16 +8,32 @@ class TodoList extends Component {
       <>
         <div>
           {todoItem.length > 0 ? (
-           
             <div className="todoList">
-              {todoItem && 
+              {todoItem &&
                 todoItem.map((todo) => (
                   <>
-                  <div className="todo">
-                    <input type="checkbox" className="doneCheck"></input>
-                    <div className="text">&nbsp;{todo.text} </div>
-                   
-                  </div><hr></hr>
+                    <div className="todo">
+                      {todo.checked ? (
+                        <>
+                          <input
+                            type="checkbox"
+                            className="doneCheck"
+                            checked
+                          ></input>
+                          <div className="text">
+                            <del>&nbsp;{todo.text}</del>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <input type="checkbox" className="doneCheck"></input>
+                          <div className="text">
+                            <p>&nbsp;{todo.text}</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <hr></hr>
                   </>
                 ))}
             </div>

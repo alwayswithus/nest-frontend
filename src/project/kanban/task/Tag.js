@@ -3,7 +3,7 @@ import "./Tag.scss";
 
 class Tag extends Component {
   render() {
-    const tagColor = "red";
+    const tagColor = this.props.tag.color;
     const tagStyle = {
       backgroundColor:`${tagColor}`
     };
