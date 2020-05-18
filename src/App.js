@@ -22,6 +22,8 @@ import ProjectSetting from "./dashboard/projectsetting/ProjectSetting";
 
 function App() {
 
+
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -48,7 +50,7 @@ function App() {
         <Route path="/kanbanMain" exact component={KanbanMain} />
 
         {/* 대시보드 */}
-        <Route path="/dashboard" exact component={Dashboard} />
+        <Route path="/nest/dashboard" exact component={Dashboard} />
 
         {/* 간트차트 */}
         <Route path="/gantt" exact component={Gantt} />

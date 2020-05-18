@@ -4,10 +4,23 @@ import Button from 'react-bootstrap/Button';
 import './Setting.scss';
 import Important from './Important';
 import Header from '../file/Header';
-
+import ModalCalendar from '../../../../modalCalendar/ModalCalendar2';
 class Setting extends Component {
+    constructor (){
+        super(...arguments)
+        this.state ={
+            open:false
+        }
+    }
+    onOpenCalendar() {
+        this.setState({
+            open:!this.state.open
+        })
+    };
     render() {
         const taskItem = this.props.task;
+
+
         return (
             <>
             
@@ -27,7 +40,8 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><i class="fas fa-calendar-week"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button variant=""> <i class="fas fa-plus fa-1x"></i> </Button>
+                                    <Button variant="" onClick={this.onOpenCalendar.bind(this)}> <i class="fas fa-plus fa-1x"></i> </Button>
+                                    {this.state.open ? <ModalCalendar /> : ""}
                                 </div>
                                 <div className="Date" style={{ display: 'inline-block' }}>
                                     {}

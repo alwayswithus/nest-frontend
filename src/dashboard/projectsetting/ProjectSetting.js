@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import './projectset.scss';
 import ProjectHeader from './ProjectHeader';
 import ProjectStatus from './ProjectStatus';
-import ModalCalendar from '../../modalCalendar/ModalCalendar';
+import ModalCalendar2 from '../../modalCalendar/ModalCalendar2';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,23 +13,22 @@ class ProjectSetting extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-            Calendaropen: false,
             Exist: false,
-            Delete: false
+            Delete: false,
+            show:false
         }
     }
 
     handleClickOpenCalendar() {
         this.setState({
-            Calendar: true,
             Exist: false,
-            Delete: false
+            Delete: false,
+            show:!this.state.show
         })
     }
 
     handleClickOpenExit() {
         this.setState({
-            Calendar: false,
             Exist: true,
             Delete: false
         })
@@ -37,18 +36,21 @@ class ProjectSetting extends Component {
 
     handleClickOpenDel() {
         this.setState({
-            Calendar: false,
             Exist: false,
             Delete: true
         })
     }
     handleClose() {
         this.setState({
-            Calendar: false,
             Exist: false,
             Delete: false
         })
     }
+
+    onSubmit(date) {
+        console.log("date:",date)
+    }
+
     render() {
 
         return (
@@ -74,17 +76,17 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
                                     <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i class="fas fa-plus fa-1x"></i></Button>
-                                    <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
+                                    {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)}/> : ""}
+                                    {/* <Dialog onClose={this.handleClose.bind(this)} open={this.state.Calendar}>
                                         <DialogTitle onClose={this.handleClose.bind(this)}>
                                             <b>일정 설정</b>
                                         </DialogTitle>
                                         <DialogContent>
-                                            <ModalCalendar />
                                         </DialogContent>
                                         <DialogActions>
                                             <Button variant="outlined" color="primary" onClick={this.handleClose.bind(this)}>닫기</Button>
                                         </DialogActions>
-                                    </Dialog>
+                                    </Dialog> */}
                                 </div>
 
                             </li>
@@ -104,72 +106,6 @@ class ProjectSetting extends Component {
                                     <div className="Member">
                                         <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                         <span>test</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
-                                    <div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div><div className="Member">
-                                        <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
                                     </div>
                                 </div>
                             </li>
