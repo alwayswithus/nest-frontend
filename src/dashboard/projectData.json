@@ -6,7 +6,7 @@
         "project_start": "20200513",
         "project_end": "20200514",
         "project_status": "상태없음",
-        "users": []
+        "members": []
     },
     {
         "project_no": 2,
@@ -15,6 +15,6 @@
         "project_start": "20200513",
         "project_end": "20200514",
         "project_status": "상태없음",
-        "users": []
+        "members": []
     }
 ]

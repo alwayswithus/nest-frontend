@@ -7,8 +7,7 @@ class ProjectMemberAdd extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-            users: userData,                // 사용자 데이터
-            members: [],                    // 각 프로젝트마다 참여하는 사용자들 목록 변수
+            users: userData                // 사용자 데이터
         }
     }
 
@@ -27,34 +26,34 @@ class ProjectMemberAdd extends Component {
             member_photo: userPhoto
         }
 
-        let addDeleteMember = update(this.state.members, {
+        let addDeleteMember = update(this.props.members, {
             $push: [member]
         })
 
         // 멤버를 추가하기 위한 버튼을 클릭할 때 나오는 사용자 데이터
-        const userIndex = this.state.users.findIndex(
-            (user) => user.user_no === userNo
-        )
+        // const userIndex = this.state.users.findIndex(
+        //     (user) => user.user_no === userNo
+        // )
 
-        let checkUser;
-        checkUser = update(this.state.users, {
-            [userIndex]: {
-                user_check: { $set: !this.state.users[userIndex].user_check }
-            }
-        })
+        // let checkUser;
+        // checkUser = update(this.state.users, {
+        //     [userIndex]: {
+        //         user_check: { $set: !this.state.users[userIndex].user_check }
+        //     }
+        // })
 
-        if (this.state.users[userIndex].user_check) {
-            const memberIndex = this.state.members.findIndex(
-                (member) => member.member_no === userNo
-            );
+        // if (this.state.users[userIndex].user_check) {
+        //     const memberIndex = this.state.members.findIndex(
+        //         (member) => member.member_no === userNo
+        //     );
 
-            addDeleteMember = update(this.state.members, {
-                $splice: [[memberIndex, 1]]
-            })
-        }
+        //     addDeleteMember = update(this.state.members, {
+        //         $splice: [[memberIndex, 1]]
+        //     })
+        // }
 
         this.setState({
-            users: checkUser,
+            // users: checkUser,
             members: addDeleteMember
         })
         this.props.callbackMembers.addMember(addDeleteMember);
