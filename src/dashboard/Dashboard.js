@@ -4,7 +4,6 @@ import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
-import userData from './userData.json';
 import update from 'react-addons-update';
 
 import ApiService from '../ApiService';
@@ -92,13 +91,13 @@ export default class Dashboard extends React.Component {
     event.preventDefault();
     
     let project = {
-      project_no: this.state.projects.length + 1,
-      project_title: event.target.projectTitle.value,
-      project_desc: event.target.projectDesc.value,
-      project_start: Date.now(),
-      project_end: "",
-      project_status: "상태없음",
-      users:this.state.members
+      projectNo: this.state.projects.length + 1,
+      projectTitle: event.target.projectTitle.value,
+      projectDesc: event.target.projectDesc.value,
+      projectStart: Date.now(),
+      projectEnd: "",
+      projectStatus: "상태없음",
+      members: this.state.members
     };
 
     let newProjects = update(this.state.projects, {
@@ -275,7 +274,7 @@ export default class Dashboard extends React.Component {
                       
                       {/* Add Project Member select */}
                       { this.state.addProjectMemberButton ? 
-                        <ProjectMemberAdd callbackMembers={{ close: this.callbackCloseMember.bind(this), addMember: this.callbackCheckPoint.bind(this) }} /> : "" }
+                        <ProjectMemberAdd members={this.state.members} callbackMembers={{ close: this.callbackCloseMember.bind(this), addMember: this.callbackCheckPoint.bind(this) }} /> : "" }
                     </div>
                   </div>
 
