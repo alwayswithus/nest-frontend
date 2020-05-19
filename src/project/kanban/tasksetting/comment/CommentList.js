@@ -11,9 +11,22 @@ const CommentList = () => {
                     <span className="media-heading"><b>이름</b></span>
                     <span className="media-heading">2분전</span>
                     <ul className="list-unstyled list-inline media-detail pull-right">
-                        <li class=""><a href=""><i class="far fa-thumbs-up thumsup" /></a></li>
-                        <li class=""><a href=""><i class="fas fa-pen" /></a></li>
-                        <li class=""><a href=""><i class="far fa-trash-alt" /></a></li>
+                    <li class="">
+                            <span data-tooltip-text="공감하기">
+                                <i class="far fa-thumbs-up thumsup"/>
+                            </span>
+                        </li>
+                        <li class="">
+                            <span data-tooltip-text="수정하기">
+                                <i class="fas fa-pen" />
+                            </span>
+                        </li>
+
+                        <li class="">
+                            <span data-tooltip-text="삭제하기">
+                                <i class="far fa-trash-alt" />
+                            </span>
+                        </li>
                     </ul>
                     <p>
                         vvvvvvcccccccccccccccccccccccccccccccccccccccccccccccccccd<br/>
@@ -34,26 +47,20 @@ const CommentList = () => {
                     <span className="media-heading">2분전</span>
                     <ul className="list-unstyled list-inline media-detail pull-right">
                         <li class="">
-                            <a href="">
-                                <span data-tooltip-text="공감하기">
-                                    <i class="far fa-thumbs-up thumsup"/>
-                                </span>
-                            </a>
+                            <span data-tooltip-text="공감하기">
+                                <i class="far fa-thumbs-up thumsup"/>
+                            </span>
                         </li>
                         <li class="">
-                            <a href="">
-                                <span data-tooltip-text="수정하기">
-                                    <i class="fas fa-pen" />
-                                </span>
-                            </a>
+                            <span data-tooltip-text="수정하기">
+                                <i class="fas fa-pen" />
+                            </span>
                         </li>
 
                         <li class="">
-                            <a href="">
-                                <span data-tooltip-text="삭제하기">
-                                    <i class="far fa-trash-alt" />
-                                </span>
-                            </a>
+                            <span data-tooltip-text="삭제하기">
+                                <i class="far fa-trash-alt" />
+                            </span>
                         </li>
                     </ul>
                     <p>
@@ -73,27 +80,21 @@ const CommentList = () => {
                     <span className="media-heading"><b>이름</b></span>
                     <span className="media-heading">2분전</span>
                     <ul className="list-unstyled list-inline media-detail pull-right">
-                        <li class="">
-                            <a href="">
-                                <span data-tooltip-text="공감하기">
-                                    <i class="far fa-thumbs-up thumsup"/>
-                                </span>
-                            </a>
+                    <li class="">
+                            <span data-tooltip-text="공감하기">
+                                <i class="far fa-thumbs-up thumsup"/>
+                            </span>
                         </li>
                         <li class="">
-                            <a href="">
-                                <span data-tooltip-text="수정하기">
-                                    <i class="fas fa-pen" />
-                                </span>
-                            </a>
+                            <span data-tooltip-text="수정하기">
+                                <i class="fas fa-pen" />
+                            </span>
                         </li>
 
                         <li class="">
-                            <a href="">
-                                <span data-tooltip-text="삭제하기">
-                                    <i class="far fa-trash-alt" />
-                                </span>
-                            </a>
+                            <span data-tooltip-text="삭제하기">
+                                <i class="far fa-trash-alt" />
+                            </span>
                         </li>
                     </ul>
                     <p>

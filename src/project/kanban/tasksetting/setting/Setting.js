@@ -5,11 +5,13 @@ import './Setting.scss';
 import Important from './Important';
 import Header from '../file/Header';
 import ModalCalendar from '../../../../modalCalendar/ModalCalendar2';
+import CheckList from './CheckList';
+
 class Setting extends Component {
     constructor (){
         super(...arguments)
         this.state ={
-            open:false
+            open:false,
         }
     }
     onOpenCalendar() {
@@ -17,16 +19,15 @@ class Setting extends Component {
             open:!this.state.open
         })
     };
+
     render() {
         const taskItem = this.props.task;
-
-
         return (
             <>
                 <div style={{ height: '100%' }}>
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
-                        <Header name='김우경' date='2020.05.06' taskContents = {taskItem.contents}/>
+                        <Header path= {this.props.path} onCallbackSetting={this.props.onCallbackSetting} name='김우경' date='2020.05.06' taskContents = {taskItem.contents}/>
                     </div>
 
                     {/* 업무속성 리스트 */}
@@ -66,6 +67,13 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><i class="fas fa-tags"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>태그</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i class="fas fa-plus fa-1x"></i> </Button></div>
+                                {taskItem.tag.map(tag => 
+                                    <div style={{ display: 'inline-block' }} className = "TagList">
+                                        <div className = "tag">
+                                            <span className="label label-default tagLabel" style={{backgroundColor:`${tag.color}`, fontSize:'1.25rem', cursor:'default'}}>{tag.name}</span>
+                                        </div>
+                                    </div>
+                                )}
                             </li>
 
                             {/* 중요도 */}
@@ -86,16 +94,18 @@ class Setting extends Component {
                             {/* 하위 할일 */}
                             <li>
                                 <form className="TodoInsert">
-                                    <button type="submit"><i class="fas fa-plus fa-1x"></i></button>
-                                    <input placeholder="  할 일을 입력" />
                                     <div className="todoList">
-                                            <ul>
-                                                 {taskItem.todoList && taskItem.todoList.map(todo =>
-                                                 <div className="todo">
+                                        {taskItem.todoList && taskItem.todoList.map(todo =>
+                                            <div className="todo">
                                                     <input type="checkbox" className="doneCheck"></input>
-                                                    <li key={todo.id}>{todo.text}</li> </div>)} 
-                                            </ul>
+                                                        <div style={{borderLeft:'3px solid #F8BCB6'}}/>
+                                                            <CheckList todo={todo}/>
+                                                        </div>)}
+                                        <div className = "insert">
+                                            <button type="submit"><i style = {{marginLeft: '40%'}} class="fas fa-plus fa-2x"></i></button>
+                                            <input style = {{marginLeft: '5%'}} value = "" placeholder="  할 일을 입력" />
                                         </div>
+                                    </div>
                                 </form>
                             </li>
                         </ul>
