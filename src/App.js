@@ -42,9 +42,9 @@ function App() {
         <Route path="/nest/notification" exact component={Notification} />
 
         {/* 업무속성 */}
-        <Route path="/nest/setting" exact component={Setting} />
-        <Route path="/nest/comment" exact component={Comment} />
-        <Route path="/nest/file" exact component={File} />
+        <Route path="#" exact component={Setting} />
+        <Route path="#" exact component={Comment} />
+        <Route path="#" exact component={File} />
 
         {/*칸반보드 */}
         <Route path="/nest/kanbanMain" exact component={KanbanMain} />

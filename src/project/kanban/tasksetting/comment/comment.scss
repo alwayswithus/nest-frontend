@@ -66,8 +66,9 @@
                 text-align:justify;
                 word-break: break-word;
             }
-            ul li a{
+            ul li {
                 color: black;
+                cursor: pointer;
                 [data-tooltip-text]:hover {
                     position: relative;
                 }
@@ -90,14 +91,14 @@
                     color: #FFFFFF;
                     font-size: 12px;
                     // margin-bottom: 1%;
-                    padding: 7px 12px;
+                    padding: 5px;
                     position: absolute;
-                    width: auto;
-                    min-width: 50px;
-                    max-width: 300px;
+                    width: 60px;
+                    // min-width: 50px;
+                    // max-width: 300px;
                     word-wrap: break-word;
                 
-                    z-index:200;
+                    z-index:999;
                 
                     opacity: 0;
                     left: -9999px;
@@ -107,7 +108,7 @@
                 }
                 
                 [data-tooltip-text]:hover:after {
-                    left: 0;
+                    left: -45px;
                     opacity: 1;
                 }
             }

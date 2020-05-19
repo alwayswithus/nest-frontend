@@ -3,9 +3,19 @@ import TodoList from "./TodoList";
 import TagList from "./TagList";
 import Date from "./Date";
 import Setting from "../tasksetting/setting/Setting";
+import File from "../tasksetting/file/File";
+import Comment from '../tasksetting/comment/Comment'
 import "./Task.scss";
 
 class Task extends Component {
+
+  constructor(){
+    super(...arguments)
+
+    this.state = {
+      path:''
+    }
+  }
   deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
     window.jQuery(document.body).removeClass("modal-open");
@@ -19,17 +29,21 @@ class Task extends Component {
 
   test() {
     this.setState({
-      open: true,
+      path:''
     });
   }
 
+  onCallbackSetting(path) {
+    this.setState({
+      path:path
+    })
+  }
   render() {
     const taskItem = this.props.task;
     const labelColor = taskItem.label;
     const labelStyle = {
       borderLeft: `5px solid ${labelColor}`,
     };
-
     return (
       <>
         <div
@@ -140,7 +154,10 @@ class Task extends Component {
             >
               <div class="modal-content">
                 <div class="modal-body">
-                  <Setting task={taskItem} key={taskItem.no} />
+                  { this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
+                      <>{ this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} />  : ( 
+                      <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no}/> : <Setting onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> }</>
+                      )} </>)}
                 </div>
                 <div class="modal-footer">
                   <button

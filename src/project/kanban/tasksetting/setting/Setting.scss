@@ -16,45 +16,71 @@
     box-shadow: -60px -50px 50px -90px #000000,
     60px 0px 50px -90px #000000;
     .TodoInsert {
-
         .todoList {
+            background-color: #F3F4F5;
             border: none;
-            border-radius: 6px;
-            
             .todo {
                 padding-left: 10px;
-                margin-bottom: 5%;
                 display: flex;
-                font-size: 12px;
-                
-                &:hover {
-                    background-color: #e2e2e259;
-                }
+                background-color: white;
+                height:50px;
                 .doneCheck {
                     // margin: 3px 0px 3px -3px;
                     width: auto;
+                    transform: scale(1.5);
                     cursor: pointer;
+                    margin: 3.5% 1% 0;
                     &:hover {
                         border: 1px solid black;
                     }
                 }
+                input{
+                    height: 25px;
+                    margin-top: 2.5%;
+                    margin-left: 2%;
+                    border: 1px dashed grey;
+                    font-size: 1.5rem;
+                    width: 500px;
+                    padding: 1%;
+                    &:focus {
+                        outline:none;
+                    }
+                }
+
                 li {
-                    background-color: white;
-                    border-left: 3px solid #FFA0A0;
-                    margin: 2px 0 0 5px;
+                    margin: 10px 0 0 5px;
                     padding-left:2%;
-                    font-size: 1.25rem;
-              }
+                    font-size: 1.5rem;
+                    height:30px;
+                    width:500px;
+                    padding-top:1%;
+                    cursor: pointer;
+                    i{
+                        display:none;
+                    }
+                    &:hover {
+                        background-color: #E6E8EC;
+                        border-radius: 2px;
+                        i {
+                            float:right;
+                            padding:0 1%;
+                            display: inline-block;
+                            height: 1px;
+                            color: #C3C3C3;
+                        }
+                    }
+                }
             }
-          }
-          
-        input { 
-            background: #D8D8D8;
-            border:none; 
-            border-radius: 2px;; 
-            font-size: 1.5rem; 
-            width: 250px;
         }
+        .insert{
+            background: white;
+            input { 
+                border:none; 
+                border-radius: 2px;; 
+                font-size: 1.5rem; 
+                width: 250px;
+            }
+        } 
 
         Button { 
             border:none; 
