@@ -3,10 +3,23 @@ import TodoList from "./TodoList";
 import TagList from "./TagList";
 import Date from "./Date";
 import Setting from "../tasksetting/setting/Setting";
+import File from "../tasksetting/file/File";
+import Comment from '../tasksetting/comment/Comment'
 import "./Task.scss";
 
 class Task extends Component {
-  // task 삭제
+
+  
+
+
+  constructor(){
+    super(...arguments)
+
+    this.state = {
+      path:''
+    }
+  }
+// task 삭제
   deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
     this.noneClick();
@@ -24,6 +37,7 @@ class Task extends Component {
     window.jQuery(".modal-backdrop").remove();
   }
 
+
   // task 완료 체크 박스
   doneTask() {
     this.props.taskCallbacks.doneTask(
@@ -33,13 +47,25 @@ class Task extends Component {
     );
     this.noneClick();
   }
+
+  test() {
+    this.setState({
+      path:''
+    });
+  }
+
+  onCallbackSetting(path) {
+    this.setState({
+      path:path
+    })
+  }
+
   render() {
     const taskItem = this.props.task;
     const labelColor = taskItem.label;
     const labelStyle = {
       borderLeft: `5px solid ${labelColor}`,
     };
-
     return (
       <>
         <div
@@ -153,9 +179,13 @@ class Task extends Component {
               role="document"
               style={{ width: "670px" }}
             >
-              <div className="modal-content">
-                <div className="modal-body">
-                  <Setting task={taskItem} key={taskItem.no} />
+              <div class="modal-content">
+                <div class="modal-body">
+                  { this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
+                      <>{ this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} />  : ( 
+                      <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no}/> : <Setting onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> }</>
+                      )} </>)}
+
                 </div>
                 <div className="modal-footer">
                   <button

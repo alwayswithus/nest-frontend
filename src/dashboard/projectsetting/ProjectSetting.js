@@ -19,10 +19,15 @@ class ProjectSetting extends Component {
             Delete: false,
 
             show: false,
-            memberListOpen: false,
-            members: [this.props.members]
+            userListOpen: false
         }
-        console.log("!!!!!!" + this.state.members)
+    }
+
+    // User List Close Function
+    callbackCloseUserList(userListOpen) {
+        this.setState({
+            userListOpen: userListOpen
+        })
     }
 
     handleClickOpenCalendar() {
@@ -53,52 +58,37 @@ class ProjectSetting extends Component {
         })
     }
 
+    // User List Open Function
+    onUserListOpen() {
+        this.setState({
+            userListOpen: !this.state.userListOpen
+        })
+    }
+
     onSubmit(date) {
         console.log("date:", date)
     }
 
-    // + 버튼을 눌렀을 때 memberList 창이 뜸.
-    addMemberList() {
-        this.setState({
-            memberListOpen: !this.state.memberListOpen
-        })
-    }
-
-    // x 버튼을 눌렀을 때 memberList창 닫음.(call back 함수)
-    callbackCloseMember(state) {
-        this.setState({
-            memberListOpen: state
-        })
-    }
-
-    callbackAddMember(members) {
-        this.setState({
-            members:members
-        })
-    }
-
     // 프로젝트 멤버 삭제하는 함수
-  onDelteMember(memberNo) {
-    const memberIndex = this.state.members.findIndex(
-      (member) => member.member_no === memberNo
-    );
-    console.log(memberIndex);
+    onDelteMember(memberNo) {
+        const memberIndex = this.state.members.findIndex(
+            (member) => member.member_no === memberNo
+        );
+        console.log(memberIndex);
 
-   let deleteMember = update(this.state.members, {
-      $splice: [[memberIndex, 1]]
-    })
+        let deleteMember = update(this.state.members, {
+            $splice: [[memberIndex, 1]]
+        })
 
-    this.setState({
-      members: deleteMember
-    })
-  }
+        this.setState({
+            members: deleteMember
+        })
+    }
     render() {
-        // console.log("projectSetting:" + this.props.project)
-        console.log("projectSetting:" + this.state.members)
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
-                <ProjectHeader project={this.props.project} name='김우경' callbackCloseProjectSetting={this.props.callbackCloseProjectSetting} />
+                <ProjectHeader project={this.props.project} name='김우경' callbackProjectSetting={this.props.callbackProjectSetting} />
                 {/* 프로젝트 리스트 */}
                 <div className="ProjectSet" >
                     <hr />
@@ -125,33 +115,29 @@ class ProjectSetting extends Component {
                             {/* 프로젝트 멤버 */}
                             <li>
                                 <div style={{ float: 'left' }}>
-                                    <h5>
-                                        <b>프로젝트멤버</b>
-                                    </h5>
+                                    <h5><b>프로젝트멤버</b></h5>
                                 </div>
                                 <div style={{ float: 'left' }}>
-                                    <Button onClick={this.addMemberList.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                    <Button onClick={this.onUserListOpen.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
                                     <div>
-                                        {this.state.memberListOpen ? <ProjectMemberAdd 
-                                                callbackMembers={{ 
-                                                    close: this.callbackCloseMember.bind(this),
-                                                    addMember : this.callbackAddMember.bind(this)}} /> : ""}
+                                        {this.state.userListOpen ?
+                                            <ProjectMemberAdd project={this.props.project} users={this.props.users} 
+                                            callbackCloseUserList={{close: this.callbackCloseUserList.bind(this)}} 
+                                            callbackProjectSetting={this.props.callbackProjectSetting}/> : ""}
                                     </div>
                                 </div>
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
-                                        {/* <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                            <span>test</span> */}
-                                        {this.props.members && this.props.members.map(member => 
-                                        <div className="Member">
-                                            <img src={member.member_photo} className="img-circle" alt="Cinque Terre" />
-                                            <span>{member.member_name}</span>
-                                            <span className="delete-member" onClick={ this.onDelteMember.bind(this, member.member_no) }>
-                                                <i className="fas fa-times"></i> 
+                                    {this.props.project.members && this.props.project.members.map(member =>
+                                        <div className="Member" key={member.memberNo}>
+                                            <img src={member.memberPhoto} className="img-circle" alt={member.memberPhoto} />
+                                            <span>{member.memberName}</span>
+                                            <span className="delete-member">
+                                                <i className="fas fa-times"></i>
                                             </span>
                                         </div>
-                                        )}
-                                    </div>
+                                    )}
+                                </div>
                             </li>
 
                             {/* csv로 내보내기 */}

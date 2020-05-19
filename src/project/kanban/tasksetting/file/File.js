@@ -5,9 +5,10 @@ import Header from './Header';
 
 class File extends Component {
     render(){
+        const taskItem = this.props.task;
     return (
             <>
-                <Header />
+                <Header path = {this.props.path} onCallbackSetting = {this.props.onCallbackSetting} taskContents = {taskItem.contents}/>
                 <div className="File">
                     <div className="FileMenu">
                         <form className="navbar-form navbar-left">
