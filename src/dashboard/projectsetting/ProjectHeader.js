@@ -4,7 +4,7 @@ import './Projectheader.scss';
 class ProjectHeader extends Component  {
     
     onCloseProjectSetting() {
-        this.props.callbackCloseProjectSetting.close(true);
+        this.props.callbackProjectSetting.close(true);
     }
 
     render() {
