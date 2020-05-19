@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "./TodoList.scss";
 
 class TodoList extends Component {
@@ -9,32 +9,27 @@ class TodoList extends Component {
         <div>
           {todoItem.length > 0 ? (
             <div className="todoList">
-              {todoItem &&
-                todoItem.map((todo) => (
-                  <>
+              {todoItem && todoItem.map(todo => (
+                  <Fragment key={todo.id}>
                     <div className="todo">
-                      {todo.checked ? (
+                      {todo.checked ? 
                         <>
-                          <input
-                            type="checkbox"
-                            className="doneCheck"
-                            checked
-                          ></input>
+                          <input type="checkbox" className="doneCheck" defaultChecked ></input>
                           <div className="text">
                             <del>&nbsp;{todo.text}</del>
                           </div>
-                        </>
-                      ) : (
+                          </>
+                       : 
                         <>
                           <input type="checkbox" className="doneCheck"></input>
                           <div className="text">
                             <p>&nbsp;{todo.text}</p>
                           </div>
                         </>
-                      )}
+                      }
                     </div>
                     <hr></hr>
-                  </>
+                  </Fragment>
                 ))}
             </div>
           ) : (

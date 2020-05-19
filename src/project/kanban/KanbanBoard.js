@@ -7,26 +7,44 @@ class KanbanBoard extends Component {
     super(...arguments);
     this.state = {
       taskListInsertState: false,
-      taskContents:""
+      taskListTitle: "",
     };
   }
 
-  taskListAdd() {
+  //리스트 추가 버튼 UI변경
+  taskListStateBtn() {
     this.setState({
       taskListInsertState: !this.state.taskListInsertState,
+      taskListTitle: "",
     });
   }
-  addTaskList(){
-
+  // 리스트 추가
+  addTaskListEnter(event) {
+    if (event.key === "Enter") {
+      this.addTaskList();
+    }
   }
-  noneTaskInsertArea(){
+
+  addTaskList() {
+    this.props.taskCallbacks.addList(this.state.taskListTitle);
+    this.setState({
+      taskListTitle: "",
+    });
+    this.taskListStateBtn();
+  }
+
+  // 리스트명 입력 이벤트
+  onTextAreaChanged(event) {
+    this.setState({
+      taskListTitle: event.target.value.substr(0, 13),
+    });
+    console.log(event.target.value);
+  }
+
+  // 리스트 추가 취소 버튼
+  noneTaskListAddBtn() {
     this.setState({
       taskListInsertState: false,
-    });
-  }
-  onTextAreaChanged(event){
-    this.setState({
-      taskContents: event.target.value,
     });
   }
 
@@ -56,31 +74,27 @@ class KanbanBoard extends Component {
             <div className="taskListAdd">
               {this.state.taskListInsertState ? (
                 <>
-                  <div className="taskListInsertArea">
-                    <div className="taskListInsertForm">
-                      <textarea
+                  <div className="taskListInsertForm">
+                    <div>
+                      <input
+                        type="text"
                         className="textArea"
-                        cols="35"
-                        rows="2"
                         onChange={this.onTextAreaChanged.bind(this)}
-                        value={this.state.taskContents}
-                      ></textarea>
+                        onKeyPress={this.addTaskList.bind(this)}
+                        value={this.state.taskListTitle}
+                        autoFocus
+                      ></input>
                     </div>
                     <div className="taskListInsertBtn">
-                      <button
-                        type="button"
-                        className="btn cancel"
-                        onClick={this.noneTaskInsertArea.bind(this)}
-                      >
-                        취소
-                      </button>
-                      <button
-                        type="button"
-                        className="btn comfirm"
+                      &nbsp;
+                      <i
+                        className="fas fa-plus Icon"
                         onClick={this.addTaskList.bind(this)}
-                      >
-                        만들기
-                      </button>
+                      ></i>
+                      <i
+                        class="far fa-trash-alt Icon"
+                        onClick={this.taskListStateBtn.bind(this)}
+                      ></i>
                     </div>
                   </div>
                 </>
@@ -88,8 +102,8 @@ class KanbanBoard extends Component {
                 <>
                   <button
                     type="button"
-                    className="btn btn-default cardPlus"
-                    onClick={this.taskListAdd.bind(this)}
+                    className="btn btn-default addTaskListBtn"
+                    onClick={this.taskListStateBtn.bind(this)}
                   >
                     + 추가
                   </button>
