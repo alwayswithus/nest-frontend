@@ -151,7 +151,7 @@ class KanbanMain extends Component {
               taskCallbacks={{
                 add: this.callbackAddTask.bind(this),
                 delete: this.callbackDeleteTask.bind(this),
-                copy: this.callbackCopyTask(this),
+                copy: this.callbackCopyTask.bind(this),
                 addList: this.callbackAddTaskList.bind(this),
                 deleteList: this.callbackDeleteTaskList.bind(this),
               }}

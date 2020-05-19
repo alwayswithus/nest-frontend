@@ -20,8 +20,9 @@ class ProjectSetting extends Component {
 
             show: false,
             memberListOpen: false,
-            members: []
+            members: [this.props.members]
         }
+        console.log("!!!!!!" + this.state.members)
     }
 
     handleClickOpenCalendar() {
@@ -92,6 +93,7 @@ class ProjectSetting extends Component {
     })
   }
     render() {
+        // console.log("projectSetting:" + this.props.project)
         console.log("projectSetting:" + this.state.members)
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
@@ -140,7 +142,7 @@ class ProjectSetting extends Component {
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                         {/* <img src="assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                             <span>test</span> */}
-                                        {this.state.members && this.state.members.map(member => 
+                                        {this.props.members && this.props.members.map(member => 
                                         <div className="Member">
                                             <img src={member.member_photo} className="img-circle" alt="Cinque Terre" />
                                             <span>{member.member_name}</span>
