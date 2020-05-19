@@ -33,7 +33,7 @@
         .newTaskListName {
           width: 200px;
           border: none;
-        border-radius: 3px;
+          border-radius: 3px;
         }
       }
       .head-insertBtn {
@@ -60,17 +60,14 @@
     }
     .taskInsertBtn {
       padding: 0px 1px 5px 180px;
-
       .btn {
         width: 50px;
         padding: 3px 0 3px 0;
         &:hover {
           // background-color: rgb(197, 197, 197);
-          background-color: #F0B2B9;
+          background-color: #f0b2b9;
           color: white;
         }
-      }
-      .cancel {
       }
       .comfirm {
         margin: 0px 0px 0px 10px;
@@ -81,11 +78,24 @@
     overflow: auto;
     overflow-x: hidden;
     height: 95%;
-    .completeCountArea{
+    .completeArea {
       text-align: center;
       background-color: #b4b8ba;
       border-radius: 3px;
+      cursor: pointer;
       color: white;
+      &:hover {
+        background-color: #7a7d7e;
+        color: white;
+      }
+    }
+    .completeTask {
+      .panel-primary {
+        border-color: #afafaf;
+        .panel-body {
+          background-color: #e4e4e4;
+        }
+      }
     }
   }
 }

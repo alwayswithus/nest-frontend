@@ -13,8 +13,7 @@ class TaskList extends Component {
       viewTaskInsertArea: false,
       taskInsertState: false,
       taskContents: "",
-      IncompleteCount: this.props.taskList.tasks.length,
-      completeCount: 0,
+      showComplete: false,
     };
   }
 
@@ -39,34 +38,18 @@ class TaskList extends Component {
     }
   }
 
+  // Task List 이름 수정 영역 UI 상태
   showTaskInsertArea() {
     this.setState({
-      taskInsertState: true,
+      taskInsertState: !this.state.taskInsertState,
     });
   }
 
-  noneTaskInsertArea() {
-    this.setState({
-      taskInsertState: false,
-    });
-  }
-
+  // Task List 입력 이벤트
   onTextAreaChanged(event) {
     this.setState({
       taskContents: event.target.value,
     });
-  }
-
-  // task 추가
-  addTask() {
-    this.props.taskCallbacks.add(
-      this.props.taskList.no,
-      this.state.taskContents
-    );
-    this.setState({
-      taskContents: "",
-    });
-    this.noneTaskInsertArea();
   }
 
   // taskList 삭제
@@ -79,12 +62,26 @@ class TaskList extends Component {
     }
   }
 
-  getSnapshotBeforeUpdate(props) {
-    return props;
+  // task 추가
+  addTask() {
+    this.props.taskCallbacks.add(
+      this.props.taskList.no,
+      this.state.taskContents
+    );
+    this.setState({
+      taskContents: "",
+    });
+    this.showTaskInsertArea();
+  }
+
+  // 완료된 Task List 목록 상태
+  showCompleteTaskList() {
+    this.setState({
+      showComplete: !this.state.showComplete,
+    });
   }
 
   render() {
-    //const keyword = this.getSnapshotBeforeUpdate(this.props.taskList.title);
     return (
       <>
         <div className="taskCategory">
@@ -104,7 +101,7 @@ class TaskList extends Component {
                     />
                   ) : (
                     <div>
-                      {this.state.keyword} &nbsp; {/* 받아올 키워드  */}
+                      {this.state.keyword} &nbsp;
                       {this.state.taskInsertState ? (
                         ""
                       ) : (
@@ -159,7 +156,7 @@ class TaskList extends Component {
                   <button
                     type="button"
                     className="btn cancel"
-                    onClick={this.noneTaskInsertArea.bind(this)}
+                    onClick={this.showTaskInsertArea.bind(this)}
                   >
                     취소
                   </button>
@@ -176,60 +173,44 @@ class TaskList extends Component {
               ""
             )}
           </div>
+
           <div className="tasks">
-            {this.props.taskList.tasks.map((task) => (
-              <>
-                {task.checked ? (
-                  <></>
-                ) : (
-                  <>
-                    <Task
-                      key={task.no}
-                      taskListId={this.props.taskList.no}
-                      task={task}
-                      taskCallbacks={this.props.taskCallbacks}
-                    />
-                  </>
-                )}
-              </>
-            ))}
-
-            <div className="completeCountArea">
-              완료된 업무 {this.state.completeCount} / {this.state.IncompleteCount}
+            {/* task 목록 */}
+            {this.props.taskList.tasks.map((task) =>
+              task.checked ? null : (
+                <Task
+                  key={task.no}
+                  taskListId={this.props.taskList.no}
+                  task={task}
+                  taskCallbacks={this.props.taskCallbacks}
+                />
+              )
+            )}
+            {/* 완료된 task 목록 */}
+            <div
+              className="completeArea"
+              onClick={this.showCompleteTaskList.bind(this)}
+            >
+              완료된 업무
             </div>
-
-            {this.props.taskList.tasks.map((task) => (
-              <>
-                {task.checked ? (
-                  <>
+            {this.state.showComplete ? (
+              <div className="completeTask">
+                {this.props.taskList.tasks.map((task) =>
+                  task.checked ? (
                     <Task
                       key={task.no}
                       taskListId={this.props.taskList.no}
                       task={task}
                       taskCallbacks={this.props.taskCallbacks}
                     />
-                  </>
-                ) : (
-                  <></>
+                  ) : null
                 )}
-              </>
-            ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </>
     );
-  }
-
-  componentDidMount() {
-    let count = 0;
-    this.props.taskList.tasks.map((task) => {
-      if (task.checked) {
-        count++;
-      }
-    });
-    this.setState({
-      completeCount: count,
-    });
   }
 }
 

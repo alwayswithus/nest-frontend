@@ -6,23 +6,33 @@ import Setting from "../tasksetting/setting/Setting";
 import "./Task.scss";
 
 class Task extends Component {
+  // task 삭제
   deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
-    window.jQuery(document.body).removeClass("modal-open");
-    window.jQuery(".modal-backdrop").remove();
+    this.noneClick();
   }
+
+  // task 복사
   copyTask() {
     this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
+    this.noneClick();
+  }
+
+  // 클릭 모달 막기
+  noneClick() {
     window.jQuery(document.body).removeClass("modal-open");
     window.jQuery(".modal-backdrop").remove();
   }
 
-  test() {
-    this.setState({
-      open: true,
-    });
+  // task 완료 체크 박스
+  doneTask() {
+    this.props.taskCallbacks.doneTask(
+      this.props.taskListId,
+      this.props.task.no,
+      this.props.task.checked
+    );
+    this.noneClick();
   }
-
   render() {
     const taskItem = this.props.task;
     const labelColor = taskItem.label;
@@ -36,7 +46,6 @@ class Task extends Component {
           className="task"
           data-toggle="modal"
           data-target={`#kanban-setting-${taskItem.no}`}
-          onClick={this.test.bind(this)}
         >
           <div className="panel panel-primary" style={labelStyle}>
             <div className="panel-body">
@@ -57,17 +66,16 @@ class Task extends Component {
                     >
                       <i className="fas fa-ellipsis-v" aria-hidden="true"></i>
                     </button>
-                    <ul className="dropdown-menu" role="menu">
+                    <ul
+                      className="dropdown-menu"
+                      role="menu"
+                      onClick={this.noneClick.bind(this)}
+                    >
                       <li>
-                        <a href="#" onClick={this.copyTask.bind(this)}>
-                          업무 복사
-                        </a>
+                        <a onClick={this.copyTask.bind(this)}>업무 복사</a>
                       </li>
-                      <li className="divider"></li>
                       <li>
-                        <a href="#" onClick={this.deleteTask.bind(this)}>
-                          업무 삭제
-                        </a>
+                        <a onClick={this.deleteTask.bind(this)}>업무 삭제</a>
                       </li>
                     </ul>
                   </div>
@@ -76,18 +84,25 @@ class Task extends Component {
               <div className="task-item task-title">
                 <div className="title">
                   {taskItem.checked ? (
+                    // 완료된 task
                     <>
                       <input
                         type="checkbox"
                         className="doneCheck"
-                        checked
+                        defaultChecked
+                        onClick={this.doneTask.bind(this)}
                       ></input>
                       &nbsp;
                       <del>{taskItem.contents}</del>
                     </>
                   ) : (
+                    // 미완료된 task
                     <>
-                      <input type="checkbox" className="doneCheck"></input>
+                      <input
+                        type="checkbox"
+                        className="doneCheck"
+                        onClick={this.doneTask.bind(this)}
+                      ></input>
                       &nbsp;
                       <label>{taskItem.contents}</label>
                     </>
@@ -106,7 +121,7 @@ class Task extends Component {
               </div>
               <div className="task-item task-date">
                 <Date
-                key={taskItem.no}
+                  key={taskItem.no}
                   startDate={taskItem.startDate}
                   endDate={taskItem.endDate}
                 />
@@ -127,30 +142,30 @@ class Task extends Component {
         {/* Project Setting Modal */}
         <div className="project-setting-dialog">
           <div
-            class="modal fade come-from-modal right"
+            className="modal fade come-from-modal right"
             id={`kanban-setting-${taskItem.no}`}
             tabIndex="-1"
             role="dialog"
             aria-labelledby="myModalLabel"
           >
             <div
-              class="modal-dialog"
+              className="modal-dialog"
               role="document"
               style={{ width: "670px" }}
             >
-              <div class="modal-content">
-                <div class="modal-body">
+              <div className="modal-content">
+                <div className="modal-body">
                   <Setting task={taskItem} key={taskItem.no} />
                 </div>
-                <div class="modal-footer">
+                <div className="modal-footer">
                   <button
                     type="button"
-                    class="btn btn-default"
+                    className="btn btn-default"
                     data-dismiss="modal"
                   >
                     Close
                   </button>
-                  <button type="button" class="btn btn-primary">
+                  <button type="button" className="btn btn-primary">
                     Save changes
                   </button>
                 </div>

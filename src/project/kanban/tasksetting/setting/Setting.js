@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Button from 'react-bootstrap/Button';
 import './Setting.scss';
 import Important from './Important';
@@ -36,10 +36,10 @@ class Setting extends Component {
                         <ul>
                             {/* 업무 마감일 */}
                             <li>
-                                <div style={{ display: 'inline-block' }}><i class="fas fa-calendar-week"></i></div>
+                                <div style={{ display: 'inline-block' }}><i className="fas fa-calendar-week"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button variant="" onClick={this.onOpenCalendar.bind(this)}> <i class="fas fa-plus fa-1x"></i> </Button>
+                                    <Button variant="" onClick={this.onOpenCalendar.bind(this)}> <i className="fas fa-plus fa-1x"></i> </Button>
                                     {this.state.open ? <ModalCalendar /> : ""}
                                 </div>
                                 <div className="Date" style={{ display: 'inline-block' }}>
@@ -48,10 +48,10 @@ class Setting extends Component {
                             </li>
                             {/* 배정된 멤버 */}
                             <li>
-                                <div style={{ float: 'left', marginTop: '10px' }}><i class="fas fa-user-plus"></i></div>
+                                <div style={{ float: 'left', marginTop: '10px' }}><i className="fas fa-user-plus"></i></div>
                                 <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                                 <div style={{ float: 'left' }}>
-                                    <Button variant=""><i class="fas fa-plus fa-1x"></i></Button>
+                                    <Button variant=""><i className="fas fa-plus fa-1x"></i></Button>
                                 </div>
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     <div className="Member">
@@ -63,14 +63,14 @@ class Setting extends Component {
 
                             {/* 태그 */}
                             <li>
-                                <div style={{ display: 'inline-block' }}><i class="fas fa-tags"></i></div>
+                                <div style={{ display: 'inline-block' }}><i className="fas fa-tags"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>태그</b></h5></div>
-                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i class="fas fa-plus fa-1x"></i> </Button></div>
+                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i className="fas fa-plus fa-1x"></i> </Button></div>
                             </li>
 
                             {/* 중요도 */}
                             <li>
-                                <div style={{ display: 'inline-block' }}><i class="fas fa-star"></i></div>
+                                <div style={{ display: 'inline-block' }}><i className="fas fa-star"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>중요도</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">
                                     <Important />
@@ -78,22 +78,25 @@ class Setting extends Component {
                             </li>
                             {/* 색상라벨 */}
                             <li>
-                                <div style={{ display: 'inline-block' }}><i class="fas fa-palette" /></div>
+                                <div style={{ display: 'inline-block' }}><i className="fas fa-palette" /></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>색상라벨</b></h5></div>
-                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i class="fas fa-plus fa-1x"></i></Button></div>
+                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i className="fas fa-plus fa-1x"></i></Button></div>
                             </li>
 
                             {/* 하위 할일 */}
                             <li>
                                 <form className="TodoInsert">
-                                    <button type="submit"><i class="fas fa-plus fa-1x"></i></button>
+                                    <button type="submit"><i className="fas fa-plus fa-1x"></i></button>
                                     <input placeholder="  할 일을 입력" />
                                     <div className="todoList">
                                             <ul>
                                                  {taskItem.todoList && taskItem.todoList.map(todo =>
-                                                 <div className="todo">
-                                                    <input type="checkbox" className="doneCheck"></input>
-                                                    <li key={todo.id}>{todo.text}</li> </div>)} 
+                                                 <Fragment key={todo.id}>
+                                                    <div className="todo">
+                                                        <input type="checkbox" className="doneCheck"></input>
+                                                        <li key={todo.id}>{todo.text}</li> 
+                                                    </div>
+                                                </Fragment>)} 
                                             </ul>
                                         </div>
                                 </form>

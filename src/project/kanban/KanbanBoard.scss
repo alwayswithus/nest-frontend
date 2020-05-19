@@ -4,7 +4,6 @@
   padding-left: 7.2rem;
   display: block;
   height: 100%;
-  
 
   .input-group {
     padding-left: 20px;
@@ -26,13 +25,42 @@
     padding-top: 40px;
     height: 100%;
 
-    .taskListInsertArea{
-      margin: 10px 10px 10px 10px;
-    }
-    .cardPlus {
+    .taskListInsertForm {
+      margin: 10px;
       width: 300px;
-      height: 45px;
-      margin : 9px 10px 0px 10px
+      padding: 12px 15px;
+      display: flex;
+      background-color: #f0d7d2;
+      border-radius: 3px;
+
+      div {
+        
+        .textArea {
+          width: 200px;
+          // height: 45px;
+          border: none;
+          resize: none;
+          border-radius: 3px;
+          // margin: 9px 10px 0px 10px;
+        }
+      }
+      .taskListInsertBtn {
+        padding-left: 10px;
+        .Icon {
+          padding-left: 15px;
+          color: #979797;
+          &:hover {
+            color: rgb(53, 53, 53);
+            cursor: pointer;
+          }
+        }
+        
+      }
+    }
+    .addTaskListBtn {
+      width: 300px;
+      height: 40px;
+      margin: 12px 10px 0px 10px;
     }
   }
 }
