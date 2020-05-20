@@ -37,7 +37,7 @@ class CheckList extends Component {
         return (
             <>
                 {this.state.click ? 
-                    <li key={todo.id} onClick = {this.onClickText.bind(this)}>{this.state.keyword} <i class="fas fa-pen fa-1x" /></li> :
+                    <li key={todo.id} onClick = {this.onClickText.bind(this)}>{this.state.keyword} <i className="fas fa-pen fa-1x" /></li> :
                     <input type="text" key={todo.id} value={this.state.keyword} onChange={this.onInputChange.bind(this)} onKeyPress={this.onEnter.bind(this)}></input> }
             </>
             )

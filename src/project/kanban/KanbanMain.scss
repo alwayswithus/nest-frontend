@@ -1,12 +1,15 @@
 .App {
   height: 100%;
-  .kanbanMain {
+  .scroll-container {
     height: 100%;
-    .content {
+    .kanbanMain {
       height: 100%;
-      .mainArea {
-        padding-left: 62px;
+      .content {
         height: 100%;
+        .mainArea {
+          padding-left: 62px;
+          height: 100%;
+        }
       }
     }
   }

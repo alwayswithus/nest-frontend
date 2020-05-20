@@ -8,10 +8,6 @@ import Comment from '../tasksetting/comment/Comment'
 import "./Task.scss";
 
 class Task extends Component {
-
-  
-
-
   constructor(){
     super(...arguments)
 
@@ -140,6 +136,9 @@ class Task extends Component {
                 <TodoList
                   key={taskItem.todoList.id}
                   todoList={taskItem.todoList}
+                  taskListId = {this.props.taskListId}
+                  taskId = {this.props.task.no}
+                  taskCallbacks={this.props.taskCallbacks}
                 />
               </div>
               <div className="task-item task-tag">
@@ -179,8 +178,8 @@ class Task extends Component {
               role="document"
               style={{ width: "670px" }}
             >
-              <div class="modal-content">
-                <div class="modal-body">
+              <div className="modal-content">
+                <div className="modal-body">
                   { this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
                       <>{ this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} />  : ( 
                       <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no}/> : <Setting onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> }</>

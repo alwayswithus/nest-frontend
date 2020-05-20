@@ -80,7 +80,7 @@ class KanbanBoard extends Component {
                         type="text"
                         className="textArea"
                         onChange={this.onTextAreaChanged.bind(this)}
-                        onKeyPress={this.addTaskList.bind(this)}
+                        onKeyPress={this.addTaskListEnter.bind(this)}
                         value={this.state.taskListTitle}
                         autoFocus
                       ></input>

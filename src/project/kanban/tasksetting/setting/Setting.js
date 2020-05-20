@@ -67,7 +67,7 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-tags"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>태그</b></h5></div>
 
-                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i class="fas fa-plus fa-1x"></i> </Button></div>
+                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i className="fas fa-plus fa-1x"></i> </Button></div>
                                 {taskItem.tag.map(tag => 
                                     <div style={{ display: 'inline-block' }} className = "TagList">
                                         <div className = "tag">
@@ -104,7 +104,7 @@ class Setting extends Component {
                                                             <CheckList todo={todo}/>
                                                         </div>)}
                                         <div className = "insert">
-                                            <button type="submit"><i style = {{marginLeft: '40%'}} class="fas fa-plus fa-2x"></i></button>
+                                            <button type="submit"><i style = {{marginLeft: '40%'}} className="fas fa-plus fa-2x"></i></button>
                                             <input style = {{marginLeft: '5%'}} value = "" placeholder="  할 일을 입력" />
                                         </div>
                                     </div>
