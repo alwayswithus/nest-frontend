@@ -15,20 +15,28 @@ export default class Dashboard extends React.Component {
     super(...arguments);
     this.state = {
       projects: null,                 // projects data
-      url: "",                        // background image url
-
       users: userData,                // user data
+
+      url: "",                        // background image url
       project: [],                    // project
       members: [],                    // members in project
+      message: null,
 
       details: true,                  // arrow 
       addProjectUserButton: false,    // add project user button
-      setOn: true,                    // project setting open & close button
-      message: null
+      setOn: true                     // project setting open & close button
+
     }
   }
 
-  // Project Setting Close Button 
+  // CallBack Background Image Setting 
+  callbackChangeBackground(url) {
+    this.setState({
+      url: url
+    })
+  }
+
+  // CallBack Project Setting Close Button 
   callbackCloseProjectSetting(setOn) {
     this.setState({
       setOn: setOn
@@ -36,30 +44,46 @@ export default class Dashboard extends React.Component {
     document.getElementById('projectSet').style.display = 'none'
   }
 
-  // Background Image Setting 
-  callbackChangeBackground(url) {
+  // CallBack Add Member Function
+  callbackAddMember(member, projectNo) {
+    const projectIndex = this.state.projects.findIndex(project =>
+      project.projectNo === projectNo)
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        members: {
+          $push: [member]
+        }
+      }
+    })
+
     this.setState({
-      url: url
+      projects: newProject,
+      project: newProject[projectIndex]
     })
   }
 
-  // Add Member Function
-  callbackAddMember(member, projectNo) {
+  // CallBack Delete Member Function
+  callbackDeleteMember(memberNo, projectNo) {
     const projectIndex = this.state.projects.findIndex(project =>
-      project.projectNo == projectNo)
+      project.projectNo === projectNo)
 
-      let project  = update(this.state.projects, {
-        [projectIndex]: {
-          members: {
-            $push: [member]
-          }
+    const memberIndex = this.state.project.members.findIndex(
+      (member) => member.memberNo === memberNo
+    );
+
+    let deleteMemberProject = update(this.state.projects, {
+      [projectIndex]: {
+        members: {
+          $splice: [[memberIndex, 1]]
         }
-      })
-      
-      this.setState({
-        projects: project
-      })
-      this.onProjectSetting(projectNo);
+      }
+    })
+
+    this.setState({
+      projects: deleteMemberProject,
+      project: deleteMemberProject[projectIndex]
+    })
   }
 
   // Project Setting button Click Function
@@ -126,8 +150,9 @@ export default class Dashboard extends React.Component {
 
   // Delete Member in Porject Function
   onDelteMember(memberNo) {
+
     const memberIndex = this.state.members.findIndex(
-      (member) => member.member_no === memberNo
+      (member) => member.memberNo === memberNo
     );
 
     let deleteMember = update(this.state.members, {
@@ -173,7 +198,11 @@ export default class Dashboard extends React.Component {
             <ProjectSetting
               users={this.state.users}
               project={this.state.project}
-              callbackProjectSetting={{ close: this.callbackCloseProjectSetting.bind(this), addMember: this.callbackAddMember.bind(this) }} />
+              callbackProjectSetting={{
+                close: this.callbackCloseProjectSetting.bind(this),
+                addMember: this.callbackAddMember.bind(this),
+                deleteMember: this.callbackDeleteMember.bind(this)
+              }} />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
             <div className="col-sm-24 project-list" onClick={this.showDetails.bind(this)}>
@@ -292,10 +321,10 @@ export default class Dashboard extends React.Component {
                                     {/* All Users */}
                                     <div className="invite-card-member-list">
                                       {this.state.users.map(user =>
-                                        <div className="invite-card-member" key={user.user_no} id={user.user_no} onClick={this.onJoinMember.bind(this, user.user_no, user.user_name, user.user_photo)}>
-                                          <img src={user.user_photo} className="img-circle" alt={user.user_photo} />
-                                          <span>{user.user_name}</span>
-                                          {user.user_check ? <i className="fas fa-check"></i> : ""}
+                                        <div className="invite-card-member" key={user.userNo} id={user.userNo} onClick={this.onJoinMember.bind(this, user.userNo, user.userName, user.userPhoto)}>
+                                          <img src={user.userPhoto} className="img-circle" alt={user.userPhoto} />
+                                          <span>{user.userName}</span>
+                                          {user.userCheck ? <i className="fas fa-check"></i> : ""}
                                         </div>)}
                                       <div className="invite-member">
                                         <i className="fas fa-user-plus fa-2x"></i>

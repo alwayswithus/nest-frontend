@@ -1,33 +1,33 @@
 [
     {
-        "user_no": 1,
-        "user_name": "yong80211@gmail.com",
-        "user_photo": "assets/images/unnamed.jpg"
+        "userNo": 1,
+        "userName": "yong80211@gmail.com",
+        "userPhoto": "assets/images/unnamed.jpg"
     },
     {
-        "user_no": 2,
-        "user_name": "최인효",
-        "user_photo": "assets/images/unnamed.jpg"
+        "userNo": 2,
+        "userName": "최인효",
+        "userPhoto": "assets/images/unnamed.jpg"
     },
     {
-        "user_no": 3,
-        "user_name": "허길행",
-        "user_photo": "assets/images/unnamed.jpg"
+        "userNo": 3,
+        "userName": "허길행",
+        "userPhoto": "assets/images/unnamed.jpg"
     },
     {
-        "user_no": 4,
-        "user_name": "김우경",
-        "user_photo": "assets/images/unnamed.jpg"
+        "userNo": 4,
+        "userName": "김우경",
+        "userPhoto": "assets/images/unnamed.jpg"
     },
     {
-        "user_no": 5,
-        "user_name": "마이콜",
-        "user_photo": "assets/images/unnamed.jpg"
+        "userNo": 5,
+        "userName": "마이콜",
+        "userPhoto": "assets/images/unnamed.jpg"
     },
     {
-        "user_no": "6",
-        "user_name": "둘리",
-        "user_photo": "assets/images/unnamed.jpg"
+        "userNo": 6,
+        "userName": "둘리",
+        "userPhoto": "assets/images/unnamed.jpg"
     }
 
 ]
