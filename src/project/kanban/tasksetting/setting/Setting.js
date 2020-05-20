@@ -73,7 +73,7 @@ class Setting extends Component {
 
                                 <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i className="fas fa-plus fa-1x"></i> </Button></div>
                                 {taskItem.tag.map(tag => 
-                                    <div style={{ display: 'inline-block' }} className = "TagList">
+                                    <div key={tag.id} style={{ display: 'inline-block' }} className = "TagList">
                                         <div className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.color}`, fontSize:'1.25rem', cursor:'default'}}>{tag.name}</span>
                                         </div>
@@ -102,10 +102,10 @@ class Setting extends Component {
 
                                     <div className="todoList">
                                         {taskItem.todoList && taskItem.todoList.map(todo =>
-                                            <div className="todo">
+                                            <div className="todo" key={todo.id}>
                                                     <input type="checkbox" className="doneCheck"></input>
                                                         <div style={{borderLeft:'3px solid #F8BCB6'}}/>
-                                                            <CheckList todo={todo}/>
+                                                            <CheckList todo={todo} key={todo.id}/>
                                                         </div>)}
                                         <div className = "insert">
 

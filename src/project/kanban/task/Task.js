@@ -4,18 +4,19 @@ import TagList from "./TagList";
 import Date from "./Date";
 import Setting from "../tasksetting/setting/Setting";
 import File from "../tasksetting/file/File";
-import Comment from '../tasksetting/comment/Comment'
+import Comment from "../tasksetting/comment/Comment";
+import DragonDrop from "drag-on-drop";
 import "./Task.scss";
 
 class Task extends Component {
-  constructor(){
-    super(...arguments)
+  constructor() {
+    super(...arguments);
 
     this.state = {
-      path:''
-    }
+      path: "",
+    };
   }
-// task 삭제
+  // task 삭제
   deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
     this.noneClick();
@@ -33,7 +34,6 @@ class Task extends Component {
     window.jQuery(".modal-backdrop").remove();
   }
 
-
   // task 완료 체크 박스
   doneTask() {
     this.props.taskCallbacks.doneTask(
@@ -46,14 +46,14 @@ class Task extends Component {
 
   test() {
     this.setState({
-      path:''
+      path: "",
     });
   }
 
   onCallbackSetting(path) {
     this.setState({
-      path:path
-    })
+      path: path,
+    });
   }
 
   render() {
@@ -136,8 +136,8 @@ class Task extends Component {
                 <TodoList
                   key={taskItem.todoList.id}
                   todoList={taskItem.todoList}
-                  taskListId = {this.props.taskListId}
-                  taskId = {this.props.task.no}
+                  taskListId={this.props.taskListId}
+                  taskId={this.props.task.no}
                   taskCallbacks={this.props.taskCallbacks}
                 />
               </div>
@@ -180,11 +180,48 @@ class Task extends Component {
             >
               <div className="modal-content">
                 <div className="modal-body">
-                  { this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
-                      <>{ this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} />  : ( 
-                      <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no}/> : <Setting onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> }</>
-                      )} </>)}
-
+                  {this.state.path == "http://localhost:3000/nest/setting" ? (
+                    <Setting
+                      path={this.state.path}
+                      onCallbackSetting={this.onCallbackSetting.bind(this)}
+                      task={taskItem}
+                      key={taskItem.no}
+                    />
+                  ) : (
+                    <>
+                      {this.state.path ==
+                      "http://localhost:3000/nest/comment" ? (
+                        <Comment
+                          path={this.state.path}
+                          onCallbackSetting={this.onCallbackSetting.bind(this)}
+                          task={taskItem}
+                          key={taskItem.no}
+                        />
+                      ) : (
+                        <>
+                          {this.state.path ==
+                          "http://localhost:3000/nest/file" ? (
+                            <File
+                              path={this.state.path}
+                              onCallbackSetting={this.onCallbackSetting.bind(
+                                this
+                              )}
+                              task={taskItem}
+                              key={taskItem.no}
+                            />
+                          ) : (
+                            <Setting
+                              onCallbackSetting={this.onCallbackSetting.bind(
+                                this
+                              )}
+                              task={taskItem}
+                              key={taskItem.no}
+                            />
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
                 <div className="modal-footer">
                   <button
@@ -204,6 +241,11 @@ class Task extends Component {
         </div>
       </>
     );
+  }
+  componentDidMount() {
+    this.setState({
+      dragonDrop: new DragonDrop(this.dragon),
+    });
   }
 }
 
