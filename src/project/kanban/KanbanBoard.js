@@ -93,7 +93,7 @@ class KanbanBoard extends Component {
                         onClick={this.addTaskList.bind(this)}
                       ></i>
                       <i
-                        class="far fa-trash-alt Icon"
+                        className="far fa-trash-alt Icon"
                         onClick={this.taskListStateBtn.bind(this)}
                       ></i>
                     </div>
