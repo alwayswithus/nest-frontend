@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 
 import "./Todo.scss";
 
-class TodoList extends Component {
+class Todo extends Component {
   // todo 체크
   doneTodoList() {
     this.props.taskCallbacks.todoCheck(
@@ -54,4 +54,4 @@ class TodoList extends Component {
   }
 }
 
-export default TodoList;
+export default Todo;

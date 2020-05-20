@@ -6,7 +6,7 @@ import TopBar from "../topBar/TopBar";
 import data from "./data.json";
 import "./KanbanMain.scss";
 
-import ScrollContainer from 'react-indiana-drag-scroll'
+import ScrollContainer from "react-indiana-drag-scroll";
 
 class KanbanMain extends Component {
   constructor() {
@@ -180,8 +180,8 @@ class KanbanMain extends Component {
           [TaskIndex]: {
             todoList: {
               [TodoIndex]: {
-                checked : {$set : !checked}
-              }
+                checked: { $set: !checked },
+              },
             },
           },
         },
@@ -259,7 +259,11 @@ class KanbanMain extends Component {
   }
   render() {
     return (
-      <ScrollContainer className="scroll-container" hideScrollbars={false} ignoreElements=".project-setting-dialog">
+      <ScrollContainer
+        className="scroll-container"
+        hideScrollbars={false}
+        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .task, .project-setting-dialog"
+        >
         <div className="container-fluid kanbanMain">
           <div
             className="row content "

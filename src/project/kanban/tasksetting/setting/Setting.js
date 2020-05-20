@@ -146,7 +146,7 @@ class Setting extends Component {
                                             <div key={todo.id} className="todo">
                                                     <input type="checkbox" className="doneCheck"></input>
                                                         <div style={{borderLeft:'3px solid #F8BCB6'}}/>
-                                                            <CheckList todo={todo}/>
+                                                            <CheckList todo={todo} key={todo.id}/>
                                                         </div>)}
                                         <div className = "insert">
 
