@@ -14,36 +14,38 @@ class Navigation extends Component {
     return (
       <div className="Navigation">
           {this.props.path == 'http://localhost:3000/nest/file' ? 
-            (<ul class="nav nav-tabs">
-              <li class="nav-item">
+
+            (<ul className="nav nav-tabs">
+              <li className="nav-item">
                 <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/setting">속성 </a>
               </li>
-              <li class="nav-item">
+              <li className="nav-item">
                 <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/comment">코멘트</a>
               </li>
-              <li class="nav-item">
+              <li className="nav-item">
                 <a onClick={this.onSettingClick.bind(this)} id='file' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href="/nest/file">파일 & 링크</a>
               </li> </ul>) : 
                 
                 (<>{this.props.path == 'http://localhost:3000/nest/comment' ? 
-                      (<ul class="nav nav-tabs">
-                        <li class="nav-item">
+
+                      (<ul className="nav nav-tabs">
+                        <li className="nav-item">
                           <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/setting">속성 </a>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                           <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href="/nest/comment">코멘트</a>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                           <a onClick={this.onSettingClick.bind(this)} id='file' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/file">파일 & 링크</a>
                         </li> </ul> ) : 
-                        (<ul class="nav nav-tabs">
-                            <li class="nav-item">
+                        (<ul className="nav nav-tabs">
+                            <li className="nav-item">
                               <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href="/nest/setting">속성 </a>
                             </li>
-                            <li class="nav-item">
+                            <li className="nav-item">
                               <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/comment">코멘트</a>
                             </li>
-                            <li class="nav-item">
+                            <li className="nav-item">
                               <a onClick={this.onSettingClick.bind(this)} id='file' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/file">파일 & 링크</a>
                             </li> </ul>)  }</>)
           }

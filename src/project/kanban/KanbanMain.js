@@ -6,6 +6,8 @@ import TopBar from "../topBar/TopBar";
 import data from "./data.json";
 import "./KanbanMain.scss";
 
+import ScrollContainer from 'react-indiana-drag-scroll'
+
 class KanbanMain extends Component {
   constructor() {
     super(...arguments);
@@ -157,40 +159,75 @@ class KanbanMain extends Component {
       taskList: newTaskList,
     });
   }
+
+  // todo 체크
+  callbackTodoCheck(taskListId, taskId, todoId, checked) {
+    const TaskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.no === taskListId
+    );
+
+    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.no === taskId
+    );
+
+    const TodoIndex = this.state.taskList[TaskListIndex].tasks[
+      TaskIndex
+    ].todoList.findIndex((todo) => todo.id === todoId);
+
+    let newTaskList = update(this.state.taskList, {
+      [TaskListIndex]: {
+        tasks: {
+          [TaskIndex]: {
+            todoList: {
+              [TodoIndex]: {
+                checked : {$set : !checked}
+              }
+            },
+          },
+        },
+      },
+    });
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
   render() {
     return (
-      <div className="container-fluid kanbanMain">
-        <div
-          className="row content "
-          style={{ backgroundImage: `url(${this.state.url})` }}
-        >
-          {/* 네비게이션바 */}
-          <div className="navibar">
-            <Navigator
-              callbackChangeBackground={{
-                change: this.callbackChangeBackground.bind(this),
-              }}
-            />
-          </div>
-          {/*상단바*/}
-          <TopBar />
-          {/* 메인 영역 */}
-          <div className="mainArea">
-            {/*칸반보드*/}
-            <KanbanBoard
-              tasks={this.state.taskList}
-              taskCallbacks={{
-                add: this.callbackAddTask.bind(this), // task 추가
-                delete: this.callbackDeleteTask.bind(this), // task 삭제
-                copy: this.callbackCopyTask.bind(this), // task 복사
-                doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
-                addList: this.callbackAddTaskList.bind(this), // taskList 추가
-                deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
-              }}
-            />
+      <ScrollContainer className="scroll-container" hideScrollbars={false}>
+        <div className="container-fluid kanbanMain">
+          <div
+            className="row content "
+            style={{ backgroundImage: `url(${this.state.url})` }}
+          >
+            {/* 네비게이션바 */}
+            <div className="navibar">
+              <Navigator
+                callbackChangeBackground={{
+                  change: this.callbackChangeBackground.bind(this),
+                }}
+              />
+            </div>
+            {/*상단바*/}
+            <TopBar />
+            {/* 메인 영역 */}
+            <div className="mainArea">
+              {/*칸반보드*/}
+              <KanbanBoard
+                tasks={this.state.taskList}
+                taskCallbacks={{
+                  add: this.callbackAddTask.bind(this), // task 추가
+                  delete: this.callbackDeleteTask.bind(this), // task 삭제
+                  copy: this.callbackCopyTask.bind(this), // task 복사
+                  doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
+                  addList: this.callbackAddTaskList.bind(this), // taskList 추가
+                  deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
+                  todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollContainer>
     );
   }
 }
