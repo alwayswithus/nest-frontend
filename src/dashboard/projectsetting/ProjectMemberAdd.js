@@ -37,11 +37,11 @@ class ProjectMemberAdd extends Component {
                             <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.props.users && this.props.users.map(user =>
-                                    <div className="invite-card-member" key={user.user_no}
-                                        id={user.user_no} onClick={this.callbackAddMember.bind(this, user.user_no, user.user_name, user.user_photo)}>
-                                        <img src={user.user_photo} className="img-circle" alt={user.user_photo} />
-                                        <span>{user.user_name}</span>
-                                        {user.user_check ? <i className="fas fa-check"></i> : ""}
+                                    <div className="invite-card-member" key={user.userNo}
+                                        id={user.userNo} onClick={this.callbackAddMember.bind(this, user.userNo, user.userName, user.userPhoto)}>
+                                        <img src={user.userPhoto} className="img-circle" alt={user.userPhoto} />
+                                        <span>{user.userName}</span>
+                                        {user.userCheck ? <i className="fas fa-check"></i> : ""}
                                     </div>)}
                                 <div className="invite-member">
                                     <i className="fas fa-user-plus fa-2x"></i>

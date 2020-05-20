@@ -69,20 +69,9 @@ class ProjectSetting extends Component {
         console.log("date:", date)
     }
 
-    // 프로젝트 멤버 삭제하는 함수
+    // Delete Member in Porject Function
     onDelteMember(memberNo) {
-        const memberIndex = this.state.members.findIndex(
-            (member) => member.member_no === memberNo
-        );
-        console.log(memberIndex);
-
-        let deleteMember = update(this.state.members, {
-            $splice: [[memberIndex, 1]]
-        })
-
-        this.setState({
-            members: deleteMember
-        })
+        this.props.callbackProjectSetting.deleteMember(memberNo, this.props.project.projectNo)
     }
     render() {
         return (
@@ -132,7 +121,7 @@ class ProjectSetting extends Component {
                                         <div className="Member" key={member.memberNo}>
                                             <img src={member.memberPhoto} className="img-circle" alt={member.memberPhoto} />
                                             <span>{member.memberName}</span>
-                                            <span className="delete-member">
+                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.memberNo)}>
                                                 <i className="fas fa-times"></i>
                                             </span>
                                         </div>
