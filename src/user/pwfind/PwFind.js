@@ -20,7 +20,7 @@ const PwFind = () => {
     <>
       <div className="PwFind">
         <div className="pwFindBox">
-          <img style={{width:"150px", height:"150px"}} src="/assets/images/nest-logo-black.png" />
+          <img style={{width:"150px", height:"150px"}} src="assets/images/nest-logo-black.png" />
 
           <form onSubmit={pwFind}>
             <InputLabel id="pwFindText">비밀번호 찾기</InputLabel>

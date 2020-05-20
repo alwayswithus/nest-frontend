@@ -12,6 +12,8 @@ import Login from "./user/login/Login";
 import SignUp from "./user/signup/SignUp";
 import PwFind from "./user/pwfind/PwFind";
 
+import Errors from "./errors/Errors";
+
 import Gantt from "./project/gantt/Gantt";
 
 import Dashboard from "./dashboard/Dashboard";
@@ -28,7 +30,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         {/* 메인 */}
-        <Route exact path="/nest" component={Login} />
+        <Route path="/nest" exact component={Login} />
 
         {/* 회원 */}
         <Route path="/nest/signup" exact component={SignUp} />
@@ -57,6 +59,10 @@ function App() {
 
         {/* 프로젝트 세팅 */}
         <Route path="/nest/projectset" exact component={ProjectSetting} />
+
+        {/* 오류페이지 처리 */}
+        <Route path="/nest/error" exact component={Errors}/>
+
       </BrowserRouter>
     </div>
   );
