@@ -16,7 +16,7 @@ class Navigation extends Component {
           {this.props.path == 'http://localhost:3000/nest/file' ? 
             (<ul class="nav nav-tabs">
               <li class="nav-item">
-                <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="#">속성 </a>
+                <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/setting">속성 </a>
               </li>
               <li class="nav-item">
                 <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/comment">코멘트</a>
@@ -28,7 +28,7 @@ class Navigation extends Component {
                 (<>{this.props.path == 'http://localhost:3000/nest/comment' ? 
                       (<ul class="nav nav-tabs">
                         <li class="nav-item">
-                          <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="#">속성 </a>
+                          <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/setting">속성 </a>
                         </li>
                         <li class="nav-item">
                           <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href="/nest/comment">코멘트</a>

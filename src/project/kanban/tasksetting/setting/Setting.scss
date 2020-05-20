@@ -19,17 +19,19 @@
         .todoList {
             background-color: #F3F4F5;
             border: none;
+            border-radius: 3px;
             .todo {
                 padding-left: 10px;
                 display: flex;
                 background-color: white;
                 height:50px;
+                border-radius: 3px;
                 .doneCheck {
                     // margin: 3px 0px 3px -3px;
                     width: auto;
                     transform: scale(1.5);
                     cursor: pointer;
-                    margin: 3.5% 1% 0;
+                    margin: 2.5% 1% 0;
                     &:hover {
                         border: 1px solid black;
                     }
@@ -71,17 +73,31 @@
                     }
                 }
             }
+            .insert{
+                background: white;
+                button{
+                    height: 25px;
+                    border: none;
+                    width: 30px;
+                    outline: none;
+                    background: none;
+                    margin-right: 1%;
+                    vertical-align: middle
+                }
+                .checkListInput{
+                    height: 20px;
+                    width: 200px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    input { 
+                        border:none; 
+                        border-radius: 2px;; 
+                        font-size: 1.5rem; 
+                        width: 250px;
+                }
+            } 
         }
-        .insert{
-            background: white;
-            input { 
-                border:none; 
-                border-radius: 2px;; 
-                font-size: 1.5rem; 
-                width: 250px;
-            }
-        } 
-
+        
         Button { 
             border:none; 
             outline:none;
@@ -91,6 +107,9 @@
 
         Button:hover { 
             border:0px;
+        }
+        
+        
         }
     }
     ul{

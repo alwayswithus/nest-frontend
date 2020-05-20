@@ -59,6 +59,7 @@ export default class Dashboard extends React.Component {
       this.setState({
         projects: project
       })
+      this.onProjectSetting(projectNo);
   }
 
   // Project Setting button Click Function

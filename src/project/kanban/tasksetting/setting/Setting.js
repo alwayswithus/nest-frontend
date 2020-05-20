@@ -6,6 +6,7 @@ import Important from './Important';
 import Header from '../file/Header';
 import ModalCalendar from '../../../../modalCalendar/ModalCalendar2';
 import CheckList from './CheckList';
+import ColorPicker from './ColorPicker';
 
 class Setting extends Component {
     constructor (){
@@ -20,6 +21,9 @@ class Setting extends Component {
         })
     };
 
+    onTodoInsert(){
+        console.log("!!!")
+    }
     render() {
         const taskItem = this.props.task;
         return (
@@ -89,7 +93,7 @@ class Setting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-palette" /></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>색상라벨</b></h5></div>
-                                <div style={{ display: 'inline-block' }} className="link"><Button variant=""><i className="fas fa-plus fa-1x"></i></Button></div>
+                                <div style={{ display: 'inline-block' }}> <ColorPicker /></div>
                             </li>
 
                             {/* 하위 할일 */}
@@ -104,8 +108,12 @@ class Setting extends Component {
                                                             <CheckList todo={todo}/>
                                                         </div>)}
                                         <div className = "insert">
-                                            <button type="submit"><i style = {{marginLeft: '40%'}} class="fas fa-plus fa-2x"></i></button>
-                                            <input style = {{marginLeft: '5%'}} value = "" placeholder="  할 일을 입력" />
+                                            <button type="submit">
+                                                <i style = {{marginLeft: '40%'}} class="fas fa-plus fa-2x"></i>
+                                            </button>
+                                            <div className = "checkListInput">
+                                                <input onClick= { this.onTodoInsert.bind(this) } style = {{marginLeft: '5%'}} value = "" placeholder="  할 일을 입력" />
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
