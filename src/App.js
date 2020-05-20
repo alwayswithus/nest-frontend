@@ -42,7 +42,7 @@ function App() {
         <Route path="/nest/notification" exact component={Notification} />
 
         {/* 업무속성 */}
-        <Route path="#" exact component={Setting} />
+        <Route path="#" component={Setting} />
         <Route path="#" exact component={Comment} />
         <Route path="#" exact component={File} />
 

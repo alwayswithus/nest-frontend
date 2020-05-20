@@ -14,9 +14,10 @@ class Navigation extends Component {
     return (
       <div className="Navigation">
           {this.props.path == 'http://localhost:3000/nest/file' ? 
+
             (<ul className="nav nav-tabs">
               <li className="nav-item">
-                <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="#">속성 </a>
+                <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/setting">속성 </a>
               </li>
               <li className="nav-item">
                 <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/comment">코멘트</a>
@@ -26,9 +27,10 @@ class Navigation extends Component {
               </li> </ul>) : 
                 
                 (<>{this.props.path == 'http://localhost:3000/nest/comment' ? 
+
                       (<ul className="nav nav-tabs">
                         <li className="nav-item">
-                          <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="#">속성 </a>
+                          <a onClick={this.onSettingClick.bind(this)} id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href="/nest/setting">속성 </a>
                         </li>
                         <li className="nav-item">
                           <a onClick={this.onSettingClick.bind(this)} id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href="/nest/comment">코멘트</a>
