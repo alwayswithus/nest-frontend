@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route , Redirect } from "react-router-dom";
 
 import Setting from "./project/kanban/tasksetting/setting/Setting";
 import File from "./project/kanban/tasksetting/file/File";
@@ -27,10 +27,10 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/*메인 */}
-        <Route  path="/nest" exact component={Login} />
+        {/* 메인 */}
+        <Route exact path="/nest" component={Login} />
 
-        {/*회원 */}
+        {/* 회원 */}
         <Route path="/nest/signup" exact component={SignUp} />
         <Route path="/nest/pwfind" exact component={PwFind} />
 
@@ -46,7 +46,7 @@ function App() {
         <Route path="#" exact component={Comment} />
         <Route path="#" exact component={File} />
 
-        {/*칸반보드 */}
+        {/* 칸반보드 */}
         <Route path="/nest/kanbanMain" exact component={KanbanMain} />
 
         {/* 대시보드 */}
@@ -55,7 +55,7 @@ function App() {
         {/* 간트차트 */}
         <Route path="/nest/gantt" exact component={Gantt} />
 
-        {/* 프로젝트 세팅*/}
+        {/* 프로젝트 세팅 */}
         <Route path="/nest/projectset" exact component={ProjectSetting} />
       </BrowserRouter>
     </div>
