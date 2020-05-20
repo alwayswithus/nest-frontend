@@ -30,12 +30,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-p": "npx webpack --mode-production",
+    "build-d": "npx webpack --mode-development"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:8888/",
+  "proxy": "http://localhost:8080/",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -49,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "react-addons-update": "^15.6.2"
+    "react-addons-update": "^15.6.2",
+    "webpack-cli": "^3.3.11"
   }
 }
