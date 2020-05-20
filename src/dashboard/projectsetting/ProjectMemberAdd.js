@@ -1,25 +1,12 @@
 import React, { Component } from 'react'
-import './ProjectMemberAdd.scss'
-import update from 'react-addons-update';
+import './ProjectMemberAdd.scss';
+import ProjectSettingUser from '../projectsetting/ProjectSettingUser';
 
 class ProjectMemberAdd extends Component {
-    constructor() {
-        super(...arguments)
-    }
-
+    
     // User List Close Function
     callbackCloseUserList() {
         this.props.callbackCloseUserList.close(false);
-    }
-
-    callbackAddMember(userNo, userName, userPhoto) {
-        let member = {
-            memberNo: userNo,
-            memberName: userName,
-            memberPhoto: userPhoto
-        }
-
-        this.props.callbackProjectSetting.addMember(member, this.props.project.projectNo);
     }
 
     render() {
@@ -37,12 +24,7 @@ class ProjectMemberAdd extends Component {
                             <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.props.users && this.props.users.map(user =>
-                                    <div className="invite-card-member" key={user.userNo}
-                                        id={user.userNo} onClick={this.callbackAddMember.bind(this, user.userNo, user.userName, user.userPhoto)}>
-                                        <img src={user.userPhoto} className="img-circle" alt={user.userPhoto} />
-                                        <span>{user.userName}</span>
-                                        {user.userCheck ? <i className="fas fa-check"></i> : ""}
-                                    </div>)}
+                                    <ProjectSettingUser key={user.userNo} user={ user } project={this.props.project} callbackProjectSetting={ this.props.callbackProjectSetting }/>)}
                                 <div className="invite-member">
                                     <i className="fas fa-user-plus fa-2x"></i>
                                     <span>멤버 초대하기</span>
