@@ -6,6 +6,7 @@ import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
 import userData from './userData.json'
 import update from 'react-addons-update';
+import User from './User';
 
 import ApiService from '../ApiService';
 
@@ -14,18 +15,17 @@ export default class Dashboard extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      projects: null,                 // projects data
-      users: userData,                // user data
+      projects: null,                  // projects data
+      users: userData,                 // user data
 
-      url: "",                        // background image url
-      project: [],                    // project
-      members: [],                    // members in project
+      url: "",                         // background image url
+      project: [],                     // project
+      members: [],                     // members in project
       message: null,
 
-      details: true,                  // arrow 
-      addProjectUserButton: false,    // add project user button
-      setOn: true                     // project setting open & close button
-
+      details: true,                   // arrow 
+      addProjectUserButton: false,     // add project user button
+      setOn: true,                     // project setting open & close button
     }
   }
 
@@ -44,22 +44,71 @@ export default class Dashboard extends React.Component {
     document.getElementById('projectSet').style.display = 'none'
   }
 
-  // CallBack Add Member Function
-  callbackAddMember(member, projectNo) {
+  // CallBack Add Delete Member Function
+  callbackAddDeleteMember(userNo, userName, userPhoto, projectNo) {
+    const memberIndex = this.state.project.members.findIndex(member =>
+      member.memberNo === userNo)
+
     const projectIndex = this.state.projects.findIndex(project =>
       project.projectNo === projectNo)
 
-    let newProject = update(this.state.projects, {
-      [projectIndex]: {
-        members: {
-          $push: [member]
-        }
-      }
-    })
+    let member = {
+      memberNo: userNo,
+      memberName: userName,
+      memberPhoto: userPhoto
+    }
 
+    let newProject;
+    if(this.state.project.members[memberIndex] && this.state.project.members[memberIndex].memberNo === userNo) {
+      newProject = update(this.state.projects, {
+        [projectIndex]: {
+          members: {
+            $splice: [[memberIndex, 1]]
+          }
+        }
+      })
+    }
+    else {
+      newProject = update(this.state.projects, {
+        [projectIndex]: {
+          members: {
+            $push: [member]
+          }
+        }
+      })
+    }
     this.setState({
       projects: newProject,
       project: newProject[projectIndex]
+    })
+  }
+
+  // Join And Exit Member in Project Function
+  callbackJoinExitMember(userNo, userName, userPhoto) {
+    const memberIndex = this.state.members.findIndex(member =>
+      member.memberNo === userNo)
+
+    let member = {
+      memberNo: userNo,
+      memberName: userName,
+      memberPhoto: userPhoto
+    }
+
+    let members;
+
+    if(this.state.members[memberIndex] && this.state.members[memberIndex].memberNo === userNo) {
+      members = update(this.state.members, {
+        $splice: [[memberIndex, 1]]
+      })
+    }
+    else {
+      members = update(this.state.members, {
+        $push: [member]
+      })
+    }
+
+    this.setState({
+      members: members
     })
   }
 
@@ -131,23 +180,6 @@ export default class Dashboard extends React.Component {
     })
   }
 
-  // Join Member in Project Function
-  onJoinMember(userNo, userName, userPhoto) {
-    let member = {
-      memberNo: userNo,
-      memberName: userName,
-      memberPhoto: userPhoto
-    }
-
-    let members = update(this.state.members, {
-      $push: [member]
-    })
-
-    this.setState({
-      members: members
-    })
-  }
-
   // Delete Member in Porject Function
   onDelteMember(memberNo) {
 
@@ -200,7 +232,7 @@ export default class Dashboard extends React.Component {
               project={this.state.project}
               callbackProjectSetting={{
                 close: this.callbackCloseProjectSetting.bind(this),
-                addMember: this.callbackAddMember.bind(this),
+                addDeleteMember: this.callbackAddDeleteMember.bind(this),
                 deleteMember: this.callbackDeleteMember.bind(this)
               }} />
           </div>
@@ -320,12 +352,10 @@ export default class Dashboard extends React.Component {
 
                                     {/* All Users */}
                                     <div className="invite-card-member-list">
-                                      {this.state.users.map(user =>
-                                        <div className="invite-card-member" key={user.userNo} id={user.userNo} onClick={this.onJoinMember.bind(this, user.userNo, user.userName, user.userPhoto)}>
-                                          <img src={user.userPhoto} className="img-circle" alt={user.userPhoto} />
-                                          <span>{user.userName}</span>
-                                          {user.userCheck ? <i className="fas fa-check"></i> : ""}
-                                        </div>)}
+                                      { this.state.users.map(user =>
+                                        <User key={ user.userNo } user={ user } members={ this.state.members } 
+                                        callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />) 
+                                      }
                                       <div className="invite-member">
                                         <i className="fas fa-user-plus fa-2x"></i>
                                         <span>멤버 초대하기</span>

@@ -9,7 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ProjectMemberAdd from './ProjectMemberAdd';
-import update from 'react-addons-update';
 
 class ProjectSetting extends Component {
     constructor() {
