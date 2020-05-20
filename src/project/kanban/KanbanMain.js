@@ -191,9 +191,75 @@ class KanbanMain extends Component {
       taskList: newTaskList,
     });
   }
+
+  //todo 추가하기
+  callbackAddTodo(text, taskNo, taskListNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+
+    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.length
+    
+    let newTodoList = {
+      id:  checkListLength + 1,
+      text: text,
+      checked: false
+    }
+    
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks : {
+          [taskIndex] : {
+            todoList:{
+              $push:[newTodoList]
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList:newTaskList
+    })
+
+  }
+
+  //task에 tag 추가하기
+  callbackAddTag(tagNo, tagName, taskListNo, taskNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+
+    
+    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].tag.length
+    console.log("KanbanMain : " + checkListLength)
+    
+    let newTag = {
+      id:  tagNo,
+      name: tagName,
+      color: "RGB(255, 160, 160)"
+    }
+
+    let newTagData = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks : {
+          [taskIndex] : {
+            tag:{
+              $push : [newTag]
+            },
+          },
+        },
+      }
+    });
+
+    this.setState({
+      taskList:newTagData
+    })
+
+    console.log(this.state.taskList[taskListIndex].tasks[taskIndex].tag)
+
+  }
   render() {
     return (
-      <ScrollContainer className="scroll-container" hideScrollbars={false}>
+      <ScrollContainer className="scroll-container" hideScrollbars={false} ignoreElements=".project-setting-dialog">
         <div className="container-fluid kanbanMain">
           <div
             className="row content "
@@ -222,6 +288,8 @@ class KanbanMain extends Component {
                   addList: this.callbackAddTaskList.bind(this), // taskList 추가
                   deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
                   todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
+                  addtodo: this.callbackAddTodo.bind(this),
+                  addtag: this.callbackAddTag.bind(this)
                 }}
               />
             </div>

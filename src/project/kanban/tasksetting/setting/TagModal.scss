@@ -1,0 +1,45 @@
+.card-member {
+    top: 92%;
+    width: 60%;
+    background-color: #FFFFFF;
+    box-shadow: 0 3px 10px rgba(85, 71, 71, 0.5);
+    z-index: 100;
+    .find-member {
+        margin-bottom: 3px;
+    }
+    
+    .invite-card-tag-list {
+        height: 200px;
+        overflow: scroll;
+        overflow-x: hidden;
+        ul{
+            li{
+                float:left;
+                vertical-align: middle;
+                padding:3px 5px;
+                margin-top:3%;
+                width:200px;
+                .tagCheck{
+                    height: 10px;
+                    transform: scale(1.7);
+                    display: inline-block;
+                }
+                .tag{
+                    cursor: default;
+                    height: 25px;
+                    display: inline-block;
+                    width:auto;
+                    background-color: #808080;
+                    border-radius: 10px;
+                    color:white;
+                    padding:1%;
+                    margin-left: 5%;
+                }
+                &:hover{
+                    border-radius: 2px;
+                    background-color: #EBEBEB;
+                }
+            }
+        }
+    }
+}

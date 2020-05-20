@@ -8,14 +8,14 @@ import Comment from '../tasksetting/comment/Comment'
 import "./Task.scss";
 
 class Task extends Component {
-  constructor(){
+  constructor() {
     super(...arguments)
 
     this.state = {
-      path:''
+      path: ''
     }
   }
-// task 삭제
+  // task 삭제
   deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
     this.noneClick();
@@ -44,15 +44,16 @@ class Task extends Component {
     this.noneClick();
   }
 
-  test() {
+  //모달 클릭 후 path 초기화.
+  onModalOpen() {
     this.setState({
-      path:''
+      path: ''
     });
   }
 
   onCallbackSetting(path) {
     this.setState({
-      path:path
+      path: path
     })
   }
 
@@ -68,6 +69,7 @@ class Task extends Component {
           className="task"
           data-toggle="modal"
           data-target={`#kanban-setting-${taskItem.no}`}
+          onClick={this.onModalOpen.bind(this)}
         >
           <div className="panel panel-primary" style={labelStyle}>
             <div className="panel-body">
@@ -118,17 +120,17 @@ class Task extends Component {
                       <del>{taskItem.contents}</del>
                     </>
                   ) : (
-                    // 미완료된 task
-                    <>
-                      <input
-                        type="checkbox"
-                        className="doneCheck"
-                        onClick={this.doneTask.bind(this)}
-                      ></input>
+                      // 미완료된 task
+                      <>
+                        <input
+                          type="checkbox"
+                          className="doneCheck"
+                          onClick={this.doneTask.bind(this)}
+                        ></input>
                       &nbsp;
                       <label>{taskItem.contents}</label>
-                    </>
-                  )}
+                      </>
+                    )}
                 </div>
               </div>
 
@@ -136,8 +138,8 @@ class Task extends Component {
                 <TodoList
                   key={taskItem.todoList.id}
                   todoList={taskItem.todoList}
-                  taskListId = {this.props.taskListId}
-                  taskId = {this.props.task.no}
+                  taskListId={this.props.taskListId}
+                  taskId={this.props.task.no}
                   taskCallbacks={this.props.taskCallbacks}
                 />
               </div>
@@ -180,10 +182,10 @@ class Task extends Component {
             >
               <div className="modal-content">
                 <div className="modal-body">
-                  { this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
-                      <>{ this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} />  : ( 
-                      <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path = {this.state.path} onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no}/> : <Setting onCallbackSetting = {this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> }</>
-                      )} </>)}
+                  {this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path={this.state.path} taskCallbacks={this.props.taskCallbacks} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} taskListNo = {this.props.taskListId}/> : (
+                    <>{this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path={this.state.path} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
+                      <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path={this.state.path} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : <Setting taskCallbacks={this.props.taskCallbacks} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} taskListNo = {this.props.taskListId}/>}</>
+                    )} </>)}
 
                 </div>
                 <div className="modal-footer">
