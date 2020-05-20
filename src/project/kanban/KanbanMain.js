@@ -262,7 +262,7 @@ class KanbanMain extends Component {
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}
-        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .task, .project-setting-dialog"
+        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
         >
         <div className="container-fluid kanbanMain">
           <div
