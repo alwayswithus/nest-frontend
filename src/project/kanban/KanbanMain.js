@@ -339,11 +339,12 @@ class KanbanMain extends Component {
         className="scroll-container"
         hideScrollbars={false}
         ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
+        style={{ backgroundImage: `url(${this.state.url})` }}
         >
         <div className="container-fluid kanbanMain">
           <div
             className="row content "
-            style={{ backgroundImage: `url(${this.state.url})` }}
+            
           >
             {/* 네비게이션바 */}
             <div className="navibar">
