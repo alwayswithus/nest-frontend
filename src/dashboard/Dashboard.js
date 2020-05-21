@@ -274,7 +274,7 @@ export default class Dashboard extends React.Component {
                       </a>
                     </div>
                     <div className="panel-footer">
-                      <span className="update-date"><h6>최초 업데이트 : {project.projectStart}</h6></span>
+                      <span className="update-date"><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
                       <span className="update-task"><h6>7/16개 업무</h6></span>
                       <div className="progress">
                         <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"

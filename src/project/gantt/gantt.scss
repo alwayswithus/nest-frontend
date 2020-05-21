@@ -1,30 +1,18 @@
-html {
+.ganntMain{
+	width: 100%;
 	height: 100%;
-	margin: 0;
-	box-sizing: border-box;
-}
-canvas {
-	height: 100%;
-	margin: 0;
-}
-body {
-	height: 100%;
-	margin: 0;
+	.content{
+		width: 100%;
+		height: 100%;
+		.mainArea{
+			padding-left: 67px;
+			width: 100%;
+			height: 100%;
+		}
+	}
 }
 
-.kanbanMain{
-	width: 100%;
-	height: 100%;
-}
-.content{
-	width: 100%;
-	height: 100%;
-}
-.mainArea{
-	padding-left: 67px;
-    width: 100%;
-    height: 100%;
-}
+
 #react-container {
 	height: 100%;
 	margin: 0;
