@@ -2,15 +2,30 @@ import React from 'react';
 import Navigator from '../navigator/Navigator';
 import './notification.scss';
 
-const Notification = () => {
-    return (
-        <div id="Notification">
-            {/* 사이드바 */}
-            <div className="sidebar">
-                <Navigator />
-            </div>
-            <div className="notice-header-background">
-                <div className="notice-header">
+export default class Notification extends React.Component {
+    constructor() {
+        super(...arguments)
+        this.state = {
+            url: ""
+        }
+    }
+
+    // CallBack Background Image Setting 
+    callbackChangeBackground(url) {
+        this.setState({
+            url: url
+        })
+    }
+
+    render() {
+        return (
+            <div id="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>
+                {/* 사이드바 */}
+                <div className="sidebar">
+                    <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
+                </div>
+                <div className="notice-header-background"></div>
+                <div className="notice-contents">
                     <div className="notice-header-contents">
                         <div className="notice-header-icon">
                             <div className="notice-header-title-month">
@@ -23,16 +38,14 @@ const Notification = () => {
                         <div className="notice-header-title-text">
                             <span className="notice-header-title-plural">
                                 30 개의 새 업데이트가 있습니다.
-                        </span>
+                            </span>
                         </div>
+                    </div>
+                    <div className="notice-body-contents">
+
                     </div>
                 </div>
             </div>
-            <div className="notice-contents">
-
-            </div>
-        </div>
-    );
+        );
+    }
 }
-
-export default Notification;
