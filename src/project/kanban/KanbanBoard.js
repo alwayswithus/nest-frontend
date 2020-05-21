@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import TaskList from "./task/TaskList";
 import "./KanbanBoard.scss";
 import DragonDrop from 'drag-on-drop';
-
+import Setting from './tasksetting/setting/Setting'
+import { BrowserRouter,Switch,Route } from "react-router-dom";
 class KanbanBoard extends Component {
   constructor() {
     super(...arguments);
@@ -51,7 +52,6 @@ class KanbanBoard extends Component {
 
   render() {
     const allTaskList = this.props.tasks;
-
     return (
       <>
         <div className="kanbanBoard">

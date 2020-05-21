@@ -29,8 +29,10 @@
             "name": "tagA",
             "color":"rgb(154,208,194)"
           },
-          { "id": 112, "name": "tagB",
-            "color":"rgb(200,97,51)" }
+          { "id": 112, 
+            "name": "tagB",
+            "color":"rgb(200,97,51)" 
+          }
         ],
         "startDate": "5월 1일",
         "endDate": "5월 15일",

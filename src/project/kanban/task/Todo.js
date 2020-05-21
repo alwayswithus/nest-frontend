@@ -23,30 +23,15 @@ class Todo extends Component {
     return (
       <Fragment>
         <div className="todo">
-          {this.props.todo.checked ? (
-            <>
-              <input
+            <input
                 type="checkbox"
                 className="doneCheck"
                 onClick={this.doneTodoList.bind(this)}
-                defaultChecked
+                checked={this.props.todo.checked}
               ></input>
-              <div className="text">
-                <del>&nbsp;{this.props.todo.text}</del>
-              </div>
-            </>
-          ) : (
-            <>
-              <input
-                type="checkbox"
-                className="doneCheck"
-                onClick={this.doneTodoList.bind(this)}
-              ></input>
-              <div className="text">
-                <p>&nbsp;{this.props.todo.text}</p>
-              </div>
-            </>
-          )}
+                {this.props.todo.checked 
+                  ? <div className="text"><del>&nbsp;{this.props.todo.text}</del></div> 
+                  : <div className="text">&nbsp;{this.props.todo.text}</div>}
         </div>
         <hr></hr>
       </Fragment>

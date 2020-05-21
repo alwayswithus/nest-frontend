@@ -21,16 +21,14 @@ class CheckList extends Component {
             this.setState({
                 click:!this.state.click
             })
+            this.props.taskCallbacks.todoTextUpdate(this.props.params.taskListNo, this.props.params.taskNo, this.props.todo.id, event.target.value);
         }
     }
 
     onInputChange(event){
-        console.log(event.target.value)
         this.setState({
             keyword:event.target.value
         })
-        console.log(this.state.keyword)
-
     }
 
     render() {
@@ -38,13 +36,16 @@ class CheckList extends Component {
         return (
             <>
                 {this.state.click ? 
-                    <li key={todo.id} onClick = {this.onClickText.bind(this)}>{this.state.keyword} <i className="fas fa-pen fa-1x" /></li> :
+                    <li key={todo.id} onClick = {this.onClickText.bind(this)}>
+                        {todo.checked ? <del>{this.state.keyword}</del> :  this.state.keyword }
+                        <i className="fas fa-pen fa-1x" />
+                    </li> :
                     <input 
-                        type="text" 
-                        key={todo.id} 
-                        value={this.state.keyword} 
-                        onChange={this.onInputChange.bind(this)} 
-                        onKeyPress={this.onEnter.bind(this)}></input> }
+                    type="text" 
+                    key={todo.id} 
+                    value={this.state.keyword} 
+                    onChange={this.onInputChange.bind(this)} 
+                    onKeyPress={this.onEnter.bind(this)}></input> }
             </>
             )
         }
