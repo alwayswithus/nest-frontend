@@ -15,7 +15,7 @@ class Setting extends Component {
         this.state ={
             open:false,
             todo:'',
-            tagOpen:false
+            tagOpen: this.props.closeValue
         }
     }
     onOpenCalendar() {
@@ -24,37 +24,36 @@ class Setting extends Component {
         })
     };
 
-    onTodoInsert(event){
-        console.log("SEtting : " + this.props.taskListNo)
+    //업무등록 onChange
+    onTodoChange(event){
         this.setState({
             todo:event.target.value
         })
     }
     
+    // 업무등록
     onKeypress(event){
-        if(event.key == 'Enter'){
+        if(event.key === 'Enter'){
             event.preventDefault()
             this.props.taskCallbacks.addtodo(event.target.value,this.props.task.no, this.props.taskListNo)
+            this.setState({
+                todo:''
+            })
         }
-        this.setState({
-            todo:''
-        })
     }
 
     //tag 모달 창 켜기.
-    onCallOpenClose(open){
-        this.setState({
-            tagOpen:open
-        })
-        console.log(this.state.tagOpen)
-    }
-
-    onClickTagPlus() {
+    onClickTagModal() {
         this.setState({
             tagOpen:!this.state.tagOpen
         })
     }
 
+    //click check box
+    clickCheckBox(todoId, todoCheck){
+        this.props.taskCallbacks.todoCheckUpdate(this.props.taskListNo, this.props.task.no,todoId, todoCheck)
+    }
+    
     render() {
         const taskItem = this.props.task;
         return (
@@ -99,27 +98,32 @@ class Setting extends Component {
 
                             {/* 태그 */}
                             <li>
-                                <div style={{ display: 'inline-block' }}><i className="fas fa-tags"></i></div>
-                                <div style={{ display: 'inline-block' }}><h5><b>태그</b></h5></div>
+                                <div style={{ float:'left'}}><i className="fas fa-tags"></i></div>
+                                <div style={{ float:'left' }}><h5><b>태그</b></h5></div>
 
-                                <div style={{ display: 'inline-block' }} className="link">
-                                    <Button onClick = {this.onClickTagPlus.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                <div style={{ float:'left' }} className="link">
+                                    <Button onClick ={this.props.onClickModal}  variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                    {/* tag 검색창 */}
+                                    <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
+                                        {this.props.closeValue ? <TagModal
+                                                                    onClickModal={this.props.onClickModal}
+                                                                    key={this.props.task.no} 
+                                                                    taskListNo = {this.props.taskListNo}
+                                                                    taskNo = {this.props.task.no}
+                                                                    taskItem = {taskItem}
+                                                                    taskCallbacks={this.props.taskCallbacks} /> : null}
+                                    </div>
                                 </div>
-                                {taskItem.tag.map(tag => 
-                                    <div key={tag.id} style={{ display: 'inline-block' }} className = "TagList">
-                                        <div className = "tag">
+
+                                {/* tag List */}
+                                <div style={{ display: 'inline-block' }} className = "TagList">
+                                    {taskItem.tag.map(tag => 
+                                        <div key={tag.id} style={{ display: 'inline-block' }} className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.color}`, fontSize:'1.25rem', cursor:'default'}}>{tag.name}</span>
                                         </div>
-                                    </div>
-                                )}
-                                <div key = {this.props.taskListNo} style={{position:'relative', marginLeft:'20%'}}>
-                                    {this.state.tagOpen ? <TagModal 
-                                                                key={this.props.task.no} 
-                                                                taskListNo = {this.props.taskListNo}
-                                                                taskNo = {this.props.task.no}
-                                                                taskCallbacks={this.props.taskCallbacks} 
-                                                                onCallbacks={this.onCallOpenClose.bind(this)}/> : null}
+                                    )}
                                 </div>
+                                
                             </li>
 
                             {/* 중요도 */}
@@ -144,9 +148,9 @@ class Setting extends Component {
                                     <div className="todoList">
                                         {taskItem.todoList && taskItem.todoList.map(todo =>
                                             <div key={todo.id} className="todo">
-                                                    <input type="checkbox" className="doneCheck"></input>
+                                                    <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)}></input>
                                                         <div style={{borderLeft:'3px solid #F8BCB6'}}/>
-                                                            <CheckList todo={todo} key={todo.id}/>
+                                                            <CheckList params={{taskListNo : this.props.taskListNo, taskNo : taskItem.no}} taskCallbacks={this.props.taskCallbacks} todo={todo} key={todo.id}/>
                                                         </div>)}
                                         <div className = "insert">
 
@@ -155,11 +159,13 @@ class Setting extends Component {
                                             </button>
                                             <div className = "checkListInput">
                                                 <input 
-                                                    onChange={this.onTodoInsert.bind(this)} 
+                                                    type="text"
+                                                    onChange={this.onTodoChange.bind(this)} 
                                                     style = {{marginLeft: '5%'}} 
                                                     value = {this.state.todo} 
                                                     placeholder={this.state.todo}
-                                                    onKeyPress={this.onKeypress.bind(this)} />
+                                                    onKeyPress={this.onKeypress.bind(this)} 
+                                                    autoFocus/>
                                             </div>
                                         </div>
                                     </div>

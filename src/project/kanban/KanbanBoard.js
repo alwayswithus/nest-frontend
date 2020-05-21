@@ -50,7 +50,6 @@ class KanbanBoard extends Component {
 
   render() {
     const allTaskList = this.props.tasks;
-
     return (
       <>
         <div className="kanbanBoard">

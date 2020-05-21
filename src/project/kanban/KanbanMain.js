@@ -5,7 +5,6 @@ import Navigator from "../../navigator/Navigator";
 import TopBar from "../topBar/TopBar";
 import data from "./data.json";
 import "./KanbanMain.scss";
-
 import ScrollContainer from "react-indiana-drag-scroll";
 
 class KanbanMain extends Component {
@@ -227,10 +226,6 @@ class KanbanMain extends Component {
   callbackAddTag(tagNo, tagName, taskListNo, taskNo){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
-
-    
-    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].tag.length
-    console.log("KanbanMain : " + checkListLength)
     
     let newTag = {
       id:  tagNo,
@@ -254,10 +249,91 @@ class KanbanMain extends Component {
       taskList:newTagData
     })
 
-    console.log(this.state.taskList[taskListIndex].tasks[taskIndex].tag)
+  }
+
+  //task에 tag 삭제하기
+  callbackDeleteTag(tagNo, taskListNo, taskNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tag.findIndex(
+      (tag) => tag.id == tagNo
+    )
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks:{
+          [taskIndex] :{
+            tag:{
+              $splice : [[tagIndex,1]]
+            }
+          }
+        }
+      }
+    });
+
+    this.setState({
+      taskList:newTaskList
+    })
 
   }
+
+  //task todo check 업데이트
+  callbackTodoCheckUpdate(taskListNo, taskNo, todoId, todoCheck) {
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const todoIndex = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.findIndex(todo => todo.id == todoId)
+
+    console.log("KanbanMain + " + todoIndex + " : " + todoCheck)
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks:{
+          [taskIndex]:{
+            todoList :{
+              [todoIndex] :{
+                checked : {
+                  $set : !todoCheck
+                } 
+              }
+            }
+          }
+        }
+      }
+    });
+
+    this.setState({
+      taskList:newTaskList
+    })
+  }
+
+  //task todo text 업데이트
+  callbackTodoTextUpdate(taskListNo, taskNo, todoId, text){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const todoIndex = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.findIndex(todo => todo.id == todoId)
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks:{
+          [taskIndex]:{
+            todoList :{
+              [todoIndex] :{
+                text : {
+                  $set : text
+                } 
+              }
+            }
+          }
+        }
+      }
+    });
+
+    this.setState({
+      taskList:newTaskList
+    })
+  }
   render() {
+
     return (
       <ScrollContainer
         className="scroll-container"
@@ -293,8 +369,11 @@ class KanbanMain extends Component {
                   addList: this.callbackAddTaskList.bind(this), // taskList 추가
                   deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
                   todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
-                  addtodo: this.callbackAddTodo.bind(this),
-                  addtag: this.callbackAddTag.bind(this)
+                  todoCheckUpdate: this.callbackTodoCheckUpdate.bind(this), // todo check 업데이트
+                  todoTextUpdate: this.callbackTodoTextUpdate.bind(this), // todo text 업데이트
+                  addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
+                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                 }}
               />
             </div>

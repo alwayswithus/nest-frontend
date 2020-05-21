@@ -10,7 +10,7 @@ class TagList extends Component {
     );
     return (
       <>
-        <div className="tags">{tagComponents}</div>
+        <div key={Date.now()} className="tags">{tagComponents}</div>
       </>
     );
   }

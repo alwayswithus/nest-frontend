@@ -7,6 +7,7 @@ import File from "../tasksetting/file/File";
 import Comment from "../tasksetting/comment/Comment";
 import DragonDrop from "drag-on-drop";
 import "./Task.scss";
+import { BrowserRouter, Route } from "react-router-dom";
 
 class Task extends Component {
   constructor() {
@@ -14,6 +15,7 @@ class Task extends Component {
 
     this.state = {
       path: "",
+      closeValue: false,
     };
   }
   // task 삭제
@@ -48,7 +50,6 @@ class Task extends Component {
   onModalOpen() {
     this.setState({
       path: "",
-
     });
   }
 
@@ -58,12 +59,24 @@ class Task extends Component {
     });
   }
 
+  onClickModal(){
+    this.setState({
+      closeValue:!this.state.closeValue,
+    })
+  }
+  
+  onCallbackChecked(check){
+    this.setState({
+      checked:check
+    })
+  }
   render() {
     const taskItem = this.props.task;
     const labelColor = taskItem.label;
     const labelStyle = {
       borderLeft: `5px solid ${labelColor}`,
     };
+
     return (
       <>
         <div
@@ -169,6 +182,7 @@ class Task extends Component {
         </div>
         {/* Project Setting Modal */}
         <div className="project-setting-dialog">
+          <form id={`Form-setting-${taskItem.no}`}>
           <div
             className="modal fade come-from-modal right"
             id={`kanban-setting-${taskItem.no}`}
@@ -182,10 +196,36 @@ class Task extends Component {
               style={{ width: "670px" }}
             >
               <div className="modal-content">
+                {/* modal 띄우기. */}
                 <div className="modal-body">
-                  {this.state.path == 'http://localhost:3000/nest/setting' ? <Setting path={this.state.path} taskCallbacks={this.props.taskCallbacks} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} taskListNo = {this.props.taskListId}/> : (
-                    <>{this.state.path == 'http://localhost:3000/nest/comment' ? <Comment path={this.state.path} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : (
-                      <> {this.state.path == 'http://localhost:3000/nest/file' ? <File path={this.state.path} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} /> : <Setting taskCallbacks={this.props.taskCallbacks} onCallbackSetting={this.onCallbackSetting.bind(this)} task={taskItem} key={taskItem.no} taskListNo = {this.props.taskListId}/>}</>
+                  {this.state.path == 'http://localhost:3000/nest/setting' ? 
+                      <Setting 
+                            path={this.state.path} 
+                            closeValue={this.state.closeValue} 
+                            onClickModal={this.onClickModal.bind(this)} 
+                            taskCallbacks={this.props.taskCallbacks} 
+                            onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                            task={taskItem} 
+                            key={taskItem.no} 
+                            taskListNo = {this.props.taskListId} /> : (
+                    <>{this.state.path == 'http://localhost:3000/nest/comment' ? 
+                        <Comment 
+                            path={this.state.path} 
+                            onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                            task={taskItem} 
+                            key={taskItem.no} /> : (
+                      <> {this.state.path == 'http://localhost:3000/nest/file' ? 
+                            <File 
+                              path={this.state.path} 
+                              onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                              task={taskItem} key={taskItem.no} /> : 
+                            <Setting 
+                              taskCallbacks={this.props.taskCallbacks}  
+                              closeValue={this.state.closeValue}
+                              onClickModal={this.onClickModal.bind(this)} 
+                              onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                              task={taskItem} key={taskItem.no} 
+                              taskListNo = {this.props.taskListId} />}</>
                     )} </>)}
                 </div>
                 <div className="modal-footer">
@@ -193,6 +233,9 @@ class Task extends Component {
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
+                    onClick={()=>this.setState({
+                      closeValue: false
+                    })}
                   >
                     Close
                   </button>
@@ -203,6 +246,7 @@ class Task extends Component {
               </div>
             </div>
           </div>
+          </form>
         </div>
       </>
     );

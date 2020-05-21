@@ -1,5 +1,5 @@
 import React from "react";
-import { Route , Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import Setting from "./project/kanban/tasksetting/setting/Setting";
 import File from "./project/kanban/tasksetting/file/File";
@@ -11,8 +11,6 @@ import KanbanMain from "./project/kanban/KanbanMain";
 import Login from "./user/login/Login";
 import SignUp from "./user/signup/SignUp";
 import PwFind from "./user/pwfind/PwFind";
-
-import Errors from "./errors/Errors";
 
 import Gantt from "./project/gantt/Gantt";
 
@@ -29,10 +27,10 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* 메인 */}
-        <Route path="/nest" exact component={Login} />
+        {/*메인 */}
+        <Route  path="/nest" exact component={Login} />
 
-        {/* 회원 */}
+        {/*회원 */}
         <Route path="/nest/signup" exact component={SignUp} />
         <Route path="/nest/pwfind" exact component={PwFind} />
 
@@ -44,11 +42,11 @@ function App() {
         <Route path="/nest/notification" exact component={Notification} />
 
         {/* 업무속성 */}
-        <Route path="#" component={Setting} />
+        <Route path="#" exact component={Setting} />
         <Route path="#" exact component={Comment} />
         <Route path="#" exact component={File} />
 
-        {/* 칸반보드 */}
+        {/*칸반보드 */}
         <Route path="/nest/kanbanMain" exact component={KanbanMain} />
 
         {/* 대시보드 */}
@@ -57,12 +55,8 @@ function App() {
         {/* 간트차트 */}
         <Route path="/nest/gantt" exact component={Gantt} />
 
-        {/* 프로젝트 세팅 */}
+        {/* 프로젝트 세팅*/}
         <Route path="/nest/projectset" exact component={ProjectSetting} />
-
-        {/* 오류페이지 처리 */}
-        <Route path="/nest/error" exact component={Errors}/>
-
       </BrowserRouter>
     </div>
   );
