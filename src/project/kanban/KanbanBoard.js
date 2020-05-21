@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import TaskList from "./task/TaskList";
 import "./KanbanBoard.scss";
-import DragonDrop from 'drag-on-drop';
 
 class KanbanBoard extends Component {
   constructor() {
