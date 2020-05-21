@@ -1,20 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import './TagModal.scss';
 import tagData from './tagData.json';
 import SettingTag from './SettingTag';
 
 class TagModal extends Component {
-    constructor() {
-        super(...arguments)
 
-        this.state = {
-            tags:tagData,
-        }
-    }
-
-    render(){
+    render() {
         return (
-            <div className="container card-member" style={ { position:'absolute', left:'0', top:'0' } }>
+            <div className="container card-member" style={{ position: 'absolute', left: '0', top: '0' }}>
                 <div className="card">
                     <div className="card-header">
                         <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>태그 추가</h6>
@@ -27,26 +20,18 @@ class TagModal extends Component {
                         {/* tagList */}
                         <div className="invite-card-tag-list">
                             <ul>
-                            {this.state.tags.map(tag =>
-                                <> 
-                                    <SettingTag 
+                                {this.props.tags.map(tag =>
+                                    <SettingTag
                                         key={tag.tagNo}
                                         taskCallbacks={this.props.taskCallbacks}
                                         tagParams={{
+                                            taskItem: this.props.taskItem,
                                             tagNo: tag.tagNo,
                                             tagName: tag.tagName,
                                             taskListNo: this.props.taskListNo,
-                                            taskNo: this.props.taskNo 
-                                        }}/>
-                                    {/* <li>
-                                        <input 
-                                            onClick = {(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} 
-                                            type="checkbox" 
-                                            className="tagCheck"
-                                            ></input>
-                                        <div className="tag" key={tag.tagNo}>{tag.tagName}</div> 
-                                    </li> */}
-                                </> )}
+                                            taskNo: this.props.taskNo
+                                        }} />
+                                )}
                             </ul>
                         </div>
                     </div>

@@ -11,6 +11,7 @@ class SettingTag extends Component {
     }
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox(event){
+        
         console.log( event.target.checked )
         this.setState({
             checked:event.target.checked
