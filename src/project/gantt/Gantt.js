@@ -19,6 +19,7 @@ class Gantt extends Component {
             },
             {
                 id: 2,
+                no: 2,
                 start: "2020-05-07",
                 end: "2020-05-09",
                 name: "업무 2",
@@ -26,6 +27,7 @@ class Gantt extends Component {
             },
             {
                 id: 3,
+                no: 3,
                 start: "2020-05-07",
                 end: "2020-05-17",
                 name: "업무 이름",
@@ -35,7 +37,10 @@ class Gantt extends Component {
 
         ];
 
-        this.state = { data: data, links: [] };
+        this.state = { 
+            data: data, 
+            links: [] 
+        };
         
     }
     genID() {
@@ -71,15 +76,20 @@ class Gantt extends Component {
         item.end = props.end;
         this.setState({ data: [...this.state.data] });
         console.log(item.start+", "+item.end);
-        console.log(item);
+        //console.log(item);
     };
     onCreateLink = item => {
         let newLink = this.createLink(item.start, item.end);
         this.setState({ links: [...this.state.links, newLink] });
     };
 
-    onClickTask = e => {
+    onClickTask = (props) => {
+        console.log("클릭됨");
+        console.log(props);
+    }
 
+    onClickProject = (props) =>{
+        console.log(props);
     }
 
     render() {
@@ -106,6 +116,7 @@ class Gantt extends Component {
                                     links={this.state.links}
                                     onUpdateTask={this.onUpdateTask}
                                     onCreateLink={this.onCreateLink}
+                                    onSelectItem={this.onClickTask}
                                     nonEditableName={true}
                                     mode={"month"}
                                 />
