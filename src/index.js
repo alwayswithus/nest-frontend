@@ -8,8 +8,6 @@ import App from './App';
 ReactDOM.render(
   
   <React.StrictMode>
-    <div className="mainIndex">
-    </div>
     <App />
   </React.StrictMode>,
   document.getElementById("root")
