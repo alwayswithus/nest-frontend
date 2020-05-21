@@ -5,7 +5,6 @@ import Date from "./Date";
 import Setting from "../tasksetting/setting/Setting";
 import File from "../tasksetting/file/File";
 import Comment from "../tasksetting/comment/Comment";
-import DragonDrop from "drag-on-drop";
 import "./Task.scss";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -251,11 +250,7 @@ class Task extends Component {
       </>
     );
   }
-  componentDidMount() {
-    this.setState({
-      dragonDrop: new DragonDrop(this.dragon),
-    });
-  }
+  
 }
 
 export default Task;
