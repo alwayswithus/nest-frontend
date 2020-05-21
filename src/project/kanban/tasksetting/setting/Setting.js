@@ -8,6 +8,7 @@ import ModalCalendar from '../../../../modalCalendar/ModalCalendar2';
 import CheckList from './CheckList';
 import ColorPicker from './ColorPicker';
 import TagModal from './TagModal';
+import tagData from './tagData.json'
 
 class Setting extends Component {
     constructor (){
@@ -15,7 +16,8 @@ class Setting extends Component {
         this.state ={
             open:false,
             todo:'',
-            tagOpen: this.props.closeValue
+            tagOpen: this.props.closeValue,
+            tags:tagData
         }
     }
     onOpenCalendar() {
@@ -42,18 +44,14 @@ class Setting extends Component {
         }
     }
 
-    //tag 모달 창 켜기.
-    onClickTagModal() {
-        this.setState({
-            tagOpen:!this.state.tagOpen
-        })
-    }
-
     //click check box
     clickCheckBox(todoId, todoCheck){
         this.props.taskCallbacks.todoCheckUpdate(this.props.taskListNo, this.props.task.no,todoId, todoCheck)
     }
     
+    onClickTag(){
+        this.props.onClickModal();
+    }
     render() {
         const taskItem = this.props.task;
         return (
@@ -102,7 +100,7 @@ class Setting extends Component {
                                 <div style={{ float:'left' }}><h5><b>태그</b></h5></div>
 
                                 <div style={{ float:'left' }} className="link">
-                                    <Button onClick ={this.props.onClickModal}  variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                    <Button onClick ={this.onClickTag.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
                                     {/* tag 검색창 */}
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
                                         {this.props.closeValue ? <TagModal
@@ -111,6 +109,7 @@ class Setting extends Component {
                                                                     taskListNo = {this.props.taskListNo}
                                                                     taskNo = {this.props.task.no}
                                                                     taskItem = {taskItem}
+                                                                    tags = {this.state.tags}
                                                                     taskCallbacks={this.props.taskCallbacks} /> : null}
                                     </div>
                                 </div>
@@ -154,7 +153,7 @@ class Setting extends Component {
                                                         </div>)}
                                         <div className = "insert">
 
-                                            <button type="submit">
+                                            <button>
                                                 <i style = {{marginLeft: '40%'}} className="fas fa-plus fa-2x"></i>
                                             </button>
                                             <div className = "checkListInput">
