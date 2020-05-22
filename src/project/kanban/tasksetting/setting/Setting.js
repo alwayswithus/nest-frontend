@@ -1,5 +1,5 @@
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import './Setting.scss';
 import Important from './Important';

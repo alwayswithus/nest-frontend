@@ -5,8 +5,9 @@ import Date from "./Date";
 import Setting from "../tasksetting/setting/Setting";
 import File from "../tasksetting/file/File";
 import Comment from "../tasksetting/comment/Comment";
+import TaskInnerContents from "./TaskInnerContents";
 import "./Task.scss";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Draggable } from "react-beautiful-dnd";
 
 class Task extends Component {
   constructor() {
@@ -15,21 +16,11 @@ class Task extends Component {
     this.state = {
       path: "",
       closeValue: false,
+      showComplete: false,
       closeTag: false
+
     };
   }
-  // task 삭제
-  deleteTask() {
-    this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
-    this.noneClick();
-  }
-
-  // task 복사
-  copyTask() {
-    this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
-    this.noneClick();
-  }
-
   // 클릭 모달 막기
   noneClick() {
     window.jQuery(document.body).removeClass("modal-open");
@@ -62,8 +53,16 @@ class Task extends Component {
   //tag modal close
   onClickModal(){
     this.setState({
-      closeValue:!this.state.closeValue,
-    })
+      closeValue: !this.state.closeValue,
+    });
+  }
+
+  // 완료된 Task List 목록 상태
+  showCompleteTaskList() {
+    this.setState({
+      showComplete: !this.state.showComplete,
+    });
+    this.noneClick();
   }
   
   //새태그 만들기에서 뒤로가기 눌렀을 때
@@ -75,128 +74,52 @@ class Task extends Component {
   }
   render() {
     const taskItem = this.props.task;
-    const labelColor = taskItem.label;
-    const labelStyle = {
-      borderLeft: `5px solid ${labelColor}`,
-    };
-
     return (
       <>
-        <div
-          className="task"
-          data-toggle="modal"
-          data-target={`#kanban-setting-${taskItem.no}`}
-          onClick={this.onModalOpen.bind(this)}
-        >
-          <div className="panel panel-primary" style={labelStyle}>
-            <div className="panel-body">
-              <div className="task-item task-top">
-                <div className="point">
-                  <i className="fas fa-circle"></i>&nbsp;
-                  <i className="fas fa-circle"></i>&nbsp;
-                  <i className="fas fa-circle"></i>&nbsp;
-                  <i className="far fa-circle"></i>&nbsp;
-                  <i className="far fa-circle"></i>&nbsp;
+        <Draggable draggableId={taskItem.no} index={this.props.index}>
+          {(provided, snapshot) => (
+            <div
+              className={taskItem.checked ? "task completeTask" : " task"}
+              data-toggle="modal"
+              data-target={`#kanban-setting-${taskItem.no}`}
+              onClick={this.onModalOpen.bind(this)}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              {this.props.firstTrueIndex === this.props.index &&
+              taskItem.checked ? (
+                <div
+                  className="completeArea"
+                  onClick={this.showCompleteTaskList.bind(this)}
+                >
+                  완료된 업무
                 </div>
-                <div className="setting">
-                  <div className="btn-group">
-                    <button
-                      className="btn btn-default dropdown-toggle btn-xs"
-                      type="button"
-                      data-toggle="dropdown"
-                    >
-                      <i className="fas fa-ellipsis-v" aria-hidden="true"></i>
-                    </button>
-                    <ul
-                      className="dropdown-menu"
-                      role="menu"
-                      onClick={this.noneClick.bind(this)}
-                    >
-                      <li>
-                        <a onClick={this.copyTask.bind(this)}>업무 복사</a>
-                      </li>
-                      <li>
-                        <a onClick={this.deleteTask.bind(this)}>업무 삭제</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="task-item task-title">
-                <div className="title">
-                  {taskItem.checked ? (
-                    // 완료된 task
-                    <>
-                      <input
-                        type="checkbox"
-                        className="doneCheck"
-                        defaultChecked
-                        onClick={this.doneTask.bind(this)}
-                      ></input>
-                      &nbsp;
-                      <del>{taskItem.contents}</del>
-                    </>
-                  ) : (
-                      // 미완료된 task
-                      <>
-                        <input
-                          type="checkbox"
-                          className="doneCheck"
-                          onClick={this.doneTask.bind(this)}
-                        ></input>
-                      &nbsp;
-                      <label>{taskItem.contents}</label>
-                      </>
-                    )}
-                </div>
-              </div>
+              ) : null}
 
-              <div className="task-itemtask-todoList">
-                <TodoList
-                  key={taskItem.todoList.id}
-                  todoList={taskItem.todoList}
-                  taskListId={this.props.taskListId}
-                  taskId={this.props.task.no}
-                  taskCallbacks={this.props.taskCallbacks}
-                />
-              </div>
-              <div className="task-item task-tag">
-                <TagList key={taskItem.tag.id} tagList={taskItem.tag} />
-              </div>
-              <div className="task-item task-date">
-                <Date
-                  key={taskItem.no}
-                  startDate={taskItem.startDate}
-                  endDate={taskItem.endDate}
-                />
-              </div>
-              <div className="task-item task-bottom">
-                <div className="count">
-                  <i className="fas fa-tasks"> 0/3</i>
-                  <i className="fas fa-comment"> 3</i>
-                  <i className="fas fa-paperclip"> 2</i>
-                </div>
-                <div className="userCocunt">
-                  <i className="fas fa-user"> 3</i>
-                </div>
-              </div>
+              {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
+              <TaskInnerContents
+                key={taskItem.no}
+                index={this.props.index}
+                task={taskItem}
+                taskListId={this.props.taskListId}
+                taskCallbacks={this.props.taskCallbacks}
+                firstTrueIndex =  {this.props.firstTrueIndex}
+              />
+              {/* ) : null} */}
             </div>
-          </div>
-        </div>
+          )}
+        </Draggable>
+
         {/* Project Setting Modal */}
         <div className="project-setting-dialog">
           <form id={`Form-setting-${taskItem.no}`}>
-          <div
-            className="modal fade come-from-modal right"
-            id={`kanban-setting-${taskItem.no}`}
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="myModalLabel"
-          >
             <div
-              className="modal-dialog"
-              role="document"
-              style={{ width: "670px" }}
+              className="modal fade come-from-modal right"
+              id={`kanban-setting-${taskItem.no}`}
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="myModalLabel"
             >
               <div className="modal-content">
                 {/* modal 띄우기. */}
@@ -255,13 +178,11 @@ class Task extends Component {
                 </div>
               </div>
             </div>
-          </div>
           </form>
         </div>
       </>
     );
   }
-  
 }
 
 export default Task;
