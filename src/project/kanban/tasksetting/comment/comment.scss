@@ -39,8 +39,10 @@
         height:40px;
         ul {
             display: inline-block;
-            li a{
+            li {
+                a{
                 color: black;
+                }
             }
         }
 
@@ -51,11 +53,14 @@
     background-color: #F3F4F5;
     .media{
         padding:1%;
+        height:200px;
+        overflow: auto;
         img{
             max-width: 35px;
         }
 
         .media-body{
+            margin-top: 20px;
             span{
                 margin-top: 1%;
                 margin-bottom: 1%;

@@ -11,7 +11,10 @@ class Comment extends Component  {
                 <Header path={this.props.path} onCallbackSetting = {this.props.onCallbackSetting} taskContents={taskItem.contents}/>
                 <div className="Comment">
                     {/* 코멘트 내용 */}
-                    <CommentList />
+                    <CommentList 
+                        taskListNo={this.props.taskListNo} 
+                        taskItem={this.props.task} 
+                        taskCallbacks={this.props.taskCallbacks}/>
     
                     {/* 코멘트 입력창 */}
                     <CommentInput />

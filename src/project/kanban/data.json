@@ -34,6 +34,35 @@
             "color":"rgb(200,97,51)" 
           }
         ],
+        "comments":[
+          {
+            "commentNo" : 1,
+            "commentRegdate":"2020-05-22",
+            "commentContents":"안녕",
+            "commentLike":0,
+            "memberNo":1,
+            "memberName":"김우경",
+            "memberPhoto":"/assets/images/unnamed.jpg"
+          },
+          {
+            "commentNo" : 2,
+            "commentRegdate":"2020-05-22",
+            "commentContents":"안녕안녕안녕\n\n안녕안녕",
+            "commentLike":1,
+            "memberNo":2,
+            "memberName":"마이콜",
+            "memberPhoto":"/assets/images/unnamed.jpg"
+          },
+          {
+            "commentNo" : 3,
+            "commentRegdate":"2020-05-22",
+            "commentContents":"배고프다!!!!",
+            "commentLike":0,
+            "memberNo":3,
+            "memberName":"둘리",
+            "memberPhoto":"/assets/images/unnamed.jpg"
+          }
+        ],
         "startDate": "5월 1일",
         "endDate": "5월 15일",
         "checked": false,

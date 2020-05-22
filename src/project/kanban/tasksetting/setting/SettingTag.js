@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import './TagModal.scss';
+import './SettingTag.scss';
 
 class SettingTag extends Component {
 
@@ -32,7 +32,7 @@ class SettingTag extends Component {
 
     render(){
         return(
-            <li>
+            <li className="SettingTag">
                 <input 
                     onClick = {this.onCheckBox.bind(this)} 
                     type="checkbox" 

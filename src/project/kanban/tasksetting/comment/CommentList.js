@@ -1,115 +1,41 @@
 import React, { Component, Fragment } from "react";
 import './comment.scss';
+import moment from 'moment';
+import CommentContents from './CommentContents'
 
-const CommentList = () => {
-    return (
-        <div className="CommentList">
-            <div className="media">
-                <a class="pull-left" href="#"><img class="img-circle" src="/images/unnamed.jpg" alt="" /></a>
-                {/* 코멘트 내용 시작 - 1 */}
-                <div className="media-body">
-                    <span className="media-heading"><b>이름</b></span>
-                    <span className="media-heading">2분전</span>
-                    <ul className="list-unstyled list-inline media-detail pull-right">
-                    <li class="">
-                            <span data-tooltip-text="공감하기">
-                                <i class="far fa-thumbs-up thumsup"/>
-                            </span>
-                        </li>
-                        <li class="">
-                            <span data-tooltip-text="수정하기">
-                                <i class="fas fa-pen" />
-                            </span>
-                        </li>
+class CommentList extends Component {
 
-                        <li class="">
-                            <span data-tooltip-text="삭제하기">
-                                <i class="far fa-trash-alt" />
-                            </span>
-                        </li>
-                    </ul>
-                    <p>
-                        vvvvvvcccccccccccccccccccccccccccccccccccccccccccccccccccd<br/>
-                        vvvvvv<br/>
-                        vvvvvv<br/>
-                        vvvvvv<br/>
-                    </p>
-                    <ul className="list-unstyled list-inline media-detail pull-left">
-                        <li><i class="fa fa-thumbs-up"></i>13</li>
-                    </ul>
+
+    onClickThumsUp(commentNo){
+        this.props.taskCallbacks.commentLikeUpdate(
+            this.props.taskListNo, 
+            this.props.taskItem.no,
+            commentNo );
+    }
+
+    onClickModifyText() {
+        this.setState({
+            change: !this.state.change
+        })
+    }
+    render(){
+        return (
+            <div className="CommentList">
+                {/* comment List */}
+                <div className="media">
+                    {/* comment */}
+                    {this.props.taskItem.comments.map(comment =>
+                        <CommentContents 
+                            comment = {comment}
+                            taskListNo = {this.props.taskListNo}
+                            taskNo = {this.props.taskItem.no}
+                            taskCallbacks = {this.props.taskCallbacks}
+                        />
+                    )}
                 </div>
             </div>
-            {/* 코멘트 내용 시작 - 2*/}
-            <div className="media">
-                <a class="pull-left" href="#"><img class="img-circle" src="/images/unnamed.jpg" alt="" /></a>
-                <div className="media-body">
-                    <span className="media-heading"><b>이름</b></span>
-                    <span className="media-heading">2분전</span>
-                    <ul className="list-unstyled list-inline media-detail pull-right">
-                        <li class="">
-                            <span data-tooltip-text="공감하기">
-                                <i class="far fa-thumbs-up thumsup"/>
-                            </span>
-                        </li>
-                        <li class="">
-                            <span data-tooltip-text="수정하기">
-                                <i class="fas fa-pen" />
-                            </span>
-                        </li>
-
-                        <li class="">
-                            <span data-tooltip-text="삭제하기">
-                                <i class="far fa-trash-alt" />
-                            </span>
-                        </li>
-                    </ul>
-                    <p>
-                        vvvvvvcccccccccccccccccccccccccccccccccccccccccccccccccccd<br/>
-                        vvvvvv<br/>
-                        vvvvvv<br/>
-                        vvvvvv<br/>
-                    </p>
-                    <ul className="list-unstyled list-inline media-detail pull-left">
-                        <li><i class="fa fa-thumbs-up"></i>13</li>
-                    </ul>
-                </div>
-            </div>
-            <div className="media">
-                <a class="pull-left" href="#"><img class="img-circle" src="/images/unnamed.jpg" alt="" /></a>
-                <div className="media-body">
-                    <span className="media-heading"><b>이름</b></span>
-                    <span className="media-heading">2분전</span>
-                    <ul className="list-unstyled list-inline media-detail pull-right">
-                    <li class="">
-                            <span data-tooltip-text="공감하기">
-                                <i class="far fa-thumbs-up thumsup"/>
-                            </span>
-                        </li>
-                        <li class="">
-                            <span data-tooltip-text="수정하기">
-                                <i class="fas fa-pen" />
-                            </span>
-                        </li>
-
-                        <li class="">
-                            <span data-tooltip-text="삭제하기">
-                                <i class="far fa-trash-alt" />
-                            </span>
-                        </li>
-                    </ul>
-                    <p>
-                        vvvvvvcccccccccccccccccccccccccccccccccccccccccccccccccccd<br/>
-                        vvvvvv<br/>
-                        vvvvvv<br/>
-                        vvvvvv<br/>
-                    </p>
-                    <ul className="list-unstyled list-inline media-detail pull-left">
-                        <li><i class="fa fa-thumbs-up"></i>13</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    );
+        )
+    };
 }
 
 export default CommentList;
