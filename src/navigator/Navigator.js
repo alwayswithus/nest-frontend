@@ -1,5 +1,6 @@
 import React from 'react';
 import './navigator.scss';
+import ReactTooltip from "react-tooltip";
 
 export default class Navigator extends React.Component {
 
@@ -29,31 +30,39 @@ export default class Navigator extends React.Component {
                             </li>
 
                             {/*<!-- Notification link -->*/}
-                            <li className="nav-item" data-toggle="tooltip" title="Notification">
-                                <a href="/nest/notification" className="link">
-                                    <i className="far fa-bell icon"></i>
-                                </a>
+                            <li className="nav-item">
+                                <span data-tooltip-text="Notification">
+                                    <a href="/nest/notification" className="link">
+                                        <i className="far fa-bell icon"></i>
+                                    </a>
+                                </span>
                             </li>
 
                             {/*<!-- Calendar link -->*/}
-                            <li className="nav-item" data-toggle="tooltip" title="Calendar">
+                            <li className="nav-item">
                                 <a href="#" className="link">
-                                    <i className="fas fa-calendar-alt icon"></i>
+                                    <span data-tooltip-text="Calendar">
+                                        <i className="fas fa-calendar-alt icon"></i>
+                                    </span>
                                 </a>
                             </li>
 
                             {/*<!-- Projects link-- >*/}
-                            <li className="nav-item" data-toggle="tooltip" title="Projects">
-                                <a href="/nest/dashboard" className="link">
-                                    <i className="fas fa-tasks icon"></i>
-                                </a>
+                            <li className="nav-item">
+                                <span data-tooltip-text="Projects">
+                                    <a href="/nest/dashboard" className="link">
+                                        <i className="fas fa-tasks icon"></i>
+                                    </a>
+                                </span>
                             </li >
 
                             {/*< !-- Slack link-- >*/}
-                            <li className="nav-item" data-toggle="tooltip" title="Slack">
-                                <a href="#" className="link">
-                                    <i className="fas fa-comment-dots icon"></i>
-                                </a>
+                            <li className="nav-item">
+                                <span data-tooltip-text="Slack">
+                                    <a href="#" className="link">
+                                        <i className="fas fa-comment-dots icon"></i>
+                                    </a>
+                                </span>
                             </li >
 
                             {/*<!-- nest -->*/}
@@ -86,8 +95,8 @@ export default class Navigator extends React.Component {
                         </div>
                     </div>
                 </div>
-                
-              {/* User Profile Modal */}
+
+                {/* User Profile Modal */}
                 <div className="modal fade" id="use-profile" role="dialog" aria-labelledby="myModalLabel"
                     aria-hidden="true">
                     <div className="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
