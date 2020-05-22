@@ -1,0 +1,27 @@
+.SettingTag{
+    float:left;
+    vertical-align: middle;
+    padding:3px 5px;
+    margin-top:3%;
+    width:200px;
+    .tagCheck{
+        height: 10px;
+        transform: scale(1.7);
+        display: inline-block;
+    }
+    .tag{
+        cursor: default;
+        height: 25px;
+        display: inline-block;
+        width:auto;
+        background-color: #808080;
+        border-radius: 10px;
+        color:white;
+        padding:1%;
+        margin-left: 5%;
+    }
+    &:hover{
+        border-radius: 2px;
+        background-color: #EBEBEB;
+    }
+}

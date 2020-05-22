@@ -15,7 +15,6 @@
     overflow: auto;
     box-shadow: -60px -50px 50px -90px #000000,
     60px 0px 50px -90px #000000;
-    .TodoInsert {
         .todoList {
             background-color: #F3F4F5;
             border: none;
@@ -31,46 +30,10 @@
                     width: auto;
                     transform: scale(1.5);
                     cursor: pointer;
-                    margin: 2.5% 1% 0;
-                    &:hover {
-                        border: 1px solid black;
-                    }
-                }
-                input{
-                    height: 25px;
-                    margin-top: 2.5%;
-                    margin-left: 2%;
-                    border: 1px dashed grey;
-                    font-size: 1.5rem;
-                    width: 500px;
-                    padding: 1%;
-                    &:focus {
-                        outline:none;
-                    }
-                }
-
-                li {
-                    margin: 10px 0 0 5px;
-                    padding-left:2%;
-                    font-size: 1.5rem;
-                    height:30px;
-                    width:500px;
-                    padding-top:1%;
-                    cursor: pointer;
-                    i{
-                        display:none;
-                    }
-                    &:hover {
-                        background-color: #E6E8EC;
-                        border-radius: 2px;
-                        i {
-                            float:right;
-                            padding:0 1%;
-                            display: inline-block;
-                            height: 1px;
-                            color: #C3C3C3;
-                        }
-                    }
+                    margin: 3.5% 1% 0;
+                    // &:hover {
+                    //     border: 1px solid black;
+                    // }
                 }
             }
             .insert{
@@ -107,9 +70,6 @@
 
         Button:hover { 
             border:0px;
-        }
-        
-        
         }
     }
     ul{

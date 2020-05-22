@@ -4,6 +4,17 @@
     background-color: #FFFFFF;
     box-shadow: 0 3px 10px rgba(85, 71, 71, 0.5);
     z-index: 100;
+    .card-header{
+        .back{
+            display: inline-block;
+            font-size: 14px;
+            font-weight: bold;
+            border-right:1px solid #E3E3E3;
+            margin:2%;
+            padding-right:3%;
+            cursor: pointer;
+        }
+    }
     .find-member {
         margin-bottom: 3px;
     }
@@ -12,34 +23,21 @@
         height: 200px;
         overflow: scroll;
         overflow-x: hidden;
-        ul{
-            li{
-                float:left;
-                vertical-align: middle;
-                padding:3px 5px;
-                margin-top:3%;
-                width:200px;
-                .tagCheck{
-                    height: 10px;
-                    transform: scale(1.7);
-                    display: inline-block;
-                }
-                .tag{
-                    cursor: default;
-                    height: 25px;
-                    display: inline-block;
-                    width:auto;
-                    background-color: #808080;
-                    border-radius: 10px;
-                    color:white;
-                    padding:1%;
-                    margin-left: 5%;
-                }
-                &:hover{
-                    border-radius: 2px;
-                    background-color: #EBEBEB;
-                }
-            }
+    }
+
+    .tagInsert{
+        text-align: center;
+        height: 30px;
+        margin-top: 10px;
+        padding:2%;
+        cursor: pointer;
+        span{
+            font-weight: bold;
+            color: #27B6BA;
+        }
+        &:hover{
+            background-color: #E3E3E3;
+            border-radius: 4px;
         }
     }
 }

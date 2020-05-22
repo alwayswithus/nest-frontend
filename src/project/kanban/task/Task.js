@@ -15,6 +15,7 @@ class Task extends Component {
     this.state = {
       path: "",
       closeValue: false,
+      closeTag: false
     };
   }
   // task 삭제
@@ -58,16 +59,19 @@ class Task extends Component {
     });
   }
 
+  //tag modal close
   onClickModal(){
     this.setState({
       closeValue:!this.state.closeValue,
     })
   }
   
-  onCallbackChecked(check){
+  //새태그 만들기에서 뒤로가기 눌렀을 때
+  onClicknewTagModal(){
     this.setState({
-      checked:check
+      closeTag:!this.state.closeTag
     })
+    this.onClickModal()
   }
   render() {
     const taskItem = this.props.task;
@@ -201,7 +205,9 @@ class Task extends Component {
                       <Setting 
                             path={this.state.path} 
                             closeValue={this.state.closeValue} 
+                            closeTag = {this.state.closeTag}
                             onClickModal={this.onClickModal.bind(this)} 
+                            onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
                             taskCallbacks={this.props.taskCallbacks} 
                             onCallbackSetting={this.onCallbackSetting.bind(this)} 
                             task={taskItem} 
@@ -211,7 +217,9 @@ class Task extends Component {
                         <Comment 
                             path={this.state.path} 
                             onCallbackSetting={this.onCallbackSetting.bind(this)} 
-                            task={taskItem} 
+                            task={taskItem}
+                            taskListNo = {this.props.taskListId}
+                            taskCallbacks={this.props.taskCallbacks}
                             key={taskItem.no} /> : (
                       <> {this.state.path == 'http://localhost:3000/nest/file' ? 
                             <File 
@@ -221,7 +229,9 @@ class Task extends Component {
                             <Setting 
                               taskCallbacks={this.props.taskCallbacks}  
                               closeValue={this.state.closeValue}
-                              onClickModal={this.onClickModal.bind(this)} 
+                              closeTag = {this.state.closeTag}
+                              onClickModal={this.onClickModal.bind(this)}
+                              onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
                               onCallbackSetting={this.onCallbackSetting.bind(this)} 
                               task={taskItem} key={taskItem.no} 
                               taskListNo = {this.props.taskListId} />}</>
@@ -233,7 +243,8 @@ class Task extends Component {
                     className="btn btn-default"
                     data-dismiss="modal"
                     onClick={()=>this.setState({
-                      closeValue: false
+                      closeValue: false,
+                      closeTag: false
                     })}
                   >
                     Close
