@@ -1,11 +1,3 @@
-/* @font-face { 
-    font-family: 'BMDOHYEON'; 
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff'); 
-    font-weight: normal; 
-    font-style: normal; 
-} */
-
-
 .ProjectSet{
     float: right;
     background-color: #F3F4F5;
@@ -16,8 +8,39 @@
     right:0px;
     top:220px;
     overflow-x: hidden;
-    hr{
-        margin:0px;
+    .project-description {
+        hr{
+            margin:0px;
+        }
+        .project-description-header {
+            
+            .project-introduce {
+                display: inline-block;
+                color: #8798A8;
+                font-size: 1.3rem; 
+                padding: 3%;
+            }
+            .fa-edit {
+                display: none;
+            }
+        }
+
+        .project-description-contents {
+            padding-top: 0;
+            padding-left: 3%;
+            padding-right: 3%;
+            padding-bottom: 3%;
+
+            .project-description-input {
+                width: 70%;
+            }
+        }
+        &:hover {
+            .fa-edit {
+                display: inline-block;
+                cursor: pointer;
+            }
+        }
     }
     .setList {
         ul{

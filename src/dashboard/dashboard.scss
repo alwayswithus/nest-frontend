@@ -72,7 +72,7 @@
     }
     
     .panel-group .panel-default {
-        width: 245px;
+        width: 243px;
         height: 160px;
         border: 0;
 
@@ -110,7 +110,7 @@
                 }
 
                 .project-state-change {
-                        
+                    border: 0;
                     padding-left: 0;
                     padding-right: 2px;
                     border-left: 0px;
@@ -124,6 +124,35 @@
                         
                     .caret {
                         visibility: visible;
+                    }
+                }
+
+                .dropdown-menu {
+                    padding: 0;
+                    margin: 0;
+
+                    .dropdown-list {
+                        width: auto;
+                        height: auto;
+                        
+                        .dropdown-list-contents {
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            padding-top: 15px;
+                            padding-bottom: 15px;
+                            
+                            .status-name {
+                                color: black;
+                            }
+
+                            .status-color {
+                                display: inline-block;
+                                float: right;
+                            }
+                        }
+                    }
+                    .dropdown-list-contents:hover {
+                        background-color: #B7B8B9;
                     }
                 }
 
@@ -145,18 +174,23 @@
         padding-left: 0;
         padding-right: 4px;
         padding-bottom: 0;
+        border-radius: 14px;
     }
     
     .panel-group .panel-footer .update-date {
-        color: crimson;
+        color: rgb(87, 76, 78);
         float: left;
         margin: 0;    
     }
     
     .panel-group .panel-footer .update-task {
-        float: right;
-        margin: 0;
-        color: black;
+        float: left;
+        margin-bottom: 3px;
+        color: rgb(87, 76, 78);
+    }
+
+    .panel-group .panel-footer .progress {
+        height: 18px;
     }
     
     .panel-group .panel-footer h6 {

@@ -15,9 +15,31 @@
             margin:2%;
             padding:2%;
         }
+
+        .project-title-header {
+            
+            .project-title {
+                margin-top: 30px;
+                margin-left: 25px;
+                margin-right: 10px;
+                margin-bottom: 30px;
+            }
+
+            h2 {
+                display: inline-block;
+            }
+        }
+
         span{
             font-size: 1.0rem;
             color:#B6B6B6
         }
+    }
+    .fa-edit {
+        display: none;
+    }
+    &:hover .fa-edit{
+        display: inline-block;
+        cursor: pointer;
     }
 }
