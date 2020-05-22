@@ -18,7 +18,10 @@ class ProjectSetting extends Component {
             Delete: false,
 
             show: false,
-            userListOpen: false
+            userListOpen: false,
+
+            projectDescCheck: false,    // project desc show and hide
+            keyword: ""                 // project desc input change
         }
     }
 
@@ -27,6 +30,14 @@ class ProjectSetting extends Component {
         this.setState({
             userListOpen: userListOpen
         })
+    }
+
+    // CallBack Change Desc Function
+    callbackProjectDescChange(event) {
+        this.setState({
+            keyword: event.target.value.substr(0, 30)
+        })
+        this.props.callbackProjectSetting.changeDesc(this.props.project.projectNo, this.state.keyword);
     }
 
     handleClickOpenCalendar() {
@@ -57,10 +68,27 @@ class ProjectSetting extends Component {
         })
     }
 
+    // Project Desc Enter Function 
+    onInputKeyPress(event) {
+        if(event.key === "Enter") {
+            this.setState({
+                projectDescCheck: !this.state.projectDescCheck
+            })
+        }
+    }
+
     // User List Open Function
     onUserListOpen() {
         this.setState({
             userListOpen: !this.state.userListOpen
+        })
+    }
+
+    // Project Desc Input Show and Hide Function
+    onProjectDescCheck() {
+        this.setState({
+            projectDescCheck: !this.state.projectDescCheck,
+            keyword: this.props.project.projectDesc
         })
     }
 
@@ -78,16 +106,32 @@ class ProjectSetting extends Component {
                 {/* 프로젝트 헤더 */}
                 <ProjectHeader project={this.props.project} name='김우경' callbackProjectSetting={this.props.callbackProjectSetting} />
                 {/* 프로젝트 리스트 */}
-                <div className="ProjectSet" >
-                    <hr />
-                    <div style={{ color: '#60C7CA', fontSize: '1.3rem', padding: '3%' }}><b>설명 추가</b></div>
-                    <hr style={{ marginBottom: '20px', color: '#555555' }} />
+                <div className="ProjectSet">
+                    <div className="project-description">
+                        <hr />
+                        <div className="project-description-header">
+                            <div className="project-introduce"><b>설명</b></div>
+                            <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i>
+                        </div>
+                        {this.state.projectDescCheck ? 
+                            <div className="project-description-contents">
+                                <input className="project-description-input" type="text" value={this.state.keyword} 
+                                onChange={this.callbackProjectDescChange.bind(this)}
+                                onKeyPress={this.onInputKeyPress.bind(this)}
+                                autoFocus />
+                            </div> :
+                            <div className="project-description-contents">
+                                <h5 style={{ marginTop: "0", fontWeight: "bold" }}>{this.props.project.projectDesc}</h5>
+                            </div>
+                        }
+                        <hr style={{ marginBottom: '20px', color: '#555555' }} />
+                    </div>
                     <div className="setList">
                         <ul>
                             {/* 프로젝트상태 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
-                                <div style={{ display: 'inline-block' }}><ProjectStatus project={this.props.project} /> </div>
+                                <div style={{ display: 'inline-block' }}><ProjectStatus callbackProjectSetting={this.props.callbackProjectSetting} project={this.props.project} /> </div>
                             </li>
 
                             {/* 마감일 */}
@@ -109,9 +153,9 @@ class ProjectSetting extends Component {
                                     <Button onClick={this.onUserListOpen.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
                                     <div>
                                         {this.state.userListOpen ?
-                                            <ProjectMemberAdd project={this.props.project} users={this.props.users} 
-                                            callbackCloseUserList={{close: this.callbackCloseUserList.bind(this)}} 
-                                            callbackProjectSetting={this.props.callbackProjectSetting}/> : ""}
+                                            <ProjectMemberAdd project={this.props.project} users={this.props.users}
+                                                callbackCloseUserList={{ close: this.callbackCloseUserList.bind(this) }}
+                                                callbackProjectSetting={this.props.callbackProjectSetting} /> : ""}
                                     </div>
                                 </div>
                                 {/* 프로젝트 멤버 리스트 */}

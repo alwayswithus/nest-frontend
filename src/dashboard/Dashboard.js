@@ -59,7 +59,7 @@ export default class Dashboard extends React.Component {
     }
 
     let newProject;
-    if(this.state.project.members[memberIndex] && this.state.project.members[memberIndex].memberNo === userNo) {
+    if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].memberNo === userNo) {
       newProject = update(this.state.projects, {
         [projectIndex]: {
           members: {
@@ -96,7 +96,7 @@ export default class Dashboard extends React.Component {
 
     let members;
 
-    if(this.state.members[memberIndex] && this.state.members[memberIndex].memberNo === userNo) {
+    if (this.state.members[memberIndex] && this.state.members[memberIndex].memberNo === userNo) {
       members = update(this.state.members, {
         $splice: [[memberIndex, 1]]
       })
@@ -135,9 +135,73 @@ export default class Dashboard extends React.Component {
     })
   }
 
+  // CallBack Change State Function
+  callbackChangeState(projectNo, state) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        projectState: { $set: state }
+      }
+    })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+  }
+
+  // CallBack Change Title Function
+  callbackProjectTitleChange(projectNo, title) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        projectTitle: { $set: title }
+      }
+    })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+  }
+
+  // CallBack Chnage Desc Function
+  callbackProjectDescChange(projectNo, desc) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        projectDesc: { $set: desc }
+      }
+    })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+  }
+
+  // State Change Function
+  onStateChange(projectNo, state) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        projectState: { $set: state }
+      }
+    })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+  }
+
   // Project Setting button Click Function
   onProjectSetting(projectNo) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
     this.setState({
       setOn: !this.state.setOn,
@@ -233,7 +297,10 @@ export default class Dashboard extends React.Component {
               callbackProjectSetting={{
                 close: this.callbackCloseProjectSetting.bind(this),
                 addDeleteMember: this.callbackAddDeleteMember.bind(this),
-                deleteMember: this.callbackDeleteMember.bind(this)
+                deleteMember: this.callbackDeleteMember.bind(this),
+                changeState: this.callbackChangeState.bind(this),
+                changeTitle: this.callbackProjectTitleChange.bind(this),
+                changeDesc: this.callbackProjectDescChange.bind(this)
               }} />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -255,16 +322,52 @@ export default class Dashboard extends React.Component {
                     <div className="panel-body">
                       <a href="#">
                         <div className="btn-group">
-                          <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change" data-toggle="dropdown">
+                          <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                            data-toggle="dropdown"
+                            style={project.projectState === "상태없음" ?
+                              { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
+                                { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                  { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                    { backgroundColor: "#337AB7" } : ""}>
                             &nbsp;&nbsp;{project.projectState}
                             <span className="caret"></span>
                           </button>
-                          <ul className="dropdown-menu" role="menu">
-                            <li>계획됨</li>
-                            <li>진행중</li>
-                            <li>완료됨</li>
-                            <li>상태없음</li>
-                          </ul>
+                          <div className="dropdown-menu" role="menu">
+                            <div className="dropdown-list">
+                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
+                                <span className="status-name">
+                                  계획됨
+                                </span>
+                                <div className="status-color">
+                                  <i className="fas fa-circle fa-xs" style={{ color: "orange" }}></i>
+                                </div>
+                              </div>
+                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "진행중")}>
+                                <span className="status-name">
+                                  진행중
+                                </span>
+                                <div className="status-color">
+                                  <i className="fas fa-circle fa-xs" style={{ color: "#5CB85C" }}></i>
+                                </div>
+                              </div>
+                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "완료됨")}>
+                                <span className="status-name">
+                                  완료됨
+                                </span>
+                                <div className="status-color">
+                                  <i className="fas fa-circle fa-xs" style={{ color: "#337AB7" }}></i>
+                                </div>
+                              </div>
+                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "상태없음")}>
+                                <span className="status-name">
+                                  상태없음
+                                </span>
+                                <div className="status-color">
+                                  <i className="fas fa-circle fa-xs" style={{ color: "#C7C7C7" }}></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </a>
 
@@ -274,13 +377,19 @@ export default class Dashboard extends React.Component {
                       </a>
                     </div>
                     <div className="panel-footer">
-                      <span className="update-date"><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
                       <span className="update-task"><h6>7/16개 업무</h6></span>
+                      <span className="update-date"><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
                       <div className="progress">
-                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
-                          aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>
-                          100% Complete (danger)
-                        </div>
+                        {project.projectState === "완료됨" ?
+                          <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="70"
+                            aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>100%</div> :
+                          project.projectState === "진행중" ?
+                            <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+                              aria-valuemin="0" aria-valuemax="100" style={{ width: 50 + "%" }}>50%</div> : 
+                          project.projectState === "계획됨" ? 
+                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+                              aria-valuemin="0" aria-valuemax="100" style={{ width: 10 + "%" }}>10%</div> : 
+                        ""}
                       </div>
                     </div>
                   </a>
@@ -352,9 +461,9 @@ export default class Dashboard extends React.Component {
 
                                     {/* All Users */}
                                     <div className="invite-card-member-list">
-                                      { this.state.users.map(user =>
-                                        <User key={ user.userNo } user={ user } members={ this.state.members } 
-                                        callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />) 
+                                      {this.state.users.map(user =>
+                                        <User key={user.userNo} user={user} members={this.state.members}
+                                          callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />)
                                       }
                                       <div className="invite-member">
                                         <i className="fas fa-user-plus fa-2x"></i>
