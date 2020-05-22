@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import './TagModal.scss';
+import './SettingTag.scss';
 
 class SettingTag extends Component {
 
@@ -11,6 +11,7 @@ class SettingTag extends Component {
     }
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox(event){
+        
         console.log( event.target.checked )
         this.setState({
             checked:event.target.checked
@@ -31,7 +32,7 @@ class SettingTag extends Component {
 
     render(){
         return(
-            <li>
+            <li className="SettingTag">
                 <input 
                     onClick = {this.onCheckBox.bind(this)} 
                     type="checkbox" 

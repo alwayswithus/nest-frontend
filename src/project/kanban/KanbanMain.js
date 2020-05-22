@@ -360,6 +360,7 @@ class KanbanMain extends Component {
     })
   }
 
+
   // Drag and Drop
   onDragEnd = (result) =>{
     const { destination, source, draggableId , type} = result;
@@ -452,6 +453,63 @@ class KanbanMain extends Component {
       },
     };
     this.setState(newState);
+
+  // comment like 수 증가
+  callbackCommentLikeUpdate(taskListNo, taskNo, commentNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
+
+    // console.log(this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike)
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks : {
+          [taskIndex] : {
+            comments : {
+              [commentIndex] : {
+                commentLike: {
+                  $set : this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike + 1
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+
+    this.setState({
+      taskList:newTaskList
+    })
+  }
+
+  //comment contents 수정
+  callbakcCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
+
+    console.log("KanbanMain + " + commentContents)
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks : {
+          [taskIndex] : {
+            comments : {
+              [commentIndex] : {
+                commentContents: {
+                  $set : commentContents
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+
+    this.setState({
+      taskList:newTaskList
+    })
+    
+
   }
   render() {
 
@@ -495,6 +553,8 @@ class KanbanMain extends Component {
                   addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+                  commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
+                  commentContentsUpdate:this.callbakcCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                 }}
               />
             </div>

@@ -17,6 +17,8 @@ class Task extends Component {
       path: "",
       closeValue: false,
       showComplete: false,
+      closeTag: false
+
     };
   }
   // 클릭 모달 막기
@@ -48,7 +50,8 @@ class Task extends Component {
     });
   }
 
-  onClickModal() {
+  //tag modal close
+  onClickModal(){
     this.setState({
       closeValue: !this.state.closeValue,
     });
@@ -60,6 +63,14 @@ class Task extends Component {
       showComplete: !this.state.showComplete,
     });
     this.noneClick();
+  }
+  
+  //새태그 만들기에서 뒤로가기 눌렀을 때
+  onClicknewTagModal(){
+    this.setState({
+      closeTag:!this.state.closeTag
+    })
+    this.onClickModal()
   }
   render() {
     const taskItem = this.props.task;
@@ -110,84 +121,60 @@ class Task extends Component {
               role="dialog"
               aria-labelledby="myModalLabel"
             >
-              <div
-                className="modal-dialog"
-                role="document"
-                style={{ width: "670px" }}
-              >
-                <div className="modal-content">
-                  {/* modal 띄우기. */}
-                  <div className="modal-body">
-                    {this.state.path == "http://localhost:3000/nest/setting" ? (
-                      <Setting
-                        path={this.state.path}
-                        closeValue={this.state.closeValue}
-                        onClickModal={this.onClickModal.bind(this)}
-                        taskCallbacks={this.props.taskCallbacks}
-                        onCallbackSetting={this.onCallbackSetting.bind(this)}
-                        task={taskItem}
-                        key={taskItem.no}
-                        taskListNo={this.props.taskListId}
-                      />
-                    ) : (
-                      <>
-                        {this.state.path ==
-                        "http://localhost:3000/nest/comment" ? (
-                          <Comment
-                            path={this.state.path}
-                            onCallbackSetting={this.onCallbackSetting.bind(
-                              this
-                            )}
+              <div className="modal-content">
+                {/* modal 띄우기. */}
+                <div className="modal-body">
+                  {this.state.path == 'http://localhost:3000/nest/setting' ? 
+                      <Setting 
+                            path={this.state.path} 
+                            closeValue={this.state.closeValue} 
+                            closeTag = {this.state.closeTag}
+                            onClickModal={this.onClickModal.bind(this)} 
+                            onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
+                            taskCallbacks={this.props.taskCallbacks} 
+                            onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                            task={taskItem} 
+                            key={taskItem.no} 
+                            taskListNo = {this.props.taskListId} /> : (
+                    <>{this.state.path == 'http://localhost:3000/nest/comment' ? 
+                        <Comment 
+                            path={this.state.path} 
+                            onCallbackSetting={this.onCallbackSetting.bind(this)} 
                             task={taskItem}
-                            key={taskItem.no}
-                          />
-                        ) : (
-                          <>
-                            {this.state.path ==
-                            "http://localhost:3000/nest/file" ? (
-                              <File
-                                path={this.state.path}
-                                onCallbackSetting={this.onCallbackSetting.bind(
-                                  this
-                                )}
-                                task={taskItem}
-                                key={taskItem.no}
-                              />
-                            ) : (
-                              <Setting
-                                taskCallbacks={this.props.taskCallbacks}
-                                closeValue={this.state.closeValue}
-                                onClickModal={this.onClickModal.bind(this)}
-                                onCallbackSetting={this.onCallbackSetting.bind(
-                                  this
-                                )}
-                                task={taskItem}
-                                key={taskItem.no}
-                                taskListNo={this.props.taskListId}
-                              />
-                            )}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </div>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-default"
-                      data-dismiss="modal"
-                      onClick={() =>
-                        this.setState({
-                          closeValue: false,
-                        })
-                      }
-                    >
-                      Close
-                    </button>
-                    <button type="button" className="btn btn-primary">
-                      Save changes
-                    </button>
-                  </div>
+                            taskListNo = {this.props.taskListId}
+                            taskCallbacks={this.props.taskCallbacks}
+                            key={taskItem.no} /> : (
+                      <> {this.state.path == 'http://localhost:3000/nest/file' ? 
+                            <File 
+                              path={this.state.path} 
+                              onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                              task={taskItem} key={taskItem.no} /> : 
+                            <Setting 
+                              taskCallbacks={this.props.taskCallbacks}  
+                              closeValue={this.state.closeValue}
+                              closeTag = {this.state.closeTag}
+                              onClickModal={this.onClickModal.bind(this)}
+                              onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
+                              onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                              task={taskItem} key={taskItem.no} 
+                              taskListNo = {this.props.taskListId} />}</>
+                    )} </>)}
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-default"
+                    data-dismiss="modal"
+                    onClick={()=>this.setState({
+                      closeValue: false,
+                      closeTag: false
+                    })}
+                  >
+                    Close
+                  </button>
+                  <button type="button" className="btn btn-primary">
+                    Save changes
+                  </button>
                 </div>
               </div>
             </div>

@@ -27,6 +27,35 @@
           { "id": 111, "name": "tagA", "color": "rgb(127,191,62)" },
           { "id": 112, "name": "tagB", "color": "rgb(86,23,248)" }
         ],
+        "comments":[
+          {
+            "commentNo" : 1,
+            "commentRegdate":"2020-05-22",
+            "commentContents":"안녕",
+            "commentLike":0,
+            "memberNo":1,
+            "memberName":"김우경",
+            "memberPhoto":"/assets/images/unnamed.jpg"
+          },
+          {
+            "commentNo" : 2,
+            "commentRegdate":"2020-05-22",
+            "commentContents":"안녕안녕안녕\n\n안녕안녕",
+            "commentLike":1,
+            "memberNo":2,
+            "memberName":"마이콜",
+            "memberPhoto":"/assets/images/unnamed.jpg"
+          },
+          {
+            "commentNo" : 3,
+            "commentRegdate":"2020-05-22",
+            "commentContents":"배고프다!!!!",
+            "commentLike":0,
+            "memberNo":3,
+            "memberName":"둘리",
+            "memberPhoto":"/assets/images/unnamed.jpg"
+          }
+        ],
         "checked": false,
         "label": "rgb(152,87,95)",
         "startDate": "5월 1일",
