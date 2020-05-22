@@ -111,15 +111,20 @@ class Task extends Component {
           )}
         </Draggable>
 
-        {/* Project Setting Modal */}
-        <div className="project-setting-dialog">
-          <form id={`Form-setting-${taskItem.no}`}>
+ {/* Project Setting Modal */}
+ <div className="project-setting-dialog">
+        
+          <div
+            className="modal fade come-from-modal right"
+            id={`kanban-setting-${taskItem.no}`}
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+          >
             <div
-              className="modal fade come-from-modal right"
-              id={`kanban-setting-${taskItem.no}`}
-              tabIndex="-1"
-              role="dialog"
-              aria-labelledby="myModalLabel"
+              className="modal-dialog"
+              role="document"
+              style={{ width: "670px" }}
             >
               <div className="modal-content">
                 {/* modal 띄우기. */}
@@ -178,7 +183,8 @@ class Task extends Component {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
+         
         </div>
       </>
     );

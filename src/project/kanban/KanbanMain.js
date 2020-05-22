@@ -453,6 +453,7 @@ class KanbanMain extends Component {
       },
     };
     this.setState(newState);
+  }
 
   // comment like 수 증가
   callbackCommentLikeUpdate(taskListNo, taskNo, commentNo){
