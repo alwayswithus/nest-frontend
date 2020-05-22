@@ -1,9 +1,4 @@
-.App{
-	height: 100%;
-}
-#root {
-	height: 100%;
-}
+
 .PwFind {
 	height: 100%;
 	text-align: center;
@@ -15,22 +10,26 @@
 		margin-right: 0;
 		vertical-align: middle;
 	}
-}
-.pwFindBox {
-	display: inline-block;
-	vertical-align: middle;
-	width: 300px;
-	padding: 20px;
-	border: 2px solid #666;
-	border-radius: 10px;
-	background-color: #e7e7e7;
-}
-form .pwFindItems {
-	font-size: 12pt;
-}
 
-#pwFindText {
-	color: #000;
-	font-size: 14pt;
-	font-weight: bold;
+	.pwFindBox {
+		display: inline-block;
+		vertical-align: middle;
+		width: 300px;
+		padding: 20px;
+		border: 2px solid #666;
+		border-radius: 10px;
+		background-color: #e7e7e7;
+	
+		#pwFindText {
+			color: #000;
+			font-size: 14pt;
+			font-weight: bold;
+		}
+	
+		form .pwFindItems {
+			font-size: 12pt;
+		}
+		
+	}
+
 }

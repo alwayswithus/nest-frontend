@@ -1,9 +1,4 @@
-.App{
-	height: 100%;
-}
-#root {
-	height: 100%;
-}
+
 .SignUp {
 	height: 100%;
 	text-align: center;
@@ -15,22 +10,27 @@
 		margin-right: 0;
 		vertical-align: middle;
 	}
-}
-.SignUpBox {
-	display: inline-block;
-	vertical-align: middle;
-	width: 300px;
-	padding: 20px;
-	border: 2px solid #666;
-	border-radius: 10px;
-	background-color: #e7e7e7;
-}
-form .SignUpItems {
-	font-size: 12pt;
-}
 
-#signUpText {
-	color: #000;
-	font-size: 14pt;
-	font-weight: bold;
+	.SignUpBox {
+		display: inline-block;
+		vertical-align: middle;
+		width: 300px;
+		padding: 20px;
+		border: 2px solid #666;
+		border-radius: 10px;
+		background-color: #e7e7e7;
+	
+		#signUpText {
+			color: #000;
+			font-size: 14pt;
+			font-weight: bold;
+		}
+	
+		form .SignUpItems {
+			font-size: 12pt;
+			
+		}
+	
+	}
+
 }
