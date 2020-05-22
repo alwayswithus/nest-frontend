@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
 import Task from "./Task";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 
 import "./TaskList.scss";
 
@@ -15,7 +16,7 @@ class TaskList extends Component {
       taskInsertState: false,
       taskContents: "",
       showComplete: false,
-      beforTaskListName: "",
+      beforTaskListName: ""
     };
   }
 
@@ -84,154 +85,171 @@ class TaskList extends Component {
     });
     this.showTaskInsertArea();
   }
-
-  // 완료된 Task List 목록 상태
-  showCompleteTaskList() {
-    this.setState({
-      showComplete: !this.state.showComplete,
-    });
-  }
-
   render() {
     return (
-      <>
-        <div className="taskCategory">
-          <div className="panel panel-primary taskPanel">
-            <div className="panel-heading">
-              <div className="taskList-head">
-                <div className="head-title">
-                  {/* task list 이름 수정 state*/}
+      <Draggable draggableId={this.props.taskList.no} index={this.props.index}>
+        {(provided) => (
+          <div
+            className="taskCategory"
+            {...provided.draggableProps}
+            ref={provided.innerRef}
+          >
+            <div
+              className="panel panel-primary taskPanel"
+              {...provided.dragHandleProps}
+            >
+              <div className="panel-heading">
+                <div className="taskList-head">
+                  <div className="head-title">
+                    {/* task list 이름 수정 state*/}
+                    {this.state.showEditNameInput ? (
+                      <input
+                        className="newTaskListName"
+                        type="text"
+                        onChange={this.onInputChanged.bind(this)}
+                        value={this.state.keyword}
+                        onKeyPress={this.onInputKeyPress.bind(this)}
+                        autoFocus
+                      />
+                    ) : (
+                      <div>
+                        {this.state.keyword} &nbsp;
+                        {this.state.taskInsertState ? (
+                          ""
+                        ) : (
+                          <i
+                            className="far fa-edit Icon"
+                            onClick={this.editNameInputState.bind(this)}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {/* task list 이름 수정 시 버튼 유무*/}
                   {this.state.showEditNameInput ? (
-                    <input
-                      className="newTaskListName"
-                      type="text"
-                      onChange={this.onInputChanged.bind(this)}
-                      value={this.state.keyword}
-                      onKeyPress={this.onInputKeyPress.bind(this)}
-                      autoFocus
-                    />
+                    <>
+                      <i
+                        className="fas fa-undo Icon reset"
+                        data-tip="취소"
+                        onClick={this.unEditTaskListName.bind(this)}
+                      ></i>
+                      <ReactTooltip />
+                    </>
                   ) : (
-                    <div>
-                      {this.state.keyword} &nbsp;
+                    <>
                       {this.state.taskInsertState ? (
                         ""
                       ) : (
-                        <i
-                          className="far fa-edit Icon"
-                          onClick={this.editNameInputState.bind(this)}
-                        />
+                        <>
+                          <div className="head-insertBtn">
+                            <i
+                              className="fas fa-plus Icon"
+                              onClick={this.showTaskInsertArea.bind(this)}
+                            ></i>
+                          </div>
+                          <div className="head-deleteBtn">
+                            <i
+                              className="far fa-trash-alt Icon"
+                              onClick={this.deleteTaskList.bind(this)}
+                            ></i>
+                          </div>
+                        </>
                       )}
-                    </div>
+                    </>
                   )}
                 </div>
-                {/* task list 이름 수정 시 버튼 유무*/}
-                {this.state.showEditNameInput ? (
-                  <>
-                    <i
-                      className="fas fa-undo Icon reset"
-                      data-tip="취소"
-                      onClick={this.unEditTaskListName.bind(this)}
-                    ></i>
-                    <ReactTooltip />
-                  </>
-                ) : (
-                  <>
-                    {this.state.taskInsertState ? (
-                      ""
-                    ) : (
-                      <>
-                        <div className="head-insertBtn">
-                          <i
-                            className="fas fa-plus Icon"
-                            onClick={this.showTaskInsertArea.bind(this)}
-                          ></i>
-                        </div>
-                        <div className="head-deleteBtn">
-                          <i
-                            className="far fa-trash-alt Icon"
-                            onClick={this.deleteTaskList.bind(this)}
-                          ></i>
-                        </div>
-                      </>
-                    )}
-                  </>
-                )}
               </div>
-            </div>
-            {/* task 추가 시 입력 창 state*/}
-            {this.state.taskInsertState ? (
-              <div className="taskInsertArea">
-                <div className="taskInsertForm">
-                  <textarea
-                    className="textArea"
-                    cols="35"
-                    rows="2"
-                    onChange={this.onTextAreaChanged.bind(this)}
-                    value={this.state.taskContents}
-                    autoFocus
-                  ></textarea>
+              {/* task 추가 시 입력 창 state*/}
+              {this.state.taskInsertState ? (
+                <div className="taskInsertArea">
+                  <div className="taskInsertForm">
+                    <textarea
+                      className="textArea"
+                      cols="35"
+                      rows="2"
+                      onChange={this.onTextAreaChanged.bind(this)}
+                      value={this.state.taskContents}
+                      autoFocus
+                    ></textarea>
+                  </div>
+                  <div className="taskInsertBtn">
+                    <button
+                      type="button"
+                      className="btn cancel"
+                      onClick={this.showTaskInsertArea.bind(this)}
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      className="btn comfirm"
+                      onClick={this.addTask.bind(this)}
+                    >
+                      만들기
+                    </button>
+                  </div>
                 </div>
-                <div className="taskInsertBtn">
-                  <button
-                    type="button"
-                    className="btn cancel"
-                    onClick={this.showTaskInsertArea.bind(this)}
-                  >
-                    취소
-                  </button>
-                  <button
-                    type="button"
-                    className="btn comfirm"
-                    onClick={this.addTask.bind(this)}
-                  >
-                    만들기
-                  </button>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-
-          <div className="tasks">
-            {/* task 목록 */}
-            {this.props.taskList.tasks.map((task) =>
-              task.checked ? null : (
-                <Task
-                  path={this.props.path}
-                  key={task.no}
-                  taskListId={this.props.taskList.no}
-                  task={task}
-                  taskCallbacks={this.props.taskCallbacks}
-                />
-              )
-            )}
-            {/* 완료된 task 목록 */}
-            <div
-              className="completeArea"
-              onClick={this.showCompleteTaskList.bind(this)}
-            >
-              완료된 업무
+              ) : (
+                ""
+              )}
             </div>
-            {this.state.showComplete ? (
-              <div className="completeTask">
-                {this.props.taskList.tasks.map((task) =>
-                  task.checked ? (
-                    <Task
-                      key={task.no}
-                      taskListId={this.props.taskList.no}
-                      task={task}
-                      taskCallbacks={this.props.taskCallbacks}
-                    />
-                  ) : null
-                )}
-              </div>
-            ) : null}
+            <Droppable droppableId={this.props.taskList.no} type="task">
+              {(provided, snapshot) => (
+                <div
+                  className="tasks"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  // isDraggingOver={snapshot.isDraggingOver}
+                >
+                  {/* task 목록 */}
+                  {this.props.taskList.tasks.map(
+                    (task, index) => (
+                      // task.checked ? null : (
+                      <Task
+                        path={this.props.path}
+                        key={task.no}
+                        taskListId={this.props.taskList.no}
+                        task={task}
+                        index={index}
+                        taskCallbacks={this.props.taskCallbacks}
+                        firstTrueIndex = {this.props.taskList.tasks.findIndex((task) => task.checked === true)}
+                      />
+                    )
+                    // )
+                  )}
+                  {provided.placeholder}
+                  {/* 완료된 task 목록 */}
+                  {/* <div
+                    className="completeArea"
+                    onClick={this.showCompleteTaskList.bind(this)}
+                  >
+                    완료된 업무
+                  </div> */}
+                  {/* {this.state.showComplete ? (
+                    <div className="completeTask">
+                      {this.props.taskList.tasks.map((task, index) =>
+                        task.checked ? (
+                          <Task
+                            key={task.no}
+                            taskListId={this.props.taskList.no}
+                            task={task}
+                            index={index}
+                            taskCallbacks={this.props.taskCallbacks}
+                          />
+                        ) : null
+                      )}
+                    </div>
+                  ) : null} */}
+                </div>
+              )}
+            </Droppable>
           </div>
-        </div>
-      </>
+        )}
+      </Draggable>
     );
   }
+
+
 }
 
 export default TaskList;
