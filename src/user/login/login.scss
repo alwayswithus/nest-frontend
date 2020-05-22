@@ -1,9 +1,5 @@
-.App{
-	height: 100%;
-}
-#root {
-	height: 100%;
-}
+#root { height: 100%; }
+.App{ height: 100%; }
 .Login {
 	height: 100%;
 	text-align: center;
@@ -15,26 +11,32 @@
 		margin-right: 0;
 		vertical-align: middle;
 	}
-}
-.loginBox {
-	display: inline-block;
-	vertical-align: middle;
-	width: 300px;
-	padding: 20px;
-	border: 2px solid #666;
-	border-radius: 10px;
-	background-color: #e7e7e7;
-}
-form .loginItems {
-	width: 200px;
-	font-size: 12pt;
-}
-Button.loginButtons {
-	width: 200px;
-	font-size: 12pt;
-}
-#loginText {
-	color: #000;
-	font-size: 14pt;
-	font-weight: bold;
+
+	.loginBox {
+		display: inline-block;
+		vertical-align: middle;
+		width: 300px;
+		padding: 20px;
+		border: 2px solid #666;
+		border-radius: 10px;
+		background-color: #e7e7e7;
+	
+		#loginText {
+			color: #000;
+			font-size: 14pt;
+			font-weight: bold;
+		}
+	
+		form .loginItems {
+			width: 200px;
+			font-size: 12pt;
+		}
+		
+		Button.loginButtons {
+			width: 200px;
+			font-size: 12pt;
+		}	
+	
+	}	
+
 }

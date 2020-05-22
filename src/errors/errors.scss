@@ -1,9 +1,4 @@
-.App{
-	height: 100%;
-}
-#root {
-	height: 100%;
-}
+
 .Errors {
 	height: 100%;
 	text-align: center;
@@ -24,13 +19,16 @@
 	border: 2px solid #666;
 	border-radius: 10px;
 	background-color: #e7e7e7;
-}
-Button.loginButtons {
-	width: 200px;
-	font-size: 12pt;
-}
-#ErrorsText {
-	color: #000;
-	font-size: 17pt;
-	font-weight: bold;
+
+	#ErrorsText {
+		color: #000;
+		font-size: 17pt;
+		font-weight: bold;
+	}
+
+	Button.loginButtons {
+		width: 200px;
+		font-size: 12pt;
+	}
+
 }
