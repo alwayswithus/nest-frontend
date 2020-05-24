@@ -15,7 +15,8 @@
     overflow: auto;
     box-shadow: -60px -50px 50px -90px #000000,
     60px 0px 50px -90px #000000;
-        .todoList {
+    .taskSettingList{
+        .checkList {
             background-color: #F3F4F5;
             border: none;
             border-radius: 3px;
@@ -38,6 +39,7 @@
             }
             .insert{
                 background: white;
+                height:38px;
                 button{
                     height: 25px;
                     border: none;
@@ -57,19 +59,22 @@
                         border-radius: 2px;; 
                         font-size: 1.5rem; 
                         width: 250px;
-                }
-            } 
-        }
+                        vertical-align: sub;
+                        &:focus {outline:none;}
+                    }
+                } 
+            }
         
-        Button { 
-            border:none; 
-            outline:none;
-            background: none;
-            margin-right: 1%;
-        }
+            Button { 
+                border:none; 
+                outline:none;
+                background: none;
+                margin-right: 1%;
+            }
 
-        Button:hover { 
-            border:0px;
+            Button:hover { 
+                border:0px;
+            }
         }
     }
     ul{
@@ -124,7 +129,7 @@
             }
 
             .TagList{
-                width:300px
+                width:300px;
             }
         }
     }

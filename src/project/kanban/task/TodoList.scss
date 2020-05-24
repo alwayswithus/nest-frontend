@@ -1,36 +1,38 @@
-.todoList {
-  border: 1px solid #8798a8;
-  border-radius: 6px;
-  background-color: white;
+.TodoList{
+  .todoList {
+    border: 1px solid #8798a8;
+    border-radius: 6px;
+    background-color: white;
+    
+    .todo {
+      padding-left: 10px;
+      display: flex;
+      font-size: 12px;
   
-  .todo {
-    padding-left: 10px;
-    display: flex;
-    font-size: 12px;
-
-    &:hover {
-      background-color: #e2e2e259;
-    }
-    .doneCheck {
-      margin: 3px 0px 3px -3px;
-      cursor: pointer;
       &:hover {
-        border: 1px solid black;
+        background-color: #e2e2e259;
+      }
+      .doneCheck {
+        margin: 3px 0px 3px -3px;
+        cursor: pointer;
+        &:hover {
+          border: 1px solid black;
+        }
+      }
+      .text {
+        border-left: 1px dashed red;
+        margin: 2px 0 0 5px;
+        p{
+          margin: 0px;
+        }
       }
     }
-    .text {
-      border-left: 1px dashed red;
-      margin: 2px 0 0 5px;
-      p{
-        margin: 0px;
-      }
+    hr {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      width: 230px;
+      margin-left: 10px;
+      color: red;
     }
-  }
-  hr {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    width: 230px;
-    margin-left: 10px;
-    color: red;
   }
 }

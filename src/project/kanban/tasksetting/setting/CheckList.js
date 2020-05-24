@@ -34,9 +34,9 @@ class CheckList extends Component {
     render() {
         const todo = this.props.todo;
         return (
-            <div className="CheckList">
+            <ul className="CheckList">
                 {this.state.click ? 
-                    <li style={{margin:'1% 0 0 0'}} key={todo.id} onClick = {this.onClickText.bind(this)}>
+                    <li style={{margin:'2% 0 0 0'}} key={todo.id} onClick = {this.onClickText.bind(this)}>
                         {todo.checked ? <del>{this.state.keyword}</del> :  this.state.keyword }
                         <i className="fas fa-pen fa-1x" />
                     </li> :
@@ -46,7 +46,7 @@ class CheckList extends Component {
                         value={this.state.keyword} 
                         onChange={this.onInputChange.bind(this)} 
                         onKeyPress={this.onEnter.bind(this)}></input> }
-            </div>
+            </ul>
             )
         }
     }
