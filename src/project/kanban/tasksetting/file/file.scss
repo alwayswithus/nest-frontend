@@ -1,76 +1,83 @@
-.File {
-    width:632px;
-    background-color: #F3F4F5;
-    float:right;
-    margin-top: 43px;
-    height: calc(100% - 43px);
-    clear:both;
-    hr{
-        border: 0.5px solid #DFDFDF;
-    }
-    .FileMenu{
-        align-items: center;
-        .btn .btn-info{
-            color: black;
-            margin: 8px 0px;
-        }
+.SettingFile{
 
-        .navbar-form .navbar-left{
-            .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-                width: 120px;
+    .File {
+        width:632px;
+        background-color: #F3F4F5;
+        float:right;
+        margin-top: 43px;
+        height: calc(100% - 43px);
+        clear:both;
+        hr{
+            border: 0.5px solid #DFDFDF;
+        }
+        .FileMenu{
+            align-items: center;
+            .input-group{
+                position: none;
             }
-        }
-    }
-
-    table td { 
-        width:200px; 
-    }
-
-    table { 
-        margin:10px;
-    }
-}
-
-.FileList{
-    table tr{
-        height: 50px;
-        vertical-align: middle;
-        button{
-            background: none;
-            border: none;
-            margin-top: 37%;
-        }
-
-        li button:hover, li button:hover i{
-            background: rgb(31,31,31);
-            color:#FFFFFF;
-            text-decoration:none;
-        }
-
-        li ul{
-            background: white;
-            display:none; 
-            height:auto;
-            border:0px;
-            border-radius: 2px;
-            position:absolute;
-            width:100px;
-            z-index:200;
-        }
-
-        li, ul li{
-            list-style: none;
-            margin:5%;
-            a{
+            .btn .btn-info{
                 color: black;
-                text-decoration: none;
+                margin: 8px 0px;
+            }
+    
+            .navbar-form .navbar-left{
+                .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    width: 120px;
+                }
             }
         }
-
-        li:hover ul{
-            display: block;
+    
+        table td { 
+            width:200px; 
+        }
+    
+        table { 
+            margin:10px;
+        }
+    }
+    
+    .FileList{
+        table tr{
+            height: 50px;
+            vertical-align: middle;
+            button{
+                background: none;
+                border: none;
+                margin-top: 37%;
+            }
+    
+            li button:hover, li button:hover i{
+                background: rgb(31,31,31);
+                color:#FFFFFF;
+                text-decoration:none;
+            }
+    
+            li ul{
+                background: white;
+                display:none; 
+                height:auto;
+                border:0px;
+                border-radius: 2px;
+                position:absolute;
+                width:100px;
+                z-index:200;
+                right: 30px;
+            }
+    
+            li, ul li{
+                list-style: none;
+                margin:5%;
+                a{
+                    color: black;
+                    text-decoration: none;
+                }
+            }
+    
+            li:hover ul{
+                display: block;
+            }
         }
     }
 }

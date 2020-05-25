@@ -1,4 +1,5 @@
 import React from 'react';
+import { AlertList } from "react-bs-notifier";
 
 import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
@@ -25,8 +26,15 @@ export default class Dashboard extends React.Component {
 
       details: true,                   // arrow 
       addProjectUserButton: false,     // add project user button
-      inviteMember: false,
+      inviteMember: false,             // invite member open & close
+      inviteMemberEmail: "",
+      inviteMemberName: "",
       setOn: true,                     // project setting open & close button
+
+      position: "top-right",
+			alerts: [],
+			timeout: 2000,
+			newMessage: "초대 메일이 성공적으로 발송되었습니다."
     }
   }
 
@@ -184,6 +192,30 @@ export default class Dashboard extends React.Component {
     })
   }
 
+  // CallBack Invite Member Function
+  callbackInviteMember(projectNo, memberEmail, memberName) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let member = {
+      memberNo: this.state.users.length + 1,
+      memberName: memberName !== "" ? memberName : memberEmail,
+      memberPhoto: "assets/images/unnamed.jpg"
+    }
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        members: {
+          $push: [member]
+        }
+      }
+    })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+  }
+
   // State Change Function
   onStateChange(projectNo, state) {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
@@ -238,6 +270,44 @@ export default class Dashboard extends React.Component {
     window.jQuery(".modal-backdrop").remove();
   }
 
+  // Invite Member Input Email Function
+  onInputInviteMemberEmail(event) {
+    this.setState({
+      inviteMemberEmail: event.target.value
+    })
+  }
+
+  // Invite Member Input Name Function
+  onInputInviteMemberName(event) {
+    this.setState({
+      inviteMemberName: event.target.value
+    })
+  }
+
+  // Invite Member Function
+  onInviteMemberButton(memberEmail, memberName) {
+    let member = {
+      memberNo: this.state.users.length + 1,
+      memberName: memberName !== "" ? memberName : memberEmail,
+      memberPhoto: "assets/images/unnamed.jpg"
+    }
+
+    let members = update(this.state.members, {
+      $push: [member]
+    })
+
+    const newAlert ={
+			id: (new Date()).getTime(),
+			type: "success",
+			message: this.state.newMessage
+		};
+
+    this.setState({
+      members: members,
+      alerts: [...this.state.alerts, newAlert]
+    })
+  }
+
   // Projects hide and show Function
   showDetails() {
     this.setState({
@@ -265,14 +335,19 @@ export default class Dashboard extends React.Component {
   onOpenCloseUser() {
     this.setState({
       addProjectUserButton: !this.state.addProjectUserButton,
-      inviteMember: false
+      inviteMember: false,
+      inviteMemberEmail: "",
+      inviteMemberName: "",
     })
   }
 
+  // Invite Member Open and Close Function
   onInviteMember() {
     this.setState({
       addProjectUserButton: !this.state.addProjectUserButton,
-      inviteMember: !this.state.inviteMember
+      inviteMember: !this.state.inviteMember,
+      inviteMemberEmail: "",
+      inviteMemberName: "",
     })
   }
 
@@ -287,9 +362,31 @@ export default class Dashboard extends React.Component {
     })
   }
 
+  // Invite Member Alert Function
+  onAlertDismissed(alert) {
+		const alerts = this.state.alerts;
+
+		// find the index of the alert that was dismissed
+		const idx = alerts.indexOf(alert);
+
+		if (idx >= 0) {
+			this.setState({
+				// remove the alert from the array
+				alerts: [...alerts.slice(0, idx), ...alerts.slice(idx + 1)]
+			});
+		}
+	}
+
   render() {
     return (
       <div className="Dashboard">
+        <AlertList
+					position={this.state.position}
+					alerts={this.state.alerts}
+					timeout={this.state.timeout}
+					dismissTitle="cancel"
+					onDismiss={this.onAlertDismissed.bind(this)}
+			  />
         <div className="container-fluid">
           {/* Side Bar */}
           <div className="sidebar">
@@ -310,7 +407,8 @@ export default class Dashboard extends React.Component {
                 deleteMember: this.callbackDeleteMember.bind(this),
                 changeState: this.callbackChangeState.bind(this),
                 changeTitle: this.callbackProjectTitleChange.bind(this),
-                changeDesc: this.callbackProjectDescChange.bind(this)
+                changeDesc: this.callbackProjectDescChange.bind(this),
+                inviteMember: this.callbackInviteMember.bind(this)
               }} />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -493,26 +591,31 @@ export default class Dashboard extends React.Component {
                                       <i className="fas fa-chevron-left"></i>
                                     </div>
                                     <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버 초대하기</h6>
-                                    <button type="button" onClick={this.onOpenCloseUser.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
                                     <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                                   </div>
-                                  <form>
                                   <div className="card-body">
-                                      <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이메일</h6>
-                                      <input type="text" className="form-control find-member" placeholder="yong80211@gmail.com" />
-                                      <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이름 (선택사항)</h6>
-                                      <input type="text" className="form-control find-member" />
-                                      <h6>
-                                        nest에 가입할 수 있는 초대 메일이 발송됩니다. 또 해당 사용자는 프로젝트에 자동으로 초대됩니다.
+                                    <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이메일</h6>
+                                    <input type="text" className="form-control find-member" name="userEmail"
+                                      onChange={this.onInputInviteMemberEmail.bind(this)}
+                                      value={this.state.inviteMemberEmail} placeholder="yong80211@gmail.com" />
+                                    <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이름 (선택사항)</h6>
+                                    <input type="text" name="userName" className="form-control find-member"
+                                      onChange={this.onInputInviteMemberName.bind(this)}
+                                      value={this.state.inviteMemberName} />
+                                    <h6>
+                                      nest에 가입할 수 있는 초대 메일이 발송됩니다. 또 해당 사용자는 프로젝트에 자동으로 초대됩니다.
                                       </h6>
                                   </div>
                                   <div className="card-footer">
                                     <hr />
-                                    <input type="submit" id="add-member-invite" className="btn btn-outline-primary btn-rounded" value="멤버 초대하기" />
+                                    <input type="button" id="add-member-invite"
+                                      className="btn btn-outline-primary btn-rounded"
+                                      onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                      value="멤버 초대하기" />
                                   </div>
-                                  </form>
                                 </div>
                               </div> : ""}
+                            
                           </div>
                         </div>
 

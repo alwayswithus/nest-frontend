@@ -17,7 +17,10 @@ class Comment extends Component  {
                         taskCallbacks={this.props.taskCallbacks}/>
     
                     {/* 코멘트 입력창 */}
-                    <CommentInput />
+                    <CommentInput 
+                        taskCallbacks = {this.props.taskCallbacks}
+                        taskItem = {this.props.task}
+                        taskListNo = {this.props.taskListNo}/>
                 </div>
             </div>
         );

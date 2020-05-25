@@ -11,7 +11,7 @@ const FileList = () => {
                     <td>김우경</td>
                     <li>
                         <button className="btn btn-default" type="submit">
-                            <i class="fas fa-ellipsis-v"></i>
+                            <i className="fas fa-ellipsis-v"></i>
                         </button>
                         <ul>
                             <li><a href="#">다운로드</a></li>
@@ -27,7 +27,7 @@ const FileList = () => {
                     <td>김우경</td>
                     <li>
                         <button className="btn btn-default" type="submit">
-                            <i class="fas fa-ellipsis-v"></i>
+                            <i className="fas fa-ellipsis-v"></i>
                         </button>
                         <ul>
                             <li><a href="#">다운로드</a></li>

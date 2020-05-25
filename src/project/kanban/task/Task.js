@@ -8,6 +8,7 @@ import Comment from "../tasksetting/comment/Comment";
 import TaskInnerContents from "./TaskInnerContents";
 import "./Task.scss";
 import { Draggable } from "react-beautiful-dnd";
+import { Route } from "react-router-dom";
 
 class Task extends Component {
   constructor() {
@@ -74,131 +75,40 @@ class Task extends Component {
   render() {
     const taskItem = this.props.task;
     return (
-      <>
-        <Draggable
-          draggableId={taskItem.no}
-          index={this.props.index}
-          isDragDisabled={this.props.complete}
-        >
+      <>      
+        <Draggable draggableId={taskItem.no} index={this.props.index} isDragDisabled={this.props.complete}>
           {(provided, snapshot) => (
-            <div
-              className={taskItem.checked ? "task completeTask" : " task"}
-              data-toggle="modal"
-              data-target={`#kanban-setting-${taskItem.no}`}
-              onClick={this.onModalOpen.bind(this)}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              ref={provided.innerRef}
-            >
-              <TaskInnerContents
-                key={taskItem.no}
-                index={this.props.index}
-                task={taskItem}
-                taskListId={this.props.taskListId}
-                taskCallbacks={this.props.taskCallbacks}
-              />
-            </div>
+            <a href={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
+              <div
+                className={taskItem.checked ? "task completeTask" : " task"}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}
+              >
+                {this.props.firstTrueIndex === this.props.index &&
+                taskItem.checked ? (
+                  <div
+                    className="completeArea"
+                    onClick={this.showCompleteTaskList.bind(this)}
+                  >
+                    완료된 업무
+                  </div>
+                ) : null}
+
+                {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
+                <TaskInnerContents
+                  key={taskItem.no}
+                  index={this.props.index}
+                  task={taskItem}
+                  taskListId={this.props.taskListId}
+                  taskCallbacks={this.props.taskCallbacks}
+                  firstTrueIndex =  {this.props.firstTrueIndex}
+                />
+                {/* ) : null} */}
+              </div>
+            </a>
           )}
         </Draggable>
-
-        {/* Project Setting Modal */}
-        <div className="project-setting-dialog">
-          <div
-            className="modal fade come-from-modal right"
-            id={`kanban-setting-${taskItem.no}`}
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="myModalLabel"
-          >
-            <div
-              className="modal-dialog"
-              role="document"
-              style={{ width: "670px" }}
-            >
-              <div className="modal-content">
-                {/* modal 띄우기. */}
-                <div className="modal-body">
-                  {this.state.path == "http://localhost:3000/nest/setting" ? (
-                    <Setting
-                      path={this.state.path}
-                      closeValue={this.state.closeValue}
-                      closeTag={this.state.closeTag}
-                      onClickModal={this.onClickModal.bind(this)}
-                      onClicknewTagModal={this.onClicknewTagModal.bind(this)}
-                      taskCallbacks={this.props.taskCallbacks}
-                      onCallbackSetting={this.onCallbackSetting.bind(this)}
-                      task={taskItem}
-                      key={taskItem.no}
-                      taskListNo={this.props.taskListId}
-                    />
-                  ) : (
-                    <>
-                      {this.state.path ==
-                      "http://localhost:3000/nest/comment" ? (
-                        <Comment
-                          path={this.state.path}
-                          onCallbackSetting={this.onCallbackSetting.bind(this)}
-                          task={taskItem}
-                          taskListNo={this.props.taskListId}
-                          taskCallbacks={this.props.taskCallbacks}
-                          key={taskItem.no}
-                        />
-                      ) : (
-                        <>
-                          {this.state.path ==
-                          "http://localhost:3000/nest/file" ? (
-                            <File
-                              path={this.state.path}
-                              onCallbackSetting={this.onCallbackSetting.bind(
-                                this
-                              )}
-                              task={taskItem}
-                              key={taskItem.no}
-                            />
-                          ) : (
-                            <Setting
-                              taskCallbacks={this.props.taskCallbacks}
-                              closeValue={this.state.closeValue}
-                              closeTag={this.state.closeTag}
-                              onClickModal={this.onClickModal.bind(this)}
-                              onClicknewTagModal={this.onClicknewTagModal.bind(
-                                this
-                              )}
-                              onCallbackSetting={this.onCallbackSetting.bind(
-                                this
-                              )}
-                              task={taskItem}
-                              key={taskItem.no}
-                              taskListNo={this.props.taskListId}
-                            />
-                          )}
-                        </>
-                      )}
-                    </>
-                  )}
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
-                    onClick={() =>
-                      this.setState({
-                        closeValue: false,
-                        closeTag: false,
-                      })
-                    }
-                  >
-                    Close
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    Save changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </>
     );
   }
