@@ -39,6 +39,7 @@ class ProjectHeader extends Component  {
     // Project Setting Close Function
     onCloseProjectSetting() {
         this.props.callbackProjectSetting.close(true);
+        this.props.callbackSettingListAllClose.close();
     }
 
     render() {

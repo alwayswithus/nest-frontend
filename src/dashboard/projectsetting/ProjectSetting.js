@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
+
 import './projectset.scss';
 import ProjectHeader from './ProjectHeader';
 import ProjectStatus from './ProjectStatus';
@@ -21,11 +22,15 @@ class ProjectSetting extends Component {
             userListOpen: false,
 
             projectDescCheck: false,    // project desc show and hide
-            keyword: ""                 // project desc input change
+            keyword: "",                // project desc input change
+
+            inviteMemberButton: false,
+            inviteMemberEmail: "",
+            inviteMemberName: ""
         }
     }
 
-    // User List Close Function
+    // CallBack User List Close Function
     callbackCloseUserList(userListOpen) {
         this.setState({
             userListOpen: userListOpen
@@ -38,6 +43,27 @@ class ProjectSetting extends Component {
             keyword: event.target.value.substr(0, 30)
         })
         this.props.callbackProjectSetting.changeDesc(this.props.project.projectNo, this.state.keyword);
+    }
+
+    // CallBack Open Invite Member Function
+    callbackOpenInviteMember(inviteMemberButton) {
+        this.setState({
+            userListOpen: false,
+            inviteMemberButton: inviteMemberButton
+        })
+    }
+
+    // CallBack Invite Member Function
+    callbackInviteMember(memberEmail, memberName) {
+        this.props.callbackProjectSetting.inviteMember(this.props.project.projectNo, memberEmail, memberName);
+    }
+
+    // CallBack Project Setting List All Colse Function
+    callbackSettingListAllClose() {
+        this.setState({
+            userListOpen: false,
+            inviteMemberButton: false
+        })
     }
 
     handleClickOpenCalendar() {
@@ -70,7 +96,7 @@ class ProjectSetting extends Component {
 
     // Project Desc Enter Function 
     onInputKeyPress(event) {
-        if(event.key === "Enter") {
+        if (event.key === "Enter") {
             this.setState({
                 projectDescCheck: !this.state.projectDescCheck
             })
@@ -80,7 +106,8 @@ class ProjectSetting extends Component {
     // User List Open Function
     onUserListOpen() {
         this.setState({
-            userListOpen: !this.state.userListOpen
+            userListOpen: !this.state.userListOpen,
+            inviteMemberButton: false
         })
     }
 
@@ -100,11 +127,36 @@ class ProjectSetting extends Component {
     onDelteMember(memberNo) {
         this.props.callbackProjectSetting.deleteMember(memberNo, this.props.project.projectNo)
     }
+
+    // Invite Member Open Function
+    onInviteMember() {
+        this.setState({
+            userListOpen: true,
+            inviteMemberButton: !this.state.inviteMemberButton
+        })
+    }
+
+    // Input Invite Member Email Function
+    onInputInviteMemberEmail(event) {
+        this.setState({
+            inviteMemberEmail: event.target.value
+        })
+    }
+
+    // Input Invite Member Name Function
+    onInputInviteMemberName(event) {
+        this.setState({
+            inviteMemberName: event.target.value
+        })
+    }
+
     render() {
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
-                <ProjectHeader project={this.props.project} name='김우경' callbackProjectSetting={this.props.callbackProjectSetting} />
+                <ProjectHeader project={this.props.project} name='김우경'  
+                    callbackSettingListAllClose={{close: this.callbackSettingListAllClose.bind(this)}} 
+                    callbackProjectSetting={this.props.callbackProjectSetting} />
                 {/* 프로젝트 리스트 */}
                 <div className="ProjectSet">
                     <div className="project-description">
@@ -113,12 +165,12 @@ class ProjectSetting extends Component {
                             <div className="project-introduce"><b>설명</b></div>
                             <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i>
                         </div>
-                        {this.state.projectDescCheck ? 
+                        {this.state.projectDescCheck ?
                             <div className="project-description-contents">
-                                <input className="project-description-input" type="text" value={this.state.keyword} 
-                                onChange={this.callbackProjectDescChange.bind(this)}
-                                onKeyPress={this.onInputKeyPress.bind(this)}
-                                autoFocus />
+                                <input className="project-description-input" type="text" value={this.state.keyword}
+                                    onChange={this.callbackProjectDescChange.bind(this)}
+                                    onKeyPress={this.onInputKeyPress.bind(this)}
+                                    autoFocus />
                             </div> :
                             <div className="project-description-contents">
                                 <h5 style={{ marginTop: "0", fontWeight: "bold" }}>{this.props.project.projectDesc}</h5>
@@ -155,7 +207,44 @@ class ProjectSetting extends Component {
                                         {this.state.userListOpen ?
                                             <ProjectMemberAdd project={this.props.project} users={this.props.users}
                                                 callbackCloseUserList={{ close: this.callbackCloseUserList.bind(this) }}
+                                                callbackOpenInviteMember={{ open: this.callbackOpenInviteMember.bind(this) }}
                                                 callbackProjectSetting={this.props.callbackProjectSetting} /> : ""}
+
+                                        {/* Add Project Member select */}
+                                        {this.state.inviteMemberButton ?
+                                            <div style={{ position: "relative" }}>
+                                                <div className="container card-member member-invite">
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <div className="back-select-user-button" onClick={this.onInviteMember.bind(this)}>
+                                                                <i className="fas fa-chevron-left"></i>
+                                                            </div>
+                                                            <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버 초대하기</h6>
+                                                            <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
+                                                        </div>
+                                                        <div className="card-body">
+                                                            <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이메일</h6>
+                                                            <input type="text" className="form-control find-member" name="userEmail"
+                                                                onChange={this.onInputInviteMemberEmail.bind(this)}
+                                                                value={this.state.inviteMemberEmail} placeholder="yong80211@gmail.com" />
+                                                            <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이름 (선택사항)</h6>
+                                                            <input type="text" name="userName" className="form-control find-member"
+                                                                onChange={this.onInputInviteMemberName.bind(this)}
+                                                                value={this.state.inviteMemberName} />
+                                                            <h6>
+                                                                nest에 가입할 수 있는 초대 메일이 발송됩니다. 또 해당 사용자는 프로젝트에 자동으로 초대됩니다.
+                                                    </h6>
+                                                        </div>
+                                                        <div className="card-footer">
+                                                            <hr />
+                                                            <input type="button" id="add-member-invite"
+                                                                className="btn btn-outline-primary btn-rounded"
+                                                                onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                                                value="멤버 초대하기" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> : ""}
                                     </div>
                                 </div>
                                 {/* 프로젝트 멤버 리스트 */}
