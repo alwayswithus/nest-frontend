@@ -18,8 +18,7 @@ class Task extends Component {
       path: "",
       closeValue: false,
       showComplete: false,
-      closeTag: false
-
+      closeTag: false,
     };
   }
   // 클릭 모달 막기
@@ -52,7 +51,7 @@ class Task extends Component {
   }
 
   //tag modal close
-  onClickModal(){
+  onClickModal() {
     this.setState({
       closeValue: !this.state.closeValue,
     });
@@ -65,26 +64,23 @@ class Task extends Component {
     });
     this.noneClick();
   }
-  
+
   //새태그 만들기에서 뒤로가기 눌렀을 때
-  onClicknewTagModal(){
+  onClicknewTagModal() {
     this.setState({
-      closeTag:!this.state.closeTag
-    })
-    this.onClickModal()
+      closeTag: !this.state.closeTag,
+    });
+    this.onClickModal();
   }
   render() {
     const taskItem = this.props.task;
     return (
       <>      
-        <Draggable draggableId={taskItem.no} index={this.props.index}>
+        <Draggable draggableId={taskItem.no} index={this.props.index} isDragDisabled={this.props.complete}>
           {(provided, snapshot) => (
             <a href={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
               <div
                 className={taskItem.checked ? "task completeTask" : " task"}
-                data-toggle="modal"
-                data-target={`#kanban-setting-${taskItem.no}`}
-                onClick={this.onModalOpen.bind(this)}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}

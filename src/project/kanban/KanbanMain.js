@@ -7,18 +7,21 @@ import data from "./data.json";
 import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
+import ApiService from '../../ApiService';
 
 class KanbanMain extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      taskList: data,
+      taskList: data.alltaskList,
       url: "",
+      
     };
   }
 
-  // Drag and Drop
+  // Drag and Drop  
   onDragEnd = (result) =>{
+
     const { destination, source, type } = result;
     
     // task의 도착지가 null일 경우
@@ -196,7 +199,7 @@ class KanbanMain extends Component {
   }
 
   // task 완료 체크
-  callbackDoneTask(taskListId, taskId, checked, index, firstTrueIndex) {
+  callbackDoneTask(taskListId, taskId, checked,) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.no === taskListId
     );
@@ -214,9 +217,6 @@ class KanbanMain extends Component {
         },
       },
     });
-
-    newTaskList[TaskListIndex].tasks.splice(index, 1);
-    newTaskList[TaskListIndex].tasks.splice(firstTrueIndex, 0,this.state.taskList[TaskListIndex].tasks[TaskIndex]);
 
     this.setState({
       taskList: newTaskList,
@@ -578,7 +578,7 @@ class KanbanMain extends Component {
             {/* 메인 영역 */}
             <div className="mainArea">
               {/*칸반보드*/}
-              <DragDropContext onDragEnd={this.onDragEnd}>
+              <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
               <KanbanBoard
                 tasks={this.state.taskList}
                 taskCallbacks={{
@@ -598,6 +598,7 @@ class KanbanMain extends Component {
                   commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                 }}
+                // isDropDisabled={this.state.isDropDisabledType}
               />
               </DragDropContext>
             </div>
@@ -606,6 +607,14 @@ class KanbanMain extends Component {
       </ScrollContainer>
       </>
     );
+  }
+  componentDidMount() {
+    ApiService.fetchKanbanMain()
+      .then(response => {
+        this.setState({
+          projects: response.data.data
+        })
+      })
   }
 }
 

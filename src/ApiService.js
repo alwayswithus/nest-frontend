@@ -6,6 +6,10 @@ class ApiService {
     fetchDashboard() {
         return axios.get(`/nest/api/dashboard`);
     }
+
+    fetchKanbanMain(){
+        return axios.get(`/nest/api/dashboard`);
+    }
 }
 
 export default new ApiService();
