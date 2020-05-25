@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-import TodoList from "./TodoList";
-import TagList from "./TagList";
-import Date from "./Date";
-import Setting from "../tasksetting/setting/Setting";
-import File from "../tasksetting/file/File";
-import Comment from "../tasksetting/comment/Comment";
 import TaskInnerContents from "./TaskInnerContents";
 import "./Task.scss";
 import { Draggable } from "react-beautiful-dnd";
-import { Route } from "react-router-dom";
 
 class Task extends Component {
   constructor() {

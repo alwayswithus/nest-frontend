@@ -8,6 +8,8 @@ import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
 import ApiService from '../../ApiService';
+import { Route, BrowserRouter } from "react-router-dom";
+import Setting from "../kanban/tasksetting/setting/Setting";
 
 class KanbanMain extends Component {
   constructor() {
@@ -607,14 +609,6 @@ class KanbanMain extends Component {
       </ScrollContainer>
       </>
     );
-  }
-  componentDidMount() {
-    ApiService.fetchKanbanMain()
-      .then(response => {
-        this.setState({
-          projects: response.data.data
-        })
-      })
   }
 }
 
