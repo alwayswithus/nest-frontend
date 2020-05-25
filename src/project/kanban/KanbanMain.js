@@ -6,6 +6,7 @@ import TopBar from "../topBar/TopBar";
 import data from "./data.json";
 import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
+import { DragDropContext } from "react-beautiful-dnd";
 
 class KanbanMain extends Component {
   constructor() {
@@ -14,6 +15,96 @@ class KanbanMain extends Component {
       taskList: data,
       url: "",
     };
+  }
+
+  // Drag and Drop
+  onDragEnd = (result) =>{
+    const { destination, source, type } = result;
+    
+    // task의 도착지가 null일 경우
+    if (!destination) {
+      return;
+    }
+
+    // task의 도착지와 출발지가 같을경우
+    if (
+      destination.draggableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    // list 재정렬
+    if(type === 'column'){
+      const newTaskList = Array.from(this.state.taskList);
+      newTaskList.splice(source.index, 1);
+      newTaskList.splice(destination.index, 0, this.state.taskList[source.index]);
+      this.setState({
+        taskList:newTaskList
+      })
+      return;
+    }
+
+    // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
+    let startIndex = 0;
+    let finishIndex = 0;
+    this.state.taskList.map((taskList,index) => taskList.no === source.droppableId ? startIndex = index: null)
+    this.state.taskList.map((taskList,index) => taskList.no === destination.droppableId ? finishIndex = index: null)
+
+    // 위의 인덱스를 가지고 출발list, 도착list를 생성
+    const start = this.state.taskList[startIndex];
+    const finish = this.state.taskList[finishIndex];
+
+    /* 같은 목록에서의 Task 이동 */
+    if(start === finish) {
+      // tasks 가공
+      const newTasks = Array.from(start.tasks);
+      newTasks.splice(source.index, 1);
+      newTasks.splice(destination.index, 0, this.state.taskList[startIndex].tasks[source.index]);
+
+      let newTaskList = update(this.state.taskList, {
+        [startIndex] : {
+          tasks:{
+            $set : newTasks
+          }
+        }
+      });
+ 
+      this.setState({
+        taskList : newTaskList
+      });
+      return;
+    }
+
+    /* 한 목록에서 다른 목록으로 이동 */
+
+    // 출발 tasks 가공
+    const startTasks = Array.from(start.tasks);
+    startTasks.splice(source.index,1);
+  
+    // 도착 tasks 가공
+    const finishTasks = Array.from(finish.tasks);
+    finishTasks.splice(destination.index, 0, this.state.taskList[startIndex].tasks[source.index]);
+
+
+    let newTaskList = update(this.state.taskList, {
+      [startIndex] : {
+        tasks:{
+          $set : startTasks
+        }
+      },
+      [finishIndex] : {
+        tasks:{
+          $set : finishTasks
+        }
+      }
+      
+    });
+
+    this.setState({
+      taskList:newTaskList
+    });
+
   }
 
   callbackChangeBackground(url) {
@@ -123,37 +214,16 @@ class KanbanMain extends Component {
         },
       },
     });
-    console.log("=========")
-    console.log(newTaskList[TaskListIndex].tasks);
-    console.log("taskListId : " + taskListId);
-    console.log("taskId : " + taskId);
-    console.log("index : " + index );
-    console.log("TaskIndex : " + TaskIndex );
-    console.log("checked : " + checked);
-    console.log("firstTrueIndex : " + firstTrueIndex);
-
 
     newTaskList[TaskListIndex].tasks.splice(index, 1);
     newTaskList[TaskListIndex].tasks.splice(firstTrueIndex, 0,this.state.taskList[TaskListIndex].tasks[TaskIndex]);
-    
 
-    // newTaskList[TaskListIndex].tasks.splice(0, 1);
-    // newTaskList[TaskListIndex].tasks.splice(3, 0,newTaskList[1].tasks[0]);
-    
-
-    // console.log(newTaskList[TaskListIndex].tasks);
     this.setState({
       taskList: newTaskList,
     });
 
-    this.test(TaskListIndex, TaskIndex)
-
   }
   
-  test(TaskListIndex, TaskIndex){
-    console.log(this.state.taskList[TaskListIndex].tasks)
-    console.log("////////")
-  }
   // task list 추가
   callbackAddTaskList(taskListTitle) {
     let newTaskList = {
@@ -360,101 +430,6 @@ class KanbanMain extends Component {
     })
   }
 
-
-  // Drag and Drop
-  onDragEnd = (result) =>{
-    const { destination, source, draggableId , type} = result;
-
-    // console.log(destination); // 도착 인덱스
-    // console.log(source); // 출발 인덱스
-    // console.log("draggableId : " + draggableId);
-
-    // task의 도착지가 null일 경우
-    if (!destination) {
-      return;
-    }
-
-    // task의 도착지와 출발지가 같을경우
-    if (
-      destination.draggableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-
-    // list 재정렬
-    if(type === 'column'){
-      const newColumnOrder = Array.from(this.state.columnOrder);
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-
-      const newState= {
-        ...this.state,
-        columnOrder:newColumnOrder
-      };
-      this.setState(newState)
-      return;
-    }
-
-    // data.json에서 원하는 taskList의 아이디를 찾음
-    const start = this.state.columns[source.droppableId];
-    const finish = this.state.columns[destination.droppableId];
-
-    if(start === finish) {
-      // 기존 task의 배열을 가져옴
-      const newTaskIds = Array.from(start.taskIds);
-      // taskList에서 출발된 인덱스를 찾아 지움
-      newTaskIds.splice(source.index, 1);
-      // 도착한 인덱스에 삭제 없이 이동한 task의 아이디를 추가
-      newTaskIds.splice(destination.index, 0, draggableId);
-
-      // 새로운 taskList를 만듬
-      const newColumn = {
-        // 기존 taskList를 가져오고
-        ...start,
-        // taskList의 순서배열을 덮어 씌움
-        taskIds: newTaskIds,
-      };
-
-      // 새로운 state를 만듬
-      const newState = {
-        ...this.state,
-        columns: {
-          ...this.state.columns,
-          [newColumn.id]: newColumn,
-        },
-      };
-
-      this.setState(newState);
-      return;
-    }
-
-    /* 한 목록에서 다른 목록으로 이동 */
-    const startTaskIds = Array.from(start.taskIds);
-    startTaskIds.splice(source.index,1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds,
-    };
-
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0 , draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
-
-    const newState = {
-      ...this.state,
-      columns:{
-        ...this.state.columns,
-        [newStart.id] : newStart,
-        [newFinish.id] : newFinish,
-      },
-    };
-    this.setState(newState);
-  }
-
   // comment like 수 증가
   callbackCommentLikeUpdate(taskListNo, taskNo, commentNo){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
@@ -539,6 +514,7 @@ class KanbanMain extends Component {
             {/* 메인 영역 */}
             <div className="mainArea">
               {/*칸반보드*/}
+              <DragDropContext onDragEnd={this.onDragEnd}>
               <KanbanBoard
                 tasks={this.state.taskList}
                 taskCallbacks={{
@@ -558,6 +534,7 @@ class KanbanMain extends Component {
                   commentContentsUpdate:this.callbakcCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                 }}
               />
+              </DragDropContext>
             </div>
           </div>
         </div>
