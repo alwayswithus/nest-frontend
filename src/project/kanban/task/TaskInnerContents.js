@@ -36,8 +36,8 @@ class TaskInnerContents extends Component {
       this.props.taskListId,
       this.props.task.no,
       this.props.task.checked,
-      this.props.index,
-      this.props.firstTrueIndex
+      this.props.index
+      // this.props.firstTrueIndex
     );
     this.noneClick();
   }

@@ -16,8 +16,14 @@ class TaskList extends Component {
       taskInsertState: false,
       taskContents: "",
       showComplete: false,
-      beforTaskListName: ""
+      beforTaskListName: "",
     };
+  }
+
+  // 클릭 모달 막기
+  noneClick() {
+    window.jQuery(document.body).removeClass("modal-open");
+    window.jQuery(".modal-backdrop").remove();
   }
 
   // Task List 이름 수정(input 태그) 상태 변경
@@ -62,6 +68,14 @@ class TaskList extends Component {
     this.setState({
       taskContents: event.target.value.substr(0, 30),
     });
+  }
+
+  // 완료된 Task List 목록 상태
+  showCompleteTaskList() {
+    this.setState({
+      showComplete: !this.state.showComplete,
+    });
+    this.noneClick();
   }
 
   // taskList 삭제
@@ -193,63 +207,73 @@ class TaskList extends Component {
                 ""
               )}
             </div>
-            <Droppable droppableId={this.props.taskList.no} type="task">
-              {(provided, snapshot) => (
-                <div
-                  className="tasks"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  // isDraggingOver={snapshot.isDraggingOver}
-                >
-                  {/* task 목록 */}
-                  {this.props.taskList.tasks.map(
-                    (task, index) => (
-                      // task.checked ? null : (
-                      <Task
-                        path={this.props.path}
-                        key={task.no}
-                        taskListId={this.props.taskList.no}
-                        task={task}
-                        index={index}
-                        taskCallbacks={this.props.taskCallbacks}
-                        firstTrueIndex = {this.props.taskList.tasks.findIndex((task) => task.checked === true)}
-                      />
-                    )
-                    // )
-                  )}
-                  {provided.placeholder}
-                  {/* 완료된 task 목록 */}
-                  {/* <div
-                    className="completeArea"
-                    onClick={this.showCompleteTaskList.bind(this)}
+            <div className="taskArea">
+              <Droppable droppableId={this.props.taskList.no} type="task">
+                {(provided, snapshot) => (
+                  <div
+                    className="tasks"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    // isDraggingOver={snapshot.isDraggingOver}
                   >
-                    완료된 업무
-                  </div> */}
-                  {/* {this.state.showComplete ? (
-                    <div className="completeTask">
-                      {this.props.taskList.tasks.map((task, index) =>
-                        task.checked ? (
-                          <Task
-                            key={task.no}
-                            taskListId={this.props.taskList.no}
-                            task={task}
-                            index={index}
-                            taskCallbacks={this.props.taskCallbacks}
-                          />
-                        ) : null
-                      )}
-                    </div>
-                  ) : null} */}
+                    {/* task 목록 */}
+                    {this.props.taskList.tasks.filter(
+                      (task) => 
+                      task.contents.indexOf(this.props.searchKeyword) !== -1 
+                      ).map((task, index) =>
+                      task.checked ? null : (
+                        <Task
+                          path={this.props.path}
+                          key={task.no}
+                          taskListId={this.props.taskList.no}
+                          task={task}
+                          index={index}
+                          taskCallbacks={this.props.taskCallbacks}
+                        />
+                      )
+                    )}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+
+              <div
+                className="tasks"
+                ref={provided.innerRef}
+                // {...provided.droppableProps}
+              >
+                <div
+                  className="completeArea"
+                  onClick={this.showCompleteTaskList.bind(this)}
+                >
+                  완료된 업무
                 </div>
-              )}
-            </Droppable>
+                {this.state.showComplete ? (
+                  <div className="completeTask">
+
+                    {this.props.taskList.tasks.tag
+                    .map((task, index) =>
+                      task.checked ? (
+                        <Task
+                          key={task.no}
+                          taskListId={this.props.taskList.no}
+                          task={task}
+                          index={index}
+                          taskCallbacks={this.props.taskCallbacks}
+                          complete={true}
+                        />
+                      ) : null
+                    )}
+                    {provided.placeholder}
+                  </div>
+                ) : null}
+              </div>
+            </div>
           </div>
         )}
       </Draggable>
     );
   }
-
-
 }
 
 export default TaskList;

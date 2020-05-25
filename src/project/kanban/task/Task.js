@@ -17,8 +17,7 @@ class Task extends Component {
       path: "",
       closeValue: false,
       showComplete: false,
-      closeTag: false
-
+      closeTag: false,
     };
   }
   // 클릭 모달 막기
@@ -51,7 +50,7 @@ class Task extends Component {
   }
 
   //tag modal close
-  onClickModal(){
+  onClickModal() {
     this.setState({
       closeValue: !this.state.closeValue,
     });
@@ -64,19 +63,23 @@ class Task extends Component {
     });
     this.noneClick();
   }
-  
+
   //새태그 만들기에서 뒤로가기 눌렀을 때
-  onClicknewTagModal(){
+  onClicknewTagModal() {
     this.setState({
-      closeTag:!this.state.closeTag
-    })
-    this.onClickModal()
+      closeTag: !this.state.closeTag,
+    });
+    this.onClickModal();
   }
   render() {
     const taskItem = this.props.task;
     return (
       <>
-        <Draggable draggableId={taskItem.no} index={this.props.index}>
+        <Draggable
+          draggableId={taskItem.no}
+          index={this.props.index}
+          isDragDisabled={this.props.complete}
+        >
           {(provided, snapshot) => (
             <div
               className={taskItem.checked ? "task completeTask" : " task"}
@@ -87,33 +90,19 @@ class Task extends Component {
               {...provided.dragHandleProps}
               ref={provided.innerRef}
             >
-              {this.props.firstTrueIndex === this.props.index &&
-              taskItem.checked ? (
-                <div
-                  className="completeArea"
-                  onClick={this.showCompleteTaskList.bind(this)}
-                >
-                  완료된 업무
-                </div>
-              ) : null}
-
-              {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
               <TaskInnerContents
                 key={taskItem.no}
                 index={this.props.index}
                 task={taskItem}
                 taskListId={this.props.taskListId}
                 taskCallbacks={this.props.taskCallbacks}
-                firstTrueIndex =  {this.props.firstTrueIndex}
               />
-              {/* ) : null} */}
             </div>
           )}
         </Draggable>
 
- {/* Project Setting Modal */}
- <div className="project-setting-dialog">
-        
+        {/* Project Setting Modal */}
+        <div className="project-setting-dialog">
           <div
             className="modal fade come-from-modal right"
             id={`kanban-setting-${taskItem.no}`}
@@ -129,51 +118,76 @@ class Task extends Component {
               <div className="modal-content">
                 {/* modal 띄우기. */}
                 <div className="modal-body">
-                  {this.state.path == 'http://localhost:3000/nest/setting' ? 
-                      <Setting 
-                            path={this.state.path} 
-                            closeValue={this.state.closeValue} 
-                            closeTag = {this.state.closeTag}
-                            onClickModal={this.onClickModal.bind(this)} 
-                            onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
-                            taskCallbacks={this.props.taskCallbacks} 
-                            onCallbackSetting={this.onCallbackSetting.bind(this)} 
-                            task={taskItem} 
-                            key={taskItem.no} 
-                            taskListNo = {this.props.taskListId} /> : (
-                    <>{this.state.path == 'http://localhost:3000/nest/comment' ? 
-                        <Comment 
-                            path={this.state.path} 
-                            onCallbackSetting={this.onCallbackSetting.bind(this)} 
-                            task={taskItem}
-                            taskListNo = {this.props.taskListId}
-                            taskCallbacks={this.props.taskCallbacks}
-                            key={taskItem.no} /> : (
-                      <> {this.state.path == 'http://localhost:3000/nest/file' ? 
-                            <File 
-                              path={this.state.path} 
-                              onCallbackSetting={this.onCallbackSetting.bind(this)} 
-                              task={taskItem} key={taskItem.no} /> : 
-                            <Setting 
-                              taskCallbacks={this.props.taskCallbacks}  
+                  {this.state.path == "http://localhost:3000/nest/setting" ? (
+                    <Setting
+                      path={this.state.path}
+                      closeValue={this.state.closeValue}
+                      closeTag={this.state.closeTag}
+                      onClickModal={this.onClickModal.bind(this)}
+                      onClicknewTagModal={this.onClicknewTagModal.bind(this)}
+                      taskCallbacks={this.props.taskCallbacks}
+                      onCallbackSetting={this.onCallbackSetting.bind(this)}
+                      task={taskItem}
+                      key={taskItem.no}
+                      taskListNo={this.props.taskListId}
+                    />
+                  ) : (
+                    <>
+                      {this.state.path ==
+                      "http://localhost:3000/nest/comment" ? (
+                        <Comment
+                          path={this.state.path}
+                          onCallbackSetting={this.onCallbackSetting.bind(this)}
+                          task={taskItem}
+                          taskListNo={this.props.taskListId}
+                          taskCallbacks={this.props.taskCallbacks}
+                          key={taskItem.no}
+                        />
+                      ) : (
+                        <>
+                          {this.state.path ==
+                          "http://localhost:3000/nest/file" ? (
+                            <File
+                              path={this.state.path}
+                              onCallbackSetting={this.onCallbackSetting.bind(
+                                this
+                              )}
+                              task={taskItem}
+                              key={taskItem.no}
+                            />
+                          ) : (
+                            <Setting
+                              taskCallbacks={this.props.taskCallbacks}
                               closeValue={this.state.closeValue}
-                              closeTag = {this.state.closeTag}
+                              closeTag={this.state.closeTag}
                               onClickModal={this.onClickModal.bind(this)}
-                              onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
-                              onCallbackSetting={this.onCallbackSetting.bind(this)} 
-                              task={taskItem} key={taskItem.no} 
-                              taskListNo = {this.props.taskListId} />}</>
-                    )} </>)}
+                              onClicknewTagModal={this.onClicknewTagModal.bind(
+                                this
+                              )}
+                              onCallbackSetting={this.onCallbackSetting.bind(
+                                this
+                              )}
+                              task={taskItem}
+                              key={taskItem.no}
+                              taskListNo={this.props.taskListId}
+                            />
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
                 <div className="modal-footer">
                   <button
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
-                    onClick={()=>this.setState({
-                      closeValue: false,
-                      closeTag: false
-                    })}
+                    onClick={() =>
+                      this.setState({
+                        closeValue: false,
+                        closeTag: false,
+                      })
+                    }
                   >
                     Close
                   </button>
@@ -184,7 +198,6 @@ class Task extends Component {
               </div>
             </div>
           </div>
-         
         </div>
       </>
     );
