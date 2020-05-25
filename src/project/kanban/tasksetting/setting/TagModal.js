@@ -9,7 +9,7 @@ class TagModal extends Component {
     // 새태그 만들기 클릭
     onClickTagInsert(){
         console.log("click!!!!!!!")
-        this.props.onClickModal()
+        this.props.onClickTag()
         this.props.onClicknewTagModal()
     }
 
@@ -33,7 +33,7 @@ class TagModal extends Component {
                 <div className="card">
                     <div className="card-header">
                         <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>태그 추가</h6>
-                            <button type="button" onClick={this.props.onClickModal} className="close" style={{ lineHeight: "35px" }}>&times;</button>
+                            <button type="button" onClick={this.props.onClickTag} className="close" style={{ lineHeight: "35px" }}>&times;</button>
                         <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                     </div>
                     <div className="card-body">
@@ -65,7 +65,7 @@ class TagModal extends Component {
                 <div className="card">
                     <div className="card-header">
                         <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>태그 추가</h6>
-                        <button type="button" onClick={this.props.onClickModal} className="close" style={{ lineHeight: "35px" }}>&times;</button>
+                        <button type="button" onClick={this.props.onClickTag} className="close" style={{ lineHeight: "35px" }}>&times;</button>
                         <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                     </div>
                     <div className="card-body">

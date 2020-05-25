@@ -56,7 +56,7 @@ class KanbanBoard extends Component {
       <>
         <div className="kanbanBoard">
           {/*업무 검색*/}
-          <div className="input-group">
+          <div style={{position:'fixed'}} className="input-group">
             <input
               type="text"
               className="form-control"
