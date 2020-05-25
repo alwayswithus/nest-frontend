@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TaskList from "./task/TaskList";
 import ReactTooltip from "react-tooltip";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import "./KanbanBoard.scss";
 
 class KanbanBoard extends Component {
@@ -51,7 +51,7 @@ class KanbanBoard extends Component {
   }
 
   render() {
-    const allTaskList = this.props.tasks;
+    const allTaskList=this.props.tasks
     return (
       <>
         <div className="kanbanBoard">
@@ -65,7 +65,7 @@ class KanbanBoard extends Component {
           </div>
           <div className="taskListArea">
             {/*task 리스트*/}
-            <DragDropContext onDragEnd={this.onDragEnd}>
+            
               <Droppable
                 droppableId="all-columns"
                 direction="horizontal"
@@ -92,7 +92,7 @@ class KanbanBoard extends Component {
                   </div>
                 )}
               </Droppable>
-            </DragDropContext>
+            
             <div className="taskListAdd">
               {this.state.taskListInsertState ? (
                 <>
