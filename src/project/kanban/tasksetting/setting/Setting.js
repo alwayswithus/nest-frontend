@@ -71,6 +71,7 @@ class Setting extends Component {
             tags:newTags
         })
     }
+
     render() {
         const taskItem = this.props.task;
         return (
@@ -142,8 +143,8 @@ class Setting extends Component {
                                 {/* tag List */}
                                 <div style={{ display: 'inline-block' }} className = "TagList">
                                     {taskItem.tag.map(tag => 
-                                        <div key={tag.id} style={{ display: 'inline-block' }} className = "tag">
-                                            <span className="label label-default tagLabel" style={{backgroundColor:`${tag.color}`, fontSize:'1.25rem', cursor:'default'}}>{tag.name}</span>
+                                        <div key={tag.id} style={{ display: 'inline-block', backgroundColor:`${tag.color}`, borderRadius:'3px' }} className = "tag">
+                                            <span className="label label-default tagLabel" style={{background: 'none', fontSize:'1.25rem', cursor:'default'}}>{tag.name}</span>
                                         </div>
                                     )}
                                 </div>
@@ -167,10 +168,10 @@ class Setting extends Component {
 
                             {/* 하위 할일 */}
                             <li className="taskSettingList">
-                                <div className="todoList">
+                                <div className="checkList">
                                     {taskItem.todoList && taskItem.todoList.map(todo =>
                                         <div key={todo.id} className="todo">
-                                                <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)}></input>
+                                                <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)} readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
@@ -181,16 +182,14 @@ class Setting extends Component {
                                                             key={todo.id}/>
                                                     </div>)}
                                     <div className = "insert">
-                                        <button>
-                                            <i style = {{marginLeft: '40%'}} className="fas fa-plus fa-2x"></i>
-                                        </button>
+                                        <sapn><i style = {{marginLeft: '1.4%',verticalAlign:'text-top' }} className="fas fa-plus fa-2x"></i></sapn>
                                         <div className = "checkListInput">
                                             <input 
                                                 type="text"
                                                 onChange={this.onTodoChange.bind(this)} 
                                                 style = {{marginLeft: '5%'}} 
                                                 value = {this.state.todo} 
-                                                placeholder={this.state.todo}
+                                                placeholder="체크리스트 아이템 추가하기"
                                                 onKeyPress={this.onKeypress.bind(this)} 
                                                 autoFocus/>
                                         </div>

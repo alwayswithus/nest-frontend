@@ -28,6 +28,7 @@ class Todo extends Component {
                 className="doneCheck"
                 onClick={this.doneTodoList.bind(this)}
                 checked={this.props.todo.checked}
+                readOnly
               ></input>
                 {this.props.todo.checked 
                   ? <div className="text"><del>&nbsp;{this.props.todo.text}</del></div> 

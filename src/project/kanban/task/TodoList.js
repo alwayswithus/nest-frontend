@@ -7,7 +7,7 @@ class TodoList extends Component {
     const todoItem = this.props.todoList;
     return (
       <>
-        <div>
+        <div className="TodoList">
           {todoItem.length > 0 ? (
             <div className="todoList">
               {todoItem &&

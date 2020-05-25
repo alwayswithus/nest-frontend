@@ -38,6 +38,7 @@ class SettingTag extends Component {
                     type="checkbox" 
                     className="tagCheck"
                     checked={this.state.checked}
+                    readOnly
                     ></input>
                 <div className="tag">{this.props.tagParams.tagName}</div> 
             </li>
