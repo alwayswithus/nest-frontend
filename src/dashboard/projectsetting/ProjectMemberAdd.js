@@ -9,6 +9,11 @@ class ProjectMemberAdd extends Component {
         this.props.callbackCloseUserList.close(false);
     }
 
+    // CallBack Open Invite Member Function
+    callbackOpenInviteMember() {
+        this.props.callbackOpenInviteMember.open(true)
+    }
+
     render() {
         return (
             <div className="ProjectMemberAdd">
@@ -24,8 +29,8 @@ class ProjectMemberAdd extends Component {
                             <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.props.users && this.props.users.map(user =>
-                                    <ProjectSettingUser key={user.userNo} user={ user } project={this.props.project} callbackProjectSetting={ this.props.callbackProjectSetting }/>)}
-                                <div className="invite-member">
+                                    <ProjectSettingUser key={user.userNo} user={user} project={this.props.project} callbackProjectSetting={this.props.callbackProjectSetting} />)}
+                                <div className="invite-member" onClick={this.callbackOpenInviteMember.bind(this)}>
                                     <i className="fas fa-user-plus fa-2x"></i>
                                     <span>멤버 초대하기</span>
                                 </div>
