@@ -20,9 +20,9 @@ import Notification from "./notification/Notification";
 import ProfileSetting from "./profile/ProfileSetting";
 import ProjectSetting from "./dashboard/projectsetting/ProjectSetting";
 
+import Calendar from "./calendar/Calendar";
+
 function App() {
-
-
 
   return (
     <div className="App">
@@ -57,6 +57,10 @@ function App() {
 
         {/* 프로젝트 세팅*/}
         <Route path="/nest/projectset" exact component={ProjectSetting} />
+
+        {/* 캘린더 */}
+        <Route path="/nest/calendar" exact component={Calendar} />
+
       </BrowserRouter>
     </div>
   );
