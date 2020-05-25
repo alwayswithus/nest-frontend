@@ -25,6 +25,7 @@ export default class Dashboard extends React.Component {
 
       details: true,                   // arrow 
       addProjectUserButton: false,     // add project user button
+      inviteMember: false,
       setOn: true,                     // project setting open & close button
     }
   }
@@ -263,7 +264,15 @@ export default class Dashboard extends React.Component {
   // New Project Add Member Open Close Function
   onOpenCloseUser() {
     this.setState({
-      addProjectUserButton: !this.state.addProjectUserButton
+      addProjectUserButton: !this.state.addProjectUserButton,
+      inviteMember: false
+    })
+  }
+
+  onInviteMember() {
+    this.setState({
+      addProjectUserButton: !this.state.addProjectUserButton,
+      inviteMember: !this.state.inviteMember
     })
   }
 
@@ -273,7 +282,8 @@ export default class Dashboard extends React.Component {
 
     this.setState({
       members: [],
-      addProjectUserButton: false
+      addProjectUserButton: false,
+      inviteMember: false
     })
   }
 
@@ -385,11 +395,11 @@ export default class Dashboard extends React.Component {
                             aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>100%</div> :
                           project.projectState === "진행중" ?
                             <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-                              aria-valuemin="0" aria-valuemax="100" style={{ width: 50 + "%" }}>50%</div> : 
-                          project.projectState === "계획됨" ? 
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                              aria-valuemin="0" aria-valuemax="100" style={{ width: 10 + "%" }}>10%</div> : 
-                        ""}
+                              aria-valuemin="0" aria-valuemax="100" style={{ width: 50 + "%" }}>50%</div> :
+                            project.projectState === "계획됨" ?
+                              <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+                                aria-valuemin="0" aria-valuemax="100" style={{ width: 10 + "%" }}>10%</div> :
+                              ""}
                       </div>
                     </div>
                   </a>
@@ -465,12 +475,42 @@ export default class Dashboard extends React.Component {
                                         <User key={user.userNo} user={user} members={this.state.members}
                                           callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />)
                                       }
-                                      <div className="invite-member">
+                                      <div className="invite-member" onClick={this.onInviteMember.bind(this)}>
                                         <i className="fas fa-user-plus fa-2x"></i>
                                         <span>멤버 초대하기</span>
                                       </div>
                                     </div>
                                   </div>
+                                </div>
+                              </div> : ""}
+
+                            {/* Add Project Member Invite */}
+                            {this.state.inviteMember ?
+                              <div className="container card-member">
+                                <div className="card">
+                                  <div className="card-header">
+                                    <div className="back-select-user-button" onClick={this.onInviteMember.bind(this)}>
+                                      <i className="fas fa-chevron-left"></i>
+                                    </div>
+                                    <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}>멤버 초대하기</h6>
+                                    <button type="button" onClick={this.onOpenCloseUser.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
+                                    <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
+                                  </div>
+                                  <form>
+                                  <div className="card-body">
+                                      <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이메일</h6>
+                                      <input type="text" className="form-control find-member" placeholder="yong80211@gmail.com" />
+                                      <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이름 (선택사항)</h6>
+                                      <input type="text" className="form-control find-member" />
+                                      <h6>
+                                        nest에 가입할 수 있는 초대 메일이 발송됩니다. 또 해당 사용자는 프로젝트에 자동으로 초대됩니다.
+                                      </h6>
+                                  </div>
+                                  <div className="card-footer">
+                                    <hr />
+                                    <input type="submit" id="add-member-invite" className="btn btn-outline-primary btn-rounded" value="멤버 초대하기" />
+                                  </div>
+                                  </form>
                                 </div>
                               </div> : ""}
                           </div>
