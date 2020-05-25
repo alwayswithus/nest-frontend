@@ -163,15 +163,11 @@ class Gantt extends Component {
         //console.log(item);
     };
 
-
-
     onSelectItem = item => {
         console.log("클릭됨");
         console.log(item);
         this.setState({ selectedItem: item });
     };
-
-
 
     render() {
         return (
