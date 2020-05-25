@@ -26,6 +26,7 @@ class CommentList extends Component {
                     {/* comment */}
                     {this.props.taskItem.comments.map(comment =>
                         <CommentContents 
+                            key={comment.commentNo}
                             comment = {comment}
                             taskListNo = {this.props.taskListNo}
                             taskNo = {this.props.taskItem.no}

@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import './comment.scss';
 import moment from 'moment';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.bubble.css';
 
 class commentContents extends Component {
 
@@ -74,12 +76,21 @@ class commentContents extends Component {
                                     </span>
                                 </li>
                             </ul>
-                        {this.state.change ? <p><input type="text" value = {this.state.keyword} onKeyPress={this.onKeyPressEnter.bind(this)} onChange={this.onChangeContents.bind(this)} placeholder={this.props.comment.commentContents} ></input></p> : <p>{
-                            this.props.comment.commentContents.split('\n').map( function(line, idx){
-                                return (<span key={idx}>{line}<br/></span>)
-                            })
+                        {this.state.change ? 
+                            <p>
+                                <input type="text"
+                                       value = {this.state.keyword} 
+                                       onKeyPress={this.onKeyPressEnter.bind(this)} 
+                                       onChange={this.onChangeContents.bind(this)} 
+                                       placeholder={this.props.comment.commentContents} >
+                                </input>
+                            </p> : 
+                                <ReactQuill 
+                                theme = "bubble"
+                                value= {this.props.comment.commentContents}
+                                readOnly
+                               />
                         }
-                    </p>}
                     <ul className="list-unstyled list-inline media-detail pull-left">
                         {this.props.comment.commentLike == '0' ? null : <li><i className="fa fa-thumbs-up"></i>&nbsp;{this.props.comment.commentLike}</li> }
                     </ul>

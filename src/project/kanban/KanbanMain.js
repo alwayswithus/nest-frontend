@@ -459,7 +459,7 @@ class KanbanMain extends Component {
   }
 
   //comment contents 수정
-  callbakcCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
+  callbackCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
@@ -487,9 +487,73 @@ class KanbanMain extends Component {
     
 
   }
+
+  //comment 글 쓰기
+  callbackAddComment(commentContents, taskListNo, taskNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].comments.length
+
+    console.log("KanbanMain + " +commentContents)
+    let newComment = {
+      commentNo:  commentLength + 1,
+      commentRegdate: "2020-05-25",
+      commentContents: commentContents,
+      commentLike:0,
+      memberNo:1,
+      memberName:"김우경",
+      memberPhoto:"/assets/images/unnamed.jpg"
+    }
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks : {
+          [taskIndex] : {
+            comments:{
+              $push : [newComment]
+            },
+          },
+        },
+      }
+    });
+
+    this.setState({
+      taskList:newTaskList
+    })
+
+
+  }
   render() {
 
     return (
+      <>
+      <BrowserRouter>
+          <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo" 
+            render={(match) => 
+              <Setting 
+              {...match}
+                // path={this.state.path} 
+                // closeValue={this.state.closeValue} 
+                // closeTag = {this.state.closeTag}
+                // onClickModal={this.onClickModal.bind(this)} 
+                // onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
+                taskCallbacks={{
+                  todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
+                  todoCheckUpdate: this.callbackTodoCheckUpdate.bind(this), // todo check 업데이트
+                  todoTextUpdate: this.callbackTodoTextUpdate.bind(this), // todo text 업데이트
+                  addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
+                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+                  commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
+                  commentContentsUpdate:this.callbakcCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                }}
+                // onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                task={this.state.taskList} 
+                // key={taskItem.no} 
+                taskListNo = {this.props.taskListId} />} />
+
+        </BrowserRouter>
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}
@@ -531,7 +595,8 @@ class KanbanMain extends Component {
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate:this.callbakcCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                 }}
               />
               </DragDropContext>
@@ -539,6 +604,7 @@ class KanbanMain extends Component {
           </div>
         </div>
       </ScrollContainer>
+      </>
     );
   }
 }
