@@ -53,8 +53,8 @@
         // }
 
         .calendar-body-contents {
-            display: inline-table;
-            padding: 40px;
+            display: inline-flex;
+            padding: 30px 30px 30px 30px;
             width: 100%;
             height: 100%;
             //background-color: white;
@@ -67,7 +67,7 @@
                     width: 100%;
                     background-color: rgb(83, 180, 115);
                 }
-                overflow-y: scroll;
+                overflow-y: auto;
                 overflow-x: hidden;
                 background-color: rgb(222, 222, 115);
             }

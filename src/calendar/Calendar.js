@@ -155,19 +155,13 @@ class myCalendar extends Component {
           </div> */}
           <div className="calendar-body-contents">
             <div className="calendar-body-contents-filter">
-              <table className="filterList" style={{height:"100%", width:"100%"}}>
-                {/* <tr>
-                  <div style={{height:"30px", width:"60px", backgroundColor:"#615161"}}/>
+              <table className="filterList" >
+                <tr>
+                  {/* <div style={{ height: "30px", width: "100%", backgroundColor: "#615161" }} />
                 </tr>
                 <tr>
-                <div style={{height:"30px", width:"60px", backgroundColor:"#615161"}}/>
+                  <div style={{ height: "30px", width: "60px", backgroundColor: "#615161" }} /> */}
                 </tr>
-                <tr>
-                <div style={{height:"30px", width:"60px", backgroundColor:"#615161"}}/>
-                </tr>
-                <tr>
-                <div style={{height:"30px", width:"60px", backgroundColor:"#615161"}}/>
-                </tr> */}
               </table>
             </div>
             <div className="calendar-body-contents-calendar">
