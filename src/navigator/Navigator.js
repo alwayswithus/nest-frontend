@@ -40,7 +40,7 @@ export default class Navigator extends React.Component {
 
                             {/*<!-- Calendar link -->*/}
                             <li className="nav-item">
-                                <a href="#" className="link">
+                                <a href="/nest/calendar" className="link">
                                     <span data-tooltip-text="Calendar">
                                         <i className="fas fa-calendar-alt icon"></i>
                                     </span>
