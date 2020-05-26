@@ -89,11 +89,15 @@ class Setting extends Component {
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.no == this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
         return (
-            <>
+            <div className = "taskSetting-setting">
                 <div style={{ height: '100%', marginTop: '-49px', position: 'absolute', right: '0', zIndex: '999'}}>
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
-                        <Header name='김우경' date='2020.05.06' taskContents = {taskItem.contents}/>
+                        <Header 
+                            name='김우경' 
+                            date='2020.05.06' 
+                            taskContents = {taskItem.contents}
+                            params={this.props.match.params}/>
                     </div>
 
                     {/* 업무속성 리스트 */}
@@ -142,8 +146,8 @@ class Setting extends Component {
                                             onClickTag={this.onClickTag.bind(this)}
                                             onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
                                             key={this.props.task.no} 
-                                            taskListNo = {this.props.taskListNo}
-                                            taskNo = {this.props.task.no}
+                                            taskListNo = {this.props.match.params.taskListNo}
+                                            taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}
                                             tags = {this.state.tags}
                                             taskCallbacks={this.props.taskCallbacks} />
@@ -177,10 +181,10 @@ class Setting extends Component {
 
                             {/* 하위 할일 */}
                             <li className="taskSettingList">
-                                <div className="todoList">
+                                <div className="checkList">
                                     {taskItem.todoList && taskItem.todoList.map(todo =>
                                         <div key={todo.id} className="todo">
-                                                <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)}></input>
+                                                <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)} readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
@@ -200,7 +204,7 @@ class Setting extends Component {
                                                 onChange={this.onTodoChange.bind(this)} 
                                                 style = {{marginLeft: '5%'}} 
                                                 value = {this.state.todo} 
-                                                placeholder={this.state.todo}
+                                                placeholder='체크리스트 아이템 추가하기'
                                                 onKeyPress={this.onKeypress.bind(this)} 
                                                 autoFocus/>
                                         </div>
@@ -210,7 +214,7 @@ class Setting extends Component {
                         </ul>
                     </div>
                 </div>
-            </>
+            </div>
         )
     }
 }

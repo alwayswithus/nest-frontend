@@ -32,7 +32,7 @@ class SettingTag extends Component {
 
     render(){
         return(
-            <li className="SettingTag">
+            <li className="SettingTag" style={{ margin:'5% 0% 0% 0%'}}>
                 <input 
                     onClick = {this.onCheckBox.bind(this)} 
                     type="checkbox" 
