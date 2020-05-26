@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import './projectset.scss';
 import ProjectHeader from './ProjectHeader';
 import ProjectStatus from './ProjectStatus';
-import ModalCalendar2 from '../../modalCalendar/ModalCalendar2';
+import ModalCalendar from '../../modalCalendar/ModalCalendar';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -119,10 +119,6 @@ class ProjectSetting extends Component {
         })
     }
 
-    onSubmit(date) {
-        console.log("date:", date)
-    }
-
     // Delete Member in Porject Function
     onDelteMember(memberNo) {
         this.props.callbackProjectSetting.deleteMember(memberNo, this.props.project.projectNo)
@@ -191,7 +187,7 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
                                     <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
-                                    {this.state.show ? <ModalCalendar2 onSubmit={this.onSubmit.bind(this)} /> : ""}
+                                    {this.state.show ? <ModalCalendar project={this.props.project}/> : ""}
                                 </div>
 
                             </li>
