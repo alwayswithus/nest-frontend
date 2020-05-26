@@ -37,6 +37,7 @@ class Editor extends Component {
             formats={Editor.formats}
             bounds={'.app'}
             placeholder={this.props.placeholder}
+            style={{height:'80px'}}
            />
          </div>
        )

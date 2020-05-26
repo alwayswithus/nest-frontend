@@ -5,10 +5,13 @@ import Header from './Header';
 
 class File extends Component {
     render(){
-        const taskItem = this.props.task;
+        const taskList = this.props.task;
+        const taskListIndex = taskList.findIndex(taskList => taskList.no == this.props.match.params.taskListNo);
+        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.no == this.props.match.params.taskNo);
+        const taskItem = taskList[taskListIndex].tasks[taskIndex]
     return (
             <div className="SettingFile">
-                <Header path = {this.props.path} onCallbackSetting = {this.props.onCallbackSetting} taskContents = {taskItem.contents}/>
+                <Header taskContents = {taskItem.contents} params={this.props.match.params}/>
                 <div className="File">
                     <div className="FileMenu">
                         <form className="navbar-form navbar-left">

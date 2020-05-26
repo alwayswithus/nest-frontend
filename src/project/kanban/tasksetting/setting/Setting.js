@@ -8,8 +8,14 @@ import ModalCalendar from '../../../../modalCalendar/ModalCalendar2';
 import CheckList from './CheckList';
 import ColorPicker from './ColorPicker';
 import TagModal from './TagModal';
-import tagData from './tagData.json'
 import update from "react-addons-update";
+import ApiService from '../../../../ApiService'
+import axios from 'axios';
+
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+    'Content-Type' : 'application/json'
+}
 
 class Setting extends Component {
     constructor (){
@@ -17,7 +23,7 @@ class Setting extends Component {
         this.state ={
             open:false,
             todo:'',
-            tags:tagData,
+            tags:null,
             closeValue:false, // 태그 모달
             closeTag: false // 새태그만들기 모달
         }
@@ -66,21 +72,50 @@ class Setting extends Component {
         this.onClickTag()
     }
 
+    //새 태그 만들기
     callbackAddTags(tagName){
         console.log("Setting : " + tagName)
-
-        const tagsLength = this.state.tags.length
+        
         let newTag = {
-            tagNo : tagsLength + 1,
-            tagName : tagName
+            tagNo : null,
+            tagName : tagName,
+            tagColor: '#FFE0E0'
         }
 
-        let newTags = update(this.state.tags, {
-            $push : [newTag]
-        });
+        fetch(`${API_URL}/api/taglist/add`, {
+            method:'post',
+            headers:API_HEADERS,
+            body:JSON.stringify(newTag)
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            let newTags= update(this.state.tags, {
+                $push : [json.data]
+            })
+            this.setState({
+                tags:newTags
+            })
+        })
 
-        this.setState({
-            tags:newTags
+    }
+
+    callbackDeleteTags(tagNo){
+        console.log("!!!!" + tagNo)
+
+        const tagIndex = this.state.tags.findIndex(tag => tag.tagNo == tagNo);
+        fetch(`${API_URL}/api/taglist/delete`, {
+            method:'delete',
+            headers:API_HEADERS,
+            body:tagNo
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            let newTags= update(this.state.tags, {
+                $splice : [[tagIndex,1]]
+            })
+            this.setState({
+                tags:newTags
+            })
         })
     }
     render() {
@@ -150,7 +185,11 @@ class Setting extends Component {
                                             taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}
                                             tags = {this.state.tags}
-                                            taskCallbacks={this.props.taskCallbacks} />
+                                            taskCallbacks={this.props.taskCallbacks}
+                                            settingTagCallbakcs={{
+                                                add:this.callbackAddTags.bind(this),
+                                                delete: this.callbackDeleteTags.bind(this)
+                                            }} />
                                     </div>
                                 </div>
 
@@ -176,7 +215,7 @@ class Setting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-palette" /></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>색상라벨</b></h5></div>
-                                <div style={{ display: 'inline-block' }}> <ColorPicker /></div>
+                                <div style={{ display: 'inline-block' }}> <ColorPicker style={{transForm: 'scale(0.5)'}}/></div>
                             </li>
 
                             {/* 하위 할일 */}
@@ -216,6 +255,15 @@ class Setting extends Component {
                 </div>
             </div>
         )
+    }
+
+    componentDidMount(){
+        ApiService.fetchTagList()
+            .then(response => {
+                this.setState({
+                    tags:response.data.data
+                })
+            })
     }
 }
 export default Setting;

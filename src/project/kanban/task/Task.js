@@ -71,7 +71,7 @@ class Task extends Component {
       <>      
         <Draggable draggableId={taskItem.no} index={this.props.index} isDragDisabled={this.props.complete}>
           {(provided, snapshot) => (
-            <Link to={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
+            <Link style={{ textDecoration: 'none', color:'black' }} to={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
               <div
                 className={taskItem.checked ? "task completeTask" : " task"}
                 {...provided.draggableProps}

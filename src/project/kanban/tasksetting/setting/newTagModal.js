@@ -7,7 +7,7 @@ class TagModal extends Component {
     onKeyPressEnter(event){
         if(event.key == "Enter"){
             event.preventDefault();
-            this.props.settingCallbacks.add(event.target.value);
+            this.props.settingTagCallbakcs.add(event.target.value);
             event.target.value='';
             this.props.onClicknewTagModal();
         }
