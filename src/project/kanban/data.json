@@ -1,161 +1,159 @@
-{
-  "alltaskList": [
-    {
-      "no": "1",
-      "title": "계획",
-      "tasks": [
-        {
-          "no": "11",
-          "contents": "계획 업무 1",
-          "todoList": [
-            {
-              "id": 1100,
-              "text": "할일 체크1",
-              "checked": true
-            },
-            {
-              "id": 1200,
-              "text": "할일 체크2",
-              "checked": true
-            },
-            {
-              "id": 1300,
-              "text": "할일 체크3",
-              "checked": false
-            }
-          ],
-          "tag": [
-            { "id": 111, "name": "tagA", "color": "rgb(127,191,62)" },
-            { "id": 112, "name": "tagB", "color": "rgb(86,23,248)" }
-          ],
-          "comments": [
-            {
-              "commentNo": 1,
-              "commentRegdate": "2020-05-22",
-              "commentContents": "안녕",
-              "commentLike": 0,
-              "memberNo": 1,
-              "memberName": "김우경",
-              "memberPhoto": "/assets/images/unnamed.jpg"
-            },
-            {
-              "commentNo": 2,
-              "commentRegdate": "2020-05-22",
-              "commentContents": "안녕안녕안녕\n\n안녕안녕",
-              "commentLike": 1,
-              "memberNo": 2,
-              "memberName": "마이콜",
-              "memberPhoto": "/assets/images/unnamed.jpg"
-            },
-            {
-              "commentNo": 3,
-              "commentRegdate": "2020-05-22",
-              "commentContents": "배고프다!!!!",
-              "commentLike": 0,
-              "memberNo": 3,
-              "memberName": "둘리",
-              "memberPhoto": "/assets/images/unnamed.jpg"
-            }
-          ],
-          "checked": false,
-          "label": "rgb(152,87,95)",
-          "startDate": "5월 1일",
-          "endDate": "5월 15일"
-        },
-        {
-          "no": "12",
-          "contents": "계획 업무 2",
-          "todoList": [],
-          "tag": [],
-          "checked": false,
-          "label": "rgb(53, 50, 255)"
-        },
-        {
-          "no": "13",
-          "contents": "계획 업무 3",
-          "todoList": [],
-          "tag": [],
-          "checked": false,
-          "label": "rgb(50, 255, 66)"
-        },
-        {
-          "no": "14",
-          "contents": "계획 업무 4",
-          "todoList": [],
-          "tag": [],
-          "checked": true,
-          "label": "rgb(95, 95, 95)"
-        },
-        {
-          "no": "15",
-          "contents": "계획 업무 5",
-          "todoList": [],
-          "tag": [],
-          "checked": true,
-          "label": "rgb(53, 50, 50)"
-        }
-      ]
-    },
-    {
-      "no": "2",
-      "title": "진행",
-      "tasks": [
-        {
-          "no": "21",
-          "contents": "진행 업무 1",
-          "todoList": [
-            {
-              "id": 2100,
-              "text": "할일 체크",
-              "checked": false
-            }
-          ],
-          "tag": [
-            { "id": 211, "name": "tagE", "color": "rgb(227,191,62)" },
-            { "id": 212, "name": "tagF", "color": "rgb(86,223,248)" }
-          ],
-          "checked": false,
-          "label": "rgb(252,87,95)",
-          "startDate": "5월 1일",
-          "endDate": "5월 15일"
-        },
-        {
-          "no": "22",
-          "contents": "진행 업무 2",
-          "todoList": [],
-          "tag": [],
-          "checked": false,
-          "label": "rgb(110,202,217)"
-        }
-      ]
-    },
-    {
-      "no": "3",
-      "title": "완료",
-      "tasks": [
-        {
-          "no": "31",
-          "contents": "완료 업무 1",
-          "todoList": [],
-          "tag": [],
-          "checked": false,
-          "label": "rgb(224,69,233)"
-        }
-      ]
-    },
-    {
-      "no": "4",
-      "title": "기타",
-      "tasks": [
-        {
-          "no": "41",
-          "contents": "기타 업무 1",
-          "todoList": [],
-          "tag": [],
-          "checked": false,
-          "label": "rgb(245,189,45)"
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "no": "1",
+    "title": "계획",
+    "tasks": [
+      {
+        "no": "11",
+        "contents": "계획 업무 1",
+        "todoList": [
+          {
+            "id": 1100,
+            "text": "할일 체크1",
+            "checked": true
+          },
+          {
+            "id": 1200,
+            "text": "할일 체크2",
+            "checked": true
+          },
+          {
+            "id": 1300,
+            "text": "할일 체크3",
+            "checked": false
+          }
+        ],
+        "tag": [
+          { "id": 111, "name": "tagA", "color": "rgb(127,191,62)" },
+          { "id": 112, "name": "tagB", "color": "rgb(86,23,248)" }
+        ],
+        "comments": [
+          {
+            "commentNo": 1,
+            "commentRegdate": "2020-05-22",
+            "commentContents": "안녕",
+            "commentLike": 0,
+            "memberNo": 1,
+            "memberName": "김우경",
+            "memberPhoto": "/assets/images/unnamed.jpg"
+          },
+          {
+            "commentNo": 2,
+            "commentRegdate": "2020-05-22",
+            "commentContents": "안녕안녕안녕\n\n안녕안녕",
+            "commentLike": 1,
+            "memberNo": 2,
+            "memberName": "마이콜",
+            "memberPhoto": "/assets/images/unnamed.jpg"
+          },
+          {
+            "commentNo": 3,
+            "commentRegdate": "2020-05-22",
+            "commentContents": "배고프다!!!!",
+            "commentLike": 0,
+            "memberNo": 3,
+            "memberName": "둘리",
+            "memberPhoto": "/assets/images/unnamed.jpg"
+          }
+        ],
+        "checked": false,
+        "label": "rgb(152,87,95)",
+        "startDate": "5월 1일",
+        "endDate": "5월 15일"
+      },
+      {
+        "no": "12",
+        "contents": "계획 업무 2",
+        "todoList": [],
+        "tag": [],
+        "checked": false,
+        "label": "rgb(53, 50, 255)"
+      },
+      {
+        "no": "13",
+        "contents": "계획 업무 3",
+        "todoList": [],
+        "tag": [],
+        "checked": false,
+        "label": "rgb(50, 255, 66)"
+      },
+      {
+        "no": "14",
+        "contents": "계획 업무 4",
+        "todoList": [],
+        "tag": [],
+        "checked": true,
+        "label": "rgb(95, 95, 95)"
+      },
+      {
+        "no": "15",
+        "contents": "계획 업무 5",
+        "todoList": [],
+        "tag": [],
+        "checked": true,
+        "label": "rgb(53, 50, 50)"
+      }
+    ]
+  },
+  {
+    "no": "2",
+    "title": "진행",
+    "tasks": [
+      {
+        "no": "21",
+        "contents": "진행 업무 1",
+        "todoList": [
+          {
+            "id": 2100,
+            "text": "할일 체크",
+            "checked": false
+          }
+        ],
+        "tag": [
+          { "id": 211, "name": "tagE", "color": "rgb(227,191,62)" },
+          { "id": 212, "name": "tagF", "color": "rgb(86,223,248)" }
+        ],
+        "checked": false,
+        "label": "rgb(252,87,95)",
+        "startDate": "5월 1일",
+        "endDate": "5월 15일"
+      },
+      {
+        "no": "22",
+        "contents": "진행 업무 2",
+        "todoList": [],
+        "tag": [],
+        "checked": false,
+        "label": "rgb(110,202,217)"
+      }
+    ]
+  },
+  {
+    "no": "3",
+    "title": "완료",
+    "tasks": [
+      {
+        "no": "31",
+        "contents": "완료 업무 1",
+        "todoList": [],
+        "tag": [],
+        "checked": false,
+        "label": "rgb(224,69,233)"
+      }
+    ]
+  },
+  {
+    "no": "4",
+    "title": "기타",
+    "tasks": [
+      {
+        "no": "41",
+        "contents": "기타 업무 1",
+        "todoList": [],
+        "tag": [],
+        "checked": false,
+        "label": "rgb(245,189,45)"
+      }
+    ]
+  }
+]

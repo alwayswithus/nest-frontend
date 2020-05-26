@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertList } from "react-bs-notifier";
+import moment from 'moment';
 
 import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
@@ -247,11 +248,13 @@ export default class Dashboard extends React.Component {
   onAddProjectSubmit(event) {
     event.preventDefault();
 
+    let startDate = moment(new Date).format('YYYY-MM-DD h:mm');
+
     let project = {
       projectNo: this.state.projects.length + 1,
       projectTitle: event.target.projectTitle.value,
       projectDesc: event.target.projectDesc.value,
-      projectStart: Date.now(),
+      projectStart: startDate,
       projectEnd: "",
       projectState: "상태없음",
       members: this.state.members
@@ -485,8 +488,8 @@ export default class Dashboard extends React.Component {
                       </a>
                     </div>
                     <div className="panel-footer">
-                      <span className="update-task"><h6>7/16개 업무</h6></span>
-                      <span className="update-date"><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
+                      <span className="update-task" style={{width: "100%"}}><h6>7/16개 업무</h6></span>
+                      <span className="update-date" style={{width: "100%"}}><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
                       <div className="progress">
                         {project.projectState === "완료됨" ?
                           <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="70"

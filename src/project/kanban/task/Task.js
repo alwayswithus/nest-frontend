@@ -23,8 +23,8 @@ class Task extends Component {
   // task 완료 체크 박스
   doneTask() {
     this.props.taskCallbacks.doneTask(
-      this.props.taskListId,
-      this.props.task.no,
+      this.props.taskListNo,
+      this.props.task.taskNo,
       this.props.task.checked
     );
     this.noneClick();
@@ -69,17 +69,17 @@ class Task extends Component {
     const taskItem = this.props.task;
     return (
       <>      
-        <Draggable draggableId={taskItem.no} index={this.props.index} isDragDisabled={this.props.complete}>
+        <Draggable draggableId={taskItem.taskNo} index={this.props.index} isDragDisabled={this.props.complete}>
           {(provided, snapshot) => (
-            <Link style={{ textDecoration: 'none', color:'black' }} to={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
+            <Link style={{ textDecoration: 'none', color:'black' }} to={`/nest/kanbanMain/${this.props.taskListNo}/task/${taskItem.taskNo}`}>
               <div
-                className={taskItem.checked ? "task completeTask" : " task"}
+                className={taskItem.taskState === "done" ? "task completeTask" : " task"}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
               >
                 {this.props.firstTrueIndex === this.props.index &&
-                taskItem.checked ? (
+                taskItem.taskState === "done" ? (
                   <div
                     className="completeArea"
                     onClick={this.showCompleteTaskList.bind(this)}
@@ -90,10 +90,10 @@ class Task extends Component {
 
                 {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
                 <TaskInnerContents
-                  key={taskItem.no}
+                  key={taskItem.taskNo}
                   index={this.props.index}
                   task={taskItem}
-                  taskListId={this.props.taskListId}
+                  taskListNo={this.props.taskListNo}
                   taskCallbacks={this.props.taskCallbacks}
                   firstTrueIndex =  {this.props.firstTrueIndex}
                 />

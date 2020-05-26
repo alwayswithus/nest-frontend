@@ -14,13 +14,13 @@ class TaskInnerContents extends Component {
 
   // task 삭제
   deleteTask() {
-    this.props.taskCallbacks.delete(this.props.taskListId, this.props.task.no);
+    this.props.taskCallbacks.delete(this.props.taskListNo, this.props.task.no);
     this.noneClick();
   }
 
   // task 복사
   copyTask() {
-    this.props.taskCallbacks.copy(this.props.taskListId, this.props.task.no);
+    this.props.taskCallbacks.copy(this.props.taskListNo, this.props.task.no);
     this.noneClick();
   }
 
@@ -33,7 +33,7 @@ class TaskInnerContents extends Component {
   // task 완료 체크 박스
   doneTask() {
     this.props.taskCallbacks.doneTask(
-      this.props.taskListId,
+      this.props.taskListNo,
       this.props.task.no,
       this.props.task.checked,
       this.props.index
@@ -44,7 +44,7 @@ class TaskInnerContents extends Component {
 
   render() {
     const taskItem = this.props.task;
-    const labelColor = taskItem.label;
+    const labelColor = taskItem.taskLabel;
     const labelStyle = {
       borderLeft: `5px solid ${labelColor}`,
     };
@@ -86,7 +86,7 @@ class TaskInnerContents extends Component {
           </div>
           <div className="task-item task-title">
             <div className="title">
-              {taskItem.checked ? (
+              {taskItem.taskState === "done" ? (
                 // 완료된 task
                 <>
                   <input
@@ -96,7 +96,7 @@ class TaskInnerContents extends Component {
                     onClick={this.doneTask.bind(this)}
                   ></input>
                   &nbsp;
-                  <del>{taskItem.contents}</del>
+                  <del>{taskItem.taskContents}</del>
                 </>
               ) : (
                 // 미완료된 task
@@ -107,30 +107,30 @@ class TaskInnerContents extends Component {
                     onClick={this.doneTask.bind(this)}
                   ></input>
                   &nbsp;
-                  <label>{taskItem.contents}</label>
+                  <label>{taskItem.taskContents}</label>
                 </>
               )}
             </div>
           </div>
 
           <div className="task-itemtask-todoList">
-            <TodoList
-              key={taskItem.todoList.id}
-              todoList={taskItem.todoList}
-              taskListId={taskItem.ListId}
+            {/* <TodoList
+              // key={taskItem.checkList.id}
+              checkList={taskItem.checkList}
+              taskListNo={taskItem.ListId}
               taskId={taskItem.no}
               taskCallbacks={this.props.taskCallbacks}
-            />
+            /> */}
           </div>
           <div className="task-item task-tag">
-            <TagList key={taskItem.tag.id} tagList={taskItem.tag} />
+            <TagList key={taskItem.tagList.tagNo} tagList={taskItem.tagList} />
           </div>
           <div className="task-item task-date">
-            <Date
+            {/* <Date
               key={taskItem.no}
               startDate={taskItem.startDate}
               endDate={taskItem.endDate}
-            />
+            /> */}
           </div>
           <div className="task-item task-bottom">
             <div className="count">
