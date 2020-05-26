@@ -3,7 +3,6 @@ import update from "react-addons-update";
 import KanbanBoard from "./KanbanBoard";
 import Navigator from "../../navigator/Navigator";
 import TopBar from "../topBar/TopBar";
-import data from "./data.json";
 import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -17,7 +16,7 @@ class KanbanMain extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      taskList: data.alltaskList,
+      taskList : null,
       url: "",
       
     };
@@ -55,8 +54,8 @@ class KanbanMain extends Component {
     // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
     let startIndex = 0;
     let finishIndex = 0;
-    this.state.taskList.map((taskList,index) => taskList.no === source.droppableId ? startIndex = index: null)
-    this.state.taskList.map((taskList,index) => taskList.no === destination.droppableId ? finishIndex = index: null)
+    this.state.taskList.map((taskList,index) => taskList.taskListNo === source.droppableId ? startIndex = index: null)
+    this.state.taskList.map((taskList,index) => taskList.taskListNo === destination.droppableId ? finishIndex = index: null)
 
     // 위의 인덱스를 가지고 출발list, 도착list를 생성
     const start = this.state.taskList[startIndex];
@@ -122,9 +121,9 @@ class KanbanMain extends Component {
   }
 
   // task 추가
-  callbackAddTask(taskListId, taskContents) {
+  callbackAddTask(taskListNo, taskContents) {
     const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.no === taskListId
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     let newTask = {
@@ -148,13 +147,13 @@ class KanbanMain extends Component {
     });
   }
   // task 삭제
-  callbackDeleteTask(taskListId, taskId) {
+  callbackDeleteTask(taskListNo, taskId) {
     const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.no === taskListId
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.no === taskId
+      (task) => task.taskNo === taskId
     );
 
     let newTaskList = update(this.state.taskList, {
@@ -170,13 +169,13 @@ class KanbanMain extends Component {
   }
 
   // task 복사
-  callbackCopyTask(taskListId, taskId) {
+  callbackCopyTask(taskListNo, taskId) {
     const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.no === taskListId
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.no === taskId
+      (task) => task.taskNo === taskId
     );
 
     let newTask = {
@@ -203,13 +202,13 @@ class KanbanMain extends Component {
   }
 
   // task 완료 체크
-  callbackDoneTask(taskListId, taskId, checked,) {
+  callbackDoneTask(taskListNo, taskId, checked,) {
     const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.no === taskListId
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.no === taskId
+      (task) => task.taskNo === taskId
     );
 
     let newTaskList = update(this.state.taskList, {
@@ -246,9 +245,9 @@ class KanbanMain extends Component {
   }
 
   // task list 삭제
-  callbackDeleteTaskList(taskListId) {
+  callbackDeleteTaskList(taskListNo) {
     const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.no === taskListId
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     let newTaskList = update(this.state.taskList, {
@@ -261,13 +260,13 @@ class KanbanMain extends Component {
   }
 
   // todo 체크
-  callbackTodoCheck(taskListId, taskId, todoId, checked) {
+  callbackTodoCheck(taskListNo, taskId, todoId, checked) {
     const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.no === taskListId
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.no === taskId
+      (task) => task.taskNo === taskId
     );
 
     const TodoIndex = this.state.taskList[TaskListIndex].tasks[
@@ -294,8 +293,8 @@ class KanbanMain extends Component {
 
   //todo 추가하기
   callbackAddTodo(text, taskNo, taskListNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
 
     const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.length
     
@@ -325,8 +324,8 @@ class KanbanMain extends Component {
 
   //task에 tag 추가하기
   callbackAddTag(tagNo, tagName, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     
     let newTag = {
       id:  tagNo,
@@ -354,8 +353,8 @@ class KanbanMain extends Component {
 
   //task에 tag 삭제하기
   callbackDeleteTag(tagNo, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tag.findIndex(
       (tag) => tag.id == tagNo
     )
@@ -380,8 +379,8 @@ class KanbanMain extends Component {
 
   //task todo check 업데이트
   callbackTodoCheckUpdate(taskListNo, taskNo, todoId, todoCheck) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     const todoIndex = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.findIndex(todo => todo.id == todoId)
 
     console.log("KanbanMain + " + todoIndex + " : " + todoCheck)
@@ -409,8 +408,8 @@ class KanbanMain extends Component {
 
   //task todo text 업데이트
   callbackTodoTextUpdate(taskListNo, taskNo, todoId, text){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     const todoIndex = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.findIndex(todo => todo.id == todoId)
 
     let newTaskList = update(this.state.taskList, {
@@ -436,8 +435,8 @@ class KanbanMain extends Component {
 
   // comment like 수 증가
   callbackCommentLikeUpdate(taskListNo, taskNo, commentNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
 
     // console.log(this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike)
@@ -464,8 +463,8 @@ class KanbanMain extends Component {
 
   //comment contents 수정
   callbackCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
 
     console.log("KanbanMain + " + commentContents)
@@ -494,8 +493,8 @@ class KanbanMain extends Component {
 
   //comment 글 쓰기
   callbackAddComment(commentContents, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskListNo == taskNo)
     const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].comments.length
 
     console.log("KanbanMain + " +commentContents)
@@ -513,7 +512,7 @@ class KanbanMain extends Component {
       [taskListIndex] : {
         tasks : {
           [taskIndex] : {
-            comments:{
+            commentList:{
               $push : [newComment]
             },
           },
@@ -549,7 +548,7 @@ class KanbanMain extends Component {
                 // onCallbackSetting={this.onCallbackSetting.bind(this)} 
                 task={this.state.taskList} 
                 // key={taskItem.no} 
-                taskListNo = {this.props.taskListId} />} />
+                taskListNo = {this.props.taskListNo} />} />
 
           {/* <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
@@ -615,13 +614,15 @@ class KanbanMain extends Component {
       </>
     );
   }
+
   componentDidMount() {
-    // ApiService.fetchKanbanMain()
-    //   .then(response => {
-    //     this.setState({
-    //       projects: response.data.data
-    //     })
-    //   })
+    ApiService.fetchKanbanMain()
+      .then(response => {
+        this.setState({
+          taskList: response.data.data.allTaskList
+        })         
+      }
+     )
   }
 }
 

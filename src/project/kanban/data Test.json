@@ -1,0 +1,295 @@
+{
+  "allTaskList": [
+    {
+      "taskListNo": "17",
+      "taskListName": "계획",
+      "tasks": [
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-17 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "react 공부",
+          "taskNo": "85",
+          "checkList": [],
+          "taskEnd": "2020-07-30 00:00:00.0",
+          "taskPoint": 5,
+          "taskLabel": "rgb(65,93,236)",
+          "taskOrder": 5
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-03 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "전체적으로 복습",
+          "taskNo": "84",
+          "checkList": [],
+          "taskEnd": "2020-07-10 00:00:00.0",
+          "taskPoint": 4,
+          "taskLabel": "rgb(211,88,177)",
+          "taskOrder": 4
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-06-09 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "웹 구축하기",
+          "taskNo": "83",
+          "checkList": [],
+          "taskEnd": "2020-06-15 00:00:00.0",
+          "taskPoint": 5,
+          "taskLabel": "rgb(29,9,33)",
+          "taskOrder": 3
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-05-24 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "점검하기",
+          "taskNo": "82",
+          "checkList": [],
+          "taskEnd": "2020-06-01 00:00:00.0",
+          "taskPoint": 5,
+          "taskLabel": "rgb(194,184,19)",
+          "taskOrder": 2
+        },
+        {
+          "tagList": [
+            {
+              "tagColor": "rgb(10,201,157)",
+              "taskNo": 81,
+              "tagNo": 2,
+              "tagName": "tagA"
+            }
+          ],
+          "commentList": [],
+          "taskStart": "2020-05-10 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "시현 준비",
+          "taskNo": "81",
+          "checkList": [],
+          "taskEnd": "2020-05-22 00:00:00.0",
+          "taskPoint": 5,
+          "taskLabel": "rgb(152,106,130)",
+          "taskOrder": 1
+        }
+      ]
+    },
+    {
+      "taskListNo": "18",
+      "taskListName": "진행",
+      "tasks": [
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-24 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "SQL 공부",
+          "taskNo": "90",
+          "checkList": [],
+          "taskEnd": "2020-08-01 00:00:00.0",
+          "taskPoint": 2,
+          "taskLabel": "rgb(18,14,28)",
+          "taskOrder": 5
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-08 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "DB 생성",
+          "taskNo": "89",
+          "checkList": [],
+          "taskEnd": "2020-07-12 00:00:00.0",
+          "taskPoint": 3,
+          "taskLabel": "rgb(113,103,242)",
+          "taskOrder": 4
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-06-14 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "framwork공부",
+          "taskNo": "88",
+          "checkList": [],
+          "taskEnd": "2020-06-17 00:00:00.0",
+          "taskPoint": 4,
+          "taskLabel": "rgb(72,187,112)",
+          "taskOrder": 3
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-05-28 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "개발 환경 셋팅",
+          "taskNo": "87",
+          "checkList": [],
+          "taskEnd": "2020-06-02 00:00:00.0",
+          "taskPoint": 3,
+          "taskLabel": "rgb(49,215,206)",
+          "taskOrder": 2
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-05-12 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "front-end 공부",
+          "taskNo": "86",
+          "checkList": [],
+          "taskEnd": "2020-05-26 00:00:00.0",
+          "taskPoint": 3,
+          "taskLabel": "rgb(228,20,246)",
+          "taskOrder": 1
+        }
+      ]
+    },
+    {
+      "taskListNo": "19",
+      "taskListName": "완료",
+      "tasks": [
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-28 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "요구사항 분석",
+          "taskNo": "95",
+          "checkList": [],
+          "taskEnd": "2020-08-07 00:00:00.0",
+          "taskPoint": 1,
+          "taskLabel": "rgb(66,74,121)",
+          "taskOrder": 5
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-12 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "리눅스 공부",
+          "taskNo": "94",
+          "checkList": [],
+          "taskEnd": "2020-07-27 00:00:00.0",
+          "taskPoint": 4,
+          "taskLabel": "rgb(137,33,249)",
+          "taskOrder": 4
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-06-20 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "리눅스 환경 구축",
+          "taskNo": "93",
+          "checkList": [],
+          "taskEnd": "2020-06-26 00:00:00.0",
+          "taskPoint": 2,
+          "taskLabel": "rgb(149,168,69)",
+          "taskOrder": 3
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-06-02 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "DB 공부",
+          "taskNo": "92",
+          "checkList": [],
+          "taskEnd": "2020-06-08 00:00:00.0",
+          "taskPoint": 5,
+          "taskLabel": "rgb(106,71,211)",
+          "taskOrder": 2
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-05-14 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "DB스키마 작성",
+          "taskNo": "91",
+          "checkList": [],
+          "taskEnd": "2020-05-21 00:00:00.0",
+          "taskPoint": 3,
+          "taskLabel": "rgb(20,242,215)",
+          "taskOrder": 1
+        }
+      ]
+    },
+    {
+      "taskListNo": "20",
+      "taskListName": "기타",
+      "tasks": [
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-31 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "프로젝트 주제 선정",
+          "taskNo": "100",
+          "checkList": [],
+          "taskEnd": "2020-08-15 00:00:00.0",
+          "taskPoint": 2,
+          "taskLabel": "rgb(110,151,31)",
+          "taskOrder": 5
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-07-16 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "조이름 선정",
+          "taskNo": "99",
+          "checkList": [],
+          "taskEnd": "2020-07-30 00:00:00.0",
+          "taskPoint": 2,
+          "taskLabel": "rgb(236,125,215)",
+          "taskOrder": 4
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-06-25 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "대자보 작성",
+          "taskNo": "98",
+          "checkList": [],
+          "taskEnd": "2020-07-08 00:00:00.0",
+          "taskPoint": 4,
+          "taskLabel": "rgb(163,170,220)",
+          "taskOrder": 3
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-06-05 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "검사 받기",
+          "taskNo": "97",
+          "checkList": [],
+          "taskEnd": "2020-06-09 00:00:00.0",
+          "taskPoint": 1,
+          "taskLabel": "rgb(125,76,128)",
+          "taskOrder": 2
+        },
+        {
+          "tagList": [],
+          "commentList": [],
+          "taskStart": "2020-05-17 00:00:00.0",
+          "taskState": "do",
+          "taskContents": "ppt 만들기",
+          "taskNo": "96",
+          "checkList": [],
+          "taskEnd": "2020-05-25 00:00:00.0",
+          "taskPoint": 5,
+          "taskLabel": "rgb(151,206,141)",
+          "taskOrder": 1
+        }
+      ]
+    }
+  ]
+}

@@ -41,7 +41,6 @@ class KanbanBoard extends Component {
     this.setState({
       taskListTitle: event.target.value.substr(0, 13),
     });
-    console.log(event.target.value);
   }
 
   // 리스트 추가 취소 버튼
@@ -86,12 +85,12 @@ class KanbanBoard extends Component {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {allTaskList.map((taskList, index) => {
+                  {allTaskList && allTaskList.map((taskList, index) => {
                     return (
                       <TaskList
                         searchKeyword={this.state.searchKeyword}
-                        key={taskList.no}
-                        listNo={taskList.no}
+                        key={taskList.taskListNo}
+                        listNo={taskList.taskListNo}
                         taskList={taskList}
                         tasks={taskList.tasks}
                         index={index}
