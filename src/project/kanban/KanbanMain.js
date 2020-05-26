@@ -7,10 +7,10 @@ import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
 import ApiService from '../../ApiService';
-import { Route, BrowserRouter } from "react-router-dom";
+import { Route, BrowserRouter,Switch } from "react-router-dom";
 import Setting from "../kanban/tasksetting/setting/Setting";
 import Comment from "../kanban/tasksetting/comment/Comment";
-import { Switch } from "@material-ui/core";
+import File from "../kanban/tasksetting/file/File"
 
 class KanbanMain extends Component {
   constructor() {
@@ -527,13 +527,14 @@ class KanbanMain extends Component {
 
   }
   render() {
+    console.log("KanbanMain + " + this.props.match.path)
     return (
       <>
       {/* taskSetting 띄우는 route */}
       {/* <BrowserRouter> */}
-      {/* <Switch> */}
+      <Switch>
           <Route 
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo" 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo" exact
             render={(match) => 
               <Setting 
                 {...match}
@@ -550,7 +551,7 @@ class KanbanMain extends Component {
                 // key={taskItem.no} 
                 taskListNo = {this.props.taskListNo} />} />
 
-          {/* <Route 
+          <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
             render={(match) => 
               <Comment 
@@ -560,7 +561,15 @@ class KanbanMain extends Component {
                     commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                     commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   }} />} />
-            </Switch> */}
+
+          <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo/file" 
+            render={(match) => 
+              <File 
+                {...match} 
+                task={this.state.taskList} 
+                 />} />    
+            </Switch>
           {/* </BrowserRouter> */}
       <ScrollContainer
         className="scroll-container"

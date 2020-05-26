@@ -1,12 +1,16 @@
 .SettingFile{
-
+    position: fixed;
+    right: 0;
+    z-index: 999;
+    margin-top: -49px;
     .File {
         width:632px;
         background-color: #F3F4F5;
         float:right;
         margin-top: 43px;
-        height: calc(100% - 43px);
+        height: 640px;
         clear:both;
+        overflow: auto;
         hr{
             border: 0.5px solid #DFDFDF;
         }

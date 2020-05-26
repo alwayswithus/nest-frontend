@@ -1,120 +1,127 @@
-.Comment{
-    box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
-    width:632px;
-    float:right;
-    margin:43px auto;
-    clear: both;
-
-    hr {
-        border: 2px solid black;
-        margin:0;
+.TaskSetComment{
+    position: fixed;
+    margin-top: -50px;
+    right: 0;
+    z-index: 999;
+    height: calc(100%);
+    .Comment{
+        box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
+        width:632px;
+        float:right;
+        margin:43px auto;
+        clear: both;
+    
+        hr {
+            border: 2px solid black;
+            margin:0;
+        }
     }
-}
-
-.Comment-input{
-    background-color: white;
-    width:632px;
-    // height:100px;
-    button{
-        border:none;
-        border-radius: 2px;
-        width:50px;
-        height:30px;
-        background-color: #27B6BA;
-        color: white;
-    }
-    form{
-        .InputForm{
-            height:auto;
-            textarea{
+    
+    .Comment-input{
+        background-color: white;
+        width:632px;
+        height: 160px;
+        button{
+            border:none;
+            border-radius: 2px;
+            width:50px;
+            height:30px;
+            background-color: #27B6BA;
+            color: white;
+        }
+        form{
+            .InputForm{
                 height:auto;
-                resize: none;
-                width:632px;
-                // overflow: hidden;
+                textarea{
+                    height:auto;
+                    resize: none;
+                    width:632px;
+                    // overflow: hidden;
+                }
             }
+        }
+        .Bottom-bar{
+            margin: 7% 2% 0;
+            height:40px;
+            ul {
+                display: inline-block;
+                li {
+                    a{
+                    color: black;
+                    }
+                }
+            }
+    
         }
     }
-    .Bottom-bar{
-        margin: 2% 2% 0;
-        height:40px;
-        ul {
-            display: inline-block;
-            li {
-                a{
-                color: black;
-                }
+    
+    .CommentList{
+        background-color: #F3F4F5;
+        .media{
+            padding:1%;
+            height:480px;
+            overflow: auto;
+            img{
+                max-width: 35px;
             }
-        }
-
-    }
-}
-
-.CommentList{
-    background-color: #F3F4F5;
-    .media{
-        padding:1%;
-        height:200px;
-        overflow: auto;
-        img{
-            max-width: 35px;
-        }
-
-        .media-body{
-            margin-top: 20px;
-            span{
-                margin-top: 1%;
-                margin-bottom: 1%;
-                margin-right: 10%;
-            }
-            p{
-                margin: 1%;
-                text-align:justify;
-                word-break: break-word;
-            }
-            ul li {
-                color: black;
-                cursor: pointer;
-                [data-tooltip-text]:hover {
-                    position: relative;
+    
+            .media-body{
+                margin-top: 20px;
+                span{
+                    margin-top: 1%;
+                    margin-bottom: 1%;
+                    margin-right: 10%;
                 }
-                
-                [data-tooltip-text]::after {
-                    -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-                    -moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-                    transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-                
-                    background-color: rgba(0, 0, 0, 0.8);
-                
-                  -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-                    -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-                    box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-                    
-                  -webkit-border-radius: 5px;
-                    -moz-border-radius: 5px;
-                    border-radius: 5px;
-                    
-                    color: #FFFFFF;
-                    font-size: 12px;
-                    // margin-bottom: 1%;
-                    padding: 5px;
-                    position: absolute;
-                    width: 60px;
-                    // min-width: 50px;
-                    // max-width: 300px;
-                    word-wrap: break-word;
-                
-                    z-index:999;
-                
-                    opacity: 0;
-                    left: -9999px;
-                    // top: 1%;
-                    
-                    content: attr(data-tooltip-text);
+                p{
+                    margin: 1%;
+                    text-align:justify;
+                    word-break: break-word;
                 }
-                
-                [data-tooltip-text]:hover:after {
-                    left: -45px;
-                    opacity: 1;
+                ul li {
+                    color: black;
+                    cursor: pointer;
+                    [data-tooltip-text]:hover {
+                        position: relative;
+                    }
+                    
+                    [data-tooltip-text]::after {
+                        -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+                        -moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+                        transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+                    
+                        background-color: rgba(0, 0, 0, 0.8);
+                    
+                      -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+                        -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+                        box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+                        
+                      -webkit-border-radius: 5px;
+                        -moz-border-radius: 5px;
+                        border-radius: 5px;
+                        
+                        color: #FFFFFF;
+                        font-size: 12px;
+                        // margin-bottom: 1%;
+                        padding: 5px;
+                        position: absolute;
+                        width: 60px;
+                        // min-width: 50px;
+                        // max-width: 300px;
+                        word-wrap: break-word;
+                    
+                        z-index:999;
+                    
+                        opacity: 0;
+                        left: -9999px;
+                        // top: 1%;
+                        
+                        content: attr(data-tooltip-text);
+                    }
+                    
+                    [data-tooltip-text]:hover:after {
+                        left: -45px;
+                        opacity: 1;
+                    }
                 }
             }
         }

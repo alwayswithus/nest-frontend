@@ -2,7 +2,7 @@
     float:left;
     vertical-align: middle;
     padding:3px 5px;
-    width: 220px;
+    width: 250px;
     float: left;
     margin: 2%;
     .tagCheck{
@@ -25,5 +25,19 @@
     &:hover{
         border-radius: 2px;
         background-color: #EBEBEB;
+        .modify{
+            display: block;
+            margin-top: 5px;
+            margin-right: 5px;
+            display: block;
+            cursor: pointer;
+        }
+    }
+
+    .modify{
+        float: right;
+        margin-top: 5px;
+        margin-right: 5px;
+        display: none;
     }
 }

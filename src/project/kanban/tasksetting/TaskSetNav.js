@@ -28,10 +28,10 @@ class Navigation extends Component {
                 <a id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}`}>속성 </a>
               </li>
               <li className="nav-item">
-                <a id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/comment`}>코멘트</a>
+                <a id='comment' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/comment`}>코멘트</a>
               </li>
               <li className="nav-item">
-                <a id='file' className="nav-link" style={{ textAlign: 'center', borderBottom: '3px solid #27B6BA' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/file`}>파일 & 링크</a>
+                <a id='file' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/file`}>파일 & 링크</a>
               </li>
             </ul>) :
 

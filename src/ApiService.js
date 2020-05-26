@@ -10,6 +10,10 @@ class ApiService {
     fetchKanbanMain(){
         return axios.get(`/nest/api/kanbanMain`);
     }
+
+    fetchTagList(){
+        return axios.get(`/nest/api/taglist`);
+    }
 }
 
 export default new ApiService();
