@@ -17,6 +17,7 @@ class TaskList extends Component {
       taskContents: "",
       showComplete: false,
       beforTaskListName: "",
+      completeTaskState: true,
     };
   }
 
@@ -100,6 +101,7 @@ class TaskList extends Component {
     this.showTaskInsertArea();
   }
   render() {
+    let completeTaskState = false;
     return (
       <Draggable draggableId={this.props.taskList.no} index={this.props.index}>
         {(provided) => (
@@ -217,53 +219,65 @@ class TaskList extends Component {
                     // isDraggingOver={snapshot.isDraggingOver}
                   >
                     {/* task 목록 */}
-                    {this.props.taskList.tasks.filter(
-                      (task) => 
-                      task.contents.indexOf(this.props.searchKeyword) !== -1 
-                      ).map((task, index) =>
-                      task.checked ? null : (
-                        <Task
-                          path={this.props.path}
-                          key={task.no}
-                          taskListId={this.props.taskList.no}
-                          task={task}
-                          index={index}
-                          taskCallbacks={this.props.taskCallbacks}
-                        />
+                    {this.props.taskList.tasks
+                      .filter(
+                        (task) =>
+                          task.contents.indexOf(this.props.searchKeyword) !== -1
                       )
-                    )}
+                      .map((task, index) =>
+                        task.checked ? null : task !== "" ? (
+                          <Task
+                            path={this.props.path}
+                            key={task.no}
+                            taskListId={this.props.taskList.no}
+                            task={task}
+                            index={index}
+                            taskCallbacks={this.props.taskCallbacks}
+                          />
+                        ) : (
+                          <div>없음</div>
+                        )
+                      )}
                     {provided.placeholder}
                   </div>
                 )}
               </Droppable>
 
               <div
-                className="tasks"
+                className="completeTasks"
                 ref={provided.innerRef}
                 // {...provided.droppableProps}
               >
-                <div
-                  className="completeArea"
-                  onClick={this.showCompleteTaskList.bind(this)}
-                >
-                  완료된 업무
-                </div>
+                {this.props.tasks.map(task => task.checked === true ? completeTaskState = true : null)}
+                {completeTaskState ? <div
+                    className="completeArea"
+                    onClick={this.showCompleteTaskList.bind(this)}
+                  >
+                    완료된 업무
+                  </div> :
+                  null
+                  }
+               
+
                 {this.state.showComplete ? (
                   <div className="completeTask">
-
-                    {this.props.taskList.tasks.tag
-                    .map((task, index) =>
-                      task.checked ? (
-                        <Task
-                          key={task.no}
-                          taskListId={this.props.taskList.no}
-                          task={task}
-                          index={index}
-                          taskCallbacks={this.props.taskCallbacks}
-                          complete={true}
-                        />
-                      ) : null
-                    )}
+                    {this.props.taskList.tasks
+                      .filter(
+                        (task) =>
+                          task.contents.indexOf(this.props.searchKeyword) !== -1
+                      )
+                      .map((task, index) =>
+                        task.checked ? (
+                          <Task
+                            key={task.no}
+                            taskListId={this.props.taskList.no}
+                            task={task}
+                            index={index}
+                            taskCallbacks={this.props.taskCallbacks}
+                            complete={true}
+                          />
+                        ) : null
+                      )}
                     {provided.placeholder}
                   </div>
                 ) : null}

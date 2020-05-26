@@ -10,6 +10,8 @@ import { DragDropContext } from "react-beautiful-dnd";
 import ApiService from '../../ApiService';
 import { Route, BrowserRouter } from "react-router-dom";
 import Setting from "../kanban/tasksetting/setting/Setting";
+import Comment from "../kanban/tasksetting/comment/Comment";
+import { Switch } from "@material-ui/core";
 
 class KanbanMain extends Component {
   constructor() {
@@ -526,20 +528,16 @@ class KanbanMain extends Component {
 
   }
   render() {
-
     return (
       <>
-      <BrowserRouter>
+      {/* taskSetting 띄우는 route */}
+      {/* <BrowserRouter> */}
+      {/* <Switch> */}
           <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo" 
             render={(match) => 
               <Setting 
-              {...match}
-                // path={this.state.path} 
-                // closeValue={this.state.closeValue} 
-                // closeTag = {this.state.closeTag}
-                // onClickModal={this.onClickModal.bind(this)} 
-                // onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
+                {...match}
                 taskCallbacks={{
                   todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
                   todoCheckUpdate: this.callbackTodoCheckUpdate.bind(this), // todo check 업데이트
@@ -547,15 +545,24 @@ class KanbanMain extends Component {
                   addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
-                  commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate:this.callbakcCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                 }}
                 // onCallbackSetting={this.onCallbackSetting.bind(this)} 
                 task={this.state.taskList} 
                 // key={taskItem.no} 
                 taskListNo = {this.props.taskListId} />} />
 
-        </BrowserRouter>
+          {/* <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
+            render={(match) => 
+              <Comment 
+                  {...match}
+                  task={this.state.taskList} 
+                  taskCallbacks={{
+                    commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
+                    commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  }} />} />
+            </Switch> */}
+          {/* </BrowserRouter> */}
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}
@@ -565,7 +572,6 @@ class KanbanMain extends Component {
         <div className="container-fluid kanbanMain">
           <div
             className="row content "
-            
           >
             {/* 네비게이션바 */}
             <div className="navibar">
@@ -600,7 +606,6 @@ class KanbanMain extends Component {
                   commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                 }}
-                // isDropDisabled={this.state.isDropDisabledType}
               />
               </DragDropContext>
             </div>
@@ -610,6 +615,15 @@ class KanbanMain extends Component {
       </>
     );
   }
+  componentDidMount() {
+    // ApiService.fetchKanbanMain()
+    //   .then(response => {
+    //     this.setState({
+    //       projects: response.data.data
+    //     })
+    //   })
+  }
 }
+
 
 export default KanbanMain;

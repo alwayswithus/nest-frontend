@@ -1,11 +1,6 @@
 import React from "react";
 import { Route } from "react-router-dom";
-
-import Setting from "./project/kanban/tasksetting/setting/Setting";
-import File from "./project/kanban/tasksetting/file/File";
 import { BrowserRouter } from "react-router-dom";
-
-import Comment from "./project/kanban/tasksetting/comment/Comment";
 import KanbanMain from "./project/kanban/KanbanMain";
 
 import Login from "./user/login/Login";
@@ -40,11 +35,6 @@ function App() {
 
         {/* 알림설정 */}
         <Route path="/nest/notification" exact component={Notification} />
-
-        {/* 업무속성 */}
-        {/* <Route path="#" exact component={Setting} /> */}
-        <Route path="#" exact component={Comment} />
-        <Route path="#" exact component={File} />
 
         {/*칸반보드 */}
         <Route path="/nest/kanbanMain" component={KanbanMain} />

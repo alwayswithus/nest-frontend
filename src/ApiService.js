@@ -8,7 +8,7 @@ class ApiService {
     }
 
     fetchKanbanMain(){
-        //return axios.get(`/nest/api/dashboard`);
+        return axios.get(`/nest/api/kanbanMain`);
     }
 }
 
