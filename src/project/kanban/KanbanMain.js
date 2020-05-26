@@ -526,7 +526,6 @@ class KanbanMain extends Component {
 
   }
   render() {
-
     return (
       <>
       <BrowserRouter>
@@ -565,7 +564,6 @@ class KanbanMain extends Component {
         <div className="container-fluid kanbanMain">
           <div
             className="row content "
-            
           >
             {/* 네비게이션바 */}
             <div className="navibar">
@@ -600,7 +598,6 @@ class KanbanMain extends Component {
                   commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                 }}
-                // isDropDisabled={this.state.isDropDisabledType}
               />
               </DragDropContext>
             </div>
@@ -610,6 +607,15 @@ class KanbanMain extends Component {
       </>
     );
   }
+  componentDidMount() {
+    // ApiService.fetchKanbanMain()
+    //   .then(response => {
+    //     this.setState({
+    //       projects: response.data.data
+    //     })
+    //   })
+  }
 }
+
 
 export default KanbanMain;
