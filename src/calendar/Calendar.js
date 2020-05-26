@@ -157,10 +157,10 @@ class myCalendar extends Component {
             <div className="calendar-body-contents-filter">
               <table className="filterList" >
                 <tr>
-                  {/* <div style={{ height: "30px", width: "100%", backgroundColor: "#615161" }} />
+                  <div style={{ height: "30px", width: "100%", backgroundColor: "#615161" }} />
                 </tr>
                 <tr>
-                  <div style={{ height: "30px", width: "60px", backgroundColor: "#615161" }} /> */}
+                  <div style={{ height: "30px", width: "60px", backgroundColor: "#615161" }} />
                 </tr>
               </table>
             </div>
