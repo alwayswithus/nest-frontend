@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import TaskInnerContents from "./TaskInnerContents";
 import "./Task.scss";
 import { Draggable } from "react-beautiful-dnd";
-
+import { Link } from "react-router-dom";
 class Task extends Component {
   constructor() {
     super(...arguments);
@@ -71,7 +71,7 @@ class Task extends Component {
       <>      
         <Draggable draggableId={taskItem.no} index={this.props.index} isDragDisabled={this.props.complete}>
           {(provided, snapshot) => (
-            <a href={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
+            <Link to={`/nest/kanbanMain/${this.props.taskListId}/task/${taskItem.no}`}>
               <div
                 className={taskItem.checked ? "task completeTask" : " task"}
                 {...provided.draggableProps}
@@ -99,7 +99,7 @@ class Task extends Component {
                 />
                 {/* ) : null} */}
               </div>
-            </a>
+            </Link>
           )}
         </Draggable>
       </>

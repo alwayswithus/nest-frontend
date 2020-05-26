@@ -4,6 +4,14 @@
     height:120px;
     float: right;
     margin-top: 100px;
+    i{
+        float: right;
+        padding:2%;
+        cursor: pointer;
+        &:hover{
+            color:#CBCBCB
+        }
+    }
     .Header-list{
         h2, span{
             margin:2%;
