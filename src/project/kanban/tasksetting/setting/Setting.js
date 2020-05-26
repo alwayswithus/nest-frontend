@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import './Setting.scss';
 import Important from './Important';
 import Header from '../file/Header';
-import ModalCalendar from '../../../../modalCalendar/ModalCalendar2';
+import ModalCalendar from '../../../../modalCalendar/ModalCalendar';
 import CheckList from './CheckList';
 import ColorPicker from './ColorPicker';
 import TagModal from './TagModal';

@@ -1,0 +1,99 @@
+[
+    {
+        "noticeNo": 1,
+        "noticeMessage": "한해용님의 코멘트에 공감했습니다.",
+        "noticeType": "like",
+        "noticeDate": "2020-05-26 14:19",
+        "sendUser": {
+            "userNo": 2,
+            "userName": "최인효",
+            "userPhoto": "assets/images/toy.png"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "진행 업무 1"
+        },
+        "project": {
+            "projectNo": 2,
+            "projectName": "Git Book"
+        }
+    },
+    {
+        "noticeNo": 2,
+        "noticeMessage": "한해용님의 코멘트에 공감했습니다.",
+        "noticeType": "like",
+        "noticeDate": "2020-05-26 08:00",
+        "sendUser": {
+            "userNo": 1,
+            "userName": "김우경",
+            "userPhoto": "assets/images/ko.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "진행 업무 1"
+        },
+        "project": {
+            "projectNo": 2,
+            "projectName": "코드의 숲"
+        }
+        
+    },
+    {
+        "noticeNo": 3,
+        "noticeMessage": "최인효님의 코멘트가 달렸습니다.",
+        "noticeType": "comment",
+        "noticeDate": "2020-05-25 17:30",
+        "sendUser": {
+            "userNo": 2,
+            "userName": "최인효",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 3,
+            "taskContents": "계획 업무 3"
+        },
+        "project": {
+            "projectNo": 1,
+            "projectName": "서마트 커스텀 스토어"
+        }
+        
+    },
+    {
+        "noticeNo": 4,
+        "noticeMessage": "한해용님을 멘션했습니다.",
+        "noticeType": "mention",
+        "noticeDate": "2020-05-25 13:30",
+        "sendUser": {
+            "userNo": 3,
+            "userName": "허길행",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    },
+    {
+        "noticeNo": 5,
+        "noticeMessage": "(nest프로젝트, 계획 업무3) 한해용님을 배정했습니다.",
+        "noticeType": "assign",
+        "noticeDate": "2020-05-24 13:30",
+        "sendUser": {
+            "userNo": 1,
+            "userName": "김우경",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    }
+]

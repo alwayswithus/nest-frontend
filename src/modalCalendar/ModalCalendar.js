@@ -1,35 +1,39 @@
-import React, {Component} from 'react';
+import React from 'react';
+
+// Import Moment and React Dates
 import moment from 'moment';
-import {DatetimePicker} from 'rc-datetime-picker';
-import './picker.css'
-import ModalCalendarStart from './ModalCalendarStart';
-import ModalCalendarEnd from './ModalCalendarEnd';
+import { DateRangePicker } from 'react-dates';
 
-class ModalCalendar extends Component {
-  constructor() {
-    super();
-    this.state = {
-      moment: moment(),
-      start: moment(this.moment)
-    };
-  }
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
-  handleChange = (moment) => {
-    this.setState({
-      moment
-    });
-    console.log("modalCalendar:" + this.state.moment)
-  }
+export default class ModalCalendar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            startDate: null,
+            endDate: null,
+            focusedInput: null,
+        };
+    }
 
-  render() {
-    return (
-      <div>
-        <ModalCalendarStart />
-        <div style={{display:'inline-block', padding:'10px'}}/>
-        <ModalCalendarEnd onSubmit={this.props.onSubmit}/>
-      </div>
-    );
-  }
+    onCalendarSubmit() {
+        this.props.onSubmit(this.state.startDate)
+    }
+    render() {
+        return (
+            <div>
+                <DateRangePicker
+                    onSubmit={this.onCalendarSubmit.bind(this)}
+                    startDateId="startDate"
+                    endDateId="endDate"
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    onDatesChange={({ startDate, endDate }) => { this.setState({ startDate, endDate }) }}
+                    focusedInput={this.state.focusedInput}
+                    onFocusChange={(focusedInput) => { this.setState({ focusedInput }) }}
+                />
+            </div>
+        );
+    }
 }
-
-export default ModalCalendar;
