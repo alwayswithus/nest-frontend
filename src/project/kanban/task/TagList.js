@@ -5,8 +5,8 @@ import "./TagList.scss";
 class TagList extends Component {
   render() {
     const tagComponents = [];
-    this.props.tagList.forEach((t) =>
-      tagComponents.push(<Tag key={t.id} tag={t} />)
+    this.props.tagList.forEach((tag) =>
+      tagComponents.push(<Tag key={tag.tagNo} tag={tag} />)
     );
     return (
       <>

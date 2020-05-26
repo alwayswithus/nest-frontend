@@ -9,8 +9,8 @@ class TaskList extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      title: this.props.taskList.title,
-      keyword: this.props.taskList.title,
+      title: this.props.taskList.taskListName,
+      keyword: this.props.taskList.taskListName,
       showEditNameInput: false,
       viewTaskInsertArea: false,
       taskInsertState: false,
@@ -82,7 +82,7 @@ class TaskList extends Component {
   // taskList 삭제
   deleteTaskList() {
     if (window.confirm("업무 목록을 삭제하시겠습니까?")) {
-      this.props.taskCallbacks.deleteList(this.props.taskList.no);
+      this.props.taskCallbacks.deleteList(this.props.taskList.taskListNo);
       this.setState({
         keyword: this.props.taskList.title,
       });
@@ -92,7 +92,7 @@ class TaskList extends Component {
   // task 추가
   addTask() {
     this.props.taskCallbacks.add(
-      this.props.taskList.no,
+      this.props.taskList.taskListNo,
       this.state.taskContents
     );
     this.setState({
@@ -103,7 +103,7 @@ class TaskList extends Component {
   render() {
     let completeTaskState = false;
     return (
-      <Draggable draggableId={this.props.taskList.no} index={this.props.index}>
+      <Draggable draggableId={this.props.taskList.taskListNo} index={this.props.index}>
         {(provided) => (
           <div
             className="taskCategory"
@@ -210,7 +210,7 @@ class TaskList extends Component {
               )}
             </div>
             <div className="taskArea">
-              <Droppable droppableId={this.props.taskList.no} type="task">
+              <Droppable droppableId={this.props.taskList.taskListNo} type="task">
                 {(provided, snapshot) => (
                   <div
                     className="tasks"
@@ -222,14 +222,14 @@ class TaskList extends Component {
                     {this.props.taskList.tasks
                       .filter(
                         (task) =>
-                          task.contents.indexOf(this.props.searchKeyword) !== -1
+                          task.taskContents.indexOf(this.props.searchKeyword) !== -1
                       )
                       .map((task, index) =>
                         task.checked ? null : task !== "" ? (
                           <Task
                             path={this.props.path}
-                            key={task.no}
-                            taskListId={this.props.taskList.no}
+                            key={task.taskNo}
+                            taskListNo={this.props.taskList.taskListNo}
                             task={task}
                             index={index}
                             taskCallbacks={this.props.taskCallbacks}
@@ -248,7 +248,7 @@ class TaskList extends Component {
                 ref={provided.innerRef}
                 // {...provided.droppableProps}
               >
-                {this.props.tasks.map(task => task.checked === true ? completeTaskState = true : null)}
+                {this.props.tasks.map(task => task.taskState === "done" ? completeTaskState = true : null)}
                 {completeTaskState ? <div
                     className="completeArea"
                     onClick={this.showCompleteTaskList.bind(this)}
@@ -264,13 +264,13 @@ class TaskList extends Component {
                     {this.props.taskList.tasks
                       .filter(
                         (task) =>
-                          task.contents.indexOf(this.props.searchKeyword) !== -1
+                          task.taskContents.indexOf(this.props.searchKeyword) !== -1
                       )
                       .map((task, index) =>
-                        task.checked ? (
+                        task.taskState === 'done' ? (
                           <Task
-                            key={task.no}
-                            taskListId={this.props.taskList.no}
+                            key={task.taskNo}
+                            taskListNo={this.props.taskList.taskListNo}
                             task={task}
                             index={index}
                             taskCallbacks={this.props.taskCallbacks}

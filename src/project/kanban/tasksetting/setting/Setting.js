@@ -85,8 +85,8 @@ class Setting extends Component {
     }
     render() {
         const taskList = this.props.task;
-        const taskListIndex = taskList.findIndex(taskList => taskList.no == this.props.match.params.taskListNo);
-        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.no == this.props.match.params.taskNo);
+        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo == this.props.match.params.taskListNo);
+        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo == this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
         return (
             <div className = "taskSetting-setting">
@@ -145,7 +145,7 @@ class Setting extends Component {
                                             closeTag = {this.state.closeTag}
                                             onClickTag={this.onClickTag.bind(this)}
                                             onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
-                                            key={this.props.task.no} 
+                                            key={this.props.task.taskNo} 
                                             taskListNo = {this.props.match.params.taskListNo}
                                             taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}
@@ -157,8 +157,8 @@ class Setting extends Component {
                                 {/* tag List */}
                                 <div style={{ display: 'inline-block' }} className = "TagList">
                                     {taskItem.tag.map(tag => 
-                                        <div key={tag.id} style={{ display: 'inline-block' }} className = "tag">
-                                            <span className="label label-default tagLabel" style={{backgroundColor:`${tag.color}`, fontSize:'1.25rem', cursor:'default'}}>{tag.name}</span>
+                                        <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
+                                            <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>{tag.tagName}</span>
                                         </div>
                                     )}
                                 </div>
@@ -182,17 +182,17 @@ class Setting extends Component {
                             {/* 하위 할일 */}
                             <li className="taskSettingList">
                                 <div className="checkList">
-                                    {taskItem.todoList && taskItem.todoList.map(todo =>
+                                    {taskItem.checkList && taskItem.checkList.map(todo =>
                                         <div key={todo.id} className="todo">
                                                 <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)} readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
                                                                 taskListNo : this.props.taskListNo, 
-                                                                taskNo : taskItem.no}} 
+                                                                taskNo : taskItem.taskNo}} 
                                                             taskCallbacks={this.props.taskCallbacks} 
                                                             todo={todo} 
-                                                            key={todo.id}/>
+                                                            key={todo.checklistNo}/>
                                                     </div>)}
                                     <div className = "insert">
                                         <button>
