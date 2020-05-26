@@ -1,0 +1,83 @@
+#Calendar {
+    margin-left: 62px;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    // .calendar-header-background {
+    //     height: 240px;
+    //     background-color: #8798A8;
+    //     opacity: 0.8;
+    // }
+    .calendar-contents {
+        width: 100%;
+        height: 100%;
+
+        // .calendar-header-contents {
+        
+        //     .calendar-header-icon {
+        //         float: left;
+        //         text-align: center;
+        //         width: 45px;
+        //         height: 45px;
+        //         background-color: #000000;
+        //         border-radius: 2px;
+
+        //         .calendar-header-title-month {
+                    
+        //             padding-top: 3px;
+
+        //             .calendar-header-title-month-text {
+        //                 color: #fff;
+                        
+        //             }
+        //         }
+
+        //         .calendar-header-title-day-text {
+        //             color: #fff;
+        //         }
+        //     }
+        
+        //     .calendar-header-title-text {
+        //         padding-left: 70px;
+        //         padding-top: 5px;
+
+        //         .calendar-header-title-plural {
+        //             font-weight: 600;
+        //             font-size: 24px;
+        //             opacity: 1;
+        //             color: black;
+        //         }
+        //     }
+        // }
+
+        .calendar-body-contents {
+            display: inline-flex;
+            padding: 30px 30px 30px 30px;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            .calendar-body-contents-filter{
+                display: table-cell;
+                height: 100%;
+                width: 150px;
+                padding: 50px 10px 10px 10px;
+                .filterList{
+                    width: 100%;
+                    background-color: rgb(83, 180, 115);
+                }
+                overflow-y: auto;
+                overflow-x: hidden;
+                //background-color: rgb(222, 222, 115);
+            }
+            .calendar-body-contents-calendar{
+                display: table-cell;
+                height: 100%;
+                width: calc(100% - 150px);
+                
+                padding: 10px;
+            }
+        }
+    }   
+}

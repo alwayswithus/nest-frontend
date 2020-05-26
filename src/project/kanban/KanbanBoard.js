@@ -10,6 +10,7 @@ class KanbanBoard extends Component {
     this.state = {
       taskListInsertState: false,
       taskListTitle: "",
+      searchKeyword:""
     };
   }
 
@@ -50,49 +51,59 @@ class KanbanBoard extends Component {
     });
   }
 
+  searchKeyword(event) {
+    this.setState({
+      searchKeyword: event.target.value
+  })
+  }
+
   render() {
-    const allTaskList=this.props.tasks
+    const allTaskList = this.props.tasks;
     return (
       <>
         <div className="kanbanBoard">
           {/*업무 검색*/}
-          <div className="input-group">
+          <div style={{position:'fixed'}} className="input-group">
             <input
               type="text"
               className="form-control"
               placeholder="업무 검색"
+              value={this.state.searchKeyword}
+              onChange={this.searchKeyword.bind(this)}
             ></input>
           </div>
           <div className="taskListArea">
             {/*task 리스트*/}
-            
-              <Droppable
-                droppableId="all-columns"
-                direction="horizontal"
-                type="column"
-              >
-                {(provided) => (
-                  <div
-                    className="taskList"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {allTaskList.map((taskList, index) => {
-                      return (
-                        <TaskList
-                          key={taskList.no}
-                          listNo={taskList.no}
-                          taskList={taskList}
-                          tasks={taskList.tasks}
-                          index={index}
-                          taskCallbacks={this.props.taskCallbacks}
-                        />
-                      );
-                    })}
-                  </div>
-                )}
-              </Droppable>
-            
+
+            <Droppable
+              droppableId="all-columns"
+              direction="horizontal"
+              type="column"
+            >
+              {(provided) => (
+                <div
+                  className="taskList"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {allTaskList.map((taskList, index) => {
+                    return (
+                      <TaskList
+                        searchKeyword={this.state.searchKeyword}
+                        key={taskList.no}
+                        listNo={taskList.no}
+                        taskList={taskList}
+                        tasks={taskList.tasks}
+                        index={index}
+                        taskCallbacks={this.props.taskCallbacks}
+                        // isDropDisabled={this.props.isDropDisabled}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </Droppable>
+
             <div className="taskListAdd">
               {this.state.taskListInsertState ? (
                 <>
@@ -112,9 +123,7 @@ class KanbanBoard extends Component {
                       <i
                         className="fas fa-plus Icon"
                         onClick={this.addTaskList.bind(this)}
-                       
                       ></i>
-                     
                       <i
                         className="fas fa-undo Icon"
                         onClick={this.taskListStateBtn.bind(this)}

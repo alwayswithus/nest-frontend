@@ -13,7 +13,7 @@
     border-color: #f0d7d2;
     .taskList-head {
       display: flex;
-      .reset{
+      .reset {
         padding-top: 3px;
       }
       .Icon {
@@ -77,19 +77,24 @@
       }
     }
   }
-  .tasks {
+  .taskArea {
     overflow: auto;
     overflow-x: hidden;
     height: 95%;
-    .completeArea {
-      text-align: center;
-      background-color: #b4b8ba;
-      border-radius: 3px;
-      cursor: pointer;
-      color: white;
-      &:hover {
-        background-color: #7a7d7e;
+    .tasks {
+      min-height: 1px;
+    }
+    .completeTasks{
+      .completeArea {
+        text-align: center;
+        background-color: #b4b8ba;
+        border-radius: 3px;
+        cursor: pointer;
         color: white;
+        &:hover {
+          background-color: #7a7d7e;
+          color: white;
+        }
       }
     }
   }

@@ -7,18 +7,25 @@ import data from "./data.json";
 import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
+import ApiService from '../../ApiService';
+import { Route, BrowserRouter } from "react-router-dom";
+import Setting from "../kanban/tasksetting/setting/Setting";
+import Comment from "../kanban/tasksetting/comment/Comment";
+import { Switch } from "@material-ui/core";
 
 class KanbanMain extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      taskList: data,
+      taskList: data.alltaskList,
       url: "",
+      
     };
   }
 
-  // Drag and Drop
+  // Drag and Drop  
   onDragEnd = (result) =>{
+
     const { destination, source, type } = result;
     
     // task의 도착지가 null일 경우
@@ -196,7 +203,7 @@ class KanbanMain extends Component {
   }
 
   // task 완료 체크
-  callbackDoneTask(taskListId, taskId, checked, index, firstTrueIndex) {
+  callbackDoneTask(taskListId, taskId, checked,) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.no === taskListId
     );
@@ -214,9 +221,6 @@ class KanbanMain extends Component {
         },
       },
     });
-
-    newTaskList[TaskListIndex].tasks.splice(index, 1);
-    newTaskList[TaskListIndex].tasks.splice(firstTrueIndex, 0,this.state.taskList[TaskListIndex].tasks[TaskIndex]);
 
     this.setState({
       taskList: newTaskList,
@@ -459,7 +463,7 @@ class KanbanMain extends Component {
   }
 
   //comment contents 수정
-  callbakcCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
+  callbackCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
@@ -487,9 +491,78 @@ class KanbanMain extends Component {
     
 
   }
-  render() {
 
+  //comment 글 쓰기
+  callbackAddComment(commentContents, taskListNo, taskNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.no == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.no == taskNo)
+    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].comments.length
+
+    console.log("KanbanMain + " +commentContents)
+    let newComment = {
+      commentNo:  commentLength + 1,
+      commentRegdate: "2020-05-25",
+      commentContents: commentContents,
+      commentLike:0,
+      memberNo:1,
+      memberName:"김우경",
+      memberPhoto:"/assets/images/unnamed.jpg"
+    }
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks : {
+          [taskIndex] : {
+            comments:{
+              $push : [newComment]
+            },
+          },
+        },
+      }
+    });
+
+    this.setState({
+      taskList:newTaskList
+    })
+
+
+  }
+  render() {
     return (
+      <>
+      {/* taskSetting 띄우는 route */}
+      {/* <BrowserRouter> */}
+      {/* <Switch> */}
+          <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo" 
+            render={(match) => 
+              <Setting 
+                {...match}
+                taskCallbacks={{
+                  todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
+                  todoCheckUpdate: this.callbackTodoCheckUpdate.bind(this), // todo check 업데이트
+                  todoTextUpdate: this.callbackTodoTextUpdate.bind(this), // todo text 업데이트
+                  addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
+                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+                }}
+                // onCallbackSetting={this.onCallbackSetting.bind(this)} 
+                task={this.state.taskList} 
+                // key={taskItem.no} 
+                taskListNo = {this.props.taskListId} />} />
+
+          {/* <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
+            render={(match) => 
+              <Comment 
+                  {...match}
+                  task={this.state.taskList} 
+                  taskCallbacks={{
+                    commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
+                    commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  }} />} />
+            </Switch> */}
+          {/* </BrowserRouter> */}
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}
@@ -499,7 +572,6 @@ class KanbanMain extends Component {
         <div className="container-fluid kanbanMain">
           <div
             className="row content "
-            
           >
             {/* 네비게이션바 */}
             <div className="navibar">
@@ -514,7 +586,7 @@ class KanbanMain extends Component {
             {/* 메인 영역 */}
             <div className="mainArea">
               {/*칸반보드*/}
-              <DragDropContext onDragEnd={this.onDragEnd}>
+              <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
               <KanbanBoard
                 tasks={this.state.taskList}
                 taskCallbacks={{
@@ -531,7 +603,8 @@ class KanbanMain extends Component {
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate:this.callbakcCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                 }}
               />
               </DragDropContext>
@@ -539,8 +612,18 @@ class KanbanMain extends Component {
           </div>
         </div>
       </ScrollContainer>
+      </>
     );
   }
+  componentDidMount() {
+    // ApiService.fetchKanbanMain()
+    //   .then(response => {
+    //     this.setState({
+    //       projects: response.data.data
+    //     })
+    //   })
+  }
 }
+
 
 export default KanbanMain;
