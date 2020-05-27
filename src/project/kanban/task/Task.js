@@ -14,20 +14,19 @@ class Task extends Component {
       closeTag: false,
     };
   }
-  // 클릭 모달 막기
-  noneClick() {
-    window.jQuery(document.body).removeClass("modal-open");
-    window.jQuery(".modal-backdrop").remove();
+  // 클릭 업무설정 막기
+  noneClick(event) {
+    event.preventDefault();
   }
 
   // task 완료 체크 박스
-  doneTask() {
+  doneTask(event) {
     this.props.taskCallbacks.doneTask(
       this.props.taskListNo,
       this.props.task.taskNo,
       this.props.task.checked
     );
-    this.noneClick();
+    this.noneClick(event);
   }
 
   //모달 클릭 후 path 초기화.
@@ -68,12 +67,21 @@ class Task extends Component {
   render() {
     const taskItem = this.props.task;
     return (
-      <>      
-        <Draggable draggableId={taskItem.taskNo} index={this.props.index} isDragDisabled={this.props.complete}>
+      <>
+        <Draggable
+          draggableId={taskItem.taskNo}
+          index={this.props.index}
+          isDragDisabled={this.props.complete}
+        >
           {(provided, snapshot) => (
-            <Link style={{ textDecoration: 'none', color:'black' }} to={`/nest/kanbanMain/${this.props.taskListNo}/task/${taskItem.taskNo}`}>
+            <Link
+              style={{ textDecoration: "none", color: "black" }}
+              to={`/nest/kanbanMain/${this.props.taskListNo}/task/${taskItem.taskNo}`}
+            >
               <div
-                className={taskItem.taskState === "done" ? "task completeTask" : " task"}
+                className={
+                  taskItem.taskState === "done" ? "task completeTask" : " task"
+                }
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
@@ -95,7 +103,7 @@ class Task extends Component {
                   task={taskItem}
                   taskListNo={this.props.taskListNo}
                   taskCallbacks={this.props.taskCallbacks}
-                  firstTrueIndex =  {this.props.firstTrueIndex}
+                  firstTrueIndex={this.props.firstTrueIndex}
                 />
                 {/* ) : null} */}
               </div>

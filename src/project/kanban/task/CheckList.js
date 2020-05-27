@@ -8,15 +8,15 @@ class CheckList extends Component {
     return (
       <>
         <div className="checkList">
-          {checkListItem.length > 0 ? (
+          {checkListItem&&checkListItem.length > 0 ? (
             <div className="checkList-inner">
               {checkListItem &&
                 checkListItem.map((checkList) => (
                   <CheckContents
                     key={checkList.checklistNo}
                     checkList={checkList}
-                    taskListId={this.props.taskListNo}
-                    taskId={this.props.taskNo}
+                    taskListNo={this.props.taskListNo}
+                    taskNo={this.props.taskNo}
                     taskCallbacks={this.props.taskCallbacks}
                   />
                 ))}
