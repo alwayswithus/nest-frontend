@@ -8,7 +8,7 @@ import NoticeDate from './NoticeDate';
 import Navigator from '../navigator/Navigator';
 import './notification.scss';
 
-export default class Notification extends React.Component {
+class Notification extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
@@ -24,9 +24,8 @@ export default class Notification extends React.Component {
             url: url
         })
     }
-
+    
     render() {
-        
         return (
             <div className="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>
                 {/* 사이드바 */}
@@ -52,7 +51,7 @@ export default class Notification extends React.Component {
                     </div>
                     <div className="notice-body-contents">
                         {this.state.dates.map(date =>
-                            <div className="notice-body-today">
+                            <div key={date.dateDay} className="notice-body-today">
                                 <div className="notice-body-header-today">
                                     <div className="notice-body-header-date">
                                         <span>Update on {date.dateMonth} {date.dateDay}, {date.dateYear}</span>
@@ -66,3 +65,5 @@ export default class Notification extends React.Component {
         );
     }
 }
+
+export default Notification;
