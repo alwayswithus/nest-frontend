@@ -531,7 +531,6 @@ class KanbanMain extends Component {
     return (
       <>
       {/* taskSetting 띄우는 route */}
-      {/* <BrowserRouter> */}
       <Switch>
           <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo" exact
@@ -546,9 +545,7 @@ class KanbanMain extends Component {
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                 }}
-                // onCallbackSetting={this.onCallbackSetting.bind(this)} 
                 task={this.state.taskList} 
-                // key={taskItem.no} 
                 taskListNo = {this.props.taskListNo} />} />
 
           <Route 
@@ -570,7 +567,6 @@ class KanbanMain extends Component {
                 task={this.state.taskList} 
                  />} />    
             </Switch>
-          {/* </BrowserRouter> */}
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}

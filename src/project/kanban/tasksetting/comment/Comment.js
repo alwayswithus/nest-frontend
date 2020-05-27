@@ -7,15 +7,15 @@ class Comment extends Component  {
     render(){
         console.log(this.props.match)
         const taskList = this.props.task;
-        const taskListIndex = taskList.findIndex(taskList => taskList.no == this.props.match.params.taskListNo);
-        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.no == this.props.match.params.taskNo);
+        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo == this.props.match.params.taskListNo);
+        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo == this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
         return (
             <div className="TaskSetComment">
                  <Header 
                     name='김우경' 
                     date='2020.05.06' 
-                    taskContents = {taskItem.contents}
+                    taskContents = {taskItem.taskContents}
                     params={this.props.match.params}/>
                 <div className="Comment">
                     {/* 코멘트 내용 */}

@@ -11,7 +11,7 @@ class File extends Component {
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
     return (
             <div className="SettingFile">
-                <Header taskContents = {taskItem.contents} params={this.props.match.params}/>
+                <Header taskContents = {taskItem.taskContents} params={this.props.match.params}/>
                 <div className="File">
                     <div className="FileMenu">
                         <form className="navbar-form navbar-left">
