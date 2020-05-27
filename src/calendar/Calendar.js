@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import Navigator from '../navigator/Navigator';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+// import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.scss';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
