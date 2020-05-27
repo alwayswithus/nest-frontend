@@ -359,9 +359,10 @@ class KanbanMain extends Component {
 
   //task에 tag 삭제하기
   callbackDeleteTag(tagNo, taskListNo, taskNo){
+    console.log("KanbanMain : "+tagNo + ":" + taskListNo + ":" + taskNo)
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tag.findIndex(
+    const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tagList.findIndex(
       (tag) => tag.tagNo == tagNo
     )
 
@@ -369,7 +370,7 @@ class KanbanMain extends Component {
       [taskListIndex] : {
         tasks:{
           [taskIndex] :{
-            tag:{
+            tagList:{
               $splice : [[tagIndex,1]]
             }
           }
@@ -499,18 +500,18 @@ class KanbanMain extends Component {
   //comment 글 쓰기
   callbackAddComment(commentContents, taskListNo, taskNo){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskListNo == taskNo)
-    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].comments.length
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].commentList
 
-    console.log("KanbanMain + " +commentContents)
+    console.log("KanbanMain + " +commentLength)
     let newComment = {
       commentNo:  commentLength + 1,
       commentRegdate: "2020-05-25",
       commentContents: commentContents,
       commentLike:0,
-      memberNo:1,
-      memberName:"김우경",
-      memberPhoto:"/assets/images/unnamed.jpg"
+      userNo:21,
+      taskNo:taskNo,
+      fileNo:null
     }
 
     let newTaskList = update(this.state.taskList, {
@@ -536,7 +537,7 @@ class KanbanMain extends Component {
     return (
       <>
       {/* taskSetting 띄우는 route */}
-      {/* <Switch> */}
+      <Switch>
           <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo" exact
             render={(match) => 
@@ -551,7 +552,7 @@ class KanbanMain extends Component {
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                 }}
                 task={this.state.taskList} />} />
-          {/* <Route 
+          <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
             render={(match) => 
               <Comment 
@@ -560,6 +561,7 @@ class KanbanMain extends Component {
                   taskCallbacks={{
                     commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                     commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                    addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                   }} />} />
 
           <Route 
@@ -568,8 +570,8 @@ class KanbanMain extends Component {
               <File 
                 {...match} 
                 task={this.state.taskList} 
-                 />} />     */}
-            {/* </Switch> */}
+                 />} />    
+            </Switch>
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}
