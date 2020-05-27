@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TodoList from "./TodoList";
+import CheckList from "./CheckList";
 import TagList from "./TagList";
 import Date from "./Date";
 import "./Task.scss";
@@ -113,24 +113,24 @@ class TaskInnerContents extends Component {
             </div>
           </div>
 
-          <div className="task-itemtask-todoList">
-            {/* <TodoList
-              // key={taskItem.checkList.id}
+          <div className="task-itemtask-checkList">
+            <CheckList
+              key={taskItem.checkList.checklistNo}
               checkList={taskItem.checkList}
-              taskListNo={taskItem.ListId}
-              taskId={taskItem.no}
+              // taskListNo={taskItem.ListId}
+              // taskId={taskItem.no}
               taskCallbacks={this.props.taskCallbacks}
-            /> */}
+            />
           </div>
           <div className="task-item task-tag">
             <TagList key={taskItem.tagList.tagNo} tagList={taskItem.tagList} />
           </div>
           <div className="task-item task-date">
-            {/* <Date
+            <Date
               key={taskItem.no}
               startDate={taskItem.startDate}
               endDate={taskItem.endDate}
-            /> */}
+            />
           </div>
           <div className="task-item task-bottom">
             <div className="count">

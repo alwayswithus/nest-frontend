@@ -113,6 +113,7 @@ class KanbanMain extends Component {
 
   }
 
+  // 배경화면 변경
   callbackChangeBackground(url) {
     console.log(url);
     this.setState({
@@ -130,7 +131,7 @@ class KanbanMain extends Component {
       // no: this.state.taskList[TaskListIndex].tasks.length,
       no:Date.now()+"",
       contents: taskContents,
-      todoList: [],
+      checkList: [],
       tag: [],
     };
 
@@ -181,7 +182,7 @@ class KanbanMain extends Component {
     let newTask = {
       no: this.state.taskList[TaskListIndex].tasks.length + Date.now() + "",
       contents: this.state.taskList[TaskListIndex].tasks[TaskIndex].contents,
-      todoList: this.state.taskList[TaskListIndex].tasks[TaskIndex].todoList,
+      checkList: this.state.taskList[TaskListIndex].tasks[TaskIndex].checkList,
       tag: this.state.taskList[TaskListIndex].tasks[TaskIndex].tag,
       startDate: this.state.taskList[TaskListIndex].tasks[TaskIndex].startDate,
       endDate: this.state.taskList[TaskListIndex].tasks[TaskIndex].endDate,
@@ -259,8 +260,8 @@ class KanbanMain extends Component {
     });
   }
 
-  // todo 체크
-  callbackTodoCheck(taskListNo, taskId, todoId, checked) {
+  // checkList 체크
+  callbackCheckListCheck(taskListNo, taskId, checkListNo, checklistState) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -269,17 +270,15 @@ class KanbanMain extends Component {
       (task) => task.taskNo === taskId
     );
 
-    const TodoIndex = this.state.taskList[TaskListIndex].tasks[
-      TaskIndex
-    ].todoList.findIndex((todo) => todo.id === todoId);
+    const ChecklistIndex = this.state.taskList[TaskListIndex].tasks[TaskIndex].checkList.findIndex((checkList) => checkList.checklistNo === checkListNo);
 
     let newTaskList = update(this.state.taskList, {
       [TaskListIndex]: {
         tasks: {
           [TaskIndex]: {
-            todoList: {
-              [TodoIndex]: {
-                checked: { $set: !checked },
+            checkList: {
+              [ChecklistIndex]: {
+                checklistState: { $set: checklistState === "done"? "do": "done" },
               },
             },
           },
@@ -291,25 +290,31 @@ class KanbanMain extends Component {
     });
   }
 
-  //todo 추가하기
-  callbackAddTodo(text, taskNo, taskListNo){
+  //checkList 추가하기
+  callbackAddCheckList(contents, taskNo, taskListNo){
+    console.log("contents : " + contents)
+    console.log("taskNo : " + taskNo)
+    console.log("taskListNo : " + taskListNo)
+    console.log(this.state.taskList)
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
 
-    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.length
+    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.length
     
-    let newTodoList = {
-      id:  checkListLength + 1,
-      text: text,
-      checked: false
+    let newCheckList = {
+      checklistNo:  checkListLength + 1,
+      checklistContents: contents,
+      checklistState: "do",
+      taskNo:taskNo
     }
     
     let newTaskList = update(this.state.taskList, {
       [taskListIndex] : {
         tasks : {
           [taskIndex] : {
-            todoList:{
-              $push:[newTodoList]
+            checkList:{
+              $push:[newCheckList]
             },
           },
         },
@@ -357,7 +362,7 @@ class KanbanMain extends Component {
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
     const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tag.findIndex(
-      (tag) => tag.id == tagNo
+      (tag) => tag.tagNo == tagNo
     )
 
     let newTaskList = update(this.state.taskList, {
@@ -378,23 +383,22 @@ class KanbanMain extends Component {
 
   }
 
-  //task todo check 업데이트
-  callbackTodoCheckUpdate(taskListNo, taskNo, todoId, todoCheck) {
+  //task checkList check 업데이트
+  callbackCheckListStateUpdate(taskListNo, taskNo, checklistNo, checklistState) {
+    
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const todoIndex = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.findIndex(todo => todo.id == todoId)
+    const checklistIndex = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == checklistNo)
 
-    console.log("KanbanMain + " + todoIndex + " : " + todoCheck)
+    console.log("KanbanMain + " + checklistIndex + " : " + checklistState)
 
     let newTaskList = update(this.state.taskList, {
       [taskListIndex] : {
         tasks:{
           [taskIndex]:{
-            todoList :{
-              [todoIndex] :{
-                checked : {
-                  $set : !todoCheck
-                } 
+            checkList :{
+              [checklistIndex] :{
+                checklistState: { $set: checklistState === "done"? "do": "done" }, 
               }
             }
           }
@@ -407,20 +411,20 @@ class KanbanMain extends Component {
     })
   }
 
-  //task todo text 업데이트
-  callbackTodoTextUpdate(taskListNo, taskNo, todoId, text){
+  //task checkList text 업데이트
+  callbackCheckListContentsUpdate(taskListNo, taskNo, checklistNo, checklistContents){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const todoIndex = this.state.taskList[taskListIndex].tasks[taskIndex].todoList.findIndex(todo => todo.id == todoId)
+    const checkListIndex = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
     let newTaskList = update(this.state.taskList, {
       [taskListIndex] : {
         tasks:{
           [taskIndex]:{
-            todoList :{
-              [todoIndex] :{
-                text : {
-                  $set : text
+            checkList :{
+              [checkListIndex] :{
+                checklistContents : {
+                  $set : checklistContents
                 } 
               }
             }
@@ -539,15 +543,14 @@ class KanbanMain extends Component {
               <Setting 
                 {...match}
                 taskCallbacks={{
-                  todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
-                  todoCheckUpdate: this.callbackTodoCheckUpdate.bind(this), // todo check 업데이트
-                  todoTextUpdate: this.callbackTodoTextUpdate.bind(this), // todo text 업데이트
-                  addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
+                  checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
+                  checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist state 업데이트
+                  checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
+                  addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                 }}
                 task={this.state.taskList} />} />
-
           {/* <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
             render={(match) => 
@@ -600,10 +603,10 @@ class KanbanMain extends Component {
                   doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
                   addList: this.callbackAddTaskList.bind(this), // taskList 추가
                   deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
-                  todoCheck: this.callbackTodoCheck.bind(this), // todo 체크
-                  todoCheckUpdate: this.callbackTodoCheckUpdate.bind(this), // todo check 업데이트
-                  todoTextUpdate: this.callbackTodoTextUpdate.bind(this), // todo text 업데이트
-                  addtodo: this.callbackAddTodo.bind(this), //업무에 todo 추가하기
+                  checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
+                  checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
+                  checklistTextUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
+                  addchecklist: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
