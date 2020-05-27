@@ -9,7 +9,7 @@ class CommentInput extends Component {
         }
     }
     onClickSubmit(){
-        this.props.taskCallbacks.addComment(this.state.contents,this.props.taskListNo, this.props.taskItem.no)
+        this.props.taskCallbacks.addComment(this.state.contents,this.props.taskListNo, this.props.taskItem.taskNo)
     }
     
     onClickSubmit2(commentContents){

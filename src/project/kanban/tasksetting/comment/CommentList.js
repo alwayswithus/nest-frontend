@@ -9,7 +9,7 @@ class CommentList extends Component {
     onClickThumsUp(commentNo){
         this.props.taskCallbacks.commentLikeUpdate(
             this.props.taskListNo, 
-            this.props.taskItem.no,
+            this.props.taskItem.taskNo,
             commentNo );
     }
 
@@ -29,7 +29,7 @@ class CommentList extends Component {
                             key={comment.commentNo}
                             comment = {comment}
                             taskListNo = {this.props.taskListNo}
-                            taskNo = {this.props.taskItem.no}
+                            taskNo = {this.props.taskItem.taskNo}
                             taskCallbacks = {this.props.taskCallbacks}
                         />
                     )}

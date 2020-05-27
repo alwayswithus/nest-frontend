@@ -45,7 +45,7 @@ class Setting extends Component {
     onKeypress(event){
         if(event.key === 'Enter'){
             event.preventDefault()
-            this.props.taskCallbacks.addtodo(event.target.value,this.props.task.no, this.props.taskListNo)
+            this.props.taskCallbacks.addtodo(event.target.value,this.props.task.taskNo, this.props.taskListNo)
             this.setState({
                 todo:''
             })
@@ -53,8 +53,8 @@ class Setting extends Component {
     }
 
     //click check box
-    clickCheckBox(todoId, todoCheck){
-        this.props.taskCallbacks.todoCheckUpdate(this.props.taskListNo, this.props.task.no,todoId, todoCheck)
+    clickCheckBox(checklistNo, checklistState){
+        this.props.taskCallbacks.todoCheckUpdate(this.props.taskListNo, this.props.task.taskNo,checklistNo, checklistState)
     }
     
     //태그 + 버튼 클릭.(모달창 띄우기)
@@ -131,7 +131,7 @@ class Setting extends Component {
                         <Header 
                             name='김우경' 
                             date='2020.05.06' 
-                            taskContents = {taskItem.contents}
+                            taskContents = {taskItem.taskContents}
                             params={this.props.match.params}/>
                     </div>
 
@@ -222,8 +222,8 @@ class Setting extends Component {
                             <li className="taskSettingList">
                                 <div className="checkList">
                                     {taskItem.checkList && taskItem.checkList.map(todo =>
-                                        <div key={todo.id} className="todo">
-                                                <input type="checkbox" className="doneCheck" checked={todo.checked} onClick={this.clickCheckBox.bind(this,todo.id, todo.checked)} readOnly></input>
+                                        <div key={todo.checklistNo} className="todo">
+                                                <input type="checkbox" className="doneCheck" checked={todo.checklistState} onClick={this.clickCheckBox.bind(this,todo.checklistNo, todo.checklistState)} readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
