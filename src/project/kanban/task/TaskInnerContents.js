@@ -15,23 +15,20 @@ class TaskInnerContents extends Component {
   // task 삭제
   deleteTask() {
     this.props.taskCallbacks.delete(this.props.taskListNo, this.props.task.taskNo);
-    this.noneClick();
   }
 
   // task 복사
   copyTask() {
     this.props.taskCallbacks.copy(this.props.taskListNo, this.props.task.taskNo);
-    this.noneClick();
   }
 
-  // 클릭 모달 막기
-  noneClick() {
-    window.jQuery(document.body).removeClass("modal-open");
-    window.jQuery(".modal-backdrop").remove();
+  // 클릭 업무설정 막기
+  noneClick(event) {
+    event.preventDefault();
   }
 
   // task 완료 체크 박스
-  doneTask() {
+  doneTask(event) {
     this.props.taskCallbacks.doneTask(
       this.props.taskListNo,
       this.props.task.taskNo,
@@ -39,7 +36,7 @@ class TaskInnerContents extends Component {
       this.props.index
       // this.props.firstTrueIndex
     );
-    this.noneClick();
+    this.noneClick(event);
   }
 
   render() {
@@ -115,21 +112,21 @@ class TaskInnerContents extends Component {
 
           <div className="task-itemtask-checkList">
             <CheckList
-              key={taskItem.checkList.checklistNo}
+              key={taskItem.taskNo}
               checkList={taskItem.checkList}
-              // taskListNo={taskItem.ListId}
-              // taskId={taskItem.no}
+              taskListNo={this.props.taskListNo}
+              taskNo={taskItem.taskNo}
               taskCallbacks={this.props.taskCallbacks}
             />
           </div>
           <div className="task-item task-tag">
-            <TagList key={taskItem.tagList.tagNo} tagList={taskItem.tagList} />
+            <TagList key={taskItem.taskNo} tagList={taskItem.tagList} />
           </div>
           <div className="task-item task-date">
             <Date
-              key={taskItem.no}
-              startDate={taskItem.startDate}
-              endDate={taskItem.endDate}
+              key={taskItem.taskNo}
+              startDate={taskItem.taskStart}
+              endDate={taskItem.taskEnd}
             />
           </div>
           <div className="task-item task-bottom">

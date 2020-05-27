@@ -4,22 +4,17 @@ import "./CheckContents.scss";
 class CheckContents extends Component {
   // checkList 체크
   doneCheckList() { 
-    this.props.taskCallbacks.checklistCheck(
-      this.props.taskListId,
-      this.props.taskId,
+    this.props.taskCallbacks.checklistStateUpdate(
+      this.props.taskListNo,
+      this.props.taskNo,
       this.props.checkList.checklistNo,
       this.props.checkList.checklistState
     );
-    this.noneClick();
-  }
 
-  // 클릭 모달 막기
-  noneClick() {
-    window.jQuery(document.body).removeClass("modal-open");
-    window.jQuery(".modal-backdrop").remove();
   }
+  
   render() {
-    console.log(this.props.checkList.checklistState);
+    console.log(this.props.checkList.checklistState + "!!");
     return (
       <Fragment>
         <div className="checklist">
@@ -27,7 +22,7 @@ class CheckContents extends Component {
                 type="checkbox"
                 className="doneCheck"
                 onClick={this.doneCheckList.bind(this)}
-                checked={this.props.checkList.checklistState === "done"}
+                checked={this.props.checkList.checklistState === "done" ? true : false}
                 readOnly
               ></input>
                 {this.props.checkList.checklistState === "done"

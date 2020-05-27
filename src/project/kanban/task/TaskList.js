@@ -22,9 +22,8 @@ class TaskList extends Component {
   }
 
   // 클릭 모달 막기
-  noneClick() {
-    window.jQuery(document.body).removeClass("modal-open");
-    window.jQuery(".modal-backdrop").remove();
+  noneClick(event) {
+    event.preventDefault();
   }
 
   // Task List 이름 수정(input 태그) 상태 변경
@@ -76,7 +75,6 @@ class TaskList extends Component {
     this.setState({
       showComplete: !this.state.showComplete,
     });
-    this.noneClick();
   }
 
   // taskList 삭제
@@ -102,6 +100,7 @@ class TaskList extends Component {
   }
   render() {
     let completeTaskState = false;
+    // console.log(this.props.taskList.tasks);
     return (
       <Draggable draggableId={this.props.taskList.taskListNo} index={this.props.index}>
         {(provided) => (

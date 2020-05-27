@@ -58,6 +58,10 @@ class KanbanBoard extends Component {
 
   render() {
     const allTaskList = this.props.tasks;
+    // console.log("//");
+    // console.log(allTaskList);
+    // console.log("//");
+
     return (
       <>
         <div className="kanbanBoard">

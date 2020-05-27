@@ -6,27 +6,29 @@ import TopBar from "../topBar/TopBar";
 import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
-import ApiService from '../../ApiService';
-import { Route, BrowserRouter,Switch } from "react-router-dom";
+import ApiService from "../../ApiService";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
 import Setting from "../kanban/tasksetting/setting/Setting";
 import Comment from "../kanban/tasksetting/comment/Comment";
-import File from "../kanban/tasksetting/file/File"
+import File from "../kanban/tasksetting/file/File";
 
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+  "Content-Type": "application/json",
+};
 class KanbanMain extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      taskList : null,
+      taskList: null,
       url: "",
-      
     };
   }
 
-  // Drag and Drop  
-  onDragEnd = (result) =>{
-
+  // Drag and Drop
+  onDragEnd = (result) => {
     const { destination, source, type } = result;
-    
+
     // task의 도착지가 null일 경우
     if (!destination) {
       return;
@@ -41,43 +43,57 @@ class KanbanMain extends Component {
     }
 
     // list 재정렬
-    if(type === 'column'){
+    if (type === "column") {
       const newTaskList = Array.from(this.state.taskList);
       newTaskList.splice(source.index, 1);
-      newTaskList.splice(destination.index, 0, this.state.taskList[source.index]);
+      newTaskList.splice(
+        destination.index,
+        0,
+        this.state.taskList[source.index]
+      );
       this.setState({
-        taskList:newTaskList
-      })
+        taskList: newTaskList,
+      });
       return;
     }
 
     // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
     let startIndex = 0;
     let finishIndex = 0;
-    this.state.taskList.map((taskList,index) => taskList.taskListNo === source.droppableId ? startIndex = index: null)
-    this.state.taskList.map((taskList,index) => taskList.taskListNo === destination.droppableId ? finishIndex = index: null)
+    this.state.taskList.map((taskList, index) =>
+      taskList.taskListNo === source.droppableId ? (startIndex = index) : null
+    );
+    this.state.taskList.map((taskList, index) =>
+      taskList.taskListNo === destination.droppableId
+        ? (finishIndex = index)
+        : null
+    );
 
     // 위의 인덱스를 가지고 출발list, 도착list를 생성
     const start = this.state.taskList[startIndex];
     const finish = this.state.taskList[finishIndex];
 
     /* 같은 목록에서의 Task 이동 */
-    if(start === finish) {
+    if (start === finish) {
       // tasks 가공
       const newTasks = Array.from(start.tasks);
       newTasks.splice(source.index, 1);
-      newTasks.splice(destination.index, 0, this.state.taskList[startIndex].tasks[source.index]);
+      newTasks.splice(
+        destination.index,
+        0,
+        this.state.taskList[startIndex].tasks[source.index]
+      );
 
       let newTaskList = update(this.state.taskList, {
-        [startIndex] : {
-          tasks:{
-            $set : newTasks
-          }
-        }
+        [startIndex]: {
+          tasks: {
+            $set: newTasks,
+          },
+        },
       });
- 
+
       this.setState({
-        taskList : newTaskList
+        taskList: newTaskList,
       });
       return;
     }
@@ -86,36 +102,37 @@ class KanbanMain extends Component {
 
     // 출발 tasks 가공
     const startTasks = Array.from(start.tasks);
-    startTasks.splice(source.index,1);
-  
+    startTasks.splice(source.index, 1);
+
     // 도착 tasks 가공
     const finishTasks = Array.from(finish.tasks);
-    finishTasks.splice(destination.index, 0, this.state.taskList[startIndex].tasks[source.index]);
-
+    finishTasks.splice(
+      destination.index,
+      0,
+      this.state.taskList[startIndex].tasks[source.index]
+    );
 
     let newTaskList = update(this.state.taskList, {
-      [startIndex] : {
-        tasks:{
-          $set : startTasks
-        }
+      [startIndex]: {
+        tasks: {
+          $set: startTasks,
+        },
       },
-      [finishIndex] : {
-        tasks:{
-          $set : finishTasks
-        }
-      }
-      
+      [finishIndex]: {
+        tasks: {
+          $set: finishTasks,
+        },
+      },
     });
 
     this.setState({
-      taskList:newTaskList
+      taskList: newTaskList,
     });
-
-  }
+  };
 
   // 배경화면 변경
   callbackChangeBackground(url) {
-    console.log(url);
+    // console.log(url);
     this.setState({
       url: url,
     });
@@ -129,7 +146,7 @@ class KanbanMain extends Component {
 
     let newTask = {
       // no: this.state.taskList[TaskListIndex].tasks.length,
-      no:Date.now()+"",
+      no: Date.now() + "",
       contents: taskContents,
       checkList: [],
       tag: [],
@@ -178,32 +195,63 @@ class KanbanMain extends Component {
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
       (task) => task.taskNo === taskId
     );
-
+    const task = this.state.taskList[TaskListIndex].tasks[TaskIndex];
     let newTask = {
-      no: this.state.taskList[TaskListIndex].tasks.length + Date.now() + "",
-      contents: this.state.taskList[TaskListIndex].tasks[TaskIndex].contents,
-      checkList: this.state.taskList[TaskListIndex].tasks[TaskIndex].checkList,
-      tag: this.state.taskList[TaskListIndex].tasks[TaskIndex].tag,
-      startDate: this.state.taskList[TaskListIndex].tasks[TaskIndex].startDate,
-      endDate: this.state.taskList[TaskListIndex].tasks[TaskIndex].endDate,
-      checked: this.state.taskList[TaskListIndex].tasks[TaskIndex].checked,
-      label: this.state.taskList[TaskListIndex].tasks[TaskIndex].label,
+      // tagList: task.tagList,
+      // commentList: [],
+      taskStart: task.taskStart,
+      taskState: task.taskState,
+      taskContents: task.taskContents,
+      taskNo: null,
+      // checkList: task.checkList,
+      taskEnd: task.taskEnd,
+      taskPoint: task.taskPoint,
+      taskLabel: task.taskLabel,
+      taskOrder: null,
     };
+    fetch(`${API_URL}/api/task/copy`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newTask),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let newTasks = this.state.taskList[TaskListIndex].tasks;
+        newTasks.splice(TaskIndex + 1, 0, {});
+        newTasks = update(newTasks, {
+          [TaskIndex + 1]: {
+            $set: {
+              tagList: task.tagList,
+              commentList: [],
+              taskStart: task.taskStart,
+              taskState: task.taskState,
+              taskContents: task.taskContents,
+              taskNo: json.data.taskNo+"",
+              checkList: task.checkList,
+              taskEnd: task.taskEnd,
+              taskPoint: task.taskPoint,
+              taskLabel: task.taskLabel,
+              taskOrder: json.data.taskOrder,
+            },
+          },
+        });
 
-    let newTaskList = update(this.state.taskList, {
-      [TaskListIndex]: {
-        tasks: {
-          $push: [newTask],
-        },
-      },
-    });
-    this.setState({
-      taskList: newTaskList,
-    });
+        let newTaskList = update(this.state.taskList, {
+          [TaskListIndex]: {
+            tasks: {
+              $set: newTasks,
+            },
+          },
+        });
+
+        this.setState({
+          taskList: newTaskList,
+        });
+      });
   }
 
   // task 완료 체크
-  callbackDoneTask(taskListNo, taskId, checked,) {
+  callbackDoneTask(taskListNo, taskId, checked) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -225,13 +273,12 @@ class KanbanMain extends Component {
     this.setState({
       taskList: newTaskList,
     });
-
   }
-  
+
   // task list 추가
   callbackAddTaskList(taskListTitle) {
     let newTaskList = {
-      no: Date.now()+"",
+      no: Date.now() + "",
       title: taskListTitle,
       tasks: [],
     };
@@ -270,7 +317,9 @@ class KanbanMain extends Component {
       (task) => task.taskNo === taskId
     );
 
-    const ChecklistIndex = this.state.taskList[TaskListIndex].tasks[TaskIndex].checkList.findIndex((checkList) => checkList.checklistNo === checkListNo);
+    const ChecklistIndex = this.state.taskList[TaskListIndex].tasks[
+      TaskIndex
+    ].checkList.findIndex((checkList) => checkList.checklistNo === checkListNo);
 
     let newTaskList = update(this.state.taskList, {
       [TaskListIndex]: {
@@ -278,7 +327,9 @@ class KanbanMain extends Component {
           [TaskIndex]: {
             checkList: {
               [ChecklistIndex]: {
-                checklistState: { $set: checklistState === "done"? "do": "done" },
+                checklistState: {
+                  $set: checklistState === "done" ? "do" : "done",
+                },
               },
             },
           },
@@ -291,30 +342,35 @@ class KanbanMain extends Component {
   }
 
   //checkList 추가하기
-  callbackAddCheckList(contents, taskNo, taskListNo){
-    console.log("contents : " + contents)
-    console.log("taskNo : " + taskNo)
-    console.log("taskListNo : " + taskListNo)
-    console.log(this.state.taskList)
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+  callbackAddCheckList(contents, taskNo, taskListNo) {
+    // console.log("contents : " + contents)
+    // console.log("taskNo : " + taskNo)
+    // console.log("taskListNo : " + taskListNo)
+    // console.log(this.state.taskList)
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
 
-    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.length
-    
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+
+    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex]
+      .checkList.length;
+
     let newCheckList = {
-      checklistNo:  checkListLength + 1,
+      checklistNo: checkListLength + 1,
       checklistContents: contents,
       checklistState: "do",
-      taskNo:taskNo
-    }
-    
+      taskNo: taskNo,
+    };
+
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks : {
-          [taskIndex] : {
-            checkList:{
-              $push:[newCheckList]
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            checkList: {
+              $push: [newCheckList],
             },
           },
         },
@@ -322,236 +378,292 @@ class KanbanMain extends Component {
     });
 
     this.setState({
-      taskList:newTaskList
-    })
-
+      taskList: newTaskList,
+    });
   }
 
   //task에 tag 추가하기
-  callbackAddTag(tagNo, tagName, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    console.log("KanbanMain + " + taskIndex)
-    
+  callbackAddTag(tagNo, tagName, taskListNo, taskNo) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+    // console.log("KanbanMain + " + taskIndex)
+
     let newTag = {
-      tagNo:  tagNo,
+      tagNo: tagNo,
       tagName: tagName,
-      tagColor: "RGB(255, 160, 160)"
-    }
+      tagColor: "RGB(255, 160, 160)",
+    };
 
     let newTagData = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks : {
-          [taskIndex] : {
-            tagList:{
-              $push : [newTag]
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            tagList: {
+              $push: [newTag],
             },
           },
         },
-      }
+      },
     });
 
     this.setState({
-      taskList:newTagData
-    })
-
+      taskList: newTagData,
+    });
   }
 
   //task에 tag 삭제하기
-  callbackDeleteTag(tagNo, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tag.findIndex(
-      (tag) => tag.tagNo == tagNo
-    )
+  callbackDeleteTag(tagNo, taskListNo, taskNo) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+    const tagIndex = this.state.taskList[taskListIndex].tasks[
+      taskIndex
+    ].tag.findIndex((tag) => tag.tagNo == tagNo);
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks:{
-          [taskIndex] :{
-            tag:{
-              $splice : [[tagIndex,1]]
-            }
-          }
-        }
-      }
-    });
-
-    this.setState({
-      taskList:newTaskList
-    })
-
-  }
-
-  //task checkList check 업데이트
-  callbackCheckListStateUpdate(taskListNo, taskNo, checklistNo, checklistState) {
-    
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const checklistIndex = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == checklistNo)
-
-    console.log("KanbanMain + " + checklistIndex + " : " + checklistState)
-
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks:{
-          [taskIndex]:{
-            checkList :{
-              [checklistIndex] :{
-                checklistState: { $set: checklistState === "done"? "do": "done" }, 
-              }
-            }
-          }
-        }
-      }
-    });
-
-    this.setState({
-      taskList:newTaskList
-    })
-  }
-
-  //task checkList text 업데이트
-  callbackCheckListContentsUpdate(taskListNo, taskNo, checklistNo, checklistContents){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const checkListIndex = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
-
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks:{
-          [taskIndex]:{
-            checkList :{
-              [checkListIndex] :{
-                checklistContents : {
-                  $set : checklistContents
-                } 
-              }
-            }
-          }
-        }
-      }
-    });
-
-    this.setState({
-      taskList:newTaskList
-    })
-  }
-
-  // comment like 수 증가
-  callbackCommentLikeUpdate(taskListNo, taskNo, commentNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
-
-    // console.log(this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike)
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks : {
-          [taskIndex] : {
-            comments : {
-              [commentIndex] : {
-                commentLike: {
-                  $set : this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike + 1
-                }
-              }
-            }
-          }
-        }
-      }
-    })
-
-    this.setState({
-      taskList:newTaskList
-    })
-  }
-
-  //comment contents 수정
-  callbackCommentContentsUpdate(taskListNo, taskNo, commentNo, commentContents){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
-    const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].comments.findIndex(comment => comment.commentNo == commentNo)
-
-    console.log("KanbanMain + " + commentContents)
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks : {
-          [taskIndex] : {
-            comments : {
-              [commentIndex] : {
-                commentContents: {
-                  $set : commentContents
-                }
-              }
-            }
-          }
-        }
-      }
-    })
-
-    this.setState({
-      taskList:newTaskList
-    })
-    
-
-  }
-
-  //comment 글 쓰기
-  callbackAddComment(commentContents, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskListNo == taskNo)
-    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].comments.length
-
-    console.log("KanbanMain + " +commentContents)
-    let newComment = {
-      commentNo:  commentLength + 1,
-      commentRegdate: "2020-05-25",
-      commentContents: commentContents,
-      commentLike:0,
-      memberNo:1,
-      memberName:"김우경",
-      memberPhoto:"/assets/images/unnamed.jpg"
-    }
-
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex] : {
-        tasks : {
-          [taskIndex] : {
-            commentList:{
-              $push : [newComment]
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            tag: {
+              $splice: [[tagIndex, 1]],
             },
           },
         },
-      }
+      },
     });
 
     this.setState({
-      taskList:newTaskList
-    })
+      taskList: newTaskList,
+    });
+  }
 
+  //task checkList check 업데이트
+  callbackCheckListStateUpdate(
+    taskListNo,
+    taskNo,
+    checklistNo,
+    checklistState
+  ) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+    const checklistIndex = this.state.taskList[taskListIndex].tasks[
+      taskIndex
+    ].checkList.findIndex((checklist) => checklist.checklistNo == checklistNo);
 
+    // console.log("KanbanMain + " + checklistIndex + " : " + checklistState)
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            checkList: {
+              [checklistIndex]: {
+                checklistState: {
+                  $set: checklistState === "done" ? "do" : "done",
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+
+  //task checkList text 업데이트
+  callbackCheckListContentsUpdate(
+    taskListNo,
+    taskNo,
+    checklistNo,
+    checklistContents
+  ) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+    const checkListIndex = this.state.taskList[taskListIndex].tasks[
+      taskIndex
+    ].checkList.findIndex((checkList) => checkList.checklistNo == checklistNo);
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            checkList: {
+              [checkListIndex]: {
+                checklistContents: {
+                  $set: checklistContents,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+
+  // comment like 수 증가
+  callbackCommentLikeUpdate(taskListNo, taskNo, commentNo) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+    const commentIndex = this.state.taskList[taskListIndex].tasks[
+      taskIndex
+    ].comments.findIndex((comment) => comment.commentNo == commentNo);
+
+    // console.log(this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike)
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            comments: {
+              [commentIndex]: {
+                commentLike: {
+                  $set:
+                    this.state.taskList[taskListIndex].tasks[taskIndex]
+                      .comments[commentIndex].commentLike + 1,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+
+  //comment contents 수정
+  callbackCommentContentsUpdate(
+    taskListNo,
+    taskNo,
+    commentNo,
+    commentContents
+  ) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo == taskNo
+    );
+    const commentIndex = this.state.taskList[taskListIndex].tasks[
+      taskIndex
+    ].comments.findIndex((comment) => comment.commentNo == commentNo);
+
+    // console.log("KanbanMain + " + commentContents)
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            comments: {
+              [commentIndex]: {
+                commentContents: {
+                  $set: commentContents,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+
+  //comment 글 쓰기
+  callbackAddComment(commentContents, taskListNo, taskNo) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo == taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskListNo == taskNo
+    );
+    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex]
+      .comments.length;
+
+    // console.log("KanbanMain + " +commentContents)
+    let newComment = {
+      commentNo: commentLength + 1,
+      commentRegdate: "2020-05-25",
+      commentContents: commentContents,
+      commentLike: 0,
+      memberNo: 1,
+      memberName: "김우경",
+      memberPhoto: "/assets/images/unnamed.jpg",
+    };
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            commentList: {
+              $push: [newComment],
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
   }
   render() {
-    console.log("KanbanMain + " + this.props.match.path)
+    // console.log("KanbanMain + " + this.props.match.path)
     return (
       <>
-      {/* taskSetting 띄우는 route */}
-      {/* <Switch> */}
-          <Route 
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo" exact
-            render={(match) => 
-              <Setting 
-                {...match}
-                taskCallbacks={{
-                  checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                  checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist state 업데이트
-                  checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
-                  addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
-                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
-                  deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
-                }}
-                task={this.state.taskList} />} />
-          {/* <Route 
+        {/* taskSetting 띄우는 route */}
+        {/* <Switch> */}
+        <Route
+          path="/nest/kanbanMain/:taskListNo/task/:taskNo"
+          exact
+          render={(match) => (
+            <Setting
+              {...match}
+              taskCallbacks={{
+                checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
+                checklistStateUpdate: this.callbackCheckListStateUpdate.bind(
+                  this
+                ), // checklist state 업데이트
+                checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(
+                  this
+                ), // checklist contents 업데이트
+                addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
+                addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+              }}
+              task={this.state.taskList}
+            />
+          )}
+        />
+        {/* <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
             render={(match) => 
               <Comment 
@@ -569,70 +681,76 @@ class KanbanMain extends Component {
                 {...match} 
                 task={this.state.taskList} 
                  />} />     */}
-            {/* </Switch> */}
-      <ScrollContainer
-        className="scroll-container"
-        hideScrollbars={false}
-        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
-        style={{ backgroundImage: `url(${this.state.url})` }}
+        {/* </Switch> */}
+        <ScrollContainer
+          className="scroll-container"
+          hideScrollbars={false}
+          ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
+          style={{ backgroundImage: `url(${this.state.url})` }}
         >
-        <div className="container-fluid kanbanMain">
-          <div
-            className="row content "
-          >
-            {/* 네비게이션바 */}
-            <div className="navibar">
-              <Navigator
-                callbackChangeBackground={{
-                  change: this.callbackChangeBackground.bind(this),
-                }}
-              />
-            </div>
-            {/*상단바*/}
-            <TopBar />
-            {/* 메인 영역 */}
-            <div className="mainArea">
-              {/*칸반보드*/}
-              <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-              <KanbanBoard
-                tasks={this.state.taskList}
-                taskCallbacks={{
-                  add: this.callbackAddTask.bind(this), // task 추가
-                  delete: this.callbackDeleteTask.bind(this), // task 삭제
-                  copy: this.callbackCopyTask.bind(this), // task 복사
-                  doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
-                  addList: this.callbackAddTaskList.bind(this), // taskList 추가
-                  deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
-                  checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                  checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
-                  checklistTextUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
-                  addchecklist: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
-                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
-                  deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
-                  commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
-                  addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
-                }}
-              />
-              </DragDropContext>
+          <div className="container-fluid kanbanMain">
+            <div className="row content ">
+              {/* 네비게이션바 */}
+              <div className="navibar">
+                <Navigator
+                  callbackChangeBackground={{
+                    change: this.callbackChangeBackground.bind(this),
+                  }}
+                />
+              </div>
+              {/*상단바*/}
+              <TopBar />
+              {/* 메인 영역 */}
+              <div className="mainArea">
+                {/*칸반보드*/}
+                <DragDropContext
+                  onDragEnd={this.onDragEnd}
+                  onDragStart={this.onDragStart}
+                >
+                  <KanbanBoard
+                    tasks={this.state.taskList}
+                    taskCallbacks={{
+                      add: this.callbackAddTask.bind(this), // task 추가
+                      delete: this.callbackDeleteTask.bind(this), // task 삭제
+                      copy: this.callbackCopyTask.bind(this), // task 복사
+                      doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
+                      addList: this.callbackAddTaskList.bind(this), // taskList 추가
+                      deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
+                      checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
+                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind(
+                        this
+                      ), // checklist check 업데이트
+                      checklistTextUpdate: this.callbackCheckListContentsUpdate.bind(
+                        this
+                      ), // checklist contents 업데이트
+                      addchecklist: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
+                      addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                      deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+                      commentLikeUpdate: this.callbackCommentLikeUpdate.bind(
+                        this
+                      ), // 코멘트 좋아요 수 증가하기
+                      commentContentsUpdate: this.callbackCommentContentsUpdate.bind(
+                        this
+                      ), //코멘트 내용 업데이트
+                      addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
+                    }}
+                  />
+                </DragDropContext>
+              </div>
             </div>
           </div>
-        </div>
-      </ScrollContainer>
+        </ScrollContainer>
       </>
     );
   }
 
   componentDidMount() {
-    ApiService.fetchKanbanMain()
-      .then(response => {
-        this.setState({
-          taskList: response.data.data.allTaskList
-        })         
-      }
-     )
+    ApiService.fetchKanbanMain().then((response) => {
+      this.setState({
+        taskList: response.data.data.allTaskList,
+      });
+    });
   }
 }
-
 
 export default KanbanMain;
