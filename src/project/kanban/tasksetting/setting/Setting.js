@@ -195,7 +195,7 @@ class Setting extends Component {
 
                                 {/* tag List */}
                                 <div style={{ display: 'inline-block' }} className = "TagList">
-                                    {taskItem.tag.map(tag => 
+                                    {taskItem.tagList.map(tag => 
                                         <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>{tag.tagName}</span>
                                         </div>

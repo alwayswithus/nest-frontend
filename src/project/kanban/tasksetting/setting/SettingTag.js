@@ -63,15 +63,23 @@ class SettingTag extends Component {
                     </div>
                 </div> */}
                 <li className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                    <input
+                    {this.props.tagParams.taskItem.tagList.map(tag => 
+                        tag.tagNo === this.props.tagParams.tagNo ? <i className="fas fa-check-square fa-1.5x"></i> : <i className="far fa-square"></i>
+                    )}
+                    {/* <input
                         onClick={this.onCheckBox.bind(this)}
                         type="checkbox"
                         className="tagCheck"
                         checked={this.state.checked}
                         readOnly
-                    ></input>
+                    ></input> */}
+                    {/* {this.props.taskItem.tagList && this.props.taskItem.tagList.map(tag => 
+                        console.log(tag.tagNo)
+                    )} */}
+                    {/* <i className="far fa-square"></i>
+                    <i className="fas fa-check-square fa-1.5x"></i> */}
                     <div className="tag">{this.props.tagParams.tagName}</div>
-                    <div onClick={this.onClickTagTrash.bind(this)} className="modify"><i class="fas fa-pen-square"></i></div>
+                    <div onClick={this.onClickTagTrash.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                 </li>
             </Fragment>
         )
