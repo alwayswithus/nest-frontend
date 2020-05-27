@@ -642,7 +642,7 @@ export default class Dashboard extends React.Component {
     ApiService.fetchDashboard()
       .then(response => {
         this.setState({
-          projects: response.data.data
+          projects: response.data.data.allProject
         })
       })
   }

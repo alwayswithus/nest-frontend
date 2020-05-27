@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import Pagination from 'react-bootstrap/Pagination'
 import noticeSendData from './noticeSendData.json';
 import dates from './dateData.json';
 
@@ -9,10 +10,10 @@ import './notification.scss';
 
 export default class Notification extends React.Component {
     constructor() {
-        super(...arguments)
+        super(...arguments);
         this.state = {
             notices: noticeSendData,            // notice send Data
-            dates: dates,                         // date Data
+            dates: dates,                       // date Data
             url: "",                            // background url
         }
     }
@@ -25,8 +26,9 @@ export default class Notification extends React.Component {
     }
 
     render() {
+        
         return (
-            <div id="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>
+            <div className="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>
                 {/* 사이드바 */}
                 <div className="sidebar">
                     <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
@@ -55,7 +57,7 @@ export default class Notification extends React.Component {
                                     <div className="notice-body-header-date">
                                         <span>Update on {date.dateMonth} {date.dateDay}, {date.dateYear}</span>
                                     </div>
-                                    <NoticeDate notices={this.state.notices} date={date}/>
+                                    <NoticeDate notices={this.state.notices} date={date} />
                                 </div>
                             </div>)}
                     </div>

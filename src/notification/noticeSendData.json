@@ -46,7 +46,7 @@
         "sendUser": {
             "userNo": 2,
             "userName": "최인효",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "assets/images/toy.png"
         },
         "task": {
             "taskNo": 3,
@@ -79,9 +79,104 @@
     },
     {
         "noticeNo": 5,
-        "noticeMessage": "(nest프로젝트, 계획 업무3) 한해용님을 배정했습니다.",
+        "noticeMessage": "한해용님을 배정했습니다.",
         "noticeType": "assign",
         "noticeDate": "2020-05-24 13:30",
+        "sendUser": {
+            "userNo": 1,
+            "userName": "김우경",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    },
+    {
+        "noticeNo": 6,
+        "noticeMessage": "한해용님을 배정했습니다.",
+        "noticeType": "assign",
+        "noticeDate": "2020-05-24 13:30",
+        "sendUser": {
+            "userNo": 1,
+            "userName": "김우경",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    },
+    {
+        "noticeNo": 7,
+        "noticeMessage": "한해용님을 배정했습니다.",
+        "noticeType": "assign",
+        "noticeDate": "2020-05-24 13:30",
+        "sendUser": {
+            "userNo": 1,
+            "userName": "김우경",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    },
+    {
+        "noticeNo": 8,
+        "noticeMessage": "한해용님을 배정했습니다.",
+        "noticeType": "assign",
+        "noticeDate": "2020-05-23 13:30",
+        "sendUser": {
+            "userNo": 3,
+            "userName": "허길행",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    },
+    {
+        "noticeNo": 9,
+        "noticeMessage": "한해용님을 배정했습니다.",
+        "noticeType": "assign",
+        "noticeDate": "2020-05-23 13:30",
+        "sendUser": {
+            "userNo": 1,
+            "userName": "김우경",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        "task": {
+            "taskNo": 1,
+            "taskContents": "완료 업무 1"
+        },
+        "project": {
+            "projectNo": 3,
+            "projectName": "코드의 숲"
+        }
+    },
+    {
+        "noticeNo": 9,
+        "noticeMessage": "한해용님을 배정했습니다.",
+        "noticeType": "assign",
+        "noticeDate": "2020-05-22 13:30",
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",

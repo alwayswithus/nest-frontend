@@ -8,6 +8,7 @@ import SignUp from "./user/signup/SignUp";
 import PwFind from "./user/pwfind/PwFind";
 
 import Gantt from "./project/gantt/Gantt";
+import File from "./project/file/File";
 
 import Dashboard from "./dashboard/Dashboard";
 import Profile from "./profile/Profile";
@@ -44,6 +45,9 @@ function App() {
 
         {/* 간트차트 */}
         <Route path="/nest/gantt" exact component={Gantt} />
+
+        {/* 파일 */}
+        <Route path="/nest/file" exact component={File} />
 
         {/* 프로젝트 세팅*/}
         <Route path="/nest/projectset" exact component={ProjectSetting} />

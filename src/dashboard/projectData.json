@@ -1,20 +1,22 @@
-[
-   {
-        "project_no": 1,
-        "project_title": "mysite 프로젝트",
-        "project_desc": "mysite 만들어보자",
-        "project_start": "20200513",
-        "project_end": "20200514",
-        "project_status": "상태없음",
-        "members": []
-    },
-    {
-        "project_no": 2,
-        "project_title": "jblog 프로젝트",
-        "project_desc": "jblog 만들어보자",
-        "project_start": "20200513",
-        "project_end": "20200514",
-        "project_status": "상태없음",
-        "members": []
-    }
-]
+{
+    "allProject" : [
+        {
+            "project_no": 1,
+            "project_title": "mysite 프로젝트",
+            "project_desc": "mysite 만들어보자",
+            "project_start": "20200513",
+            "project_end": "20200514",
+            "project_status": "상태없음",
+            "members": []
+        },
+        {
+            "project_no": 2,
+            "project_title": "jblog 프로젝트",
+            "project_desc": "jblog 만들어보자",
+            "project_start": "20200513",
+            "project_end": "20200514",
+            "project_status": "상태없음",
+            "members": []
+        }
+    ]
+}
