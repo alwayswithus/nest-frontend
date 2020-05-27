@@ -22,7 +22,7 @@ class Setting extends Component {
         super(...arguments)
         this.state ={
             open:false,
-            todo:'',
+            checklist:'',
             tags:null,
             closeValue:false, // 태그 모달
             closeTag: false // 새태그만들기 모달
@@ -35,9 +35,9 @@ class Setting extends Component {
     };
 
     //업무등록 onChange
-    onTodoChange(event){
+    onChecklistChange(event){
         this.setState({
-            todo:event.target.value
+            checklist:event.target.value
         })
     }
     
@@ -45,16 +45,16 @@ class Setting extends Component {
     onKeypress(event){
         if(event.key === 'Enter'){
             event.preventDefault()
-            this.props.taskCallbacks.addtodo(event.target.value,this.props.task.taskNo, this.props.taskListNo)
+            this.props.taskCallbacks.addCheckList(event.target.value, this.props.match.params.taskNo, this.props.match.params.taskListNo)
             this.setState({
-                todo:''
+                checklist:''
             })
         }
     }
 
     //click check box
     clickCheckBox(checklistNo, checklistState){
-        this.props.taskCallbacks.todoCheckUpdate(this.props.taskListNo, this.props.task.taskNo,checklistNo, checklistState)
+        this.props.taskCallbacks.checklistStateUpdate(this.props.match.params.taskListNo, this.props.match.params.taskNo, checklistNo, checklistState);
     }
     
     //태그 + 버튼 클릭.(모달창 띄우기)
@@ -195,7 +195,7 @@ class Setting extends Component {
 
                                 {/* tag List */}
                                 <div style={{ display: 'inline-block' }} className = "TagList">
-                                    {taskItem.tag.map(tag => 
+                                    {taskItem.tagList.map(tag => 
                                         <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>{tag.tagName}</span>
                                         </div>
@@ -221,17 +221,17 @@ class Setting extends Component {
                             {/* 하위 할일 */}
                             <li className="taskSettingList">
                                 <div className="checkList">
-                                    {taskItem.checkList && taskItem.checkList.map(todo =>
-                                        <div key={todo.checklistNo} className="todo">
-                                                <input type="checkbox" className="doneCheck" checked={todo.checklistState} onClick={this.clickCheckBox.bind(this,todo.checklistNo, todo.checklistState)} readOnly></input>
+                                    {taskItem.checkList && taskItem.checkList.map(checklist =>
+                                        <div key={checklist.checklistNo} className="inner-checklist">
+                                                <input type="checkbox" className="doneCheck" checked={checklist.checklistState === "done"} onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState)} readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
                                                                 taskListNo : this.props.taskListNo, 
                                                                 taskNo : taskItem.taskNo}} 
-                                                            taskCallbacks={this.props.taskCallbacks} 
-                                                            todo={todo} 
-                                                            key={todo.checklistNo}/>
+                                                                taskCallbacks={this.props.taskCallbacks} 
+                                                                checklist={checklist} 
+                                                                key={checklist.checklistNo}/>
                                                     </div>)}
                                     <div className = "insert">
                                         <button>
@@ -240,9 +240,9 @@ class Setting extends Component {
                                         <div className = "checkListInput">
                                             <input 
                                                 type="text"
-                                                onChange={this.onTodoChange.bind(this)} 
+                                                onChange={this.onChecklistChange.bind(this)} 
                                                 style = {{marginLeft: '5%'}} 
-                                                value = {this.state.todo} 
+                                                value = {this.state.checklist} 
                                                 placeholder='체크리스트 아이템 추가하기'
                                                 onKeyPress={this.onKeypress.bind(this)} 
                                                 autoFocus/>

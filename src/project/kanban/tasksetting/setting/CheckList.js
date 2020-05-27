@@ -6,7 +6,7 @@ class CheckList extends Component {
         super(...arguments)
         this.state ={
             click:true,
-            keyword:this.props.todo.text
+            keyword:this.props.checklist.checklistContents
         }
     }
 
@@ -21,7 +21,7 @@ class CheckList extends Component {
             this.setState({
                 click:!this.state.click
             })
-            this.props.taskCallbacks.todoTextUpdate(this.props.params.taskListNo, this.props.params.taskNo, this.props.todo.checklistNo, event.target.value);
+            this.props.taskCallbacks.checklistStateUpdate(this.props.params.taskListNo, this.props.params.taskNo, this.props.checklist.checklistNo, event.target.value);
         }
     }
 
@@ -32,17 +32,17 @@ class CheckList extends Component {
     }
 
     render() {
-        const todo = this.props.todo;
+        const checklist = this.props.checklist;
         return (
             <ul className="CheckList">
                 {this.state.click ? 
-                    <li style={{margin:'2% 0 0 0'}} key={todo.checklistNo} onClick = {this.onClickText.bind(this)}>
-                        {todo.checklistState ? <del>{this.state.keyword}</del> :  this.state.keyword }
+                    <li style={{margin:'2% 0 0 0'}} key={checklist.checklistNo} onClick = {this.onClickText.bind(this)}>
+                        {checklist.checklistState === "done" ? <del>{this.state.keyword}</del> :  this.state.keyword }
                         <i className="fas fa-pen fa-1x" />
                     </li> :
                     <input 
                         type="text" 
-                        key={todo.checklistNo} 
+                        key={checklist.checklistNo} 
                         value={this.state.keyword} 
                         onChange={this.onInputChange.bind(this)} 
                         onKeyPress={this.onEnter.bind(this)}></input> }
