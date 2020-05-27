@@ -331,18 +331,19 @@ class KanbanMain extends Component {
   callbackAddTag(tagNo, tagName, taskListNo, taskNo){
     const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+    console.log("KanbanMain + " + taskIndex)
     
     let newTag = {
-      id:  tagNo,
-      name: tagName,
-      color: "RGB(255, 160, 160)"
+      tagNo:  tagNo,
+      tagName: tagName,
+      tagColor: "RGB(255, 160, 160)"
     }
 
     let newTagData = update(this.state.taskList, {
       [taskListIndex] : {
         tasks : {
           [taskIndex] : {
-            tag:{
+            tagList:{
               $push : [newTag]
             },
           },
@@ -535,7 +536,7 @@ class KanbanMain extends Component {
     return (
       <>
       {/* taskSetting 띄우는 route */}
-      <Switch>
+      {/* <Switch> */}
           <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo" exact
             render={(match) => 
@@ -549,10 +550,8 @@ class KanbanMain extends Component {
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                 }}
-                task={this.state.taskList} 
-                 />} />
-
-          <Route 
+                task={this.state.taskList} />} />
+          {/* <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
             render={(match) => 
               <Comment 
@@ -569,8 +568,8 @@ class KanbanMain extends Component {
               <File 
                 {...match} 
                 task={this.state.taskList} 
-                 />} />    
-            </Switch>
+                 />} />     */}
+            {/* </Switch> */}
       <ScrollContainer
         className="scroll-container"
         hideScrollbars={false}
