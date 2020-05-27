@@ -200,7 +200,7 @@ export default class Dashboard extends React.Component {
     let member = {
       memberNo: this.state.users.length + 1,
       memberName: memberName !== "" ? memberName : memberEmail,
-      memberPhoto: "assets/images/unnamed.jpg"
+      memberPhoto: "/nest/assets/images/unnamed.jpg"
     }
 
     let newProject = update(this.state.projects, {
@@ -292,7 +292,7 @@ export default class Dashboard extends React.Component {
     let member = {
       memberNo: this.state.users.length + 1,
       memberName: memberName !== "" ? memberName : memberEmail,
-      memberPhoto: "assets/images/unnamed.jpg"
+      memberPhoto: "/nest/assets/images/unnamed.jpg"
     }
 
     let members = update(this.state.members, {

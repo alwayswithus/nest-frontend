@@ -165,7 +165,7 @@ class Setting extends Component {
                                 </div>
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     <div className="Member">
-                                        <img src="/assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <img src="/nest/assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                         <span>김우경</span>
                                     </div>
                                 </div>
