@@ -23,7 +23,7 @@ class TopBar extends Component {
                       <a href="/nest/gantt">타임라인</a>
                     </li>
                     <li>
-                      <a href="#">파일</a>
+                      <a href="/nest/file">파일</a>
                     </li>
                     <li>
                       <a href="#">활동로그</a>

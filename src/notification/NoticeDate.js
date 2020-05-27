@@ -1,13 +1,15 @@
 import React from 'react';
 import moment from 'moment';
+import ReactTooltip from "react-tooltip";
+import { Link } from "react-router-dom";
 
 import './noticeDate.scss';
 
 export default class NoticeDate extends React.Component {
-
+    
     render() {
         let date = `${this.props.date.dateYear}-${this.props.date.dateMonth}-${this.props.date.dateDay}`;
-        console.log(date);
+        
         return (
             <div className="NoticeDate">
                 {this.props.notices.map(notice =>
@@ -23,9 +25,15 @@ export default class NoticeDate extends React.Component {
                                 <div className="notice-body-contents-acive">
                                     <span>{notice.noticeMessage}</span>
                                 </div>
+                                
                                 <div className="notice-body-contents-path">
                                     <i className="fas fa-project-diagram fa-xs"></i>
-                                    <span className="contents-path">{`${notice.project.projectName} > ${notice.task.taskContents}`}</span>
+                                    <Link to="#">
+                                        <span className="contents-path" data-tip="프로젝트로 가기" data-place="bottom">
+                                            {`${notice.project.projectName} > ${notice.task.taskContents}`}
+                                        </span>
+                                        <ReactTooltip />
+                                    </Link>
                                 </div>
                             </div>
                             <div className="notice-body-avatar-timeline">
