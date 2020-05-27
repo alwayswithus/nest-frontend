@@ -119,6 +119,10 @@ class Setting extends Component {
         })
     }
     render() {
+
+        if(!this.props.task){
+            return <></>;
+        }
         const taskList = this.props.task;
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo == this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo == this.props.match.params.taskNo);

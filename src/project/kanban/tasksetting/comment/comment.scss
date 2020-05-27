@@ -10,7 +10,7 @@
         float:right;
         margin:43px auto;
         clear: both;
-    
+        height: 100%;
         hr {
             border: 2px solid black;
             margin:0;
@@ -57,10 +57,11 @@
     
     .CommentList{
         background-color: #F3F4F5;
+        height: calc(100% - 375px);
         .media{
             padding:1%;
-            height:480px;
             overflow: auto;
+            height: 100%;
             img{
                 max-width: 35px;
             }
