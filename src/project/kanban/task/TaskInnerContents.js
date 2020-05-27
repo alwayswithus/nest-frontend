@@ -14,13 +14,13 @@ class TaskInnerContents extends Component {
 
   // task 삭제
   deleteTask() {
-    this.props.taskCallbacks.delete(this.props.taskListNo, this.props.task.no);
+    this.props.taskCallbacks.delete(this.props.taskListNo, this.props.task.taskNo);
     this.noneClick();
   }
 
   // task 복사
   copyTask() {
-    this.props.taskCallbacks.copy(this.props.taskListNo, this.props.task.no);
+    this.props.taskCallbacks.copy(this.props.taskListNo, this.props.task.taskNo);
     this.noneClick();
   }
 
@@ -34,8 +34,8 @@ class TaskInnerContents extends Component {
   doneTask() {
     this.props.taskCallbacks.doneTask(
       this.props.taskListNo,
-      this.props.task.no,
-      this.props.task.checked,
+      this.props.task.taskNo,
+      this.props.task.taskState,
       this.props.index
       // this.props.firstTrueIndex
     );
