@@ -2,10 +2,14 @@ import React, { Component, Fragment } from "react";
 import CommentList from './CommentList'
 import CommentInput from "./CommentInput";
 import Header from '../file/Header';
+import ApiService from "../../../../ApiService";
 
 class Comment extends Component  {
     render(){
-        console.log(this.props.match)
+        if(!this.props.task){
+            return <></>;
+        }
+
         const taskList = this.props.task;
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo == this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo == this.props.match.params.taskNo);

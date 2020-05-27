@@ -3,20 +3,9 @@ import './SettingTag.scss';
 
 class SettingTag extends Component {
 
-    constructor() {
-        super(...arguments)
-        this.state = {
-            checked: false
-        }
-    }
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox(event) {
-
-        console.log(event.target.checked)
-        this.setState({
-            checked: event.target.checked
-        })
-        if (event.target.checked) {
+        if (event.target.className == 'far fa-square') {
             this.props.taskCallbacks.addtag(
                 this.props.tagParams.tagNo,
                 this.props.tagParams.tagName,
@@ -31,7 +20,7 @@ class SettingTag extends Component {
     }
 
     //tag 삭제
-    onClickTagTrash() {
+    onClickTagModify() {
         this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
     }
 
@@ -62,24 +51,17 @@ class SettingTag extends Component {
                         </div>
                     </div>
                 </div> */}
-                <li className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                    {this.props.tagParams.taskItem.tagList.map(tag => 
-                        tag.tagNo === this.props.tagParams.tagNo ? <i className="fas fa-check-square fa-1.5x"></i> : <i className="far fa-square"></i>
+                <li onClick={this.onCheckBox.bind(this)} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
+                    {this.props.tagParams.taskItem.tagList.map(tag =>
+                        tag.tagNo === this.props.tagParams.tagNo ?  <i className="fas fa-check-square"></i> : null
                     )}
-                    {/* <input
-                        onClick={this.onCheckBox.bind(this)}
-                        type="checkbox"
-                        className="tagCheck"
-                        checked={this.state.checked}
-                        readOnly
-                    ></input> */}
-                    {/* {this.props.taskItem.tagList && this.props.taskItem.tagList.map(tag => 
-                        console.log(tag.tagNo)
-                    )} */}
-                    {/* <i className="far fa-square"></i>
-                    <i className="fas fa-check-square fa-1.5x"></i> */}
+                    {/* {this.props.tagParams.taskItem.tagList.length == 0 ? <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i> : 
+                        (<> {this.props.tagParams.taskItem.tagList.map(tag =>
+                                tag.tagNo === this.props.tagParams.tagNo ?  <i onClick={this.onCheckBox.bind(this)} className="fas fa-check-square"></i> : <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i>
+                        )}</>)
+                    } */}
                     <div className="tag">{this.props.tagParams.tagName}</div>
-                    <div onClick={this.onClickTagTrash.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
+                    <div onClick={this.onClickTagModify.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                 </li>
             </Fragment>
         )

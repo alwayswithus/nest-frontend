@@ -24,7 +24,7 @@ class CommentList extends Component {
                 {/* comment List */}
                 <div className="media">
                     {/* comment */}
-                    {this.props.taskItem.comments.map(comment =>
+                    {this.props.taskItem.commentList.map(comment =>
                         <CommentContents 
                             key={comment.commentNo}
                             comment = {comment}

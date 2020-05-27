@@ -43,6 +43,11 @@
     }
     
     .FileList{
+        .FileList-tr{
+            td{
+                padding-left: 10px;
+            }
+        }
         table tr{
             height: 50px;
             vertical-align: middle;

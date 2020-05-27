@@ -14,6 +14,10 @@ class ApiService {
     fetchTagList(){
         return axios.get(`/nest/api/taglist`);
     }
+
+    fetchUser(){
+        return axios.get(`/nest/api/user`);
+    }
 }
 
 export default new ApiService();

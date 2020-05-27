@@ -416,27 +416,24 @@ class KanbanMain extends Component {
   }
 
   //task에 tag 삭제하기
-  callbackDeleteTag(tagNo, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
-    );
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
-    );
-    const tagIndex = this.state.taskList[taskListIndex].tasks[
-      taskIndex
-    ].tag.findIndex((tag) => tag.tagNo == tagNo);
+  callbackDeleteTag(tagNo, taskListNo, taskNo){
+    console.log("KanbanMain : "+tagNo + ":" + taskListNo + ":" + taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+    const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tagList.findIndex(
+      (tag) => tag.tagNo == tagNo
+    )
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            tag: {
-              $splice: [[tagIndex, 1]],
-            },
-          },
-        },
-      },
+      [taskListIndex] : {
+        tasks:{
+          [taskIndex] :{
+            tagList:{
+              $splice : [[tagIndex,1]]
+            }
+          }
+        }
+      }
     });
 
     this.setState({
@@ -598,26 +595,22 @@ class KanbanMain extends Component {
   }
 
   //comment 글 쓰기
-  callbackAddComment(commentContents, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
-    );
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskListNo == taskNo
-    );
-    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex]
-      .comments.length;
 
-    // console.log("KanbanMain + " +commentContents)
+  callbackAddComment(commentContents, taskListNo, taskNo){
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].commentList
+    // console.log("KanbanMain + " +commentLength)
+    
     let newComment = {
       commentNo: commentLength + 1,
       commentRegdate: "2020-05-25",
       commentContents: commentContents,
-      commentLike: 0,
-      memberNo: 1,
-      memberName: "김우경",
-      memberPhoto: "/assets/images/unnamed.jpg",
-    };
+      commentLike:0,
+      userNo:21,
+      taskNo:taskNo,
+      fileNo:null
+    }
 
     let newTaskList = update(this.state.taskList, {
       [taskListIndex]: {
@@ -639,31 +632,23 @@ class KanbanMain extends Component {
     // console.log("KanbanMain + " + this.props.match.path)
     return (
       <>
-        {/* taskSetting 띄우는 route */}
-        {/* <Switch> */}
-        <Route
-          path="/nest/kanbanMain/:taskListNo/task/:taskNo"
-          exact
-          render={(match) => (
-            <Setting
-              {...match}
-              taskCallbacks={{
-                checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                checklistStateUpdate: this.callbackCheckListStateUpdate.bind(
-                  this
-                ), // checklist state 업데이트
-                checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(
-                  this
-                ), // checklist contents 업데이트
-                addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
-                addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
-                deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
-              }}
-              task={this.state.taskList}
-            />
-          )}
-        />
-        {/* <Route 
+      {/* taskSetting 띄우는 route */}
+      <Switch>
+          <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo" exact
+            render={(match) => 
+              <Setting 
+                {...match}
+                taskCallbacks={{
+                  checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
+                  checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist state 업데이트
+                  checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
+                  addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
+                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+                }}
+                task={this.state.taskList} />} />
+          <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
             render={(match) => 
               <Comment 
@@ -672,6 +657,7 @@ class KanbanMain extends Component {
                   taskCallbacks={{
                     commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                     commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                    addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
                   }} />} />
 
           <Route 
@@ -680,13 +666,13 @@ class KanbanMain extends Component {
               <File 
                 {...match} 
                 task={this.state.taskList} 
-                 />} />     */}
-        {/* </Switch> */}
-        <ScrollContainer
-          className="scroll-container"
-          hideScrollbars={false}
-          ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
-          style={{ backgroundImage: `url(${this.state.url})` }}
+                 />} />    
+            </Switch>
+      <ScrollContainer
+        className="scroll-container"
+        hideScrollbars={false}
+        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
+        style={{ backgroundImage: `url(${this.state.url})` }}
         >
           <div className="container-fluid kanbanMain">
             <div className="row content ">
