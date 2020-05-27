@@ -59,7 +59,7 @@ class TagModal extends Component {
                         <div className="invite-card-tag-list">
                             <ul>
                                 {this.props.tags && this.props.tags
-                                    .filter((element) => element.tagName.indexOf(this.state.keyword) != -1)
+                                    .filter((element) => element.tagName.indexOf(this.state.keyword) !== -1)
                                     .map(tag =>
                                     <SettingTag
                                         key={tag.tagNo}

@@ -17,7 +17,7 @@ class CheckList extends Component {
     }
 
     onEnter(event) {
-        if(event.key=='Enter'){
+        if(event.key === 'Enter'){
             this.setState({
                 click:!this.state.click
             })

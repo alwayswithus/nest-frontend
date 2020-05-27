@@ -38,10 +38,10 @@ export default class Notification extends React.Component {
                     <div className="notice-header-contents">
                         <div className="notice-header-icon">
                             <div className="notice-header-title-month">
-                                <span className="notice-header-title-month-text">{moment(new Date).format("MMM")}</span>
+                                <span className="notice-header-title-month-text">{moment(new Date()).format("MMM")}</span>
                             </div>
                             <div className="notice-header-title-day">
-                                <span className="notice-header-title-day-text">{moment(new Date).format("DD")}</span>
+                                <span className="notice-header-title-day-text">{moment(new Date()).format("DD")}</span>
                             </div>
                         </div>
                         <div className="notice-header-title-text">

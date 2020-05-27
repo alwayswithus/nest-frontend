@@ -5,7 +5,7 @@ import { CirclePicker } from 'react-color';
 class TagModal extends Component {
 
     onKeyPressEnter(event){
-        if(event.key == "Enter"){
+        if(event.key === "Enter"){
             event.preventDefault();
             this.props.settingTagCallbakcs.add(event.target.value);
             event.target.value='';

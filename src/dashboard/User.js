@@ -13,7 +13,7 @@ export default class User extends React.Component {
                 <img src={this.props.user.userPhoto} className="img-circle" alt={this.props.user.userPhoto} />
                 <span>{this.props.user.userName}</span>
                 { this.props.members.map(member => 
-                    member.memberNo == this.props.user.userNo ? <i key={member.memberNo} className="fas fa-check"></i> : "") }
+                    member.memberNo === this.props.user.userNo ? <i key={member.memberNo} className="fas fa-check"></i> : "") }
             </div>
         )
     }

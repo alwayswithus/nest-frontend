@@ -5,7 +5,7 @@ class SettingTag extends Component {
 
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox(event) {
-        if (event.target.className == 'far fa-square') {
+        if (event.target.className === 'far fa-square') {
             this.props.taskCallbacks.addtag(
                 this.props.tagParams.tagNo,
                 this.props.tagParams.tagName,
@@ -55,7 +55,7 @@ class SettingTag extends Component {
                     {this.props.tagParams.taskItem.tagList.map(tag =>
                         tag.tagNo === this.props.tagParams.tagNo ?  <i className="fas fa-check-square"></i> : null
                     )}
-                    {/* {this.props.tagParams.taskItem.tagList.length == 0 ? <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i> : 
+                    {/* {this.props.tagParams.taskItem.tagList.length === 0 ? <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i> : 
                         (<> {this.props.tagParams.taskItem.tagList.map(tag =>
                                 tag.tagNo === this.props.tagParams.tagNo ?  <i onClick={this.onCheckBox.bind(this)} className="fas fa-check-square"></i> : <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i>
                         )}</>)

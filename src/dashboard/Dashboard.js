@@ -200,7 +200,7 @@ export default class Dashboard extends React.Component {
     let member = {
       memberNo: this.state.users.length + 1,
       memberName: memberName !== "" ? memberName : memberEmail,
-      memberPhoto: "/nest/assets/images/unnamed.jpg"
+      memberPhoto: "assets/images/unnamed.jpg"
     }
 
     let newProject = update(this.state.projects, {
@@ -248,7 +248,7 @@ export default class Dashboard extends React.Component {
   onAddProjectSubmit(event) {
     event.preventDefault();
 
-    let startDate = moment(new Date).format('YYYY-MM-DD h:mm');
+    let startDate = moment(new Date()).format('YYYY-MM-DD h:mm');
 
     let project = {
       projectNo: this.state.projects.length + 1,
@@ -292,7 +292,7 @@ export default class Dashboard extends React.Component {
     let member = {
       memberNo: this.state.users.length + 1,
       memberName: memberName !== "" ? memberName : memberEmail,
-      memberPhoto: "/nest/assets/images/unnamed.jpg"
+      memberPhoto: "assets/images/unnamed.jpg"
     }
 
     let members = update(this.state.members, {
