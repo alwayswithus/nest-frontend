@@ -18,6 +18,10 @@ class ApiService {
     fetchUser(){
         return axios.get(`/nest/api/user`);
     }
+
+    fetchLogin(email, password){
+        return axios.post(`/nest/api/login?email=${email}&password=${password}`)
+    }
 }
 
 export default new ApiService();
