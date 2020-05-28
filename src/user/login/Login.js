@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 import Input from "@material-ui/core/Input";
 
 import { Button, InputLabel } from "@material-ui/core";
+import ApiService from '../../ApiService';
 
 import "./login.scss"
 
@@ -18,16 +19,40 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  // const login = e => {
-  //   e.preventDefault();
-  // };
+  const login = e => {
+    e.preventDefault();
+    ApiService.fetchLogin(e.target.email.value, e.target.password.value)
+    .then(response => {
+      if (!response.data.data) {
+        window.location.href = "/nest/";
+        return;
+      }
+      sessionStorage.setItem("authUserNo", response.data.data.userNo)
+      sessionStorage.setItem("authUserEmail", response.data.data.userEmail)
+      sessionStorage.setItem("authUserName", response.data.data.userName)
+      sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
+      sessionStorage.setItem("authUserBg", response.data.data.userBg)
+
+      // let a = sessionStorage.getItem("authUserNo");
+      // let b = sessionStorage.getItem("authUserName");
+      // let c = sessionStorage.getItem("authUserEmail");
+      // let d = sessionStorage.getItem("authUserPhoto");
+      // let e = sessionStorage.getItem("authUserBg");
+      // console.log(a + " / " + b + " / " + c +" / " + d + " / " + e)
+
+    }).then( e =>{
+      if(sessionStorage.getItem("authUserName")){
+        window.location.href = "/nest/dashboard";
+      }
+    });
+  };
 
   return (
     <>
       <div className="Login">
         <div className="loginBox">
           <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
-          <form /*onSubmit={login}*/ action="/nest/auth" method="POST" >
+          <form onSubmit={login}>
             <InputLabel id="loginText">Log In</InputLabel>
             <br/>
             <Input
@@ -50,7 +75,9 @@ const Login = () => {
                   />
             <br/><br/>
 
-            <Input className="loginItems" id="loginSubmit" type="submit" value="로그인" />
+            {/* <Link to="/nest/dashboard"> */}
+              <Input className="loginItems" id="loginSubmit" type="submit" value="로그인" />
+            {/* </Link> */}
 				  </form>
 
           <br/>
