@@ -5,9 +5,10 @@
     width: 250px;
     float: left;
     margin: 2%;
-    .fa-square, .fa-check-square{
-        cursor: pointer;
-    }
+    cursor: pointer;
+    // .fa-square, .fa-check-square{
+    //     cursor: pointer;
+    // }
     .tagCheck{
         height: 10px;
         margin-left: 5%;
@@ -15,7 +16,7 @@
         display: inline-block;
     }
     .tag{
-        cursor: default;
+        cursor: pointer;
         height: 25px;
         display: inline-block;
         width:auto;
