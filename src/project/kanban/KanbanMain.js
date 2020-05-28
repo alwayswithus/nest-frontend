@@ -276,20 +276,47 @@ class KanbanMain extends Component {
   }
 
   // task list 추가
-  callbackAddTaskList(taskListTitle) {
+  callbackAddTaskList(taskListName,projectNo) {
+
     let newTaskList = {
-      no: Date.now() + "",
-      title: taskListTitle,
-      tasks: [],
+      taskListNo: null,
+      taskListName: taskListName,
+      taskListOrder: null,
+      projectNo:projectNo
     };
 
-    let pushTaskList = update(this.state.taskList, {
-      $push: [newTaskList],
-    });
+    fetch(`${API_URL}/api/taskList/add`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newTaskList),
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      // console.log(json.data) //taskList 하나
 
-    this.setState({
-      taskList: pushTaskList,
-    });
+      newTaskList = update(json.data, {
+        $set: {
+          taskListNo: json.data.taskListNo+"",
+          taskListName: json.data.taskListName,
+          taskListOrder: json.data.taskListOrder,
+          projectNo:json.data.projectNo,
+          tasks:[]
+        }
+      })
+
+      console.log(newTaskList);
+
+      let pushTaskList = update(this.state.taskList, {
+        $push: [newTaskList],
+      });
+
+      this.setState({
+        taskList: pushTaskList,
+      });
+    })
+
+
+
   }
 
   // task list 삭제
