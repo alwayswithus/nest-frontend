@@ -9,7 +9,7 @@ class Navigation extends Component {
     console.log("TaskSetNav : " + this.props.match.path)
     return (
       <div className="Navigation">
-        {this.props.match.path == '/nest/kanbanMain/:taskListNo/task/:taskNo/file' ?
+        {this.props.match.path === '/nest/kanbanMain/:taskListNo/task/:taskNo/file' ?
           (<ul className="nav nav-tabs">
             <li className="nav-item">
               <a id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}`}>속성 </a>
@@ -22,7 +22,7 @@ class Navigation extends Component {
             </li>
           </ul>) :
 
-          (<>{this.props.match.path == '/nest/kanbanMain/:taskListNo/task/:taskNo/comment' ?
+          (<>{this.props.match.path === '/nest/kanbanMain/:taskListNo/task/:taskNo/comment' ?
             (<ul className="nav nav-tabs">
               <li className="nav-item">
                 <a id='setting' className="nav-link" style={{ textAlign: 'center', borderBottom: 'none' }} href={`/nest/kanbanMain/${this.props.params.taskListNo}/task/${this.props.params.taskNo}`}>속성 </a>

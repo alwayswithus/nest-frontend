@@ -7,7 +7,7 @@
         "sendUser": {
             "userNo": 2,
             "userName": "최인효",
-            "userPhoto": "assets/images/toy.png"
+            "userPhoto": "/nest/assets/images/toy.png"
         },
         "task": {
             "taskNo": 1,
@@ -26,7 +26,7 @@
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",
-            "userPhoto": "assets/images/ko.jpg"
+            "userPhoto": "/nest/assets/images/ko.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -46,7 +46,7 @@
         "sendUser": {
             "userNo": 2,
             "userName": "최인효",
-            "userPhoto": "assets/images/toy.png"
+            "userPhoto": "/nest/assets/images/toy.png"
         },
         "task": {
             "taskNo": 3,
@@ -66,7 +66,7 @@
         "sendUser": {
             "userNo": 3,
             "userName": "허길행",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -85,7 +85,7 @@
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -104,7 +104,7 @@
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -123,7 +123,7 @@
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -142,7 +142,7 @@
         "sendUser": {
             "userNo": 3,
             "userName": "허길행",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -161,7 +161,7 @@
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,
@@ -180,7 +180,7 @@
         "sendUser": {
             "userNo": 1,
             "userName": "김우경",
-            "userPhoto": "assets/images/unnamed.jpg"
+            "userPhoto": "/nest/assets/images/unnamed.jpg"
         },
         "task": {
             "taskNo": 1,

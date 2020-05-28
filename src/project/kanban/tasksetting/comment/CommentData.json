@@ -8,11 +8,11 @@
             {
                 "memberNo": 1,
                 "memberName": "김우경",
-                "memberPhoto": "/assets/images/unnamed.jpg"
+                "memberPhoto": "/nest/assets/images/unnamed.jpg"
             }, {
                 "memberNo": 2,
                 "memberName": "마이콜",
-                "memberPhoto": "/assets/images/unnamed.jpg"
+                "memberPhoto": "/nest/assets/images/unnamed.jpg"
             }
         ]
     }

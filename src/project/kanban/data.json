@@ -35,7 +35,7 @@
             "commentLike": 0,
             "memberNo": 1,
             "memberName": "김우경",
-            "memberPhoto": "/assets/images/unnamed.jpg"
+            "memberPhoto": "/nest/assets/images/unnamed.jpg"
           },
           {
             "commentNo": 2,
@@ -44,7 +44,7 @@
             "commentLike": 1,
             "memberNo": 2,
             "memberName": "마이콜",
-            "memberPhoto": "/assets/images/unnamed.jpg"
+            "memberPhoto": "/nest/assets/images/unnamed.jpg"
           },
           {
             "commentNo": 3,
@@ -53,7 +53,7 @@
             "commentLike": 0,
             "memberNo": 3,
             "memberName": "둘리",
-            "memberPhoto": "/assets/images/unnamed.jpg"
+            "memberPhoto": "/nest/assets/images/unnamed.jpg"
           }
         ],
         "checked": false,

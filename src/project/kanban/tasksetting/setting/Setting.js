@@ -102,7 +102,7 @@ class Setting extends Component {
     callbackDeleteTags(tagNo){
         console.log("!!!!" + tagNo)
 
-        const tagIndex = this.state.tags.findIndex(tag => tag.tagNo == tagNo);
+        const tagIndex = this.state.tags.findIndex(tag => tag.tagNo === tagNo);
         fetch(`${API_URL}/api/taglist/delete`, {
             method:'delete',
             headers:API_HEADERS,
@@ -124,8 +124,8 @@ class Setting extends Component {
             return <></>;
         }
         const taskList = this.props.task;
-        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo == this.props.match.params.taskListNo);
-        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo == this.props.match.params.taskNo);
+        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
+        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
         return (
             <div className = "taskSetting-setting">
@@ -165,7 +165,7 @@ class Setting extends Component {
                                 </div>
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     <div className="Member">
-                                        <img src="/assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
+                                        <img src="/nest/assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
                                         <span>김우경</span>
                                     </div>
                                 </div>

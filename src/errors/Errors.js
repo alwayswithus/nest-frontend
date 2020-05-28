@@ -10,7 +10,7 @@ const Errors = () => {
     <>
       <div className="Errors">
         <div className="ErrorsBox">
-          <img style={{width:"150px", height:"150px"}} src="assets/images/nest-logo-black-errors.png" />
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black-errors.png" />
           <InputLabel id="ErrorsText">Errors!!</InputLabel>
           <br/>
           <Link to="/nest">

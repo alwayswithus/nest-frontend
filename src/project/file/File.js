@@ -42,7 +42,7 @@ export default class File extends React.Component {
                                 <td>
                                     <div className="file-name-cell">
                                         <div className="file-name-cell-image">
-                                            <img className="file-image" src="../assets/images/toy.png" />
+                                            <img className="file-image" src="../nest/assets/images/toy.png" />
                                         </div>
                                         <div className="file-name-and-path">
                                             <span className="file-name">plug.png</span>

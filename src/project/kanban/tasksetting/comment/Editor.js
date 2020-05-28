@@ -19,7 +19,7 @@ class Editor extends Component {
     }
 
     // onKeyPressEditor(event){
-    //   if(event.shiftKey == true){
+    //   if(event.shiftKey === true){
     //     console.log("Editor"+event.key)
         
     //   }

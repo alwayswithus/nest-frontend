@@ -7,7 +7,7 @@ import "./KanbanMain.scss";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext } from "react-beautiful-dnd";
 import ApiService from "../../ApiService";
-import { Route, BrowserRouter, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Setting from "../kanban/tasksetting/setting/Setting";
 import Comment from "../kanban/tasksetting/comment/Comment";
 import File from "../kanban/tasksetting/file/File";
@@ -375,11 +375,11 @@ class KanbanMain extends Component {
     // console.log("taskListNo : " + taskListNo)
     // console.log(this.state.taskList)
     const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
+      (taskList) => taskList.taskListNo === taskListNo
     );
 
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
+      (task) => task.taskNo === taskNo
     );
 
     const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex]
@@ -412,10 +412,10 @@ class KanbanMain extends Component {
   //task에 tag 추가하기
   callbackAddTag(tagNo, tagName, taskListNo, taskNo) {
     const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
+      (taskList) => taskList.taskListNo === taskListNo
     );
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
+      (task) => task.taskNo === taskNo
     );
 
     // const tagIndex = this.state.taskList[taskIndex].tasks[taskIndex].tagList.findIndex(
@@ -450,10 +450,10 @@ class KanbanMain extends Component {
   //task에 tag 삭제하기
   callbackDeleteTag(tagNo, taskListNo, taskNo){
     console.log("KanbanMain : "+tagNo + ":" + taskListNo + ":" + taskNo)
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo)
     const tagIndex = this.state.taskList[taskListIndex].tasks[taskIndex].tagList.findIndex(
-      (tag) => tag.tagNo == tagNo
+      (tag) => tag.tagNo === tagNo
     )
 
     let newTaskList = update(this.state.taskList, {
@@ -481,14 +481,14 @@ class KanbanMain extends Component {
     checklistState
   ) {
     const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
+      (taskList) => taskList.taskListNo === taskListNo
     );
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
+      (task) => task.taskNo === taskNo
     );
     const checklistIndex = this.state.taskList[taskListIndex].tasks[
       taskIndex
-    ].checkList.findIndex((checklist) => checklist.checklistNo == checklistNo);
+    ].checkList.findIndex((checklist) => checklist.checklistNo === checklistNo);
 
     // console.log("KanbanMain + " + checklistIndex + " : " + checklistState)
 
@@ -521,14 +521,14 @@ class KanbanMain extends Component {
     checklistContents
   ) {
     const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
+      (taskList) => taskList.taskListNo === taskListNo
     );
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
+      (task) => task.taskNo === taskNo
     );
     const checkListIndex = this.state.taskList[taskListIndex].tasks[
       taskIndex
-    ].checkList.findIndex((checkList) => checkList.checklistNo == checklistNo);
+    ].checkList.findIndex((checkList) => checkList.checklistNo === checklistNo);
 
     let newTaskList = update(this.state.taskList, {
       [taskListIndex]: {
@@ -554,14 +554,14 @@ class KanbanMain extends Component {
   // comment like 수 증가
   callbackCommentLikeUpdate(taskListNo, taskNo, commentNo) {
     const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
+      (taskList) => taskList.taskListNo === taskListNo
     );
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
+      (task) => task.taskNo === taskNo
     );
     const commentIndex = this.state.taskList[taskListIndex].tasks[
       taskIndex
-    ].comments.findIndex((comment) => comment.commentNo == commentNo);
+    ].comments.findIndex((comment) => comment.commentNo === commentNo);
 
     // console.log(this.state.taskList[taskListIndex].tasks[taskIndex].comments[commentIndex].commentLike)
     let newTaskList = update(this.state.taskList, {
@@ -595,14 +595,14 @@ class KanbanMain extends Component {
     commentContents
   ) {
     const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo == taskListNo
+      (taskList) => taskList.taskListNo === taskListNo
     );
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo == taskNo
+      (task) => task.taskNo === taskNo
     );
     const commentIndex = this.state.taskList[taskListIndex].tasks[
       taskIndex
-    ].comments.findIndex((comment) => comment.commentNo == commentNo);
+    ].comments.findIndex((comment) => comment.commentNo === commentNo);
 
     // console.log("KanbanMain + " + commentContents)
     let newTaskList = update(this.state.taskList, {
@@ -629,8 +629,8 @@ class KanbanMain extends Component {
   //comment 글 쓰기
 
   callbackAddComment(commentContents, taskListNo, taskNo){
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo)
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo)
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo)
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo)
     const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].commentList
     // console.log("KanbanMain + " +commentLength)
     

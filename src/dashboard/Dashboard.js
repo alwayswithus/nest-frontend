@@ -253,9 +253,10 @@ export default class Dashboard extends React.Component {
   onAddProjectSubmit(event) {
     event.preventDefault();
 
+
     let projectTitle = event.target.projectTitle.value;
     let projectDesc = event.target.projectDesc.value;
-    let startDate = moment(new Date).format('YYYY-MM-DD h:mm');
+    let startDate = moment(new Date()).format('YYYY-MM-DD h:mm');
     let members = this.state.members;
 
     let project = {

@@ -41,7 +41,7 @@ class commentContents extends Component {
     //comment 작성 후 enter
     onKeyPressEnter(event) {
         console.log("CommentContents + " + event.target.value)
-        if(event.key == 'Enter'){ 
+        if(event.key === 'Enter'){ 
             event.preventDefault()
             this.setState({
                 change:!this.state.change,
@@ -92,7 +92,7 @@ class commentContents extends Component {
                                />
                         }
                     <ul className="list-unstyled list-inline media-detail pull-left">
-                        {this.props.comment.commentLike == '0' ? null : <li><i className="fa fa-thumbs-up"></i>&nbsp;{this.props.comment.commentLike}</li> }
+                        {this.props.comment.commentLike === '0' ? null : <li><i className="fa fa-thumbs-up"></i>&nbsp;{this.props.comment.commentLike}</li> }
                     </ul>
                 </div>
             </Fragment>
