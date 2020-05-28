@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
 import Task from "./Task";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import update from "react-addons-update";
 
 import "./TaskList.scss";
+
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+  "Content-Type": "application/json",
+};
 
 class TaskList extends Component {
   constructor() {
@@ -21,25 +27,46 @@ class TaskList extends Component {
     };
   }
 
-  // 클릭 모달 막기
+  // 클릭 이벤트 막기
   noneClick(event) {
     event.preventDefault();
   }
 
-  // Task List 이름 수정(input 태그) 상태 변경
+  // Task List 이름 수정(input 태그) 및 UI 변경
   editNameInputState() {
+    if (this.state.showEditNameInput) {
+      this.editTaskListName();
+    }
+
     this.setState({
       showEditNameInput: !this.state.showEditNameInput,
       beforTaskListName: this.state.keyword,
     });
   }
 
+  editTaskListName() {
+    const newTaskList = update(this.props.taskList, {
+      taskListName: { $set: this.state.keyword },
+    });
+
+    fetch(`${API_URL}/api/taskList/editName`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newTaskList),
+    })
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }
+
   //Task List 이름 수정 취소
   unEditTaskListName() {
     this.setState({
+      showEditNameInput: !this.state.showEditNameInput,
+      beforTaskListName: this.state.keyword,
       keyword: this.state.beforTaskListName,
     });
-    this.editNameInputState();
   }
 
   // Task List 이름 수정시 글자 수 limit
@@ -49,7 +76,7 @@ class TaskList extends Component {
     });
   }
 
-  // Task List 이름 수정시 엔터키로 수정
+  // Task List 이름 수정 (Enter키로 함수 호출)
   onInputKeyPress(event) {
     if (event.key === "Enter") {
       this.editNameInputState();
@@ -63,7 +90,7 @@ class TaskList extends Component {
     });
   }
 
-  // Task List 입력 이벤트
+  // Task 내용 입력 이벤트
   onTextAreaChanged(event) {
     this.setState({
       taskContents: event.target.value.substr(0, 30),
@@ -80,7 +107,7 @@ class TaskList extends Component {
   // taskList 삭제
   deleteTaskList() {
     if (window.confirm("업무 목록을 삭제하시겠습니까?")) {
-      this.props.taskCallbacks.deleteList(this.props.taskList.taskListNo);
+      this.props.taskCallbacks.deleteList(this.props.taskList);
       this.setState({
         keyword: this.props.taskList.title,
       });
@@ -102,7 +129,10 @@ class TaskList extends Component {
     let completeTaskState = false;
     // console.log(this.props.taskList.tasks);
     return (
-      <Draggable draggableId={this.props.taskList.taskListNo} index={this.props.index}>
+      <Draggable
+        draggableId={this.props.taskList.taskListNo}
+        index={this.props.index}
+      >
         {(provided) => (
           <div
             className="taskCategory"
@@ -209,7 +239,10 @@ class TaskList extends Component {
               )}
             </div>
             <div className="taskArea">
-              <Droppable droppableId={this.props.taskList.taskListNo} type="task">
+              <Droppable
+                droppableId={this.props.taskList.taskListNo}
+                type="task"
+              >
                 {(provided, snapshot) => (
                   <div
                     className="tasks"
@@ -221,7 +254,9 @@ class TaskList extends Component {
                     {this.props.taskList.tasks
                       .filter(
                         (task) =>
-                          task.taskContents.indexOf(this.props.searchKeyword) !== -1
+                          task.taskContents.indexOf(
+                            this.props.searchKeyword
+                          ) !== -1
                       )
                       .map((task, index) =>
                         task.checked ? null : task !== "" ? (
@@ -247,26 +282,29 @@ class TaskList extends Component {
                 ref={provided.innerRef}
                 // {...provided.droppableProps}
               >
-                {this.props.tasks.map(task => task.taskState === "done" ? completeTaskState = true : null)}
-                {completeTaskState ? <div
+                {this.props.tasks.map((task) =>
+                  task.taskState === "done" ? (completeTaskState = true) : null
+                )}
+                {completeTaskState ? (
+                  <div
                     className="completeArea"
                     onClick={this.showCompleteTaskList.bind(this)}
                   >
                     완료된 업무
-                  </div> :
-                  null
-                  }
-               
+                  </div>
+                ) : null}
 
                 {this.state.showComplete ? (
                   <div className="completeTask">
                     {this.props.taskList.tasks
                       .filter(
                         (task) =>
-                          task.taskContents.indexOf(this.props.searchKeyword) !== -1
+                          task.taskContents.indexOf(
+                            this.props.searchKeyword
+                          ) !== -1
                       )
                       .map((task, index) =>
-                        task.taskState === 'done' ? (
+                        task.taskState === "done" ? (
                           <Task
                             key={task.taskNo}
                             taskListNo={this.props.taskList.taskListNo}
