@@ -12,13 +12,18 @@ import User from './User';
 
 import ApiService from '../ApiService';
 
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+  'Content-Type': 'application/json'
+}
+
 export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
       projects: null,                  // projects data
-      users: userData,                 // user data
+      users: null,                 // user data
 
       url: "",                         // background image url
       project: [],                     // project
@@ -57,19 +62,19 @@ export default class Dashboard extends React.Component {
   // CallBack Add Delete Member Function
   callbackAddDeleteMember(userNo, userName, userPhoto, projectNo) {
     const memberIndex = this.state.project.members.findIndex(member =>
-      member.memberNo === userNo)
+      member.userNo === userNo)
 
     const projectIndex = this.state.projects.findIndex(project =>
       project.projectNo === projectNo)
 
     let member = {
-      memberNo: userNo,
-      memberName: userName,
-      memberPhoto: userPhoto
+      userNo: userNo,
+      userName: userName,
+      userPhoto: userPhoto
     }
 
     let newProject;
-    if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].memberNo === userNo) {
+    if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
       newProject = update(this.state.projects, {
         [projectIndex]: {
           members: {
@@ -96,17 +101,17 @@ export default class Dashboard extends React.Component {
   // Join And Exit Member in Project Function
   callbackJoinExitMember(userNo, userName, userPhoto) {
     const memberIndex = this.state.members.findIndex(member =>
-      member.memberNo === userNo)
+      member.userNo === userNo)
 
     let member = {
-      memberNo: userNo,
-      memberName: userName,
-      memberPhoto: userPhoto
+      userNo: userNo,
+      userName: userName,
+      userPhoto: userPhoto
     }
 
     let members;
 
-    if (this.state.members[memberIndex] && this.state.members[memberIndex].memberNo === userNo) {
+    if (this.state.members[memberIndex] && this.state.members[memberIndex].userNo === userNo) {
       members = update(this.state.members, {
         $splice: [[memberIndex, 1]]
       })
@@ -128,7 +133,7 @@ export default class Dashboard extends React.Component {
       project.projectNo === projectNo)
 
     const memberIndex = this.state.project.members.findIndex(
-      (member) => member.memberNo === memberNo
+      (member) => member.userNo === memberNo
     );
 
     let deleteMemberProject = update(this.state.projects, {
@@ -198,9 +203,9 @@ export default class Dashboard extends React.Component {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
     let member = {
-      memberNo: this.state.users.length + 1,
-      memberName: memberName !== "" ? memberName : memberEmail,
-      memberPhoto: "assets/images/unnamed.jpg"
+      userNo: this.state.users.length + 1,
+      userName: memberName !== "" ? memberName : memberEmail,
+      userPhoto: "assets/images/unnamed.jpg"
     }
 
     let newProject = update(this.state.projects, {
@@ -248,17 +253,26 @@ export default class Dashboard extends React.Component {
   onAddProjectSubmit(event) {
     event.preventDefault();
 
+    let projectTitle = event.target.projectTitle.value;
+    let projectDesc = event.target.projectDesc.value;
     let startDate = moment(new Date).format('YYYY-MM-DD h:mm');
+    let members = this.state.members;
 
     let project = {
-      projectNo: this.state.projects.length + 1,
-      projectTitle: event.target.projectTitle.value,
-      projectDesc: event.target.projectDesc.value,
+      projectNo: null,
+      projectTitle: projectTitle,
+      projectDesc: projectDesc,
       projectStart: startDate,
       projectEnd: "",
       projectState: "상태없음",
-      members: this.state.members
+      members: members
     };
+
+    fetch(`${API_URL}/api/dashboard/add`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
 
     let newProjects = update(this.state.projects, {
       $push: [project]
@@ -290,9 +304,9 @@ export default class Dashboard extends React.Component {
   // Invite Member Function
   onInviteMemberButton(memberEmail, memberName) {
     let member = {
-      memberNo: this.state.users.length + 1,
-      memberName: memberName !== "" ? memberName : memberEmail,
-      memberPhoto: "assets/images/unnamed.jpg"
+      userNo: this.state.users.length + 1,
+      userName: memberName !== "" ? memberName : memberEmail,
+      userPhoto: "assets/images/unnamed.jpg"
     }
 
     let members = update(this.state.members, {
@@ -322,7 +336,7 @@ export default class Dashboard extends React.Component {
   onDelteMember(memberNo) {
 
     const memberIndex = this.state.members.findIndex(
-      (member) => member.memberNo === memberNo
+      (member) => member.userNo === memberNo
     );
 
     let deleteMember = update(this.state.members, {
@@ -548,10 +562,10 @@ export default class Dashboard extends React.Component {
                               {/* Member List */}
                               <div className="join-project-member">
                                 {this.state.members && this.state.members.map(member =>
-                                  <div className="Member" key={member.memberNo}>
-                                    <img src={member.memberPhoto} className="img-circle" alt={member.memberPhoto} />
-                                    <span>{member.memberName}</span>
-                                    <span className="delete-member" onClick={this.onDelteMember.bind(this, member.memberNo)}>
+                                  <div className="Member" key={member.userNo}>
+                                    <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                    <span>{member.userName}</span>
+                                    <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
                                       <i className="fas fa-times"></i>
                                     </span>
                                   </div>)}
@@ -572,7 +586,7 @@ export default class Dashboard extends React.Component {
 
                                     {/* All Users */}
                                     <div className="invite-card-member-list">
-                                      {this.state.users.map(user =>
+                                      {this.state.users && this.state.users.map(user =>
                                         <User key={user.userNo} user={user} members={this.state.members}
                                           callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />)
                                       }
@@ -644,6 +658,12 @@ export default class Dashboard extends React.Component {
         this.setState({
           projects: response.data.data.allProject
         })
-      })
+      });
+    ApiService.fetchUser()
+      .then(response => {
+        this.setState({
+          users: response.data.data.allUser
+        })
+      });
   }
 }

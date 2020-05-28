@@ -1,33 +1,34 @@
-[
-    {
-        "userNo": 1,
-        "userName": "yong80211@gmail.com",
-        "userPhoto": "assets/images/unnamed.jpg"
-    },
-    {
-        "userNo": 2,
-        "userName": "최인효",
-        "userPhoto": "assets/images/unnamed.jpg"
-    },
-    {
-        "userNo": 3,
-        "userName": "허길행",
-        "userPhoto": "assets/images/unnamed.jpg"
-    },
-    {
-        "userNo": 4,
-        "userName": "김우경",
-        "userPhoto": "assets/images/unnamed.jpg"
-    },
-    {
-        "userNo": 5,
-        "userName": "마이콜",
-        "userPhoto": "assets/images/unnamed.jpg"
-    },
-    {
-        "userNo": 6,
-        "userName": "둘리",
-        "userPhoto": "assets/images/unnamed.jpg"
-    }
-
-]
+{
+    "allUser" : [
+        {
+            "userNo": 1,
+            "userName": "yong80211@gmail.com",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        {
+            "userNo": 2,
+            "userName": "최인효",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        {
+            "userNo": 3,
+            "userName": "허길행",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        {
+            "userNo": 4,
+            "userName": "김우경",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        {
+            "userNo": 5,
+            "userName": "마이콜",
+            "userPhoto": "assets/images/unnamed.jpg"
+        },
+        {
+            "userNo": 6,
+            "userName": "둘리",
+            "userPhoto": "assets/images/unnamed.jpg"
+        }
+    ]
+}
