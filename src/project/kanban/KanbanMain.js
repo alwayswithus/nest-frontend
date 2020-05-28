@@ -697,7 +697,7 @@ class KanbanMain extends Component {
             render={(match) => 
               <File 
                 {...match} 
-                task={this.state.taskList} 
+                task={this.state.taskList}
                  />} />    
             </Switch>
       <ScrollContainer
