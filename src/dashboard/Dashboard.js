@@ -36,6 +36,8 @@ export default class Dashboard extends React.Component {
       inviteMemberEmail: "",
       inviteMemberName: "",
       setOn: true,                     // project setting open & close button
+      isMemberEmailValid: false,       // member email valid
+      isProjectTitleValid: false,      // project title valid 
 
       position: "top-right",
 			alerts: [],
@@ -264,7 +266,7 @@ export default class Dashboard extends React.Component {
       projectTitle: projectTitle,
       projectDesc: projectDesc,
       projectStart: startDate,
-      projectEnd: "",
+      projectEnd: null,
       projectState: "상태없음",
       members: members
     };
@@ -290,9 +292,21 @@ export default class Dashboard extends React.Component {
 
   // Invite Member Input Email Function
   onInputInviteMemberEmail(event) {
-    this.setState({
-      inviteMemberEmail: event.target.value
-    })
+
+    const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+
+    if(event.target.value.match(emailRegExp)) {
+      this.setState({
+        isMemberEmailValid: true,
+        inviteMemberEmail: event.target.value
+      })
+    }
+    else {
+      this.setState({
+        isMemberEmailValid: false,
+        inviteMemberEmail: event.target.value
+      })
+    }
   }
 
   // Invite Member Input Name Function
@@ -324,6 +338,20 @@ export default class Dashboard extends React.Component {
       members: members,
       alerts: [...this.state.alerts, newAlert]
     })
+  }
+
+  // New Project Title Validation Function
+  onValidateProjectTitle(event) {
+    if(event.target.value.length > 0) {
+      this.setState({
+        isProjectTitleValid: true
+      })
+    }
+    else {
+      this.setState({
+        isProjectTitleValid: false
+      })
+    }
   }
 
   // Projects hide and show Function
@@ -549,7 +577,7 @@ export default class Dashboard extends React.Component {
                         <div className="modal-body add-project-body">
                           <div className="form-group">
                             <h5>제목</h5>
-                            <input type="text" name="projectTitle" className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
+                            <input type="text" name="projectTitle" onChange={this.onValidateProjectTitle.bind(this)}className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
                             <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                             <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
                             <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
@@ -626,10 +654,14 @@ export default class Dashboard extends React.Component {
                                   </div>
                                   <div className="card-footer">
                                     <hr />
-                                    <input type="button" id="add-member-invite"
+                                    {this.state.isMemberEmailValid ? <input type="button" id="add-member-invite"
                                       className="btn btn-outline-primary btn-rounded"
                                       onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                      value="멤버 초대하기" />
+                                      value="멤버 초대하기" /> : 
+                                      <input type="button" id="add-member-invite"
+                                      className="btn btn-outline-primary btn-rounded"
+                                      onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                      value="멤버 초대하기" disabled/>}
                                   </div>
                                 </div>
                               </div> : ""}
@@ -639,7 +671,8 @@ export default class Dashboard extends React.Component {
 
                         {/* Add Project Modal footer */}
                         <div className="modal-footer add-project-footer">
-                          <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" />
+                          {this.state.isProjectTitleValid ? <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" /> : 
+                          <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" disabled />}
                         </div>
                       </div>
                     </form>
