@@ -246,10 +246,10 @@ class ProjectSetting extends Component {
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {this.props.project.members && this.props.project.members.map(member =>
-                                        <div className="Member" key={member.memberNo}>
-                                            <img src={member.memberPhoto} className="img-circle" alt={member.memberPhoto} />
-                                            <span>{member.memberName}</span>
-                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.memberNo)}>
+                                        <div className="Member" key={member.userNo}>
+                                            <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                            <span>{member.userName}</span>
+                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
                                                 <i className="fas fa-times"></i>
                                             </span>
                                         </div>

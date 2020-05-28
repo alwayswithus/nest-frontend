@@ -4,9 +4,12 @@ import FileList from './FileList'
 import Header from './Header';
 
 class File extends Component {
-    render(){
+    onChangeFileUpload(event) {
+        console.log(event.target.files)
+    }
+    render() {
 
-        if(!this.props.task){
+        if (!this.props.task) {
             return <></>;
         }
 
@@ -14,20 +17,20 @@ class File extends Component {
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
-    return (
+        return (
             <div className="SettingFile">
-                <Header taskContents = {taskItem.taskContents} params={this.props.match.params}/>
+                <Header taskContents={taskItem.taskContents} params={this.props.match.params} />
                 <div className="File">
                     <div className="FileMenu">
                         <form className="navbar-form navbar-left">
-                                <div className="input-group">
-                                    <input type="text" className="form-control" placeholder="Search" name="search" />
-                                    <div className="input-group-btn"></div>
-                                </div>
-                            </form>
-                        <button className="btn btn-info" style={{margin:'8px 0px'}}>파일첨부</button>
+                            <div className="input-group">
+                                <input type="text" className="form-control" placeholder="Search" name="search" />
+                                <div className="input-group-btn"></div>
+                            </div>
+                        </form>
+                        <input onChange={this.onChangeFileUpload.bind(this)} type='file' className="fileUpload" name="file" />
                     </div>
-                    <hr/>
+                    <hr />
                     <table>
                         <thead>
                             <tr>
@@ -37,8 +40,8 @@ class File extends Component {
                             </tr>
                         </thead>
                     </table>
-                    <hr style={{paddingLeft:'10px'}}/>
-                    <FileList />
+                    <hr style={{ paddingLeft: '10px' }} />
+                    <FileList taskItem={taskItem}/>
                 </div>
             </div>
         )

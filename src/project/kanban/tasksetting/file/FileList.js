@@ -1,28 +1,40 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './file.scss';
+import Dropzone from 'react-dropzone-uploader'
+import 'react-dropzone-uploader/dist/styles.css'
+import moment from 'moment';
 
-const FileList = () => {
-    return (
-        <div className="FileList">
-            <table>
-                <tr className="FileList-tr">
-                    <td>파일이름</td>
-                    <td>2020.05.06</td>
-                    <td>김우경</td>
-                    <li>
-                        <button className="btn btn-default" type="submit">
-                            <i className="fas fa-ellipsis-v"></i>
-                        </button>
-                        <ul>
-                            <li><a href="#">다운로드</a></li>
-                            <li><a href="#">이름변경</a></li>
-                            <li><a href="#" style={{color:'red'}}>삭제</a></li>
-                        </ul>
-                    </li>
-                </tr>
-            </table>
-        </div>
-    )
+class FileList extends Component{
+    render(){
+        console.log(this.props.taskItem.commentList)
+        return (
+            <div className="FileList">
+                <table>
+                    <tbody>
+                        {this.props.taskItem.commentList.map(file => 
+                            <tr className="FileList-tr">
+                                <td>
+                                    <img style={{width:'50px', paddingRight:'3%', paddingBottom:'1%'}} src={file.filePath} alt={file.originName} ></img>
+                                    {file.originName}</td>
+                                <td>{moment(file.fileRegDate).format('YYYY년 MM월 DD일')}</td>
+                                <td>{file.userName}</td>
+                                <li>
+                                    <button className="btn btn-default" type="submit">
+                                        <i className="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul>
+                                        <li><a href="#">다운로드</a></li>
+                                        <li><a href="#">이름변경</a></li>
+                                        <li><a href="#" style={{color:'red'}}>삭제</a></li>
+                                    </ul>
+                                </li>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
 }
 
 export default FileList;

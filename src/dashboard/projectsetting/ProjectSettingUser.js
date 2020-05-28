@@ -14,7 +14,7 @@ export default class ProjectSettingUser extends React.Component {
                 <img src={this.props.user.userPhoto} className="img-circle" alt={this.props.user.userPhoto} />
                 <span>{this.props.user.userName}</span>
                 { this.props.project.members.map(member => 
-                    member.memberNo === this.props.user.userNo ? <i key={member.memberNo} className="fas fa-check"></i> : "") }
+                    member.userNo === this.props.user.userNo ? <i key={member.userNo} className="fas fa-check"></i> : "") }
             </div>
         )
     }

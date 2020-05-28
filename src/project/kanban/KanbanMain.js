@@ -730,20 +730,32 @@ class KanbanMain extends Component {
                   ), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                 }}
-              />
-            )}
-          />
+                task={this.state.taskList} />} />
+          <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
+            render={(match) => 
+              <Comment 
+                  {...match}
+                  task={this.state.taskList} 
+                  taskCallbacks={{
+                    commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
+                    commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                    addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
+                  }} />} />
 
-          <Route
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo/file"
-            render={(match) => <File {...match} task={this.state.taskList} />}
-          />
-        </Switch>
-        <ScrollContainer
-          className="scroll-container"
-          hideScrollbars={false}
-          ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
-          style={{ backgroundImage: `url(${this.state.url})` }}
+          <Route 
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo/file" 
+            render={(match) => 
+              <File 
+                {...match} 
+                task={this.state.taskList}
+                 />} />    
+            </Switch>
+      <ScrollContainer
+        className="scroll-container"
+        hideScrollbars={false}
+        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
+        style={{ backgroundImage: `url(${this.state.url})` }}
         >
           <div className="container-fluid kanbanMain">
             <div className="row content ">
