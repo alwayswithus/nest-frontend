@@ -9,7 +9,7 @@ class KanbanBoard extends Component {
     super(...arguments);
     this.state = {
       taskListInsertState: false,
-      taskListTitle: "",
+      taskListName: "",
       searchKeyword:""
     };
   }
@@ -18,7 +18,7 @@ class KanbanBoard extends Component {
   taskListStateBtn() {
     this.setState({
       taskListInsertState: !this.state.taskListInsertState,
-      taskListTitle: "",
+      taskListName: "",
     });
   }
   // 리스트 추가
@@ -29,9 +29,9 @@ class KanbanBoard extends Component {
   }
 
   addTaskList() {
-    this.props.taskCallbacks.addList(this.state.taskListTitle);
+    this.props.taskCallbacks.addList(this.state.taskListName, 5);
     this.setState({
-      taskListTitle: "",
+      taskListName: "",
     });
     this.taskListStateBtn();
   }
@@ -39,7 +39,7 @@ class KanbanBoard extends Component {
   // 리스트명 입력 이벤트
   onTextAreaChanged(event) {
     this.setState({
-      taskListTitle: event.target.value.substr(0, 13),
+      taskListName: event.target.value.substr(0, 13),
     });
   }
 
@@ -106,7 +106,7 @@ class KanbanBoard extends Component {
                 </div>
               )}
             </Droppable>
-
+            {/* TaskList 추가 */}
             <div className="taskListAdd">
               {this.state.taskListInsertState ? (
                 <>
@@ -117,7 +117,7 @@ class KanbanBoard extends Component {
                         className="textArea"
                         onChange={this.onTextAreaChanged.bind(this)}
                         onKeyPress={this.addTaskListEnter.bind(this)}
-                        value={this.state.taskListTitle}
+                        value={this.state.taskListName}
                         autoFocus
                       ></input>
                     </div>

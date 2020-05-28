@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 
 import './noticeDate.scss';
 
-export default class NoticeDate extends React.Component {
+class NoticeDate extends React.Component {
     
     render() {
         let date = `${this.props.date.dateYear}-${this.props.date.dateMonth}-${this.props.date.dateDay}`;
         const today = new Date();
+
         return (
             <div className="NoticeDate">
                 {this.props.notices.map(notice =>
@@ -55,3 +56,5 @@ export default class NoticeDate extends React.Component {
         )
     }
 } 
+
+export default NoticeDate;

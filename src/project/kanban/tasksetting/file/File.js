@@ -29,11 +29,13 @@ class File extends Component {
                     </div>
                     <hr/>
                     <table>
-                        <tr>
-                            <td>이름</td>
-                            <td>공유한날짜</td>
-                            <td>공유한사람</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <td>이름</td>
+                                <td>공유한날짜</td>
+                                <td>공유한사람</td>
+                            </tr>
+                        </thead>
                     </table>
                     <hr style={{paddingLeft:'10px'}}/>
                     <FileList />

@@ -276,20 +276,47 @@ class KanbanMain extends Component {
   }
 
   // task list 추가
-  callbackAddTaskList(taskListTitle) {
+  callbackAddTaskList(taskListName,projectNo) {
+
     let newTaskList = {
-      no: Date.now() + "",
-      title: taskListTitle,
-      tasks: [],
+      taskListNo: null,
+      taskListName: taskListName,
+      taskListOrder: null,
+      projectNo:projectNo
     };
 
-    let pushTaskList = update(this.state.taskList, {
-      $push: [newTaskList],
-    });
+    fetch(`${API_URL}/api/taskList/add`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newTaskList),
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      // console.log(json.data) //taskList 하나
 
-    this.setState({
-      taskList: pushTaskList,
-    });
+      newTaskList = update(json.data, {
+        $set: {
+          taskListNo: json.data.taskListNo+"",
+          taskListName: json.data.taskListName,
+          taskListOrder: json.data.taskListOrder,
+          projectNo:json.data.projectNo,
+          tasks:[]
+        }
+      })
+
+      console.log(newTaskList);
+
+      let pushTaskList = update(this.state.taskList, {
+        $push: [newTaskList],
+      });
+
+      this.setState({
+        taskList: pushTaskList,
+      });
+    })
+
+
+
   }
 
   // task list 삭제
@@ -390,29 +417,34 @@ class KanbanMain extends Component {
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
       (task) => task.taskNo === taskNo
     );
-    // console.log("KanbanMain + " + taskIndex)
 
-    let newTag = {
-      tagNo: tagNo,
-      tagName: tagName,
-      tagColor: "RGB(255, 160, 160)",
-    };
+    // const tagIndex = this.state.taskList[taskIndex].tasks[taskIndex].tagList.findIndex(
+    //   (tag) => tag.tagNo == tagNo
+    // );
+    // console.log(this.state.taskList[taskIndex].tasks[taskIndex].tagList)
 
-    let newTagData = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            tagList: {
-              $push: [newTag],
-            },
-          },
-        },
-      },
-    });
+    // if(this.state.taskList[taskListIndex].tasks[taskIndex].tagList)
+    // let newTag = {
+    //   tagNo: tagNo,
+    //   tagName: tagName,
+    //   tagColor: "RGB(255, 160, 160)",
+    // };
 
-    this.setState({
-      taskList: newTagData,
-    });
+    // let newTagData = update(this.state.taskList, {
+    //   [taskListIndex]: {
+    //     tasks: {
+    //       [taskIndex]: {
+    //         tagList: {
+    //           $push: [newTag],
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
+    // this.setState({
+    //   taskList: newTagData,
+    // });
   }
 
   //task에 tag 삭제하기
@@ -644,7 +676,7 @@ class KanbanMain extends Component {
                   checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist state 업데이트
                   checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
                   addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
-                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  addDeletetag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag:this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                 }}
                 task={this.state.taskList} />} />
