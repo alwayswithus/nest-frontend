@@ -730,18 +730,7 @@ class KanbanMain extends Component {
                   ), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                 }}
-                task={this.state.taskList} />} />
-          <Route 
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment" 
-            render={(match) => 
-              <Comment 
-                  {...match}
-                  task={this.state.taskList} 
-                  taskCallbacks={{
-                    commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                    commentContentsUpdate:this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
-                    addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
-                  }} />} />
+                task={this.state.taskList} />)} />
 
           <Route 
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/file" 
