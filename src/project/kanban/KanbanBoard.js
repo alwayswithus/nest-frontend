@@ -21,13 +21,15 @@ class KanbanBoard extends Component {
       taskListName: "",
     });
   }
-  // 리스트 추가
+  
+  // 리스트 추가(Enter)
   addTaskListEnter(event) {
     if (event.key === "Enter") {
       this.addTaskList();
     }
   }
 
+  // 리스트 추가
   addTaskList() {
     this.props.taskCallbacks.addList(this.state.taskListName, 5);
     this.setState({
@@ -50,6 +52,7 @@ class KanbanBoard extends Component {
     });
   }
 
+  // 업무 검색
   searchKeyword(event) {
     this.setState({
       searchKeyword: event.target.value
