@@ -54,9 +54,9 @@ class commentContents extends Component {
         return (
             <Fragment>
                 <div key = {this.props.comment.commentNo} style={{height:'20px'}}/>
-                        <a className="pull-left" href="#"><img className="img-circle" src={this.props.comment.memberPhoto} alt="" /></a>
+                        <a className="pull-left" href="#"><img className="img-circle" src={`/${this.props.comment.userPhoto}`} alt="" /></a>
                         <div className="media-body">
-                            <span className="media-heading"><b>{this.props.comment.memberName}</b></span>
+                            <span className="media-heading"><b>{this.props.comment.userName}</b></span>
                             <span className="media-heading">{moment(this.props.comment.commentRegdate).format('YYYY-MM-DD hh:mm:ss')}</span>
                             <ul className="list-unstyled list-inline media-detail pull-right">
                                 <li>
@@ -64,11 +64,12 @@ class commentContents extends Component {
                                         <i onClick = {this.onClickThumsUp.bind(this, this.props.comment.commentNo)} className="far fa-thumbs-up thumsup"/>
                                     </span>
                                 </li>
+                                {this.props.comment.fileNo == null ? 
                                 <li>
                                     <span data-tooltip-text="수정하기">
                                         <i onClick= {this.onClickModifyText.bind(this)} className="fas fa-pen" />
                                     </span>
-                                </li>
+                                </li> : null}
         
                                 <li>
                                     <span data-tooltip-text="삭제하기">
