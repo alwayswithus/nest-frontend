@@ -730,43 +730,76 @@ class KanbanMain extends Component {
   }
 
   //comment 글 쓰기
-  callbackAddComment(commentContents, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
-    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex]
-      .commentList;
+  callbackAddComment(fileList, taskListNo, taskNo, commentContents, userNo, userName, userPhoto) {
+    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
+    const commentLength = this.state.taskList[taskListIndex].tasks[taskIndex].commentList;
     // console.log("KanbanMain + " +commentLength)
 
-    let newComment = {
-      commentNo: commentLength + 1,
-      commentRegdate: "2020-05-25",
-      commentContents: commentContents,
-      commentLike: 0,
-      userNo: 21,
-      taskNo: taskNo,
-      fileNo: null,
-    };
+    // if(fileList.fileNo == null) {
+    //   let newComment = {
+    //     commentNo: commentLength + 1,
+    //     commentRegdate: fileList.fileRegDate,
+    //     commentContents: fileList.originName,
+    //     commentLike: 0,
+    //     userNo: userNo,
+    //     taskNo: taskNo,
+    //     fileNo: fileList.fileNo,
+    //     userPhoto:userPhoto,
+    //     filePath
+    //   };
+
+    // }
+
+    // let newTaskList = update(this.state.taskList, {
+    //   [taskListIndex]: {
+    //     tasks: {
+    //       [taskIndex]: {
+    //         commentList: {
+    //           $push: [newComment],
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
+    // this.setState({
+    //   taskList: newTaskList,
+    // });
+  }
+
+  //file upload 하기
+  callbackAddFile(formData, taskListNo, taskNo){
+
+    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            commentList: {
-              $push: [newComment],
-            },
-          },
-        },
-      },
+      [taskListIndex] :{
+        tasks:{
+          [taskIndex]:{
+            fileList:{
+              $push:[formData]
+            }
+          }
+        }
+      }
     });
 
     this.setState({
       taskList: newTaskList,
     });
+    let fileList = newTaskList[taskListIndex].tasks[taskIndex].fileList;
+
+    this.callbackAddComment(
+                       fileList,
+                       taskListNo, 
+                       taskNo, 
+                       sessionStorage.getItem("authUserNo"), 
+                       sessionStorage.getItem("authUserName"), 
+                       sessionStorage.getItem("authUserPhoto") )
   }
+
   render() {
     // console.log("KanbanMain + " + this.props.match.path)
     return (
@@ -803,20 +836,20 @@ class KanbanMain extends Component {
                 task={this.state.taskList}
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate: this.callbackCommentContentsUpdate.bind(
-                    this
-                  ), //코멘트 내용 업데이트
+                  commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                 }}
-                task={this.state.taskList}
-              />
-            )}
-          />
+                task={this.state.taskList} />} /> 
 
           <Route
             path="/nest/kanbanMain/:taskListNo/task/:taskNo/file"
-            render={(match) => <File {...match} task={this.state.taskList} />}
-          />
+            render={(match) => 
+                    <File {...match} 
+                        task={this.state.taskList}
+                        taskCallbacks={{
+                            addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
+                            addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
+                          }}  />} />
         </Switch>
         <ScrollContainer
           className="scroll-container"
