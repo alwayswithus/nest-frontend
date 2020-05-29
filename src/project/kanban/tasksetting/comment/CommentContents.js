@@ -77,6 +77,7 @@ class commentContents extends Component {
                                     </span>
                                 </li>
                             </ul>
+                            {this.props.comment.fileNo == null ? null : <img style={{display:'block', width:'150px', padding: '2% 3% 0% 3%'}} src={this.props.comment.filePath} alt={this.props.comment.originName} ></img>}
                         {this.state.change ? 
                             <p>
                                 <input type="text"
