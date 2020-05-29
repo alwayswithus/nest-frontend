@@ -21,7 +21,7 @@ class KanbanMain extends Component {
     super(...arguments);
     this.state = {
       taskList: null,
-      url: "",
+      url: window.sessionStorage.getItem("authUserBg")
     };
   }
 
@@ -132,10 +132,22 @@ class KanbanMain extends Component {
 
   // 배경화면 변경
   callbackChangeBackground(url) {
-    // console.log(url);
+
+    let authUser = {
+      userNo: window.sessionStorage.getItem("authUserNo"),
+      userBg: url
+    }
+
+    fetch(`${API_URL}/api/user/backgroundChange`, {
+        method: 'post',
+        headers: API_HEADERS,
+        body: JSON.stringify(authUser)
+    })
+
+    window.sessionStorage.setItem("authUserBg", url)
     this.setState({
-      url: url,
-    });
+       url: url
+    })
   }
 
   // task 추가

@@ -8,23 +8,40 @@ import NoticeDate from './NoticeDate';
 import Navigator from '../navigator/Navigator';
 import './notification.scss';
 
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+    'Content-Type': 'application/json'
+}
 class Notification extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
-            notices: noticeSendData,            // notice send Data
-            dates: dates,                       // date Data
-            url: "",                            // background url
+            notices: noticeSendData,                               // notice send Data
+            dates: dates,                                          // date Data
+            url: window.sessionStorage.getItem("authUserBg")       // background url
         }
     }
 
     // CallBack Background Image Setting 
     callbackChangeBackground(url) {
+
+        let authUser = {
+            userNo: window.sessionStorage.getItem("authUserNo"),
+            userBg: url
+        }
+
+        fetch(`${API_URL}/api/user/backgroundChange`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(authUser)
+        })
+
+        window.sessionStorage.setItem("authUserBg", url)
         this.setState({
             url: url
         })
     }
-    
+
     render() {
         return (
             <div className="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>

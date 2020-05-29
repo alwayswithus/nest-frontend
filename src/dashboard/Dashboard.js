@@ -25,7 +25,7 @@ export default class Dashboard extends React.Component {
       projects: null,                  // projects data
       users: null,                 // user data
 
-      url: "",                         // background image url
+      url: window.sessionStorage.getItem("authUserBg"),                         // background image url
       project: [],                     // project
       members: [],                     // members in project
       message: null,
@@ -48,6 +48,19 @@ export default class Dashboard extends React.Component {
 
   // CallBack Background Image Setting 
   callbackChangeBackground(url) {
+
+    let authUser = {
+      userNo: window.sessionStorage.getItem("authUserNo"),
+      userBg: url
+    }
+
+    fetch(`${API_URL}/api/user/backgroundChange`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(authUser)
+    })
+    
+    sessionStorage.setItem("authUserBg", url)
     this.setState({
       url: url
     })
@@ -276,7 +289,7 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(project)
     })
-
+   
     let newProjects = update(this.state.projects, {
       $push: [project]
     });
@@ -689,6 +702,7 @@ export default class Dashboard extends React.Component {
   componentDidMount() {
     ApiService.fetchDashboard()
       .then(response => {
+        console.log(response)
         this.setState({
           projects: response.data.data.allProject
         })
