@@ -33,13 +33,6 @@ const Login = () => {
       sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
       sessionStorage.setItem("authUserBg", response.data.data.userBg)
 
-      // let a = sessionStorage.getItem("authUserNo");
-      // let b = sessionStorage.getItem("authUserName");
-      // let c = sessionStorage.getItem("authUserEmail");
-      // let d = sessionStorage.getItem("authUserPhoto");
-      // let e = sessionStorage.getItem("authUserBg");
-      // console.log(a + " / " + b + " / " + c +" / " + d + " / " + e)
-
     }).then( e =>{
       if(sessionStorage.getItem("authUserName")){
         window.location.href = "/nest/dashboard";
@@ -52,7 +45,7 @@ const Login = () => {
       <div className="Login">
         <div className="loginBox">
           <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
-          <form onSubmit={login}>
+          <form onSubmit={login} /*action="/nest/auth" method="POST"*/>
             <InputLabel id="loginText">Log In</InputLabel>
             <br/>
             <Input
@@ -75,9 +68,7 @@ const Login = () => {
                   />
             <br/><br/>
 
-            {/* <Link to="/nest/dashboard"> */}
-              <Input className="loginItems" id="loginSubmit" type="submit" value="로그인" />
-            {/* </Link> */}
+            <Input className="loginItems" id="loginSubmit" type="submit" value="로그인" />
 				  </form>
 
           <br/>
