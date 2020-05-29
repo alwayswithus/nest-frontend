@@ -7,8 +7,8 @@ class ApiService {
         return axios.get(`/nest/api/dashboard/${window.sessionStorage.getItem("authUserNo")}`);
     }
 
-    fetchKanbanMain(){
-        return axios.get(`/nest/api/kanbanMain`);
+    fetchKanbanMain(no){
+        return axios.get(`/nest/api/kanbanMain/${no}`);
     }
 
     fetchTagList(){

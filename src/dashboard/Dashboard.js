@@ -9,7 +9,7 @@ import ProjectSetting from './projectsetting/ProjectSetting';
 import userData from './userData.json'
 import update from 'react-addons-update';
 import User from './User';
-
+import {Link} from 'react-router-dom'
 import ApiService from '../ApiService';
 
 const API_URL = "http://localhost:8080/nest";
@@ -512,7 +512,7 @@ export default class Dashboard extends React.Component {
             <div className="panel-group">
               {this.state.details ? this.state.projects && this.state.projects.map(project =>
                 <div key={project.projectNo} className="panel panel-default projects">
-                  <a href="/nest/kanbanMain">
+                  <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
                     <div className="panel-header">
                       <span className="project-title">
                         {project.projectTitle}
@@ -591,7 +591,7 @@ export default class Dashboard extends React.Component {
                               ""}
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </div>) : ""}
             </div>
 

@@ -179,7 +179,7 @@ class Gantt extends Component {
                             <Navigator />
                         </div>
                         {/*상단바*/}
-                        <TopBar />
+                        <TopBar projectNo={this.props.match.params.projectNo}/>
                         {/* 메인 영역 */}
                         <div className="mainArea">
                             {/*간트차트*/}

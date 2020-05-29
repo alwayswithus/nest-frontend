@@ -14,7 +14,7 @@ class Header extends Component {
                 <h2><b>{this.props.taskContents}</b></h2>
                 <span>작성자 : {this.props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {this.props.date}</span>
             </div>
-            <Navigation params = {this.props.params} />
+            <Navigation params = {this.props.params} projectNo={this.props.projectNo} />
         </div>
     )
     }

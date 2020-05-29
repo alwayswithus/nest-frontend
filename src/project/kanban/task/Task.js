@@ -76,7 +76,7 @@ class Task extends Component {
           {(provided, snapshot) => (
             <Link
               style={{ textDecoration: "none", color: "black" }}
-              to={`/nest/kanbanMain/${this.props.taskListNo}/task/${taskItem.taskNo}`}
+              to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.taskListNo}/task/${taskItem.taskNo}`}
             >
               <div
                 className={

@@ -801,17 +801,18 @@ class KanbanMain extends Component {
   }
 
   render() {
-    // console.log("KanbanMain + " + this.props.match.path)
+    console.log(this.props.match.params)
     return (
       <>
         {/* taskSetting 띄우는 route */}
         <Switch>
           <Route
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo"
+            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo"
             exact
             render={(match) => (
               <Setting
                 {...match}
+                projectNo={this.props.match.params.projectNo}
                 taskCallbacks={{
                   checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
                   checklistStateUpdate: this.callbackCheckListStateUpdate.bind(
@@ -829,22 +830,24 @@ class KanbanMain extends Component {
             )}
           />
           <Route
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo/comment"
+            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/comment"
             render={(match) => (
               <Comment
                 {...match}
+                projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                 }}
-                task={this.state.taskList} />} /> 
+                task={this.state.taskList} />)} /> 
 
           <Route
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo/file"
+            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/file"
             render={(match) => 
-                    <File {...match} 
+                    <File {...match}
+                        projectNo={this.props.match.params.projectNo}
                         task={this.state.taskList}
                         taskCallbacks={{
                             addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
@@ -868,7 +871,7 @@ class KanbanMain extends Component {
                 />
               </div>
               {/*상단바*/}
-              <TopBar />
+              <TopBar projectNo={this.props.match.params.projectNo} />
               {/* 메인 영역 */}
               <div className="mainArea">
                 {/*칸반보드*/}
@@ -878,6 +881,7 @@ class KanbanMain extends Component {
                 >
                   <KanbanBoard
                     tasks={this.state.taskList}
+                    projectNo={this.props.match.params.projectNo}
                     taskCallbacks={{
                       add: this.callbackAddTask.bind(this), // task 추가
                       delete: this.callbackDeleteTask.bind(this), // task 삭제
@@ -914,7 +918,7 @@ class KanbanMain extends Component {
   }
 
   componentDidMount() {
-    ApiService.fetchKanbanMain().then((response) => {
+    ApiService.fetchKanbanMain(this.props.match.params.projectNo).then((response) => {
       this.setState({
         taskList: response.data.data.allTaskList,
       });

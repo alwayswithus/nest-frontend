@@ -17,13 +17,13 @@ class TopBar extends Component {
                 <div className="topCenterIn">
                   <ul className="nav navbar-nav">
                     <li className="active">
-                      <a href="/nest/kanbanMain">업무</a>
+                      <a href={`/nest/dashboard/${this.props.projectNo}/kanbanboard`}>업무</a>
                     </li>
                     <li>
-                      <a href="/nest/gantt">타임라인</a>
+                      <a href={`/nest/dashboard/${this.props.projectNo}/timeline`}>타임라인</a>
                     </li>
                     <li>
-                      <a href="/nest/file">파일</a>
+                      <a href={`/nest/dashboard/${this.props.projectNo}/file`}>파일</a>
                     </li>
                     <li>
                       <a href="#">활동로그</a>

@@ -38,16 +38,20 @@ function App() {
         <Route path="/nest/notification" exact component={Notification} />
 
         {/*칸반보드 */}
-        <Route path="/nest/kanbanMain" component={KanbanMain} />
+        <Route 
+          path="/nest/dashboard/:projectNo/kanbanboard" 
+          render={(match) => <KanbanMain {...match}/>} />
 
         {/* 대시보드 */}
         <Route path="/nest/dashboard" exact component={Dashboard} />
 
         {/* 간트차트 */}
-        <Route path="/nest/gantt" exact component={Gantt} />
+        <Route 
+          path="/nest/dashboard/:projectNo/timeline" exact 
+          render={(match) => <Gantt {...match}/>} />
 
         {/* 파일 */}
-        <Route path="/nest/file" exact component={File} />
+        <Route path="/nest/dashboard/:projectNo/file" exact component={File} />
 
         {/* 프로젝트 세팅*/}
         <Route path="/nest/projectset" exact component={ProjectSetting} />

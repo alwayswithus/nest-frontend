@@ -9,6 +9,7 @@ class Comment extends Component  {
         if(!this.props.task){
             return <></>;
         }
+        console.log(this.props.match.params.projectNo)
 
         const taskList = this.props.task;
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
@@ -20,7 +21,8 @@ class Comment extends Component  {
                     name='김우경' 
                     date='2020.05.06' 
                     taskContents = {taskItem.taskContents}
-                    params={this.props.match.params}/>
+                    params={this.props.match.params}
+                    projectNo={this.props.projectNo}/>
                 <div className="Comment">
                     {/* 코멘트 내용 */}
                     <CommentList 

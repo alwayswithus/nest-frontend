@@ -136,6 +136,7 @@ class Setting extends Component {
                             name='김우경' 
                             date='2020.05.06' 
                             taskContents = {taskItem.taskContents}
+                            projectNo={this.props.projectNo}
                             params={this.props.match.params}/>
                     </div>
 

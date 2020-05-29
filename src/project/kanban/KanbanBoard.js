@@ -102,6 +102,7 @@ class KanbanBoard extends Component {
                         tasks={taskList.tasks}
                         index={index}
                         taskCallbacks={this.props.taskCallbacks}
+                        projectNo={this.props.projectNo}
                         // isDropDisabled={this.props.isDropDisabled}
                       />
                     );

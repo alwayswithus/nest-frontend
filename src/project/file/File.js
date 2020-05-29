@@ -43,7 +43,7 @@ export default class File extends React.Component {
         return (
             <div className="File" style={{ backgroundImage: `url(${this.state.url})` }}>
                 <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
-                <TopBar />
+                <TopBar projectNo={this.props.match.params.projectNo}/>
                 <div className="file-resource-table">
                     <Table>
                         <thead>
@@ -59,7 +59,7 @@ export default class File extends React.Component {
                                 <td>
                                     <div className="file-name-cell">
                                         <div className="file-name-cell-image">
-                                            <img className="file-image" src="../nest/assets/images/toy.png" />
+                                            <img className="file-image" src="/nest/assets/images/toy.png" />
                                         </div>
                                         <div className="file-name-and-path">
                                             <span className="file-name">plug.png</span>

@@ -261,7 +261,7 @@ class TaskList extends Component {
                       .map((task, index) =>
                         task.checked ? null : task !== "" ? (
                           <Task
-                            path={this.props.path}
+                            projectNo = {this.props.projectNo}
                             key={task.taskNo}
                             taskListNo={this.props.taskList.taskListNo}
                             task={task}
