@@ -20,24 +20,32 @@ const API_HEADERS = {
 export default class Dashboard extends React.Component {
 
   constructor() {
+
+    // 세션 체크...
+    if(!sessionStorage.getItem("authUserNo")){
+      window.location.href = "/nest/";
+      return;
+    }
+
     super(...arguments);
     this.state = {
-      projects: null,                  // projects data
-      users: null,                 // user data
+      projects: null,                                               // projects data
+      users: null,                                                  // user data
 
-      url: window.sessionStorage.getItem("authUserBg"),                         // background image url
-      project: [],                     // project
-      members: [],                     // members in project
+      url: window.sessionStorage.getItem("authUserBg"),             // background image url
+      project: [],                                                  // project
+      members: [],                                                  // members in project
       message: null,
 
-      details: true,                   // arrow 
-      addProjectUserButton: false,     // add project user button
-      inviteMember: false,             // invite member open & close
+      details: true,                                                // arrow 
+      addProjectUserButton: false,                                  // add project user button
+      inviteMember: false,                                          // invite member open & close
       inviteMemberEmail: "",
       inviteMemberName: "",
-      setOn: true,                     // project setting open & close button
-      isMemberEmailValid: false,       // member email valid
-      isProjectTitleValid: false,      // project title valid 
+      setOn: true,                                                  // project setting open & close button
+      isMemberEmailValid: false,                                    // member email valid
+      isProjectTitleValid: false,                                   // project title valid
+      isNotEmptyValid: false, 
 
       position: "top-right",
 			alerts: [],
@@ -284,19 +292,23 @@ export default class Dashboard extends React.Component {
       members: members
     };
 
-    fetch(`${API_URL}/api/dashboard/add`, {
+    fetch(`${API_URL}/api/dashboard/add/${window.sessionStorage.getItem("authUserNo")}`, {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(project)
     })
-   
-    let newProjects = update(this.state.projects, {
-      $push: [project]
-    });
-
-    this.setState({
-      projects: newProjects
+    .then(response => response.json())
+    .then(json => {
+      let newProjects = update(this.state.projects, {
+        $push: [json.data]
+      });
+  
+      this.setState({
+        projects: newProjects
+      })
     })
+   
+    
 
     document.getElementById('add-project').style.display = 'none'
     window.jQuery(document.body).removeClass("modal-open");
@@ -311,13 +323,15 @@ export default class Dashboard extends React.Component {
     if(event.target.value.match(emailRegExp)) {
       this.setState({
         isMemberEmailValid: true,
-        inviteMemberEmail: event.target.value
+        inviteMemberEmail: event.target.value,
+        isNotEmptyValid: false
       })
     }
     else {
       this.setState({
         isMemberEmailValid: false,
-        inviteMemberEmail: event.target.value
+        inviteMemberEmail: event.target.value,
+        isNotEmptyValid: true
       })
     }
   }
@@ -331,15 +345,13 @@ export default class Dashboard extends React.Component {
 
   // Invite Member Function
   onInviteMemberButton(memberEmail, memberName) {
+    
     let member = {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
-      userPhoto: "assets/images/unnamed.jpg"
+      userEmail: memberEmail,
+      userPhoto: "assets/images/arrowloding.jpg"
     }
-
-    let members = update(this.state.members, {
-      $push: [member]
-    })
 
     const newAlert ={
 			id: (new Date()).getTime(),
@@ -347,22 +359,42 @@ export default class Dashboard extends React.Component {
 			message: this.state.newMessage
 		};
 
-    this.setState({
-      members: members,
-      alerts: [...this.state.alerts, newAlert]
+    fetch(`${API_URL}/api/user/invite/`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(member)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let members = update(this.state.members, {
+        $push: [json.data]
+      })
+
+      let users = update(this.state.users, {
+        $push: [json.data]
+      })
+      this.setState({
+        members: members,
+        users: users,
+        alerts: [...this.state.alerts, newAlert]
+      })
     })
   }
 
   // New Project Title Validation Function
   onValidateProjectTitle(event) {
-    if(event.target.value.length > 0) {
+    const blank_pattern = /[\s]/g;
+
+    if(event.target.value.length > 0 && blank_pattern.test(event.target.value) === false) {
       this.setState({
-        isProjectTitleValid: true
+        isProjectTitleValid: true,
+        isNotEmptyValid: false
       })
     }
     else {
       this.setState({
-        isProjectTitleValid: false
+        isProjectTitleValid: false,
+        isNotEmptyValid: true
       })
     }
   }
@@ -590,7 +622,8 @@ export default class Dashboard extends React.Component {
                         <div className="modal-body add-project-body">
                           <div className="form-group">
                             <h5>제목</h5>
-                            <input type="text" name="projectTitle" onChange={this.onValidateProjectTitle.bind(this)}className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" /><br />
+                            <input type="text" name="projectTitle" onChange={this.onValidateProjectTitle.bind(this)}className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" />
+                              {this.state.isNotEmptyValid ? <i className="fas fa-exclamation fa-xs" style={{margin: "10px", color: "#D5493B"}}>  공백은 허용되지 않습니다.</i> : ""}<br />
                             <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                             <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
                             <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
@@ -702,7 +735,6 @@ export default class Dashboard extends React.Component {
   componentDidMount() {
     ApiService.fetchDashboard()
       .then(response => {
-        console.log(response)
         this.setState({
           projects: response.data.data.allProject
         })

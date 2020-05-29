@@ -21,7 +21,7 @@ class KanbanMain extends Component {
     super(...arguments);
     this.state = {
       taskList: null,
-      url: window.sessionStorage.getItem("authUserBg")
+      url: window.sessionStorage.getItem("authUserBg"),
     };
   }
 
@@ -36,7 +36,7 @@ class KanbanMain extends Component {
 
     // task의 도착지와 출발지가 같을경우
     if (
-      destination.draggableId === source.droppableId &&
+      destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
       return;
@@ -44,16 +44,48 @@ class KanbanMain extends Component {
 
     // list 재정렬
     if (type === "column") {
-      const newTaskList = Array.from(this.state.taskList);
+      let newTaskList = Array.from(this.state.taskList);
       newTaskList.splice(source.index, 1);
       newTaskList.splice(
         destination.index,
         0,
         this.state.taskList[source.index]
       );
+
+      const endTaskList = this.state.taskList[destination.index];
+
+      newTaskList.map((taskList, index) => {
+        if (source.index <= index && destination.index > index) {
+          newTaskList = update(newTaskList, {
+            [index]: {
+              taskListOrder: { $set: taskList.taskListOrder - 1 },
+            },
+          });
+        }
+        if (source.index >= index && destination.index < index) {
+          newTaskList = update(newTaskList, {
+            [index]: {
+              taskListOrder: { $set: taskList.taskListOrder + 1 },
+            },
+          });
+        }
+      });
+      newTaskList = update(newTaskList, {
+        [destination.index]: {
+          taskListOrder: { $set: endTaskList.taskListOrder },
+        },
+      });
+
+      fetch(`${API_URL}/api/taskList/reOrder`, {
+        method: "post",
+        headers: API_HEADERS,
+        body: JSON.stringify(newTaskList),
+      });
+
       this.setState({
         taskList: newTaskList,
       });
+
       return;
     }
 
@@ -90,6 +122,46 @@ class KanbanMain extends Component {
             $set: newTasks,
           },
         },
+      });
+
+      newTasks.map((task, index) => {
+        if (source.index <= index && destination.index > index) {
+          newTaskList = update(newTaskList, {
+            [startIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: task.taskOrder + 1 },
+                },
+              },
+            },
+          });
+        }
+        if (source.index >= index && destination.index < index) {
+          newTaskList = update(newTaskList, {
+            [startIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: task.taskOrder - 1 },
+                },
+              },
+            },
+          });
+        }
+      });
+      newTaskList = update(newTaskList, {
+        [finishIndex]: {
+          tasks: {
+            [destination.index] : {
+              taskOrder : {$set: finish.tasks[destination.index].taskOrder }
+            }
+          },
+        },
+      });
+
+      fetch(`${API_URL}/api/task/reOrder`, {
+        method: "post",
+        headers: API_HEADERS,
+        body: JSON.stringify(newTaskList[startIndex].tasks),
       });
 
       this.setState({
@@ -132,22 +204,21 @@ class KanbanMain extends Component {
 
   // 배경화면 변경
   callbackChangeBackground(url) {
-
     let authUser = {
       userNo: window.sessionStorage.getItem("authUserNo"),
-      userBg: url
-    }
+      userBg: url,
+    };
 
     fetch(`${API_URL}/api/user/backgroundChange`, {
-        method: 'post',
-        headers: API_HEADERS,
-        body: JSON.stringify(authUser)
-    })
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(authUser),
+    });
 
-    window.sessionStorage.setItem("authUserBg", url)
+    window.sessionStorage.setItem("authUserBg", url);
     this.setState({
-       url: url
-    })
+      url: url,
+    });
   }
 
   // task 추가
@@ -303,7 +374,6 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.log(json.data) //taskList 하나
 
         newTaskList = update(json.data, {
           $set: {
@@ -403,10 +473,6 @@ class KanbanMain extends Component {
 
   //checkList 추가하기
   callbackAddCheckList(contents, taskNo, taskListNo) {
-    // console.log("contents : " + contents)
-    // console.log("taskNo : " + taskNo)
-    // console.log("taskListNo : " + taskListNo)
-    // console.log(this.state.taskList)
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -773,25 +839,23 @@ class KanbanMain extends Component {
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                 }}
-                task={this.state.taskList} />)} />
+                task={this.state.taskList} />} /> 
 
-          <Route 
-            path="/nest/kanbanMain/:taskListNo/task/:taskNo/file" 
+          <Route
+            path="/nest/kanbanMain/:taskListNo/task/:taskNo/file"
             render={(match) => 
-              <File 
-                {...match} 
-                task={this.state.taskList}
-                taskCallbacks={{
-                  addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
-                  addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
-                }}
-                 />} />    
-            </Switch>
-      <ScrollContainer
-        className="scroll-container"
-        hideScrollbars={false}
-        ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
-        style={{ backgroundImage: `url(${this.state.url})` }}
+                    <File {...match} 
+                        task={this.state.taskList}
+                        taskCallbacks={{
+                            addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
+                            addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
+                          }}  />} />
+        </Switch>
+        <ScrollContainer
+          className="scroll-container"
+          hideScrollbars={false}
+          ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
+          style={{ backgroundImage: `url(${this.state.url})` }}
         >
           <div className="container-fluid kanbanMain">
             <div className="row content ">

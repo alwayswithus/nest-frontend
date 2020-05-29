@@ -4,7 +4,7 @@ const DASHBOARD_API_URL = "http://localhost:8080/nest";
 
 class ApiService {
     fetchDashboard() {
-        return axios.get(`/nest/api/dashboard`);
+        return axios.get(`/nest/api/dashboard/${window.sessionStorage.getItem("authUserNo")}`);
     }
 
     fetchKanbanMain(){
@@ -16,7 +16,7 @@ class ApiService {
     }
 
     fetchUser(){
-        return axios.get(`/nest/api/user`);
+        return axios.get(`/nest/api/user/${window.sessionStorage.getItem("authUserNo")}`);
     }
 
     fetchLogin(email, password){

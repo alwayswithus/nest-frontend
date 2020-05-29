@@ -22,7 +22,6 @@ export default class Navigator extends React.Component {
         sessionStorage.clear();
     }
 
-
     render() {
         return (
             <div className='Navigator'>
@@ -31,7 +30,7 @@ export default class Navigator extends React.Component {
                         <div className="exclude-nest-li">
                             {/*<!-- About link -->*/}
                             <li className="nav-item" data-toggle="modal" data-target="#use-profile">
-                                <img className="nav-item-profile" src="/nest/assets/images/ko.jpg"></img><br />
+                                <img className="nav-item-profile" src={window.sessionStorage.getItem("authUserPhoto")}></img><br />
                             </li>
 
                             {/*<!-- Notification link -->*/}
@@ -110,10 +109,10 @@ export default class Navigator extends React.Component {
                             {/* Header */}
                             <a href="/nest/profile" className="profile-setting-page">
                                 <div className="modal-header">
-                                    <img src="/nest/assets/images/ko.jpg" alt="avatar" className="rounded-circle img-responsive" />
+                                    <img src={window.sessionStorage.getItem("authUserPhoto")} alt="avatar" className="rounded-circle img-responsive" />
                                     <div className="text-center">
-                                        <h4 className="mt-1 mb-2">Maria Doe</h4>
-                                        <h5 className="mt-1 mb-2">youg1322@naver.com</h5>
+                                        <h4 className="mt-1 mb-2">{window.sessionStorage.getItem("authUserName")}</h4>
+                                        <h5 className="mt-1 mb-2">{window.sessionStorage.getItem("authUserEmail")}</h5>
                                     </div>
                                 </div>
                             </a>
