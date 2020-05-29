@@ -2,13 +2,47 @@ import React, { Component, Fragment } from 'react';
 import './file.scss';
 import FileList from './FileList'
 import Header from './Header';
+import axios from 'axios';
+
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+    "Context-Type": "application/json",
+}
 
 class File extends Component {
+
+    constructor(){
+        super(...arguments)
+        this.state = {
+            selectedFile:null,
+            msg:'success'
+        }
+    }
+
     onChangeFileUpload(event) {
-        console.log(event.target.files)
+        this.setState({
+            selectedFile : event.target.files[0]
+        })
+    }
+    onClickeFileUpload(){
+        const formData = new FormData();
+        formData.append('file', this.state.selectedFile)
+        formData.append('taskNo', this.props.match.params.taskNo);
+        console.log(sessionStorage.getItem("authUserNo"))
+        fetch(`${API_URL}/api/upload`, {
+            method:'post',
+            headers:API_HEADERS,
+            body: formData,
+          })
+          .then((response) => response.json())
+          .then((json) => {
+                this.props.taskCallbacks.addFile(
+                  json.data,
+                  this.props.match.params.taskListNo, 
+                  this.props.match.params.taskNo)
+          })
     }
     render() {
-
         if (!this.props.task) {
             return <></>;
         }
@@ -28,7 +62,10 @@ class File extends Component {
                                 <div className="input-group-btn"></div>
                             </div>
                         </form>
-                        <input onChange={this.onChangeFileUpload.bind(this)} type='file' className="fileUpload" name="file" />
+                            <input  
+                                onChange={this.onChangeFileUpload.bind(this)} 
+                                type='file' className="fileUpload" name="file" />
+                        <button  onClick={this.onClickeFileUpload.bind(this)}>제출</button>
                     </div>
                     <hr />
                     <table>

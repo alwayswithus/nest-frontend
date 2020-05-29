@@ -6,7 +6,7 @@ import moment from 'moment';
 
 class FileList extends Component{
     render(){
-        console.log(this.props.taskItem.commentList)
+        console.log(this.props.taskItem.fileList)
         return (
             <div className="FileList">
                 <table>
