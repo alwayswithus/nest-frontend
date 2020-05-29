@@ -7,19 +7,36 @@ import Navigator from '../../navigator/Navigator'
 import TopBar from '../topBar/TopBar';
 import './file.scss';
 
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+  "Content-Type": "application/json",
+};
 export default class File extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
-            url: ""
+            url: sessionStorage.getItem("authUserBg")
         }
     }
 
     // CallBack Background Image Setting 
     callbackChangeBackground(url) {
-        this.setState({
+
+        let authUser = {
+            userNo: window.sessionStorage.getItem("authUserNo"),
+            userBg: url
+          }
+      
+          fetch(`${API_URL}/api/user/backgroundChange`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(authUser)
+          })
+          
+          sessionStorage.setItem("authUserBg", url)
+          this.setState({
             url: url
-        })
+          })
     }
 
     render() {
