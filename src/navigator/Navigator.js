@@ -30,7 +30,7 @@ export default class Navigator extends React.Component {
                         <div className="exclude-nest-li">
                             {/*<!-- About link -->*/}
                             <li className="nav-item" data-toggle="modal" data-target="#use-profile">
-                                <img className="nav-item-profile" src={`/${window.sessionStorage.getItem("authUserPhoto")}`}></img><br />
+                                <img className="nav-item-profile" src={`${window.sessionStorage.getItem("authUserPhoto")}`}></img><br />
                             </li>
 
                             {/*<!-- Notification link -->*/}
@@ -109,7 +109,7 @@ export default class Navigator extends React.Component {
                             {/* Header */}
                             <a href="/nest/profile" className="profile-setting-page">
                                 <div className="modal-header">
-                                    <img src={`/${window.sessionStorage.getItem("authUserPhoto")}`} alt="avatar" className="rounded-circle img-responsive" />
+                                    <img src={`${window.sessionStorage.getItem("authUserPhoto")}`} alt="avatar" className="rounded-circle img-responsive" />
                                     <div className="text-center">
                                         <h4 className="mt-1 mb-2">{window.sessionStorage.getItem("authUserName")}</h4>
                                         <h5 className="mt-1 mb-2">{window.sessionStorage.getItem("authUserEmail")}</h5>
@@ -120,10 +120,10 @@ export default class Navigator extends React.Component {
                             <div className="modal-body">
                                 <h4 className="mt-1 mb-2">배경화면 설정</h4>
                                 <div className="background-setting">
-                                    <img id="1" onClick={this.onBackGroundClick.bind(this)} src="/assets/images/abandoned-forest-industry-nature.jpg" alt="/assets/images/abandoned-forest-industry-nature.jpg" className={this.state.backgroundId === "1" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
-                                    <img id="2" onClick={this.onBackGroundClick.bind(this)} src="/assets/images/arizona-asphalt-beautiful-blue-sky.jpg" alt="/assets/images/arizona-asphalt-beautiful-blue-sky.jpg" className={this.state.backgroundId === "2" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
-                                    <img id="3" onClick={this.onBackGroundClick.bind(this)} src="/assets/images/sunray-through-trees.jpg" alt="/assets/images/sunray-through-trees.jpg" className={this.state.backgroundId === "3" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
-                                    <img id="4" onClick={this.onBackGroundClick.bind(this)} src="/assets/images/fire-wallpaper.jpg" alt="/assets/images/fire-wallpaper.jpg" className={this.state.backgroundId === "4" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="1" onClick={this.onBackGroundClick.bind(this)} src="/nest/assets/images/abandoned-forest-industry-nature.jpg" alt="/nest/assets/images/abandoned-forest-industry-nature.jpg" className={this.state.backgroundId === "1" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="2" onClick={this.onBackGroundClick.bind(this)} src="/nest/assets/images/arizona-asphalt-beautiful-blue-sky.jpg" alt="/nest/assets/images/arizona-asphalt-beautiful-blue-sky.jpg" className={this.state.backgroundId === "2" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="3" onClick={this.onBackGroundClick.bind(this)} src="/nest/assets/images/sunray-through-trees.jpg" alt="/nest/assets/images/sunray-through-trees.jpg" className={this.state.backgroundId === "3" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
+                                    <img id="4" onClick={this.onBackGroundClick.bind(this)} src="/nest/assets/images/fire-wallpaper.jpg" alt="/nest/assets/images/fire-wallpaper.jpg" className={this.state.backgroundId === "4" ? "active rounded-circle img-responsive" : "rounded-circle img-responsive"} />
                                     <div className="btn background-setting-button">
                                         더 보기
                                     </div>
