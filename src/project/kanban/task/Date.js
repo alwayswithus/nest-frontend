@@ -8,13 +8,9 @@ class Date extends Component {
     return (
       <>
         <div className="task-date">
-          {endDate && endDate ? (
-            <b>
-              {startDate} ~ {endDate}
-            </b>
-          ) : (
-            <b>일정 미정</b>
-          )}
+          {!startDate && !endDate && "일정 미정"}
+          {startDate && !endDate && `${startDate} ~`}
+          {startDate && endDate && `${startDate} ~ ${endDate}`}
         </div>
       </>
     );

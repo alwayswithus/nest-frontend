@@ -279,8 +279,10 @@ class KanbanMain extends Component {
       taskContents: taskContents,
       projectNo: projectNo,
       taskNo: null,
+      taskWriter: sessionStorage.getItem("authUserNo")
     };
 
+    console.log(sessionStorage.getItem("authUserNo"));
     fetch(`${API_URL}/api/task/insert`, {
       method: "post",
       headers: API_HEADERS,
@@ -302,6 +304,7 @@ class KanbanMain extends Component {
           taskPoint: json.data.taskPoint,
           taskLabel: json.data.taskLabel,
           fileList: [],
+          taskWriter:json.data.taskWriter
         };
 
         let newTaskList = this.state.taskList;
