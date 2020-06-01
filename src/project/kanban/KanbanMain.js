@@ -682,52 +682,54 @@ class KanbanMain extends Component {
     const tagIndex = this.state.taskList[taskIndex].tasks[taskIndex].tagList.findIndex(
       (tag) => tag.tagNo == tagNo
     );
-    
-    let newTag = {
-      tagNo: tagNo,
-      tagName: tagName,
-      tagColor: "RGB(255, 160, 160)",
-      taskNo:taskNo
-    };
-    fetch(`${API_URL}/api/tag/add`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(newTag),
-    })
-    .then((response) => response.json())
-    .then((json) => {
-        let newTagData = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                tagList: {
-                  $push: [json.data],
-                },
-              },
-            },
-          },
-        });
 
-        const tagIndex = newTagData[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
-        newTagData = update(newTagData, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                tagList: {
-                  [tagIndex]:{
-                    tagName:{$set: tagName},
-                    tagColor:{$set: "RGB(255, 160, 160)"}
-                  }
-                },
-              },
-            },
-          },
-        })
-        this.onSetStateTaskTagNo(array, newTagData, taskListNo, taskNo)
-        this.setState({
-          taskList: newTagData,
-        });
-      })
+    console.log()
+    
+    // let newTag = {
+    //   tagNo: tagNo,
+    //   tagName: tagName,
+    //   tagColor: "RGB(255, 160, 160)",
+    //   taskNo:taskNo
+    // };
+    // fetch(`${API_URL}/api/tag/add`, {
+    //   method: "post",
+    //   headers: API_HEADERS,
+    //   body: JSON.stringify(newTag),
+    // })
+    // .then((response) => response.json())
+    // .then((json) => {
+    //     let newTagData = update(this.state.taskList, {
+    //       [taskListIndex]: {
+    //         tasks: {
+    //           [taskIndex]: {
+    //             tagList: {
+    //               $push: [json.data],
+    //             },
+    //           },
+    //         },
+    //       },
+    //     });
+
+    //     const tagIndex = newTagData[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
+    //     newTagData = update(newTagData, {
+    //       [taskListIndex]: {
+    //         tasks: {
+    //           [taskIndex]: {
+    //             tagList: {
+    //               [tagIndex]:{
+    //                 tagName:{$set: tagName},
+    //                 tagColor:{$set: "RGB(255, 160, 160)"}
+    //               }
+    //             },
+    //           },
+    //         },
+    //       },
+    //     })
+    //     this.onSetStateTaskTagNo(array, newTagData, taskListNo, taskNo)
+    //     this.setState({
+    //       taskList: newTagData,
+    //     });
+    //   })
 
   }
 
@@ -1041,12 +1043,16 @@ class KanbanMain extends Component {
 }
 
   //comment 삭제하기
-  callbackDeleteComment(taskListNo, taskNo, commentNo){
+  callbackDeleteComment(fileNo, taskListNo, taskNo, commentNo){
     const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
+    const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === fileNo);
 
-    fetch(`${API_URL}/api/comment/${commentNo}`, {
+    if(fileNo == null){
+      fileNo = 0;
+    }
+    fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
       method: "delete"
     })
     .then(response => response.json())
@@ -1062,6 +1068,20 @@ class KanbanMain extends Component {
           },
         },
       });
+      if(fileIndex != -1){
+        newTaskList = update(newTaskList, {
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                fileList: {
+                  $splice: [[fileIndex, 1]],
+                },
+              },
+            },
+          },
+        });
+
+      }
 
       this.setState({
         taskList:newTaskList
@@ -1089,7 +1109,6 @@ class KanbanMain extends Component {
         },
       },
     });
-
     this.setState({
       taskList: newTaskList,
     });

@@ -9,6 +9,7 @@ import ColorPicker from './ColorPicker';
 import TagModal from './TagModal';
 import update from "react-addons-update";
 import ApiService from '../../../../ApiService'
+import TaskMember from './TaskMember';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -64,6 +65,7 @@ class Setting extends Component {
         this.props.taskCallbacks.updateTaskTag(array, this.props.task, this.props.match.params.taskListNo, this.props.match.params.taskNo)
     }
 
+
     onClickCalendar(){
         console.log(this.state.open)
         this.setState({
@@ -71,13 +73,12 @@ class Setting extends Component {
         })
     }
 
-    
-
     onSetStateTaskTagNo(array){
         this.setState({
             taskTagNo:array
         })
     }
+
     //새태그 만들기 click
     onClicknewTagModal(){
         this.setState({
@@ -132,6 +133,14 @@ class Setting extends Component {
             })
         })
     }
+
+    onClickTaskMember(){
+        console.log("!!!!")
+    }
+
+    onDelteMember(){
+        console.log("delete!!!!")
+    }
     render() {
 
         if(!this.props.task){
@@ -185,13 +194,20 @@ class Setting extends Component {
                                 <div style={{ float: 'left', marginTop: '10px' }}><i className="fas fa-user-plus"></i></div>
                                 <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                                 <div style={{ float: 'left' }}>
-                                    <Button variant=""><i className="fas fa-plus fa-1x"></i></Button>
+                                    <Button onClick={this.onClickTaskMember.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
+                                    {/* <TaskMember /> */}
                                 </div>
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
-                                    <div className="Member">
-                                        <img src="/nest/assets/images/unnamed.jpg" className="img-circle" alt="Cinque Terre" />
-                                        <span>김우경</span>
-                                    </div>
+                                    {/* 업무 멤버 리스트 */}
+                                    {taskItem.memberList.map(member => 
+                                        <div className="Member">
+                                            <img src={member.userPhoto} className="img-circle" alt="Cinque Terre" />
+                                            <span>{member.userName}</span>
+                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
+                                                <i className="fas fa-times"></i>
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             </li>
                             {/* 태그 */}
@@ -294,7 +310,14 @@ class Setting extends Component {
                     tags:response.data.data
                 })
             })
-    }
+
+        // ApiService.fetchProjectMember(this.props.projectNo)
+        //     // .then(response => {
+        //     //     this.setState({
+
+        //     //     })
+        //     // })
+        }
 }
 export default Setting;
 
