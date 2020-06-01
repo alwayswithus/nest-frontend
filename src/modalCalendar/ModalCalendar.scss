@@ -1,0 +1,54 @@
+.Selectable
+  .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #f0f8ff !important;
+  color: #4a90e2;
+}
+.Selectable .DayPicker-Day {
+  border-radius: 0 !important;
+}
+.Selectable .DayPicker-Day--start {
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.Selectable .DayPicker-Day--end {
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+.Range {
+  position: absolute;
+  left: 200px;
+  top: 0px;
+  background-color: white;
+  width: 300px;
+  height: 370px;
+  box-shadow: 0 3px 10px rgba(85, 71, 71, 0.5);
+  .calendar {
+    .calendar-header {
+      h6 {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      button {
+        line-height: 35px;
+      }
+      hr {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-color: #e3e3e3;
+      }
+    }
+    .calendar-body {
+      text-align: center;
+      .DayPicker {
+        font-size: 1.5rem;
+          .DayPicker-Month{
+            border:1px solid lightgray;
+            .DayPicker-WeekdaysRow{
+              border-bottom:1px solid lightgray;
+            }
+        }
+      }
+    }
+  }
+}

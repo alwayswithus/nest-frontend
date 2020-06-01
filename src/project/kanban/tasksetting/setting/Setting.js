@@ -19,7 +19,7 @@ class Setting extends Component {
     constructor (){
         super(...arguments)
         this.state ={
-            open:false,
+            open:false, // 캘린더 모달
             checklist:'',
             tags:null,
             closeValue:false, // 태그 모달
@@ -63,6 +63,15 @@ class Setting extends Component {
         var array = [...this.props.taskTagNo]
         this.props.taskCallbacks.updateTaskTag(array, this.props.task, this.props.match.params.taskListNo, this.props.match.params.taskNo)
     }
+
+    onClickCalendar(){
+        console.log(this.state.open)
+        this.setState({
+            open:!this.state.open
+        })
+    }
+
+    
 
     onSetStateTaskTagNo(array){
         this.setState({
@@ -155,8 +164,17 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-calendar-week"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button variant="" onClick={this.onOpenCalendar.bind(this)}> <i className="fas fa-plus fa-1x"></i> </Button>
-                                    {this.state.open ? <ModalCalendar /> : ""}
+                                    <Button variant="" onClick={this.onOpenCalendar.bind(this)}> 
+                                    <b className="taskDate">{!taskItem.taskStart && !taskItem.taskEnd && <i className="fas fa-plus fa-1x"></i>}
+                                        {taskItem.taskStart && !taskItem.taskEnd && `${taskItem.taskStart} ~`}
+                                        {taskItem.taskStart && taskItem.taskEnd && `${taskItem.taskStart} ~ ${taskItem.taskEnd}`}
+                                    </b>  </Button>
+                                    <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
+                                    <ModalCalendar open={this.state.open}
+                                    onClickCalendar={this.onClickCalendar.bind(this)}
+                                    from = {taskItem.taskStart}
+                                    to = {taskItem.taskEnd}/>
+                                    </div>
                                 </div>
                                 <div className="Date" style={{ display: 'inline-block' }}>
                                     {}
