@@ -23,8 +23,7 @@ class Task extends Component {
   doneTask(event) {
     this.props.taskCallbacks.doneTask(
       this.props.taskListNo,
-      this.props.task.taskNo,
-      this.props.task.checked
+      this.props.task.taskNo
     );
     this.noneClick(event);
   }

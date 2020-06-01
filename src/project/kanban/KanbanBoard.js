@@ -31,7 +31,7 @@ class KanbanBoard extends Component {
 
   // 리스트 추가
   addTaskList() {
-    this.props.taskCallbacks.addList(this.state.taskListName, 5);
+    this.props.taskCallbacks.addList(this.state.taskListName, this.props.projectNo);
     this.setState({
       taskListName: "",
     });
