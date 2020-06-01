@@ -13,7 +13,6 @@ class TagModal extends Component {
     }
     // 새태그 만들기 클릭
     onClickTagInsert(){
-        console.log("click!!!!!!!")
         this.props.onClickTag()
         this.props.onClicknewTagModal()
     }
@@ -52,7 +51,6 @@ class TagModal extends Component {
         }
 
     render() {
-        console.log(this.props.taskTagNo)
         return (
             <Fragment>
                 {/* 새태그 만들기 */}
@@ -95,18 +93,6 @@ class TagModal extends Component {
                                             <div className="tag">{tag.tagName}</div>
                                             <div onClick={this.onClickTagModify.bind(this,tag.tagNo)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                                         </li>
-                                    // <SettingTag
-                                    //     key={tag.tagNo}
-                                    //     taskCallbacks={this.props.taskCallbacks}
-                                    //     taskTagNo={this.props.taskTagNo}
-                                    //     tagParams={{
-                                    //         taskItem: this.props.taskItem,
-                                    //         tagNo: tag.tagNo,
-                                    //         tagName: tag.tagName,
-                                    //         taskListNo: this.props.taskListNo,
-                                    //         taskNo: this.props.taskNo
-                                    //     }}
-                                    //     settingTagCallbakcs={this.props.settingTagCallbakcs} />
                                 )}
                             </ul>
                         </div>

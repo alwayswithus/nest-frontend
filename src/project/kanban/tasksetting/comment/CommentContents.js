@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react";
 import './comment.scss';
 import moment from 'moment';
 import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.bubble.css';
+
+const API_URL = "http://localhost:8080/nest";
 
 class commentContents extends Component {
 
@@ -53,8 +54,8 @@ class commentContents extends Component {
 
     //삭제하기 버튼 누르기
     onClickDeleteContents(){
-        alert('삭제하시겠습니까?')
-        this.props.taskCallbacks.deleteComment(this.props.taskListNo, this.props.taskNo, this.props.comment.commentNo)
+        alert('삭제 하시겠습니까?')
+        this.props.taskCallbacks.deleteComment(this.props.comment.fileNo, this.props.taskListNo, this.props.taskNo, this.props.comment.commentNo)
     }
     render(){
         return (
@@ -70,7 +71,7 @@ class commentContents extends Component {
                                 <i onClick = {this.onClickThumsUp.bind(this, this.props.comment.commentNo)} className="far fa-thumbs-up thumsup"/>
                             </span>
                         </li>
-                        {this.props.comment.fileNo == null || this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
+                        {this.props.comment.fileNo == null && this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
                             <li>
                                 <span data-tooltip-text="수정하기">
                                     <i onClick= {this.onClickModifyText.bind(this)} className="fas fa-pen" />
@@ -83,7 +84,8 @@ class commentContents extends Component {
                                 </span>
                             </li> : null}
                         </ul>
-                        {this.props.comment.fileNo == null ? null : <img style={{display:'block', width:'150px', padding: '2% 3% 0% 3%'}} src={this.props.comment.filePath} alt={this.props.comment.originName} ></img>}
+                        {this.props.comment.fileNo == null ? null : 
+                            <img style={{display:'block', width:'150px', padding: '2% 3% 0% 3%'}} src={`${API_URL}${this.props.comment.filePath}`} alt={this.props.comment.originName} ></img>}
                         {this.state.change ? 
                             <p style={{ border: '4px solid rgb(39, 182, 186)',
                                         width: '485px',
