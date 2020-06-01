@@ -14,7 +14,7 @@ class File extends Component {
     constructor(){
         super(...arguments)
         this.state = {
-            selectedFile:null,
+            selectedFile:null
         }
     }
 
@@ -40,7 +40,7 @@ class File extends Component {
                   json.data,
                   this.props.match.params.taskListNo, 
                   this.props.match.params.taskNo)
-          })
+            })
     }
     render() {
         if (!this.props.task) {

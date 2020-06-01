@@ -5,18 +5,6 @@ class SettingTag extends Component {
 
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox() {
-        // if (event.target.className == 'far fa-square') {
-        //     this.props.taskCallbacks.addtag(
-        //         this.props.tagParams.tagNo,
-        //         this.props.tagParams.tagName,
-        //         this.props.tagParams.taskListNo,
-        //         this.props.tagParams.taskNo);
-        // } else {
-        //     this.props.taskCallbacks.deletetag(
-        //         this.props.tagParams.tagNo,
-        //         this.props.tagParams.taskListNo,
-        //         this.props.tagParams.taskNo)
-        // }
         this.props.taskCallbacks.addDeletetag(
             this.props.tagParams.tagNo,
             this.props.tagParams.tagName,
@@ -57,16 +45,7 @@ class SettingTag extends Component {
                     </div>
                 </div> */}
                 <li onClick={this.onCheckBox.bind(this)} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                    {/* {this.props.tagParams.taskItem.tagList.map(tag =>
-                        // tag.tagNo === this.props.tagParams.tagNo ?  <i class="fas fa-check"></i> : null
-                        console.log(this.props.tagParams.tagNo.includes(tag.tagNo))
-                    )} */}
-                    {/* {this.props.tagParams.taskItem.tagList.length == 0 ? <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i> : 
-                        (<> {this.props.tagParams.taskItem.tagList.map(tag =>
-                                tag.tagNo === this.props.tagParams.tagNo ?  <i onClick={this.onCheckBox.bind(this)} className="fas fa-check-square"></i> : <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i>
-                        )}</>)
-                    } */}
-                    {this.props.taskTagNo&&this.props.taskTagNo.indexOf(this.props.tagParams.tagNo) != -1 ? console.log('true') : console.log('false')}
+                    {/* {this.props.taskTagNo&&this.props.taskTagNo.indexOf(this.props.tagParams.tagNo) != -1 ? console.log('true') : console.log('false')} */}
                     <div className="tag">{this.props.tagParams.tagName}</div>
                     <div onClick={this.onClickTagModify.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                 </li>

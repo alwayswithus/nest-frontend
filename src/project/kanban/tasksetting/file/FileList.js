@@ -3,6 +3,7 @@ import './file.scss';
 import Dropzone from 'react-dropzone-uploader'
 import 'react-dropzone-uploader/dist/styles.css'
 import moment from 'moment';
+const API_URL = "http://localhost:8080/nest";
 
 class FileList extends Component{
     render(){
@@ -15,7 +16,7 @@ class FileList extends Component{
                             <>
                             <tr className="FileList-tr">
                                 <td>
-                                    <img style={{width:'50px', paddingRight:'3%', paddingBottom:'1%'}} src={file.filePath} alt={file.originName} ></img>
+                                    <img style={{width:'50px', paddingRight:'3%', paddingBottom:'1%'}} src={`${API_URL}${file.filePath}`} alt={file.originName} ></img>
                                     {file.originName}</td>
                                 <td>{moment(file.fileRegDate).format('YYYY년 MM월 DD일')}</td>
                                 <td>{file.userName}</td>
