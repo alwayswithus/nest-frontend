@@ -118,7 +118,8 @@ class TaskList extends Component {
   addTask() {
     this.props.taskCallbacks.add(
       this.props.taskList.taskListNo,
-      this.state.taskContents
+      this.state.taskContents,
+      this.props.projectNo
     );
     this.setState({
       taskContents: "",
@@ -259,7 +260,7 @@ class TaskList extends Component {
                           ) !== -1
                       )
                       .map((task, index) =>
-                        task.checked ? null : task !== "" ? (
+                      task.taskState === "done" ? null :  (
                           <Task
                             projectNo = {this.props.projectNo}
                             key={task.taskNo}
@@ -268,8 +269,6 @@ class TaskList extends Component {
                             index={index}
                             taskCallbacks={this.props.taskCallbacks}
                           />
-                        ) : (
-                          <div>없음</div>
                         )
                       )}
                     {provided.placeholder}

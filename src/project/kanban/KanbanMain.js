@@ -11,7 +11,8 @@ import { Route, Switch } from "react-router-dom";
 import Setting from "../kanban/tasksetting/setting/Setting";
 import Comment from "../kanban/tasksetting/comment/Comment";
 import File from "../kanban/tasksetting/file/File";
-import moment from 'moment';
+import moment, { now }  from 'moment';
+import Task from "./task/Task";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -153,14 +154,14 @@ class KanbanMain extends Component {
       newTaskList = update(newTaskList, {
         [finishIndex]: {
           tasks: {
-            [destination.index] : {
-              taskOrder : {$set: finish.tasks[destination.index].taskOrder }
-            }
+            [destination.index]: {
+              taskOrder: { $set: finish.tasks[destination.index].taskOrder },
+            },
           },
         },
       });
 
-      fetch(`${API_URL}/api/task/reOrder`, {
+      fetch(`${API_URL}/api/task/reOrder/sameList`, {
         method: "post",
         headers: API_HEADERS,
         body: JSON.stringify(newTaskList[startIndex].tasks),
@@ -199,6 +200,47 @@ class KanbanMain extends Component {
       },
     });
 
+    newTaskList[startIndex].tasks.map((task, index) => {
+      newTaskList = update(newTaskList, {
+        [startIndex]: {
+          tasks: {
+            [index]: {
+              taskOrder: {
+                $set: newTaskList[startIndex].tasks.length - index,
+              },
+            },
+          },
+        },
+      });
+    });
+
+    newTaskList[finishIndex].tasks.map((task, index) => {
+      newTaskList = update(newTaskList, {
+        [finishIndex]: {
+          tasks: {
+            [index]: {
+              taskOrder: {
+                $set: newTaskList[finishIndex].tasks.length - index,
+              },
+            },
+          },
+        },
+      });
+    });
+    const reOrder = {
+      startTaskListNo: newTaskList[startIndex].taskListNo,
+      endTaskListNo: newTaskList[finishIndex].taskListNo,
+      startTasks: newTaskList[startIndex].tasks,
+      endTasks: newTaskList[finishIndex].tasks,
+      reOrderTask: this.state.taskList[startIndex].tasks[source.index].taskNo,
+    };
+
+    fetch(`${API_URL}/api/task/reOrder/otherList`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(reOrder),
+    });
+
     this.setState({
       taskList: newTaskList,
     });
@@ -224,30 +266,51 @@ class KanbanMain extends Component {
   }
 
   // task 추가
-  callbackAddTask(taskListNo, taskContents) {
+  callbackAddTask(taskListNo, taskContents, projectNo) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
-
-    let newTask = {
-      // no: this.state.taskList[TaskListIndex].tasks.length,
-      no: Date.now() + "",
-      contents: taskContents,
-      checkList: [],
-      tag: [],
+    const task = {
+      taskOrder:
+        this.state.taskList[TaskListIndex].tasks.length === 0
+          ? 1
+          : this.state.taskList[TaskListIndex].tasks[0].taskOrder + 1,
+      taskListNo: taskListNo,
+      taskContents: taskContents,
+      projectNo: projectNo,
+      taskNo: null,
     };
 
-    let newTaskList = update(this.state.taskList, {
-      [TaskListIndex]: {
-        tasks: {
-          $push: [newTask],
-        },
-      },
-    });
+    fetch(`${API_URL}/api/task/insert`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(task),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let newTask = {
+          commentList: [],
+          taskStart: json.data.taskStart,
+          taskEnd: json.data.taskEnd,
+          taskOrder: json.data.taskOrder,
+          tagList: [],
+          taskState: "do",
+          memberList: [],
+          taskContents: json.data.taskContents,
+          taskNo: json.data.taskNo,
+          checkList: [],
+          taskPoint: json.data.taskPoint,
+          taskLabel: json.data.taskLabel,
+          fileList: [],
+        };
 
-    this.setState({
-      taskList: newTaskList,
-    });
+        let newTaskList = this.state.taskList;
+        newTaskList[TaskListIndex].tasks.splice(0, 0, newTask);
+
+        this.setState({
+          taskList: newTaskList,
+        });
+      });
   }
   // task 삭제
   callbackDeleteTask(taskListNo, taskId) {
@@ -266,6 +329,31 @@ class KanbanMain extends Component {
         },
       },
     });
+
+    const taskListLength = newTaskList[TaskListIndex].tasks.length;
+    newTaskList[TaskListIndex].tasks.map((task, index) => {
+      newTaskList = update(newTaskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [index]: {
+              taskOrder: { $set: taskListLength - index },
+            },
+          },
+        },
+      });
+    });
+
+    const deleteTask = {
+      startTasks: newTaskList[TaskListIndex].tasks,
+      reOrderTask: taskId,
+    };
+
+    fetch(`${API_URL}/api/task/delete`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(deleteTask),
+    });
+
     this.setState({
       taskList: newTaskList,
     });
@@ -281,23 +369,19 @@ class KanbanMain extends Component {
       (task) => task.taskNo === taskId
     );
     const task = this.state.taskList[TaskListIndex].tasks[TaskIndex];
-    let newTask = {
-      // tagList: task.tagList,
-      // commentList: [],
-      taskStart: task.taskStart,
-      taskState: task.taskState,
-      taskContents: task.taskContents,
+
+    let copyTask = {
+      tagList: task.tagList,
+      memberList: task.memberList,
+      originalTaskNo: task.taskNo,
       taskNo: null,
-      // checkList: task.checkList,
-      taskEnd: task.taskEnd,
-      taskPoint: task.taskPoint,
-      taskLabel: task.taskLabel,
-      taskOrder: null,
+      checkList: task.checkList,
     };
-    fetch(`${API_URL}/api/task/copy`, {
+
+    fetch(`${API_URL}/api/task/copy/insert`, {
       method: "post",
       headers: API_HEADERS,
-      body: JSON.stringify(newTask),
+      body: JSON.stringify(copyTask),
     })
       .then((response) => response.json())
       .then((json) => {
@@ -306,17 +390,19 @@ class KanbanMain extends Component {
         newTasks = update(newTasks, {
           [TaskIndex + 1]: {
             $set: {
-              tagList: task.tagList,
               commentList: [],
               taskStart: task.taskStart,
+              taskEnd: task.taskEnd,
+              taskOrder: null,
+              tagList: task.tagList,
               taskState: task.taskState,
-              taskContents: task.taskContents,
+              memberList: task.memberList,
+              taskContents: `${task.taskContents}_copy`,
               taskNo: json.data.taskNo + "",
               checkList: task.checkList,
-              taskEnd: task.taskEnd,
               taskPoint: task.taskPoint,
               taskLabel: task.taskLabel,
-              taskOrder: json.data.taskOrder,
+              fileList: [],
             },
           },
         });
@@ -329,6 +415,72 @@ class KanbanMain extends Component {
           },
         });
 
+        const taskListLength = newTaskList[TaskListIndex].tasks.length;
+        newTaskList[TaskListIndex].tasks.map((task, index) => {
+          newTaskList = update(newTaskList, {
+            [TaskListIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: taskListLength - index },
+                },
+              },
+            },
+          });
+        });
+
+        if (newTaskList[TaskListIndex].tasks[TaskIndex].tagList.length !== 0) {
+          newTaskList[TaskListIndex].tasks[TaskIndex].tagList.map(
+            (tag, index) => {
+              newTaskList = update(newTaskList, {
+                [TaskListIndex]: {
+                  tasks: {
+                    [TaskIndex]: {
+                      tagList: {
+                        [index]: {
+                          taskNo: {
+                            $set: json.data.taskNo,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+            }
+          );
+        }
+        if (
+          newTaskList[TaskListIndex].tasks[TaskIndex].checkList.length !== 0
+        ) {
+          newTaskList[TaskListIndex].tasks[TaskIndex].checkList.map(
+            (checkList, index) => {
+              newTaskList = update(newTaskList, {
+                [TaskListIndex]: {
+                  tasks: {
+                    [TaskIndex]: {
+                      checkList: {
+                        [index]: {
+                          taskNo: {
+                            $set: json.data.taskNo,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+            }
+          );
+        }
+
+        fetch(`${API_URL}/api/task/reOrder/sameList`, {
+          method: "post",
+          headers: API_HEADERS,
+          body: JSON.stringify(newTaskList[TaskListIndex].tasks),
+        });
+
+        console.log(newTaskList);
+
         this.setState({
           taskList: newTaskList,
         });
@@ -336,7 +488,7 @@ class KanbanMain extends Component {
   }
 
   // task 완료 체크
-  callbackDoneTask(taskListNo, taskId, checked) {
+  callbackDoneTask(taskListNo, taskId) {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -349,11 +501,17 @@ class KanbanMain extends Component {
       [TaskListIndex]: {
         tasks: {
           [TaskIndex]: {
-            checked: { $set: !checked },
+            taskState: { $set: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === 'done' ? 'do' : 'done' },
           },
         },
       },
     });
+
+    fetch(`${API_URL}/api/task/state`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newTaskList[TaskListIndex].tasks[TaskIndex]),
+    })
 
     this.setState({
       taskList: newTaskList,
@@ -376,7 +534,6 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-
         newTaskList = update(json.data, {
           $set: {
             taskListNo: json.data.taskListNo + "",
@@ -910,21 +1067,24 @@ class KanbanMain extends Component {
   }
 
   //file upload 하기
-  callbackAddFile(formData, taskListNo, taskNo){
-
-    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
+  callbackAddFile(formData, taskListNo, taskNo) {
+    const taskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo === taskListNo
+    );
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+      (task) => task.taskNo === taskNo
+    );
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex] :{
-        tasks:{
-          [taskIndex]:{
-            fileList:{
-              $push:[formData]
-            }
-          }
-        }
-      }
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            fileList: {
+              $push: [formData],
+            },
+          },
+        },
+      },
     });
 
     this.setState({
@@ -933,10 +1093,13 @@ class KanbanMain extends Component {
     const fileIndex = newTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex(file => file.fileNo == formData.fileNo)
     const file = newTaskList[taskListIndex].tasks[taskIndex].fileList[fileIndex]
     this.callbackAddComment(
-                       file,
-                       taskListNo, 
-                       taskNo,
-                       null )
+      fileList,
+      taskListNo,
+      taskNo,
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      sessionStorage.getItem("authUserPhoto")
+    );
   }
 
   // 태그가 추가 될 때마다 taskTagNo를 set 해줌.
@@ -987,7 +1150,9 @@ class KanbanMain extends Component {
                 task={this.state.taskList} 
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                  commentContentsUpdate: this.callbackCommentContentsUpdate.bind(
+                    this
+                  ), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                   deleteComment: this.callbackDeleteComment.bind(this) // 코멘트 삭제하기
                 }}
@@ -996,14 +1161,18 @@ class KanbanMain extends Component {
 
           <Route
             path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/file"
-            render={(match) => 
-                    <File {...match}
-                        projectNo={this.props.match.params.projectNo}
-                        task={this.state.taskList}
-                        taskCallbacks={{
-                            addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
-                            addComment: this.callbackAddComment.bind(this) // 코멘트 글 쓰기
-                          }}  />} />
+            render={(match) => (
+              <File
+                {...match}
+                projectNo={this.props.match.params.projectNo}
+                task={this.state.taskList}
+                taskCallbacks={{
+                  addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
+                  addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
+                }}
+              />
+            )}
+          />
         </Switch>
         <ScrollContainer
           className="scroll-container"
@@ -1056,11 +1225,13 @@ class KanbanMain extends Component {
   }
 
   componentDidMount() {
-    ApiService.fetchKanbanMain(this.props.match.params.projectNo).then((response) => {
-      this.setState({
-        taskList: response.data.data.allTaskList,
-      });
-    });
+    ApiService.fetchKanbanMain(this.props.match.params.projectNo).then(
+      (response) => {
+        this.setState({
+          taskList: response.data.data.allTaskList,
+        });
+      }
+    );
   }
 }
 
