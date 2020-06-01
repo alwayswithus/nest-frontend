@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import './CommentInputDemo.scss'
 import ReactQuill from 'react-quill';
 import PropTypes from 'prop-types';
 import 'react-quill/dist/quill.snow.css';
@@ -14,7 +13,9 @@ class Editor extends Component {
     }
     
     handleChange (html) {
-        this.setState({ editorHtml: html });
+        // this.setState({ editorHtml: html });
+        console.log("Editor: " + html)
+        this.props.onSetStateContents(html)
         this.props.onClickSubmit(this.state.editorHtml)
     }
 
@@ -26,13 +27,13 @@ class Editor extends Component {
     // }
 
     render () {
+      console.log("Editor Render()" + this.props.contents)
       return (
         <div>
           <ReactQuill 
             theme={this.state.theme}
             onChange={this.handleChange.bind(this)}
-            // onKeyDown = {(e) => this.onKeyPressEditor(e)}
-            value={this.state.editorHtml}
+            value={this.props.contents}
             modules={Editor.modules}
             formats={Editor.formats}
             bounds={'.app'}

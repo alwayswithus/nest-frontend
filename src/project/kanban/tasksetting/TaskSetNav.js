@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 class Navigation extends Component {
 
   render() {
-    console.log("TaskSetNav : " + this.props.params)
     return (
       <div className="Navigation">
         {this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/file' ?

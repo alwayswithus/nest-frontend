@@ -22,7 +22,7 @@ class CommentList extends Component {
         return (
             <div className="CommentList">
                 {/* comment List */}
-                <div className="media">
+                <div ref={(node) => {this.node = node;}} className="media">
                     {/* comment */}
                     {this.props.taskItem.commentList.map(comment =>
                         <CommentContents 

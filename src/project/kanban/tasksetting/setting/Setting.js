@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import './Setting.scss';
@@ -10,7 +9,6 @@ import ColorPicker from './ColorPicker';
 import TagModal from './TagModal';
 import update from "react-addons-update";
 import ApiService from '../../../../ApiService'
-import axios from 'axios';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -25,7 +23,7 @@ class Setting extends Component {
             checklist:'',
             tags:null,
             closeValue:false, // 태그 모달
-            closeTag: false // 새태그만들기 모달
+            closeTag: false, // 새태그만들기 모달
         }
     }
     onOpenCalendar() {
@@ -62,8 +60,15 @@ class Setting extends Component {
         this.setState({
             closeValue:!this.state.closeValue
         })
+        var array = [...this.props.taskTagNo]
+        this.props.taskCallbacks.updateTaskTag(array, this.props.task, this.props.match.params.taskListNo, this.props.match.params.taskNo)
     }
 
+    onSetStateTaskTagNo(array){
+        this.setState({
+            taskTagNo:array
+        })
+    }
     //새태그 만들기 click
     onClicknewTagModal(){
         this.setState({
@@ -181,15 +186,17 @@ class Setting extends Component {
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
                                         {/* tag 검색창 */}
                                         <TagModal
-                                            closeValue = {this.state.closeValue}
-                                            closeTag = {this.state.closeTag}
-                                            onClickTag={this.onClickTag.bind(this)}
-                                            onClicknewTagModal = {this.onClicknewTagModal.bind(this)}
+                                            closeValue = {this.state.closeValue} // 태그 모달 띄우는 상태변수
+                                            closeTag = {this.state.closeTag} // 새 태그 만들기 모달 띄우는 상태 변수
+                                            onClickTag={this.onClickTag.bind(this, taskItem)} // 태그 모달 띄우는 함수
+                                            onClicknewTagModal = {this.onClicknewTagModal.bind(this)} // 새 태그 만들기 모달 띄우는 함수
                                             key={this.props.task.taskNo} 
                                             taskListNo = {this.props.match.params.taskListNo}
                                             taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}
+                                            taskTagNo={this.state.taskTagNo} //task tagNo 배열.
                                             tags = {this.state.tags}
+                                            taskTagNo = {this.props.taskTagNo}
                                             taskCallbacks={this.props.taskCallbacks}
                                             settingTagCallbakcs={{
                                                 add:this.callbackAddTags.bind(this),

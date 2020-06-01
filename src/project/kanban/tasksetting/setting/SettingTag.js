@@ -66,6 +66,7 @@ class SettingTag extends Component {
                                 tag.tagNo === this.props.tagParams.tagNo ?  <i onClick={this.onCheckBox.bind(this)} className="fas fa-check-square"></i> : <i onClick={this.onCheckBox.bind(this)} className="far fa-square"></i>
                         )}</>)
                     } */}
+                    {this.props.taskTagNo&&this.props.taskTagNo.indexOf(this.props.tagParams.tagNo) != -1 ? console.log('true') : console.log('false')}
                     <div className="tag">{this.props.tagParams.tagName}</div>
                     <div onClick={this.onClickTagModify.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                 </li>
