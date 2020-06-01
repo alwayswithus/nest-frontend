@@ -1093,7 +1093,7 @@ class KanbanMain extends Component {
     const fileIndex = newTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex(file => file.fileNo == formData.fileNo)
     const file = newTaskList[taskListIndex].tasks[taskIndex].fileList[fileIndex]
     this.callbackAddComment(
-      fileList,
+      file,
       taskListNo,
       taskNo,
       sessionStorage.getItem("authUserNo"),

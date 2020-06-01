@@ -6,10 +6,9 @@ import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
 import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
-import userData from './userData.json'
 import update from 'react-addons-update';
 import User from './User';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ApiService from '../ApiService';
 
 const API_URL = "http://localhost:8080/nest";
@@ -22,7 +21,7 @@ export default class Dashboard extends React.Component {
   constructor() {
 
     // 세션 체크...
-    if(!sessionStorage.getItem("authUserNo")){
+    if (!sessionStorage.getItem("authUserNo")) {
       window.location.href = "/nest/";
       return;
     }
@@ -45,12 +44,16 @@ export default class Dashboard extends React.Component {
       setOn: true,                                                  // project setting open & close button
       isMemberEmailValid: false,                                    // member email valid
       isProjectTitleValid: false,                                   // project title valid
-      isNotEmptyValid: false, 
+      isNotEmptyValid: false,
 
       position: "top-right",
-			alerts: [],
-			timeout: 2000,
-			newMessage: "초대 메일이 성공적으로 발송되었습니다."
+      alerts: [],
+      timeout: 2000,
+      newMessage: "초대 메일이 성공적으로 발송되었습니다.",
+
+      projectWriter: "",                                             // project writer
+      projectKeyword: "",                                            // project search
+      memberKeyword: ""                                              // member search
     }
   }
 
@@ -67,7 +70,7 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(authUser)
     })
-    
+
     sessionStorage.setItem("authUserBg", url)
     this.setState({
       url: url
@@ -93,11 +96,20 @@ export default class Dashboard extends React.Component {
     let member = {
       userNo: userNo,
       userName: userName,
-      userPhoto: userPhoto
+      userPhoto: userPhoto,
+      projectNo: projectNo
     }
 
     let newProject;
+
     if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
+
+      fetch(`${API_URL}/api/user/delete/`, {
+        method: 'post',
+        headers: API_HEADERS,
+        body: JSON.stringify(member)
+      })
+
       newProject = update(this.state.projects, {
         [projectIndex]: {
           members: {
@@ -107,6 +119,13 @@ export default class Dashboard extends React.Component {
       })
     }
     else {
+
+      fetch(`${API_URL}/api/user/add/`, {
+        method: 'post',
+        headers: API_HEADERS,
+        body: JSON.stringify(member)
+      })
+
       newProject = update(this.state.projects, {
         [projectIndex]: {
           members: {
@@ -152,6 +171,12 @@ export default class Dashboard extends React.Component {
 
   // CallBack Delete Member Function
   callbackDeleteMember(memberNo, projectNo) {
+
+    let userProject = {
+      projectNo: projectNo,
+      userNo: memberNo
+    }
+
     const projectIndex = this.state.projects.findIndex(project =>
       project.projectNo === projectNo)
 
@@ -167,6 +192,12 @@ export default class Dashboard extends React.Component {
       }
     })
 
+    fetch(`${API_URL}/api/user/delete`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(userProject)
+    })
+
     this.setState({
       projects: deleteMemberProject,
       project: deleteMemberProject[projectIndex]
@@ -177,15 +208,28 @@ export default class Dashboard extends React.Component {
   callbackChangeState(projectNo, state) {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
-    let newProject = update(this.state.projects, {
-      [projectIndex]: {
-        projectState: { $set: state }
-      }
-    })
+    let project = {
+      projectNo: projectNo,
+      projectState: state
+    }
 
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
+    fetch(`${API_URL}/api/projectsetting/state`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectState: { $set: json.data.projectState }
+        }
+      })
+  
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
     })
   }
 
@@ -193,15 +237,28 @@ export default class Dashboard extends React.Component {
   callbackProjectTitleChange(projectNo, title) {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
-    let newProject = update(this.state.projects, {
-      [projectIndex]: {
-        projectTitle: { $set: title }
-      }
-    })
+    let project = {
+      projectNo: projectNo,
+      projectTitle: title
+    }
 
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
+    fetch(`${API_URL}/api/projectsetting/title`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectTitle: { $set: json.data.projectTitle }
+        }
+      })
+  
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
     })
   }
 
@@ -209,15 +266,28 @@ export default class Dashboard extends React.Component {
   callbackProjectDescChange(projectNo, desc) {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
-    let newProject = update(this.state.projects, {
-      [projectIndex]: {
-        projectDesc: { $set: desc }
-      }
-    })
+    let project = {
+      projectNo: projectNo,
+      projectDesc: desc
+    }
 
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
+    fetch(`${API_URL}/api/projectsetting/desc`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectDesc: { $set: json.data.projectDesc }
+        }
+      })
+  
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
     })
   }
 
@@ -228,42 +298,80 @@ export default class Dashboard extends React.Component {
     let member = {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
-      userPhoto: "assets/images/unnamed.jpg"
+      userEmail: memberEmail,
+      userPhoto: "assets/images/arrowloding.jpg",
+      projectNo: projectNo
     }
 
-    let newProject = update(this.state.projects, {
-      [projectIndex]: {
-        members: {
-          $push: [member]
-        }
-      }
-    })
+    const newAlert = {
+      id: (new Date()).getTime(),
+      type: "success",
+      message: this.state.newMessage
+    };
 
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
+    fetch(`${API_URL}/api/settinguser/invite/`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(member)
     })
+      .then(response => response.json())
+      .then(json => {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            members: {
+              $push: [json.data]
+            }
+          }
+        })
+
+        let users = update(this.state.users, {
+          $push: [json.data]
+        })
+
+        this.setState({
+          users: users,
+          projects: newProject,
+          project: newProject[projectIndex],
+          alerts: [...this.state.alerts, newAlert]
+        })
+      })
   }
 
   // State Change Function
   onStateChange(projectNo, state) {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
-    let newProject = update(this.state.projects, {
-      [projectIndex]: {
-        projectState: { $set: state }
-      }
-    })
+    let project = {
+      projectNo: projectNo,
+      projectState: state
+    }
 
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
+    fetch(`${API_URL}/api/projectsetting/state`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectState: { $set: json.data.projectState }
+        }
+      })
+  
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
     })
   }
 
   // Project Setting button Click Function
   onProjectSetting(projectNo) {
+    
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    console.log(this.state.projects[projectIndex]);
 
     this.setState({
       setOn: !this.state.setOn,
@@ -276,10 +384,10 @@ export default class Dashboard extends React.Component {
   onAddProjectSubmit(event) {
     event.preventDefault();
 
-
     let projectTitle = event.target.projectTitle.value;
     let projectDesc = event.target.projectDesc.value;
-    let startDate = moment(new Date()).format('YYYY-MM-DD h:mm');
+    let startDate = moment(new Date()).format('YYYY-MM-DD HH:mm');
+    let regDate = moment(new Date()).format('YYYY-MM-DD HH:mm');
     let members = this.state.members;
 
     let project = {
@@ -289,6 +397,8 @@ export default class Dashboard extends React.Component {
       projectStart: startDate,
       projectEnd: null,
       projectState: "상태없음",
+      projectRegDate: regDate,
+      projectWriter: window.sessionStorage.getItem("authUserNo"),
       members: members
     };
 
@@ -297,18 +407,18 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(project)
     })
-    .then(response => response.json())
-    .then(json => {
-      let newProjects = update(this.state.projects, {
-        $push: [json.data]
-      });
-  
-      this.setState({
-        projects: newProjects
+      .then(response => response.json())
+      .then(json => {
+        let newProjects = update(this.state.projects, {
+          $push: [json.data]
+        });
+
+        this.setState({
+          projects: newProjects
+        })
       })
-    })
-   
-    
+
+
 
     document.getElementById('add-project').style.display = 'none'
     window.jQuery(document.body).removeClass("modal-open");
@@ -320,7 +430,7 @@ export default class Dashboard extends React.Component {
 
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
 
-    if(event.target.value.match(emailRegExp)) {
+    if (event.target.value.match(emailRegExp)) {
       this.setState({
         isMemberEmailValid: true,
         inviteMemberEmail: event.target.value,
@@ -345,7 +455,7 @@ export default class Dashboard extends React.Component {
 
   // Invite Member Function
   onInviteMemberButton(memberEmail, memberName) {
-    
+
     let member = {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
@@ -353,39 +463,41 @@ export default class Dashboard extends React.Component {
       userPhoto: "assets/images/arrowloding.jpg"
     }
 
-    const newAlert ={
-			id: (new Date()).getTime(),
-			type: "success",
-			message: this.state.newMessage
-		};
+    const newAlert = {
+      id: (new Date()).getTime(),
+      type: "success",
+      message: this.state.newMessage
+    };
 
     fetch(`${API_URL}/api/user/invite/`, {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(member)
     })
-    .then(response => response.json())
-    .then(json => {
-      let members = update(this.state.members, {
-        $push: [json.data]
-      })
+      .then(response => response.json())
+      .then(json => {
+        let members = update(this.state.members, {
+          $push: [json.data]
+        })
 
-      let users = update(this.state.users, {
-        $push: [json.data]
+        let users = update(this.state.users, {
+          $push: [json.data]
+        })
+        this.setState({
+          inviteMemberEmail: "",
+          inviteMemberName: "",
+          members: members,
+          users: users,
+          alerts: [...this.state.alerts, newAlert]
+        })
       })
-      this.setState({
-        members: members,
-        users: users,
-        alerts: [...this.state.alerts, newAlert]
-      })
-    })
   }
 
   // New Project Title Validation Function
   onValidateProjectTitle(event) {
     const blank_pattern = /[\s]/g;
 
-    if(event.target.value.length > 0 && blank_pattern.test(event.target.value) === false) {
+    if (event.target.value.length > 0 && blank_pattern.test(event.target.value) === false) {
       this.setState({
         isProjectTitleValid: true,
         isNotEmptyValid: false
@@ -397,6 +509,21 @@ export default class Dashboard extends React.Component {
         isNotEmptyValid: true
       })
     }
+  }
+
+  // Project Search Function
+  onNotifyProjectKeywordChange(keyword) {
+    console.log(keyword)
+    this.setState({
+      projectKeyword: keyword
+    })
+  }
+
+  // Find Member Search Function
+  onFindMemberSearch(event) {
+    this.setState({
+      memberKeyword: event.target.value
+    })
   }
 
   // Projects hide and show Function
@@ -455,29 +582,29 @@ export default class Dashboard extends React.Component {
 
   // Invite Member Alert Function
   onAlertDismissed(alert) {
-		const alerts = this.state.alerts;
+    const alerts = this.state.alerts;
 
-		// find the index of the alert that was dismissed
-		const idx = alerts.indexOf(alert);
+    // find the index of the alert that was dismissed
+    const idx = alerts.indexOf(alert);
 
-		if (idx >= 0) {
-			this.setState({
-				// remove the alert from the array
-				alerts: [...alerts.slice(0, idx), ...alerts.slice(idx + 1)]
-			});
-		}
-	}
+    if (idx >= 0) {
+      this.setState({
+        // remove the alert from the array
+        alerts: [...alerts.slice(0, idx), ...alerts.slice(idx + 1)]
+      });
+    }
+  }
 
   render() {
     return (
       <div className="Dashboard">
         <AlertList
-					position={this.state.position}
-					alerts={this.state.alerts}
-					timeout={this.state.timeout}
-					dismissTitle="cancel"
-					onDismiss={this.onAlertDismissed.bind(this)}
-			  />
+          position={this.state.position}
+          alerts={this.state.alerts}
+          timeout={this.state.timeout}
+          dismissTitle="cancel"
+          onDismiss={this.onAlertDismissed.bind(this)}
+        />
         <div className="container-fluid">
           {/* Side Bar */}
           <div className="sidebar">
@@ -485,7 +612,7 @@ export default class Dashboard extends React.Component {
           </div>
 
           {/* Top Bar */}
-          <DashboardTopbar />
+          <DashboardTopbar projectKeyword={this.state.projectKeyword} notifyProjectKeywordChange={this.onNotifyProjectKeywordChange.bind(this)} />
 
           {/* Main Area */}
           <div id="projectSet" style={{ display: 'none' }}>
@@ -510,89 +637,94 @@ export default class Dashboard extends React.Component {
 
             {/* Projects */}
             <div className="panel-group">
-              {this.state.details ? this.state.projects && this.state.projects.map(project =>
-                <div key={project.projectNo} className="panel panel-default projects">
-                  <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
-                    <div className="panel-header">
-                      <span className="project-title">
-                        {project.projectTitle}
-                      </span>
-                    </div>
-                    <div className="panel-body">
-                      <a href="#">
-                        <div className="btn-group">
-                          <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
-                            data-toggle="dropdown"
-                            style={project.projectState === "상태없음" ?
-                              { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
-                                { backgroundColor: "orange" } : project.projectState === "진행중" ?
-                                  { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
-                                    { backgroundColor: "#337AB7" } : ""}>
-                            &nbsp;&nbsp;{project.projectState}
-                            <span className="caret"></span>
-                          </button>
-                          <div className="dropdown-menu" role="menu">
-                            <div className="dropdown-list">
-                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
-                                <span className="status-name">
-                                  계획됨
+              {this.state.details ? this.state.projects && this.state.projects
+                .filter(project => project.projectTitle.indexOf(this.state.projectKeyword) != -1 || 
+                project.projectState.indexOf(this.state.projectKeyword) != -1 ||
+                project.projectStart.indexOf(this.state.projectKeyword) != -1 ||
+                project.projectEnd && project.projectEnd.indexOf(this.state.projectKeyword) != -1)
+                .map(project =>
+                  <div key={project.projectNo} className="panel panel-default projects">
+                    <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
+                      <div className="panel-header">
+                        <span className="project-title">
+                          {project.projectTitle}
+                        </span>
+                      </div>
+                      <div className="panel-body">
+                        <Link to="#">
+                          <div className="btn-group">
+                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                              data-toggle="dropdown"
+                              style={project.projectState === "상태없음" ?
+                                { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
+                                  { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                    { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                      { backgroundColor: "#337AB7" } : ""}>
+                              &nbsp;&nbsp;{project.projectState}
+                              <span className="caret"></span>
+                            </button>
+                            <div className="dropdown-menu" role="menu">
+                              <div className="dropdown-list">
+                                <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
+                                  <span className="status-name">
+                                    계획됨
                                 </span>
-                                <div className="status-color">
-                                  <i className="fas fa-circle fa-xs" style={{ color: "orange" }}></i>
+                                  <div className="status-color">
+                                    <i className="fas fa-circle fa-xs" style={{ color: "orange" }}></i>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "진행중")}>
-                                <span className="status-name">
-                                  진행중
+                                <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "진행중")}>
+                                  <span className="status-name">
+                                    진행중
                                 </span>
-                                <div className="status-color">
-                                  <i className="fas fa-circle fa-xs" style={{ color: "#5CB85C" }}></i>
+                                  <div className="status-color">
+                                    <i className="fas fa-circle fa-xs" style={{ color: "#5CB85C" }}></i>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "완료됨")}>
-                                <span className="status-name">
-                                  완료됨
+                                <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "완료됨")}>
+                                  <span className="status-name">
+                                    완료됨
                                 </span>
-                                <div className="status-color">
-                                  <i className="fas fa-circle fa-xs" style={{ color: "#337AB7" }}></i>
+                                  <div className="status-color">
+                                    <i className="fas fa-circle fa-xs" style={{ color: "#337AB7" }}></i>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "상태없음")}>
-                                <span className="status-name">
-                                  상태없음
+                                <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "상태없음")}>
+                                  <span className="status-name">
+                                    상태없음
                                 </span>
-                                <div className="status-color">
-                                  <i className="fas fa-circle fa-xs" style={{ color: "#C7C7C7" }}></i>
+                                  <div className="status-color">
+                                    <i className="fas fa-circle fa-xs" style={{ color: "#C7C7C7" }}></i>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </a>
+                        </Link>
 
-                      {/* Project Setting Click */}
-                      <a href="#">
-                        <i className="fas fa-cog fa-lg" onClick={this.onProjectSetting.bind(this, project.projectNo)} ></i>
-                      </a>
-                    </div>
-                    <div className="panel-footer">
-                      <span className="update-task" style={{width: "100%"}}><h6>7/16개 업무</h6></span>
-                      <span className="update-date" style={{width: "100%"}}><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
-                      <div className="progress">
-                        {project.projectState === "완료됨" ?
-                          <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>100%</div> :
-                          project.projectState === "진행중" ?
-                            <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-                              aria-valuemin="0" aria-valuemax="100" style={{ width: 50 + "%" }}>50%</div> :
-                            project.projectState === "계획됨" ?
-                              <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                                aria-valuemin="0" aria-valuemax="100" style={{ width: 10 + "%" }}>10%</div> :
-                              ""}
+                        {/* Project Setting Click */}
+                        <Link to="#">
+                          <i className="fas fa-cog fa-lg" onClick={this.onProjectSetting.bind(this, project.projectNo)} ></i>
+                        </Link>
                       </div>
-                    </div>
-                  </Link>
-                </div>) : ""}
+                      <div className="panel-footer">
+                        <span className="update-task" style={{ width: "100%" }}><h6>16개 중 7개 업무 완료</h6></span>
+                        <span className="update-date" style={{ width: "100%" }}><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
+                        <div className="progress">
+                          {project.projectState === "완료됨" ?
+                            <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="70"
+                              aria-valuemin="0" aria-valuemax="100" style={{ width: 100 + "%" }}>100%</div> :
+                            project.projectState === "진행중" ?
+                              <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+                                aria-valuemin="0" aria-valuemax="100" style={{ width: 50 + "%" }}>50%</div> :
+                              project.projectState === "계획됨" ?
+                                <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+                                  aria-valuemin="0" aria-valuemax="100" style={{ width: 10 + "%" }}>10%</div> :
+                                ""}
+                        </div>
+                      </div>
+                    </Link>
+                  </div>) : ""}
             </div>
 
             {/* 새 프로젝트 */}
@@ -622,8 +754,8 @@ export default class Dashboard extends React.Component {
                         <div className="modal-body add-project-body">
                           <div className="form-group">
                             <h5>제목</h5>
-                            <input type="text" name="projectTitle" onChange={this.onValidateProjectTitle.bind(this)}className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" />
-                              {this.state.isNotEmptyValid ? <i className="fas fa-exclamation fa-xs" style={{margin: "10px", color: "#D5493B"}}>  공백은 허용되지 않습니다.</i> : ""}<br />
+                            <input type="text" name="projectTitle" onChange={this.onValidateProjectTitle.bind(this)} className="form-control modal-body-title" placeholder="예)웹사이트, 웹디자인" />
+                            {this.state.isNotEmptyValid ? <i className="fas fa-exclamation fa-xs" style={{ margin: "10px", color: "#D5493B" }}>  공백은 허용되지 않습니다.</i> : ""}<br />
                             <h5 style={{ display: "inline" }}>설명</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
                             <input type="text" name="projectDesc" className="form-control modal-body-description" /><br />
                             <h5 style={{ display: "inline" }}>프로젝트 멤버</h5> <h6 style={{ display: "inline" }}>(선택사항)</h6>
@@ -657,11 +789,14 @@ export default class Dashboard extends React.Component {
                                     <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                                   </div>
                                   <div className="card-body">
-                                    <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
+                                    <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
 
                                     {/* All Users */}
                                     <div className="invite-card-member-list">
-                                      {this.state.users && this.state.users.map(user =>
+                                      {this.state.users && this.state.users
+                                      .filter(user => user.userName.indexOf(this.state.memberKeyword) != -1 ||
+                                      user.userEmail.indexOf(this.state.memberKeyword) != -1)
+                                      .map(user =>
                                         <User key={user.userNo} user={user} members={this.state.members}
                                           callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />)
                                       }
@@ -687,11 +822,11 @@ export default class Dashboard extends React.Component {
                                   </div>
                                   <div className="card-body">
                                     <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이메일</h6>
-                                    <input type="text" className="form-control find-member" name="userEmail"
+                                    <input type="text" id="userEmail" className="form-control find-member" name="userEmail"
                                       onChange={this.onInputInviteMemberEmail.bind(this)}
                                       value={this.state.inviteMemberEmail} placeholder="yong80211@gmail.com" />
                                     <h6 style={{ fontSize: "14px", fontWeight: "bold" }}>이름 (선택사항)</h6>
-                                    <input type="text" name="userName" className="form-control find-member"
+                                    <input type="text" id="userName" name="userName" className="form-control find-member"
                                       onChange={this.onInputInviteMemberName.bind(this)}
                                       value={this.state.inviteMemberName} />
                                     <h6>
@@ -703,22 +838,22 @@ export default class Dashboard extends React.Component {
                                     {this.state.isMemberEmailValid ? <input type="button" id="add-member-invite"
                                       className="btn btn-outline-primary btn-rounded"
                                       onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                      value="멤버 초대하기" /> : 
+                                      value="멤버 초대하기" /> :
                                       <input type="button" id="add-member-invite"
-                                      className="btn btn-outline-primary btn-rounded"
-                                      onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                      value="멤버 초대하기" disabled/>}
+                                        className="btn btn-outline-primary btn-rounded"
+                                        onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                        value="멤버 초대하기" disabled />}
                                   </div>
                                 </div>
                               </div> : ""}
-                            
+
                           </div>
                         </div>
 
                         {/* Add Project Modal footer */}
                         <div className="modal-footer add-project-footer">
-                          {this.state.isProjectTitleValid ? <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" /> : 
-                          <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" disabled />}
+                          {this.state.isProjectTitleValid ? <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" /> :
+                            <input type="submit" id="add-project-submit" className="btn btn-outline-primary btn-rounded" value="OK" disabled />}
                         </div>
                       </div>
                     </form>
