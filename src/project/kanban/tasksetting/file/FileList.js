@@ -6,12 +6,13 @@ import moment from 'moment';
 
 class FileList extends Component{
     render(){
-        console.log(this.props.taskItem.fileList)
         return (
             <div className="FileList">
                 <table>
                     <tbody>
                         {this.props.taskItem.commentList.map(file => 
+                            file.fileNo == null ? null :
+                            <>
                             <tr className="FileList-tr">
                                 <td>
                                     <img style={{width:'50px', paddingRight:'3%', paddingBottom:'1%'}} src={file.filePath} alt={file.originName} ></img>
@@ -29,6 +30,8 @@ class FileList extends Component{
                                     </ul>
                                 </li>
                             </tr>
+                            <div style={{height:'3px'}}/>
+                            </>
                         )}
                     </tbody>
                 </table>

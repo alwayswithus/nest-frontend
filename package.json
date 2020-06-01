@@ -31,7 +31,8 @@
     "react-scripts": "3.4.1",
     "react-tabbordion": "^1.0.5",
     "react-textarea-autosize": "^7.1.2",
-    "react-tooltip": "^4.2.6"
+    "react-tooltip": "^4.2.6",
+    "styled-components": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

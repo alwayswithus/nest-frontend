@@ -2,19 +2,18 @@ import React, { Component, Fragment } from "react";
 import CommentList from './CommentList'
 import CommentInput from "./CommentInput";
 import Header from '../file/Header';
-import ApiService from "../../../../ApiService";
 
 class Comment extends Component  {
     render(){
         if(!this.props.task){
             return <></>;
         }
-        console.log(this.props.match.params.projectNo)
 
         const taskList = this.props.task;
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
+
         return (
             <div className="TaskSetComment">
                  <Header 

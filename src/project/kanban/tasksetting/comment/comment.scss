@@ -74,10 +74,20 @@
                     margin-right: 3%;
                     margin-left: 3%;
                 }
-                p{
+                p {
                     margin: 1%;
                     text-align:justify;
                     word-break: break-word;
+                    .fa-paper-plane{
+                        float: right;
+                        margin-top: 8px;
+                        color: #93DADC;
+                        cursor: pointer;
+                        &:hover{
+                            color: #27B6BA;
+                            cursor: pointer;
+                        }
+                    }
                 }
                 ul li {
                     color: black;

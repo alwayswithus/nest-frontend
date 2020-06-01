@@ -3,14 +3,15 @@
     right: 0;
     z-index: 999;
     margin-top: -49px;
+    height: calc(100% - 215px);
     .File {
         width:632px;
         background-color: #F3F4F5;
         float:right;
-        margin-top: 43px;
-        height: 640px;
+        margin-top: 44px;
         clear:both;
-        overflow: auto;
+        box-shadow: -60px -50px 50px -90px #000000,
+    60px 0px 50px -90px #000000;
         hr{
             border: 0.5px solid #DFDFDF;
         }
@@ -55,7 +56,9 @@
     }
     
     .FileList{
+        overflow: auto;
         .FileList-tr{
+            border-radius: 5px;
             td{
                 padding-left: 10px;
             }

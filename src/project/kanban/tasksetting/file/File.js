@@ -15,20 +15,20 @@ class File extends Component {
         super(...arguments)
         this.state = {
             selectedFile:null,
-            msg:'success'
         }
     }
 
+    // 파일 선택 했을 때.
     onChangeFileUpload(event) {
         this.setState({
             selectedFile : event.target.files[0]
         })
-    }
-    onClickeFileUpload(){
+
         const formData = new FormData();
-        formData.append('file', this.state.selectedFile)
+        formData.append('file', event.target.files[0])
         formData.append('taskNo', this.props.match.params.taskNo);
-        console.log(sessionStorage.getItem("authUserNo"))
+        formData.append('userNo', sessionStorage.getItem("authUserNo"));
+
         fetch(`${API_URL}/api/upload`, {
             method:'post',
             headers:API_HEADERS,
@@ -65,7 +65,6 @@ class File extends Component {
                             <input  
                                 onChange={this.onChangeFileUpload.bind(this)} 
                                 type='file' className="fileUpload" name="file" />
-                        <button  onClick={this.onClickeFileUpload.bind(this)}>제출</button>
                     </div>
                     <hr />
                     <table>

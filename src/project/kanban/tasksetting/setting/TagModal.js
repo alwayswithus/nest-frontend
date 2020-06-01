@@ -25,7 +25,34 @@ class TagModal extends Component {
         })
     }
 
+        //checkbox를 클릭했을 때 tag를 추가하기.
+        onCheckBox(event, tagNo, tagName) {
+            var array = [...this.props.taskTagNo]
+            array.splice(0, this.props.taskItem.tagList.length)
+
+            if (event.target.className == 'far fa-square') {
+                this.props.taskCallbacks.addtag(
+                    tagNo,
+                    tagName,
+                    this.props.taskListNo,
+                    this.props.taskNo,
+                    array);
+            } else {
+                this.props.taskCallbacks.deletetag(
+                    tagNo,
+                    this.props.taskListNo,
+                    this.props.taskNo,
+                    array)
+                }
+        }
+    
+        //tag 삭제
+        onClickTagModify() {
+            this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
+        }
+
     render() {
+        console.log(this.props.taskTagNo)
         return (
             <Fragment>
                 {/* 새태그 만들기 */}
@@ -61,17 +88,25 @@ class TagModal extends Component {
                                 {this.props.tags && this.props.tags
                                     .filter((element) => element.tagName.indexOf(this.state.keyword) !== -1)
                                     .map(tag =>
-                                    <SettingTag
-                                        key={tag.tagNo}
-                                        taskCallbacks={this.props.taskCallbacks}
-                                        tagParams={{
-                                            taskItem: this.props.taskItem,
-                                            tagNo: tag.tagNo,
-                                            tagName: tag.tagName,
-                                            taskListNo: this.props.taskListNo,
-                                            taskNo: this.props.taskNo
-                                        }}
-                                        settingTagCallbakcs={this.props.settingTagCallbakcs} />
+                                        <li className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
+                                            {this.props.taskTagNo&&this.props.taskTagNo.indexOf(tag.tagNo) != -1 ? 
+                                                <i onClick={(e) => this.onCheckBox(e,tag.tagNo,tag.tagName)} className="fas fa-check-square"></i> : <i onClick={(e) => this.onCheckBox(e,tag.tagNo,tag.tagName)} className="far fa-square"></i>
+                                            }
+                                            <div className="tag">{tag.tagName}</div>
+                                            <div onClick={this.onClickTagModify.bind(this,tag.tagNo)} className="modify"><i className="fas fa-pencil-alt"></i></div>
+                                        </li>
+                                    // <SettingTag
+                                    //     key={tag.tagNo}
+                                    //     taskCallbacks={this.props.taskCallbacks}
+                                    //     taskTagNo={this.props.taskTagNo}
+                                    //     tagParams={{
+                                    //         taskItem: this.props.taskItem,
+                                    //         tagNo: tag.tagNo,
+                                    //         tagName: tag.tagName,
+                                    //         taskListNo: this.props.taskListNo,
+                                    //         taskNo: this.props.taskNo
+                                    //     }}
+                                    //     settingTagCallbakcs={this.props.settingTagCallbakcs} />
                                 )}
                             </ul>
                         </div>
