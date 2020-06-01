@@ -24,6 +24,7 @@ class ProjectSetting extends Component {
             projectDescCheck: false,    // project desc show and hide
             keyword: "",                // project desc input change
 
+            isMemberEmailValid: false,
             inviteMemberButton: false,
             inviteMemberEmail: "",
             inviteMemberName: ""
@@ -39,10 +40,11 @@ class ProjectSetting extends Component {
 
     // CallBack Change Desc Function
     callbackProjectDescChange(event) {
+        this.props.callbackProjectSetting.changeDesc(this.props.project.projectNo, event.target.value.substr(0, 30));
+        
         this.setState({
             keyword: event.target.value.substr(0, 30)
         })
-        this.props.callbackProjectSetting.changeDesc(this.props.project.projectNo, this.state.keyword);
     }
 
     // CallBack Open Invite Member Function
@@ -56,6 +58,10 @@ class ProjectSetting extends Component {
     // CallBack Invite Member Function
     callbackInviteMember(memberEmail, memberName) {
         this.props.callbackProjectSetting.inviteMember(this.props.project.projectNo, memberEmail, memberName);
+        this.setState({
+            inviteMemberEmail: "",
+            inviteMemberName: ""
+        })
     }
 
     // CallBack Project Setting List All Colse Function
@@ -134,9 +140,20 @@ class ProjectSetting extends Component {
 
     // Input Invite Member Email Function
     onInputInviteMemberEmail(event) {
-        this.setState({
-            inviteMemberEmail: event.target.value
-        })
+        const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+
+        if(event.target.value.match(emailRegExp)) {
+            this.setState({
+                isMemberEmailValid: true,
+                inviteMemberEmail: event.target.value
+            })
+        } 
+        else {
+            this.setState({
+                isMemberEmailValid: false,
+                inviteMemberEmail: event.target.value
+            })
+        }
     }
 
     // Input Invite Member Name Function
@@ -150,7 +167,7 @@ class ProjectSetting extends Component {
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
-                <ProjectHeader project={this.props.project} name='김우경'  
+                <ProjectHeader project={this.props.project}
                     callbackSettingListAllClose={{close: this.callbackSettingListAllClose.bind(this)}} 
                     callbackProjectSetting={this.props.callbackProjectSetting} />
                 {/* 프로젝트 리스트 */}
@@ -233,10 +250,14 @@ class ProjectSetting extends Component {
                                                         </div>
                                                         <div className="card-footer">
                                                             <hr />
-                                                            <input type="button" id="add-member-invite"
+                                                            {this.state.isMemberEmailValid ? <input type="button" id="add-member-invite"
                                                                 className="btn btn-outline-primary btn-rounded"
                                                                 onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                                                value="멤버 초대하기" />
+                                                                value="멤버 초대하기" /> : 
+                                                                <input type="button" id="add-member-invite"
+                                                                className="btn btn-outline-primary btn-rounded"
+                                                                onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                                                value="멤버 초대하기" disabled/>}
                                                         </div>
                                                     </div>
                                                 </div>
