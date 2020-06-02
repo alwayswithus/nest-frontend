@@ -93,7 +93,7 @@ class KanbanBoard extends Component {
                   ref={provided.innerRef}
                 >
                   {allTaskList && allTaskList.map((taskList, index) => {
-                    return (
+                    return ( 
                       <TaskList
                         searchKeyword={this.state.searchKeyword}
                         key={taskList.taskListNo}

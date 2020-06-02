@@ -78,7 +78,7 @@ class Task extends Component {
               style={{ textDecoration: "none", color: "black" }}
               to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.taskListNo}/task/${taskItem.taskNo}`}
               onClick={this.props.taskCallbacks.modalStateFalse}
-            >
+            > 
               <div
                 className={
                   taskItem.taskState === "done" ? "task completeTask" : " task"

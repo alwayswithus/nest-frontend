@@ -243,7 +243,7 @@ class TaskList extends Component {
               <Droppable
                 droppableId={this.props.taskList.taskListNo}
                 type="task"
-              >
+              > 
                 {(provided, snapshot) => (
                   <div
                     className="tasks"

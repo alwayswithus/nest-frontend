@@ -55,7 +55,7 @@ export default class ModalCalendar extends React.Component {
     const { from, to } = this.state;
     const modifiers = { start: from, end: to };
     return (
-      <>
+      <> 
         <div className="container Range">
           <div className="calendar">
             <div className="calendar-header">
