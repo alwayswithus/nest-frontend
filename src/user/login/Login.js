@@ -20,23 +20,15 @@ const Login = () => {
   };
 
   const login = e => {
-    e.preventDefault();
+    //e.preventDefault();
     ApiService.fetchLogin(e.target.email.value, e.target.password.value)
     .then(response => {
-      if (!response.data.data) {
-        window.location.href = "/nest/";
-        return;
-      }
       sessionStorage.setItem("authUserNo", response.data.data.userNo)
       sessionStorage.setItem("authUserEmail", response.data.data.userEmail)
       sessionStorage.setItem("authUserName", response.data.data.userName)
       sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
       sessionStorage.setItem("authUserBg", response.data.data.userBg)
 
-    }).then( e =>{
-      if(sessionStorage.getItem("authUserName")){
-        window.location.href = "/nest/dashboard";
-      }
     });
   };
 
@@ -45,7 +37,7 @@ const Login = () => {
       <div className="Login">
         <div className="loginBox">
           <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
-          <form onSubmit={login} /* action="/nest/auth" method="POST" */ >
+          <form onSubmit={login}  action="/nest/auth" method="POST" >
             <InputLabel id="loginText">Log In</InputLabel>
             <br/>
             <Input

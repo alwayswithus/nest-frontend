@@ -1,37 +1,45 @@
-.ganntMain{
-	width: 100%;
-	height: 100%;
-
-	.content{
+.Gantt{
+	margin-left: 62px;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+	overflow: auto;
+	
+	.ganntMain{
 		width: 100%;
 		height: 100%;
 
-		.mainArea{
-			padding-top: 30px;
-			padding-left: 30px;
+		.content{
 			width: 100%;
 			height: 100%;
 
-			.app-container {
-				padding: 50px 5px 5px 5px;
-				display: flex;
-				flex-direction: column;
-				justify-content: flex-start;
-				align-items: center;
+			.mainArea{
+				padding-top: 30px;
+				padding-left: 30px;
 				width: 100%;
 				height: 100%;
 
-				.time-line-container {
+				.app-container {
+					padding: 50px 5px 5px 5px;
 					display: flex;
 					flex-direction: column;
 					justify-content: flex-start;
 					align-items: center;
 					width: 100%;
 					height: 100%;
-					margin: 10px;
+
+					.time-line-container {
+						display: flex;
+						flex-direction: column;
+						justify-content: flex-start;
+						align-items: center;
+						width: 100%;
+						height: 100%;
+						margin: 10px;
+					}
 				}
 			}
 		}
 	}
 }
-

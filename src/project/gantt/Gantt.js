@@ -1,12 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import Navigator from "../../navigator/Navigator";
 import TopBar from "../topBar/TopBar";
-
+import ApiService from "../../ApiService"
 import TimeLine from "react-gantt-timeline";
-//import TimeLine from "./dist/index";
 
 import "./gantt.scss";
 
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+  "Content-Type": "application/json",
+};
 // 간트차트 스타일 설정
 const ganttStyleConfig = {
     header: {
@@ -37,7 +40,7 @@ const ganttStyleConfig = {
     },
     taskList: {
         title: {
-            label: "업무스..",
+            label: "업무목록",
             style: {
                 backgroundColor: "#8798a8"
             }
@@ -67,7 +70,7 @@ const ganttStyleConfig = {
             }
         },
         task: {
-            //showLabel: true,
+            showLabel: true,
             style: {
                 borderRadius: 14,
                 //boxShadow: "2px 2px 8px #888888"
@@ -80,47 +83,43 @@ const ganttStyleConfig = {
                 //backgroundColor:'red',
                 border:"solid 2px #ffffff",
             }
-        }
+        },
+        links: {color:"#e7e7e7",selectedColor:"#e7e7e7"}
     }
 };
 
-class Gantt extends Component {
+class Gantt extends React.Component {
     constructor(props) {
         super(props);
 
-        let datas = [
-            {
-                id: 1,
-                no: 1,
-                start: "2020-05-08",
-                end: "2020-06-09",
-                name: "업무 1",
-                color: "#b8d6ce",
-            },
-            {
-                id: 2,
-                no: 2,
-                start: "2020-05-07",
-                end: "2020-05-09",
-                name: "업무 2",
-                color: "#afd0df",
-            },
-            {
-                id: 3,
-                no: 3,
-                start: "2020-05-07",
-                end: "2020-05-17",
-                name: "업무 이름",
-                color: "#ddb3b1",
-            },
-        ];
-
         this.state = {
-            data: datas,
+            url: sessionStorage.getItem("authUserBg"),
+            data: [],
             links: [], 
             selectedItem: null 
         };
     }
+
+    // CallBack Background Image Setting 
+    callbackChangeBackground(url) {
+
+        let authUser = {
+            userNo: window.sessionStorage.getItem("authUserNo"),
+            userBg: url
+          }
+      
+          fetch(`${API_URL}/api/user/backgroundChange`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(authUser)
+          })
+          
+          sessionStorage.setItem("authUserBg", url)
+          this.setState({
+            url: url
+          })
+    }
+
 
     genID() {
         function S4() {
@@ -171,15 +170,13 @@ class Gantt extends Component {
 
     render() {
         return (
-            <div style={{ paddingLeft: '62px', width: '100%', height: '100%' }}>
+            <div className="Gantt" style={{ backgroundImage: `url(${this.state.url})` }}>
+                {/* 네비게이션바 */}
+                <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
+                {/*상단바*/}
+                <TopBar projectNo={this.props.match.params.projectNo}/>
                 <div className="container-fluid ganntMain">
                     <div className="row content">
-                        {/* 네비게이션바 */}
-                        <div className="navibar">
-                            <Navigator />
-                        </div>
-                        {/*상단바*/}
-                        <TopBar projectNo={this.props.match.params.projectNo}/>
                         {/* 메인 영역 */}
                         <div className="mainArea">
                             {/*간트차트*/}
@@ -208,6 +205,17 @@ class Gantt extends Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    componentDidMount() {
+        ApiService.fetchGantt(this.props.match.params.projectNo).then(
+          (response) => {
+            this.setState({
+              data: response.data.data.allTasks
+            });
+            // console.log(response.data.data.allTasks);
+          }
         );
     }
 }
