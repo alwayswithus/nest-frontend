@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ProjectMemberAdd from './ProjectMemberAdd';
+import ApiService from '../../ApiService';
 
 class ProjectSetting extends Component {
     constructor() {
@@ -27,7 +28,8 @@ class ProjectSetting extends Component {
             isMemberEmailValid: false,
             inviteMemberButton: false,
             inviteMemberEmail: "",
-            inviteMemberName: ""
+            inviteMemberName: "",
+            role: ""
         }
     }
 
@@ -41,7 +43,7 @@ class ProjectSetting extends Component {
     // CallBack Change Desc Function
     callbackProjectDescChange(event) {
         this.props.callbackProjectSetting.changeDesc(this.props.project.projectNo, event.target.value.substr(0, 30));
-        
+
         this.setState({
             keyword: event.target.value.substr(0, 30)
         })
@@ -142,12 +144,12 @@ class ProjectSetting extends Component {
     onInputInviteMemberEmail(event) {
         const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
 
-        if(event.target.value.match(emailRegExp)) {
+        if (event.target.value.match(emailRegExp)) {
             this.setState({
                 isMemberEmailValid: true,
                 inviteMemberEmail: event.target.value
             })
-        } 
+        }
         else {
             this.setState({
                 isMemberEmailValid: false,
@@ -163,12 +165,19 @@ class ProjectSetting extends Component {
         })
     }
 
+    // Role Select Function
+    onAccessRole(role) {
+        this.setState({
+            role: role
+        })
+    }
+
     render() {
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
                 <ProjectHeader project={this.props.project}
-                    callbackSettingListAllClose={{close: this.callbackSettingListAllClose.bind(this)}} 
+                    callbackSettingListAllClose={{ close: this.callbackSettingListAllClose.bind(this) }}
                     callbackProjectSetting={this.props.callbackProjectSetting} />
                 {/* 프로젝트 리스트 */}
                 <div className="ProjectSet">
@@ -204,7 +213,7 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
                                     <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
-                                    {this.state.show ? <ModalCalendar project={this.props.project}/> : ""}
+                                    {this.state.show ? <ModalCalendar project={this.props.project} /> : ""}
                                 </div>
 
                             </li>
@@ -253,11 +262,11 @@ class ProjectSetting extends Component {
                                                             {this.state.isMemberEmailValid ? <input type="button" id="add-member-invite"
                                                                 className="btn btn-outline-primary btn-rounded"
                                                                 onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                                                value="멤버 초대하기" /> : 
+                                                                value="멤버 초대하기" /> :
                                                                 <input type="button" id="add-member-invite"
-                                                                className="btn btn-outline-primary btn-rounded"
-                                                                onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                                                value="멤버 초대하기" disabled/>}
+                                                                    className="btn btn-outline-primary btn-rounded"
+                                                                    onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                                                    value="멤버 초대하기" disabled />}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -267,12 +276,64 @@ class ProjectSetting extends Component {
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {this.props.project.members && this.props.project.members.map(member =>
-                                        <div className="Member" key={member.userNo}>
-                                            <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
-                                            <span>{member.userName}</span>
-                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
-                                                <i className="fas fa-times"></i>
-                                            </span>
+                                        <div className="dropdown" key={member.userNo}>
+                                            <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown">
+                                                <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                                <span>{member.userName}</span>
+                                                <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
+                                                    <i className="fas fa-times"></i>
+                                                </span>
+                                            </button>
+                                            <div className="dropdown-menu" role="menu">
+                                                <div className="dropdown-list">
+                                                    <div className="dropdown-list-contents" onClick={this.onAccessRole.bind(this, "전체")} role="menuitem">
+                                                        <div className="access-title">
+                                                            전체 엑세스
+                                                        </div>
+                                                        {member.roleNo === 1 ? 
+                                                        <div className="access-check">
+                                                            <i className="fas fa-check"></i>
+                                                        </div> : ""}
+                                                    </div>
+                                                    <div className="dropdown-list-contents" onClick={this.onAccessRole.bind(this, "제한")} role="menuitem">
+                                                        <div className="access-title">
+                                                            제한 엑세스
+                                                        </div>
+                                                        {member.roleNo === 2 ? 
+                                                        <div className="access-check">
+                                                            <i className="fas fa-check"></i>
+                                                        </div> : ""}
+                                                    </div>
+                                                    <div className="dropdown-list-contents" onClick={this.onAccessRole.bind(this, "통제")} role="menuitem">
+                                                        <div className="access-title">
+                                                            통제 엑세스
+                                                        </div>
+                                                        {member.roleNo === 3 ? 
+                                                        <div className="access-check">
+                                                            <i className="fas fa-check"></i>
+                                                        </div> : ""}
+                                                    </div>
+                                                    <div className="divider"></div>
+                                                    <div className="dropdown-list-description" role="menuitem">
+                                                        <div className="entire-access-description" role="menuitem">
+                                                            <strong>전체 엑세스</strong>
+                                                            : 모든 프로젝트 멤버는 프로젝트 안에 있는 업무 보기, 수정이 가능합니다.
+                                                        </div>
+                                                        <br />
+                                                        <div className="limit-access-description" role="menuitem">
+                                                            <strong>제한 엑세스</strong>
+                                                            : 모든 프로젝트 멤버는 업무, 제목, 설명, 위치, 시작일, 마감일, 멤버 배정에 대해
+                                                            추가/수정을 할 수 없습니다. <br /> 단, 코멘트, 태그, 색상 라벨, 체크 리스트에 대해
+                                                            추가/수정은 가능합니다.
+                                                        </div>
+                                                        <br />
+                                                        <div className="control-access-description" role="menuitem">
+                                                            <strong>통제 엑세스</strong>
+                                                            : 프로젝트 멤버는 업무만 볼 수 있습니다. 그 이외 모든 활동은 불가능합니다.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -290,14 +351,15 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }} className="link">
                                     <button onClick={this.handleClickOpenExit.bind(this)} >프로젝트 나가기</button>
                                     <Dialog onClose={this.handleClose.bind(this)} open={this.state.Exist}>
-                                        <DialogTitle onClose={this.handleClose.bind(this)}>
+                                        <DialogTitle style={{paddingBottom: "0px"}} onClose={this.handleClose.bind(this)}>
                                             <h2><b>이 프로젝트 나가기</b></h2>
                                         </DialogTitle>
-                                        <DialogContent>
+                                        <DialogContent style={{paddingTop: "0px", fontSize: "17px"}}>
                                             정말 이 프로젝트를 나가시겠습니까?
                                         </DialogContent>
-                                        <DialogActions>
-                                            <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white' }} onClick={this.handleClose.bind(this)}>닫기</Button>
+                                        <DialogActions style={{display: "grid"}}>
+                                            <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: 'black', fontWeight: 'bold', marginBottom: "7px" }} onClick={this.handleClose.bind(this)}>아니오, 이 프로젝트에 머뭅니다.</Button>
+                                            <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white', fontWeight: 'bold' }} onClick={this.handleClose.bind(this)}>네, 이 프로젝트를 나갑니다.</Button>
                                         </DialogActions>
                                     </Dialog>
                                 </div>
