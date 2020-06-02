@@ -3,7 +3,7 @@ import React from "react";
 import DayPicker, { DateUtils } from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import "./ModalCalendar.scss";
-import moment, { now }  from 'moment';
+import moment, { now } from "moment";
 
 export default class ModalCalendar extends React.Component {
   static defaultProps = {
@@ -19,8 +19,18 @@ export default class ModalCalendar extends React.Component {
 
   getInitialState() {
     return {
-      from: undefined,
-      to: undefined
+      from:
+        this.props.from === undefined
+          ? null
+          : this.props.from === null
+          ? null
+          : moment(this.props.from, moment.defaultFormat)._d,
+      to:
+        this.props.to === undefined
+          ? null
+          : this.props.to === null
+          ? null
+          : moment(this.props.to, moment.defaultFormat)._d,
     };
   }
 
@@ -29,42 +39,52 @@ export default class ModalCalendar extends React.Component {
     this.setState(range);
   }
 
-//   handleResetClick() {
-//     this.setState(this.getInitialState());
-//   }
+  // 날짜 지정 확인
+  onClickConfirm() {
+    // this.props.onClickCalendar(); // 창 닫기
+    this.props.taskCallbacks.modalStateUpdate();
+    this.props.onClickConfirm(
+      this.state.from,
+      this.state.to,
+      this.props.taskListIndex,
+      this.props.taskIndex
+    );
+  }
 
   render() {
     const { from, to } = this.state;
-
-    console.log("2 :"+this.state.from+' ~ '+this.state.to)
-    
-    console.log("1 :"+moment(this.state.from).format('YYYY-MM-DD hh:mm:ss') +' ~ '+moment(this.state.to).format('YYYY-MM-DD hh:mm:ss'))
-    
     const modifiers = { start: from, end: to };
     return (
       <>
-        <div
-          className="container Range"
-          style={this.props.open ? { display: "block" } : { display: "none" }}
-        >
+        <div className="container Range">
           <div className="calendar">
             <div className="calendar-header">
               <h6>업무 마감일 지정</h6>
+
               <button
                 type="button"
-                onClick={this.props.onClickCalendar}
                 className="close"
+                onClick={this.props.taskCallbacks.modalStateUpdate}
               >
                 &times;
               </button>
               <hr />
             </div>
             <div className="calendar-body">
-            <p>
-            {!from && !to && "날짜를 선택해 주세요"}
-            {from && !to && `${from.toLocaleDateString()} ~`}
-            {from && to && `${from.toLocaleDateString()} ~ ${to.toLocaleDateString()}`}
-          </p>
+              <p>
+                {!from && !to && "날짜 미정"}
+                {from && !to && `${from.toLocaleDateString()} ~`}
+                {from &&
+                  to &&
+                  `${from.toLocaleDateString()} ~ ${to.toLocaleDateString()}`}
+                <button
+                  type="button"
+                  onClick={this.onClickConfirm.bind(this)}
+                  className="confirm btn btn-info"
+                >
+                  적용
+                </button>
+              </p>
               <DayPicker
                 className="Selectable"
                 numberOfMonths={this.props.numberOfMonths}
