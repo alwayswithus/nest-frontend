@@ -1,1 +1,716 @@
-{}
+{
+  "allTaskList": [
+    {
+      "taskListNo": "17",
+      "projectNo": 5,
+      "taskListName": "계획",
+      "taskListOrder": 1,
+      "tasks": [
+        {
+          "commentList": [
+            {
+              "commentNo": 7,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 4,
+              "commentRegdate": "2020-06-03 09:40:00.0",
+              "userNo": 21,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 85,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-06-02 09:40:00.0",
+              "commentContents": "발표.ppt",
+              "originName": "발표.ppt"
+            },
+            {
+              "commentNo": 12,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 9,
+              "commentRegdate": "2020-06-01 19:10:14.0",
+              "userNo": 21,
+              "filePath": "/assets/upimages/20205171014276.png",
+              "taskNo": 85,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-06-01 19:10:14.0",
+              "commentContents": "꽉찬알.png",
+              "originName": "꽉찬알.png"
+            }
+          ],
+          "taskStart": "2020-07-17",
+          "taskEnd": "2020-07-30",
+          "taskOrder": 5,
+          "tagList": [
+            {
+              "tagColor": "rgb(123,12,50)",
+              "taskNo": 85,
+              "tagNo": 4,
+              "tagName": "#tagD"
+            }
+          ],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "react 공부",
+          "taskNo": "85",
+          "checkList": [],
+          "taskPoint": 5,
+          "taskLabel": "rgb(65,93,236)",
+          "taskWriter": 21,
+          "taskRegdate": "2020-07-17 00:00:00.0",
+          "fileList": [
+            {
+              "fileRegdate": "2020-06-02 09:40:00.0",
+              "changeName": "20200525100902",
+              "fileNo": 4,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 85,
+              "originName": "발표.ppt"
+            },
+            {
+              "fileRegdate": "2020-06-01 19:10:14.0",
+              "changeName": "20205171014276.png",
+              "fileNo": 9,
+              "filePath": "/assets/upimages/20205171014276.png",
+              "taskNo": 85,
+              "originName": "꽉찬알.png"
+            }
+          ]
+        },
+        {
+          "commentList": [
+            {
+              "commentNo": 8,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 5,
+              "commentRegdate": "2020-06-03 09:40:00.0",
+              "userNo": 21,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 84,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-06-03 09:40:00.0",
+              "commentContents": "펭수.jpg",
+              "originName": "펭수.jpg"
+            }
+          ],
+          "taskStart": "2020-07-03",
+          "taskEnd": "2020-07-10",
+          "taskOrder": 4,
+          "tagList": [
+            {
+              "tagColor": "rgb(157,10,201)",
+              "taskNo": 84,
+              "tagNo": 3,
+              "tagName": "#tagC"
+            },
+            {
+              "tagColor": "rgb(50,123,12)",
+              "taskNo": 84,
+              "tagNo": 5,
+              "tagName": "#tagE"
+            }
+          ],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "전체적으로 복습",
+          "taskNo": "84",
+          "checkList": [],
+          "taskPoint": 4,
+          "taskLabel": "rgb(211,88,177)",
+          "taskWriter": 20,
+          "taskRegdate": "2020-07-03 00:00:00.0",
+          "fileList": [
+            {
+              "fileRegdate": "2020-06-03 09:40:00.0",
+              "changeName": "20200525100902",
+              "fileNo": 5,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 84,
+              "originName": "펭수.jpg"
+            }
+          ]
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-06-09",
+          "taskEnd": "2020-06-15",
+          "taskOrder": 3,
+          "tagList": [
+            {
+              "tagColor": "rgb(10,201,157)",
+              "taskNo": 83,
+              "tagNo": 1,
+              "tagName": "#tagA"
+            }
+          ],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "웹 구축하기",
+          "taskNo": "83",
+          "checkList": [],
+          "taskPoint": 5,
+          "taskLabel": "rgb(29,9,33)",
+          "taskWriter": 19,
+          "taskRegdate": "2020-06-09 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [
+            {
+              "commentNo": 4,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 3,
+              "commentRegdate": "2020-05-31 09:40:00.0",
+              "userNo": 21,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 82,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-05-31 09:40:00.0",
+              "commentContents": "엑셀.xlxs",
+              "originName": "엑셀.xlxs"
+            },
+            {
+              "commentNo": 5,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": null,
+              "commentRegdate": "2020-06-01 09:40:00.0",
+              "userNo": 4,
+              "filePath": null,
+              "taskNo": 82,
+              "commentLike": 0,
+              "userName": "김우경",
+              "fileRegDate": null,
+              "commentContents": "프로젝트 너무 하기 싫다",
+              "originName": null
+            }
+          ],
+          "taskStart": "2020-05-24",
+          "taskEnd": "2020-06-01",
+          "taskOrder": 2,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 21,
+              "userEmail": "user123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:55.0",
+              "userBirth": null,
+              "userName": "김둥지",
+              "userNumber": null
+            },
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 4,
+              "userEmail": "rladnrud123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:53.0",
+              "userBirth": null,
+              "userName": "김우경",
+              "userNumber": null
+            }
+          ],
+          "taskContents": "점검하기",
+          "taskNo": "82",
+          "checkList": [],
+          "taskPoint": 5,
+          "taskLabel": "rgb(194,184,19)",
+          "taskWriter": 4,
+          "taskRegdate": "2020-05-24 00:00:00.0",
+          "fileList": [
+            {
+              "fileRegdate": "2020-05-31 09:40:00.0",
+              "changeName": "20200525100902",
+              "fileNo": 3,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 82,
+              "originName": "엑셀.xlxs"
+            }
+          ]
+        },
+        {
+          "commentList": [
+            {
+              "commentNo": 1,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 1,
+              "commentRegdate": "2020-05-28 09:40:00.0",
+              "userNo": 21,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 81,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-05-28 09:40:00.0",
+              "commentContents": "dully.jpg",
+              "originName": "dully.jpg"
+            },
+            {
+              "commentNo": 2,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 2,
+              "commentRegdate": "2020-05-29 09:40:00.0",
+              "userNo": 21,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 81,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-05-29 09:40:00.0",
+              "commentContents": "kakao.jpg",
+              "originName": "kakao.jpg"
+            },
+            {
+              "commentNo": 3,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": null,
+              "commentRegdate": "2020-05-30 09:40:00.0",
+              "userNo": 4,
+              "filePath": null,
+              "taskNo": 81,
+              "commentLike": 0,
+              "userName": "김우경",
+              "fileRegDate": null,
+              "commentContents": "안녕<br/> ㅎㅇㅎㅇ",
+              "originName": null
+            },
+            {
+              "commentNo": 10,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 7,
+              "commentRegdate": "2020-06-01 17:03:52.0",
+              "userNo": 21,
+              "filePath": "/assets/upimages/2020515351627.jpg",
+              "taskNo": 81,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-06-01 17:03:51.0",
+              "commentContents": "짱구.jpg",
+              "originName": "짱구.jpg"
+            }
+          ],
+          "taskStart": "2020-05-10",
+          "taskEnd": "2020-05-22",
+          "taskOrder": 1,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 21,
+              "userEmail": "user123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:55.0",
+              "userBirth": null,
+              "userName": "김둥지",
+              "userNumber": null
+            },
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 4,
+              "userEmail": "rladnrud123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:53.0",
+              "userBirth": null,
+              "userName": "김우경",
+              "userNumber": null
+            },
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 20,
+              "userEmail": "chldlsgy123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:55.0",
+              "userBirth": null,
+              "userName": "최인효",
+              "userNumber": null
+            }
+          ],
+          "taskContents": "시현 준비",
+          "taskNo": "81",
+          "checkList": [],
+          "taskPoint": 5,
+          "taskLabel": "rgb(152,106,130)",
+          "taskWriter": 1,
+          "taskRegdate": "2020-05-10 00:00:00.0",
+          "fileList": [
+            {
+              "fileRegdate": "2020-05-28 09:40:00.0",
+              "changeName": "20200525100902",
+              "fileNo": 1,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 81,
+              "originName": "dully.jpg"
+            },
+            {
+              "fileRegdate": "2020-05-29 09:40:00.0",
+              "changeName": "20200525100902",
+              "fileNo": 2,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 81,
+              "originName": "kakao.jpg"
+            },
+            {
+              "fileRegdate": "2020-06-01 17:03:51.0",
+              "changeName": "2020515351627.jpg",
+              "fileNo": 7,
+              "filePath": "/assets/upimages/2020515351627.jpg",
+              "taskNo": 81,
+              "originName": "짱구.jpg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "taskListNo": "18",
+      "projectNo": 5,
+      "taskListName": "진행",
+      "taskListOrder": 2,
+      "tasks": [
+        {
+          "commentList": [],
+          "taskStart": "2020-07-24",
+          "taskEnd": "2020-08-01",
+          "taskOrder": 5,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "SQL 공부",
+          "taskNo": "90",
+          "checkList": [],
+          "taskPoint": 2,
+          "taskLabel": "rgb(18,14,28)",
+          "taskWriter": 21,
+          "taskRegdate": "2020-07-24 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-07-08",
+          "taskEnd": "2020-07-12",
+          "taskOrder": 4,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "DB 생성",
+          "taskNo": "89",
+          "checkList": [],
+          "taskPoint": 3,
+          "taskLabel": "rgb(113,103,242)",
+          "taskWriter": 20,
+          "taskRegdate": "2020-07-08 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-06-14",
+          "taskEnd": "2020-06-17",
+          "taskOrder": 3,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "framwork공부",
+          "taskNo": "88",
+          "checkList": [],
+          "taskPoint": 4,
+          "taskLabel": "rgb(72,187,112)",
+          "taskWriter": 19,
+          "taskRegdate": "2020-06-14 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-05-28",
+          "taskEnd": "2020-06-02",
+          "taskOrder": 2,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "개발 환경 셋팅",
+          "taskNo": "87",
+          "checkList": [],
+          "taskPoint": 3,
+          "taskLabel": "rgb(49,215,206)",
+          "taskWriter": 4,
+          "taskRegdate": "2020-05-28 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [
+            {
+              "commentNo": 6,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "fileNo": 5,
+              "commentRegdate": "2020-06-03 09:40:00.0",
+              "userNo": 21,
+              "filePath": "/assets/images/unnamed.jpg",
+              "taskNo": 86,
+              "commentLike": 0,
+              "userName": "김둥지",
+              "fileRegDate": "2020-06-03 09:40:00.0",
+              "commentContents": "펭수.jpg",
+              "originName": "펭수.jpg"
+            }
+          ],
+          "taskStart": "2020-05-12",
+          "taskEnd": "2020-05-26",
+          "taskOrder": 1,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 21,
+              "userEmail": "user123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:55.0",
+              "userBirth": null,
+              "userName": "김둥지",
+              "userNumber": null
+            },
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 4,
+              "userEmail": "rladnrud123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:53.0",
+              "userBirth": null,
+              "userName": "김우경",
+              "userNumber": null
+            },
+            {
+              "userTitle": null,
+              "userPhoto": "/nest/assets/images/unnamed.jpg",
+              "userDept": null,
+              "userNo": 19,
+              "userEmail": "gksgodyd123@gmail.com",
+              "userRegdate": "2020-06-01 16:08:55.0",
+              "userBirth": null,
+              "userName": "한해용",
+              "userNumber": null
+            }
+          ],
+          "taskContents": "front-end 공부",
+          "taskNo": "86",
+          "checkList": [],
+          "taskPoint": 3,
+          "taskLabel": "rgb(228,20,246)",
+          "taskWriter": 1,
+          "taskRegdate": "2020-05-12 00:00:00.0",
+          "fileList": []
+        }
+      ]
+    },
+    {
+      "taskListNo": "19",
+      "projectNo": 5,
+      "taskListName": "완료",
+      "taskListOrder": 3,
+      "tasks": [
+        {
+          "commentList": [],
+          "taskStart": "2020-06-01",
+          "taskEnd": null,
+          "taskOrder": 6,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "qwe",
+          "taskNo": "107",
+          "checkList": [],
+          "taskPoint": null,
+          "taskLabel": "rgb(223,223,223)",
+          "taskWriter": 21,
+          "taskRegdate": "2020-06-01 17:00:59.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-07-28",
+          "taskEnd": "2020-08-07",
+          "taskOrder": 5,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "요구사항 분석",
+          "taskNo": "95",
+          "checkList": [],
+          "taskPoint": 1,
+          "taskLabel": "rgb(66,74,121)",
+          "taskWriter": 21,
+          "taskRegdate": "2020-07-28 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-07-12",
+          "taskEnd": "2020-07-27",
+          "taskOrder": 4,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "리눅스 공부",
+          "taskNo": "94",
+          "checkList": [],
+          "taskPoint": 4,
+          "taskLabel": "rgb(137,33,249)",
+          "taskWriter": 20,
+          "taskRegdate": "2020-07-12 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-06-20",
+          "taskEnd": "2020-06-26",
+          "taskOrder": 3,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "리눅스 환경 구축",
+          "taskNo": "93",
+          "checkList": [],
+          "taskPoint": 2,
+          "taskLabel": "rgb(149,168,69)",
+          "taskWriter": 19,
+          "taskRegdate": "2020-06-20 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-06-02",
+          "taskEnd": "2020-06-08",
+          "taskOrder": 2,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "DB 공부",
+          "taskNo": "92",
+          "checkList": [],
+          "taskPoint": 5,
+          "taskLabel": "rgb(106,71,211)",
+          "taskWriter": 4,
+          "taskRegdate": "2020-06-02 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-05-14",
+          "taskEnd": "2020-05-21",
+          "taskOrder": 1,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "DB스키마 작성",
+          "taskNo": "91",
+          "checkList": [],
+          "taskPoint": 3,
+          "taskLabel": "rgb(20,242,215)",
+          "taskWriter": 1,
+          "taskRegdate": "2020-05-14 00:00:00.0",
+          "fileList": []
+        }
+      ]
+    },
+    {
+      "taskListNo": "20",
+      "projectNo": 5,
+      "taskListName": "기타",
+      "taskListOrder": 4,
+      "tasks": [
+        {
+          "commentList": [],
+          "taskStart": "2020-07-31",
+          "taskEnd": "2020-08-15",
+          "taskOrder": 5,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "프로젝트 주제 선정",
+          "taskNo": "100",
+          "checkList": [],
+          "taskPoint": 2,
+          "taskLabel": "rgb(110,151,31)",
+          "taskWriter": 21,
+          "taskRegdate": "2020-07-31 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-07-16",
+          "taskEnd": "2020-07-30",
+          "taskOrder": 4,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "조이름 선정",
+          "taskNo": "99",
+          "checkList": [],
+          "taskPoint": 2,
+          "taskLabel": "rgb(236,125,215)",
+          "taskWriter": 20,
+          "taskRegdate": "2020-07-16 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-06-25",
+          "taskEnd": "2020-07-08",
+          "taskOrder": 3,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "대자보 작성",
+          "taskNo": "98",
+          "checkList": [],
+          "taskPoint": 4,
+          "taskLabel": "rgb(163,170,220)",
+          "taskWriter": 19,
+          "taskRegdate": "2020-06-25 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-06-05",
+          "taskEnd": "2020-06-09",
+          "taskOrder": 2,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "검사 받기",
+          "taskNo": "97",
+          "checkList": [],
+          "taskPoint": 1,
+          "taskLabel": "rgb(125,76,128)",
+          "taskWriter": 4,
+          "taskRegdate": "2020-06-05 00:00:00.0",
+          "fileList": []
+        },
+        {
+          "commentList": [],
+          "taskStart": "2020-05-17",
+          "taskEnd": "2020-05-25",
+          "taskOrder": 1,
+          "tagList": [],
+          "taskState": "do",
+          "memberList": [],
+          "taskContents": "ppt 만들기",
+          "taskNo": "96",
+          "checkList": [],
+          "taskPoint": 5,
+          "taskLabel": "rgb(151,206,141)",
+          "taskWriter": 1,
+          "taskRegdate": "2020-05-17 00:00:00.0",
+          "fileList": []
+        }
+      ]
+    }
+  ]
+}

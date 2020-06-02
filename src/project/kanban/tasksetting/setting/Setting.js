@@ -10,6 +10,7 @@ import TagModal from './TagModal';
 import update from "react-addons-update";
 import ApiService from '../../../../ApiService'
 import TaskMember from './TaskMember';
+import moment, { now }  from 'moment';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -20,7 +21,6 @@ class Setting extends Component {
     constructor (){
         super(...arguments)
         this.state ={
-            open:false, // 캘린더 모달
             checklist:'',
             tags:null,
             closeValue:false, // 태그 모달
@@ -68,12 +68,11 @@ class Setting extends Component {
         this.props.taskCallbacks.updateTaskTag(array, this.props.task, this.props.match.params.taskListNo, this.props.match.params.taskNo)
     }
 
+    
 
-    onClickCalendar(){
-        console.log(this.state.open)
-        this.setState({
-            open:!this.state.open
-        })
+    // 날짜 정보 callback
+    onClickConfirm(from, to, taskListIndex, taskIndex){
+        this.props.taskCallbacks.updateTaskDate(moment(from).format('YYYY-MM-DD'),moment(to).format('YYYY-MM-DD'), taskListIndex, taskIndex)
     }
 
     onSetStateTaskTagNo(array){
@@ -158,7 +157,6 @@ class Setting extends Component {
         this.props.taskCallbacks.deleteCheckList(checklistNo , this.props.match.params.taskListNo, this.props.match.params.taskNo);
     }
     render() {
-
         if(!this.props.task){
             return <></>;
         }
@@ -192,16 +190,22 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-calendar-week"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button variant="" onClick={this.onOpenCalendar.bind(this)}> 
+                                    <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate}> 
                                     <b className="taskDate">{!taskItem.taskStart && !taskItem.taskEnd && <i className="fas fa-plus fa-1x"></i>}
                                         {taskItem.taskStart && !taskItem.taskEnd && `${taskItem.taskStart} ~`}
                                         {taskItem.taskStart && taskItem.taskEnd && `${taskItem.taskStart} ~ ${taskItem.taskEnd}`}
                                     </b>  </Button>
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
-                                    <ModalCalendar open={this.state.open}
-                                    onClickCalendar={this.onClickCalendar.bind(this)}
-                                    from = {taskItem.taskStart}
-                                    to = {taskItem.taskEnd}/>
+
+                                    {this.props.modalState ? 
+                                        <ModalCalendar 
+                                        onClickConfirm={this.onClickConfirm.bind(this)}
+                                        from = {taskItem.taskStart}
+                                        to = {taskItem.taskEnd}
+                                        taskListIndex ={taskListIndex}
+                                        taskIndex={taskIndex}
+                                        taskCallbacks={this.props.taskCallbacks}/> 
+                                        : null }
                                     </div>
                                 </div>
                                 <div className="Date" style={{ display: 'inline-block' }}>

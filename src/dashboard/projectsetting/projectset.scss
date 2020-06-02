@@ -96,6 +96,37 @@
                             
                         }
                     }
+
+                    .dropdown-list {
+
+                        .dropdown-list-contents {
+                            padding-top: 10px;
+                            padding-left: 10px;
+                            padding-right: 30px;
+                            padding-bottom: 10px;
+
+                            .access-title {
+                                display: inline-block;
+                            }
+
+                            .access-check {
+                                display: inline-block;
+                                float: right;
+                                color: #8798A8;
+                            }
+
+                            &:hover {
+                                background-color: #E6E8EC;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .dropdown-list-description {
+                            padding: 5px 10px;
+                            height: 100px;
+                            overflow: auto;
+                        }
+                    }
                 }
                 div{
                     button{
