@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import './header.scss';
 import Navigation from '../TaskSetNav';
+import {Link} from 'react-router-dom';
 
 class Header extends Component {
-    onClickCloseTaskSetting(){
-        console.log("close!")
-    }
+
     render(){
     return (
         <div style={{display:'block'}} id= "taskSettingHeader" className="Header">
-            <i onClick={this.onClickCloseTaskSetting.bind(this)} className="fas fa-times fa-1x"></i>
+            <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} onClick={this.props.onClickTag}><i className="fas fa-times fa-1x"></i></Link>
             <div className="Header-list">
                 <h2><b>{this.props.taskContents}</b></h2>
                 <span>작성자 : {this.props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {this.props.date}</span>

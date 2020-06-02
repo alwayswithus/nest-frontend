@@ -14,7 +14,6 @@ class CheckContents extends Component {
   }
   
   render() {
-    console.log(this.props.checkList.checklistState + "!!");
     return (
       <Fragment>
         <div className="checklist">
@@ -22,7 +21,7 @@ class CheckContents extends Component {
                 type="checkbox"
                 className="doneCheck"
                 onClick={this.doneCheckList.bind(this)}
-                checked={this.props.checkList.checklistState === "done" ? true : false}
+                checked={this.props.checkList.checklistState === "done"}
                 readOnly
               ></input>
                 {this.props.checkList.checklistState === "done"

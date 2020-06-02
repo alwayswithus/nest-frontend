@@ -604,74 +604,75 @@ class KanbanMain extends Component {
   }
 
   // checkList 체크
-  callbackCheckListCheck(taskListNo, taskId, checkListNo, checklistState) {
-    const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
+  // callbackCheckListCheck(taskListNo, taskNo, checkListNo, checklistState) {
+  //   const TaskListIndex = this.state.taskList.findIndex(
+  //     (taskList) => taskList.taskListNo === taskListNo
+  //   );
 
-    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskId
-    );
+  //   const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+  //     (task) => task.taskNo === taskNo
+  //   );
 
-    const ChecklistIndex = this.state.taskList[TaskListIndex].tasks[
-      TaskIndex
-    ].checkList.findIndex((checkList) => checkList.checklistNo === checkListNo);
+  //   const ChecklistIndex = this.state.taskList[TaskListIndex].tasks[
+  //     TaskIndex
+  //   ].checkList.findIndex((checkList) => checkList.checklistNo === checkListNo);
 
-    let newTaskList = update(this.state.taskList, {
-      [TaskListIndex]: {
-        tasks: {
-          [TaskIndex]: {
-            checkList: {
-              [ChecklistIndex]: {
-                checklistState: {
-                  $set: checklistState === "done" ? "do" : "done",
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-    this.setState({
-      taskList: newTaskList,
-    });
-  }
+  //     let newTaskList = update(this.state.taskList, {
+  //       [TaskListIndex]: {
+  //         tasks: {
+  //           [TaskIndex]: {
+  //             checkList: {
+  //               [ChecklistIndex]: {
+  //                 checklistState: {
+  //                   $set: checklistState === "done" ? "do" : "done",
+  //                 },
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     });
+  //     this.setState({
+  //       taskList: newTaskList,
+  //     });
+  // }
 
   //checkList 추가하기
   callbackAddCheckList(contents, taskNo, taskListNo) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
+    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
 
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
-
-    const checkListLength = this.state.taskList[taskListIndex].tasks[taskIndex]
-      .checkList.length;
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
 
     let newCheckList = {
-      checklistNo: checkListLength + 1,
+      checklistNo: null,
       checklistContents: contents,
       checklistState: "do",
       taskNo: taskNo,
     };
 
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            checkList: {
-              $push: [newCheckList],
+    fetch(`${API_URL}/api/tasksetting/checklist/add`,{
+      method:'post',
+      headers: API_HEADERS,
+      body:JSON.stringify(newCheckList)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let newTaskList = update(this.state.taskList, {
+        [taskListIndex]: {
+          tasks: {
+            [taskIndex]: {
+              checkList: {
+                $push: [json.data],
+              },
             },
           },
         },
-      },
-    });
-
-    this.setState({
-      taskList: newTaskList,
-    });
+      });
+  
+      this.setState({
+        taskList: newTaskList,
+      });
+    })
   }
 
   //task에 tag 추가하기
@@ -686,54 +687,52 @@ class KanbanMain extends Component {
     const tagIndex = this.state.taskList[taskIndex].tasks[taskIndex].tagList.findIndex(
       (tag) => tag.tagNo == tagNo
     );
-
-    console.log()
     
-    // let newTag = {
-    //   tagNo: tagNo,
-    //   tagName: tagName,
-    //   tagColor: "RGB(255, 160, 160)",
-    //   taskNo:taskNo
-    // };
-    // fetch(`${API_URL}/api/tag/add`, {
-    //   method: "post",
-    //   headers: API_HEADERS,
-    //   body: JSON.stringify(newTag),
-    // })
-    // .then((response) => response.json())
-    // .then((json) => {
-    //     let newTagData = update(this.state.taskList, {
-    //       [taskListIndex]: {
-    //         tasks: {
-    //           [taskIndex]: {
-    //             tagList: {
-    //               $push: [json.data],
-    //             },
-    //           },
-    //         },
-    //       },
-    //     });
+    let newTag = {
+      tagNo: tagNo,
+      tagName: tagName,
+      tagColor: "RGB(255, 160, 160)",
+      taskNo:taskNo
+    };
+    fetch(`${API_URL}/api/tag/add`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newTag),
+    })
+    .then((response) => response.json())
+    .then((json) => {
+        let newTagData = update(this.state.taskList, {
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                tagList: {
+                  $push: [json.data],
+                },
+              },
+            },
+          },
+        });
 
-    //     const tagIndex = newTagData[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
-    //     newTagData = update(newTagData, {
-    //       [taskListIndex]: {
-    //         tasks: {
-    //           [taskIndex]: {
-    //             tagList: {
-    //               [tagIndex]:{
-    //                 tagName:{$set: tagName},
-    //                 tagColor:{$set: "RGB(255, 160, 160)"}
-    //               }
-    //             },
-    //           },
-    //         },
-    //       },
-    //     })
-    //     this.onSetStateTaskTagNo(array, newTagData, taskListNo, taskNo)
-    //     this.setState({
-    //       taskList: newTagData,
-    //     });
-    //   })
+        const tagIndex = newTagData[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
+        newTagData = update(newTagData, {
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                tagList: {
+                  [tagIndex]:{
+                    tagName:{$set: tagName},
+                    tagColor:{$set: "RGB(255, 160, 160)"}
+                  }
+                },
+              },
+            },
+          },
+        })
+        this.onSetStateTaskTagNo(array, newTagData, taskListNo, taskNo)
+        this.setState({
+          taskList: newTagData,
+        });
+      })
 
   }
 
@@ -791,7 +790,22 @@ class KanbanMain extends Component {
     ].checkList.findIndex((checklist) => checklist.checklistNo === checklistNo);
 
     // console.log("KanbanMain + " + checklistIndex + " : " + checklistState)
+    
+    let newCheckList = {
+      checklistNo: checklistNo,
+      checklistContents: null,
+      checklistState: checklistState === "done" ? "do" : "done",
+      taskNo: taskNo,
+    };
 
+    console.log("check")
+
+    fetch(`${API_URL}/api/tasksetting/checklist/update`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newCheckList),
+    })
+    .then(response => response.json())
     let newTaskList = update(this.state.taskList, {
       [taskListIndex]: {
         tasks: {
@@ -830,27 +844,72 @@ class KanbanMain extends Component {
       taskIndex
     ].checkList.findIndex((checkList) => checkList.checklistNo === checklistNo);
 
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            checkList: {
-              [checkListIndex]: {
-                checklistContents: {
-                  $set: checklistContents,
+    let newCheckList = {
+      checklistNo: checklistNo,
+      checklistContents: checklistContents,
+      checklistState: null,
+      taskNo: taskNo,
+    };
+
+    console.log("update!!!")
+    fetch(`${API_URL}/api/tasksetting/checklist/update`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(newCheckList),
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      let newTaskList = update(this.state.taskList, {
+        [taskListIndex]: {
+          tasks: {
+            [taskIndex]: {
+              checkList: {
+                [checkListIndex]: {
+                  checklistContents: {
+                    $set: checklistContents,
+                  },
                 },
               },
             },
           },
         },
-      },
-    });
-
-    this.setState({
-      taskList: newTaskList,
-    });
+      });
+  
+      this.setState({
+        taskList: newTaskList,
+      });
+    })
   }
 
+  //checklist delete
+  callbackDeleteCheckList(checklistNo, taskListNo, taskNo){
+
+    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
+    const checkListIndex =  this.state.taskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo === checklistNo)
+
+    fetch(`${API_URL}/api/tasksetting/checklist/${checklistNo}`, {
+      method:'delete'
+    })
+    .then(response => response.json())
+    .then(json => {
+      let newTaskList = update(this.state.taskList, {
+        [taskListIndex]:{
+          tasks:{
+            [taskIndex]:{
+              checkList:{
+                $splice:[[checkListIndex,1]]
+              }
+            }
+          }
+        }
+      })
+      this.setState({
+        taskList: newTaskList
+      })
+    })
+
+  }
   // comment like 수 증가
   callbackCommentLikeUpdate(taskListNo, taskNo, commentNo) {
     const taskListIndex = this.state.taskList.findIndex(
@@ -1136,9 +1195,89 @@ class KanbanMain extends Component {
     const taskIndex = TaskList[taskListIndex].tasks.findIndex(
       (task) => task.taskNo === taskNo
     );
+
+    array.splice(0, TaskList[taskListIndex].tasks[taskIndex].tagList.length)
     this.setState({
         taskTagNo:array.concat(TaskList[taskListIndex].tasks[taskIndex].tagList.map(tag => tag.tagNo))
     })
+
+    console.log("kanbanMain + ")
+  }
+
+  //업무에 멤버 추가 & 삭제
+  addDeleteMember(userNo, projectMembers,taskListNo, taskNo){
+    const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskItem = this.state.taskList[taskListIndex].tasks[taskIndex]
+    const memberIndex= taskItem.memberList.findIndex(member => member.userNo == userNo)
+    
+    const projectMemberIndex = projectMembers.findIndex(projectMember => projectMember.userNo == userNo);
+    
+    let member = {
+        userNo: userNo,
+        taskNo: taskNo
+    }
+
+    let newMember = {
+      userTitle:null,
+      userPhoto:projectMembers[projectMemberIndex].userPhoto,
+      userDept:null,
+      userNo: userNo,
+      userEmail: projectMembers[projectMemberIndex].userEmail,
+      userRegdate: projectMembers[projectMemberIndex].userRegdate,
+      userBirth: projectMembers[projectMemberIndex].userBirth,
+      userName: projectMembers[projectMemberIndex].userName,
+      userNumber: null
+    }
+    if(memberIndex == -1) {
+        fetch(`${API_URL}/api/task/member/add`, {
+            method:'post', 
+            headers:API_HEADERS,
+            body: JSON.stringify(member)
+        }) 
+        .then(response => response.json())
+        .then(json => {
+          let newTaskList = update(this.state.taskList,{
+            [taskListIndex]:{
+              tasks:{
+                [taskIndex]:{
+                  memberList:{
+                    $push:[newMember]
+                  }
+                }
+              }
+            }
+          })
+          console.log(newTaskList[taskListIndex].tasks[taskIndex].memberList)
+          this.setState({
+            taskList:newTaskList
+          })
+        })
+      } else {
+        fetch(`${API_URL}/api/task/member/${userNo}/${taskNo}`, {
+          method:'delete'
+        }) 
+        .then(response => response.json())
+        .then(json => {
+          let newTaskList = update(this.state.taskList,{
+            [taskListIndex]:{
+              tasks:{
+                [taskIndex]:{
+                  memberList:{
+                    $splice:[[memberIndex, 1]]
+                  }
+                }
+              }
+            }
+          })
+
+          console.log(newTaskList[taskIndex].tasks[taskIndex].memberList)
+          this.setState({
+            taskList:newTaskList
+          })
+        })
+      }
+  }
 }
 
 // 업무 날짜 수정
@@ -1215,10 +1354,10 @@ modalStateUpdate(){
                 task={this.state.taskList}
                 taskTagNo={this.state.taskTagNo}
                 taskCallbacks={{
-                  checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
                   checklistStateUpdate: this.callbackCheckListStateUpdate.bind( this), // checklist state 업데이트
                   checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
                   addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
+                  deleteCheckList: this.callbackDeleteCheckList.bind(this), //업무에 checklist 삭제하기
                   addDeletetag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
@@ -1238,9 +1377,7 @@ modalStateUpdate(){
                 task={this.state.taskList} 
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
-                  commentContentsUpdate: this.callbackCommentContentsUpdate.bind(
-                    this
-                  ), //코멘트 내용 업데이트
+                  commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                   deleteComment: this.callbackDeleteComment.bind(this) // 코멘트 삭제하기
                 }}
@@ -1297,8 +1434,8 @@ modalStateUpdate(){
                       doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
                       addList: this.callbackAddTaskList.bind(this), // taskList 추가
                       deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
-                      checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
+                      // checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
+                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind( this), // checklist check 업데이트
                       modalStateFalse:this.modalStateFalse.bind(this)
                     }}
                   />

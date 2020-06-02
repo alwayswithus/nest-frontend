@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import './comment.scss';
+// import './comment.scss';
 import moment from 'moment';
 import ReactQuill from 'react-quill';
 

@@ -1,6 +1,7 @@
 import React, { Component, Fragment, useState } from "react";
 import Editor from "./Editor";
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
+import './CommentInput.scss'
 import ReactQuill from 'react-quill';
 import PropTypes from 'prop-types';
 
