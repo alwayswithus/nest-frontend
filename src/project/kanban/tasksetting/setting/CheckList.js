@@ -16,12 +16,13 @@ class CheckList extends Component {
         })
     }
 
+    // checklist content update
     onEnter(event) {
         if(event.key === 'Enter'){
             this.setState({
                 click:!this.state.click
             })
-            this.props.taskCallbacks.checklistStateUpdate(this.props.params.taskListNo, this.props.params.taskNo, this.props.checklist.checklistNo, event.target.value);
+            this.props.taskCallbacks.checklistContentsUpdate(this.props.params.taskListNo, this.props.params.taskNo, this.props.checklist.checklistNo, event.target.value)
         }
     }
 
@@ -36,10 +37,12 @@ class CheckList extends Component {
         return (
             <ul className="CheckList">
                 {this.state.click ? 
-                    <li style={{margin:'2% 0 0 0'}} key={checklist.checklistNo} onClick = {this.onClickText.bind(this)}>
-                        {checklist.checklistState === "done" ? <del>{this.state.keyword}</del> :  this.state.keyword }
-                        <i className="fas fa-pen fa-1x" />
-                    </li> :
+                    <>
+                        <li style={{margin:'2% 0 0 0'}} key={checklist.checklistNo} onClick = {this.onClickText.bind(this)}>
+                            {checklist.checklistState === "done" ? <del>{this.state.keyword}</del> :  this.state.keyword }
+                            <i className="fas fa-pen fa-1x" />
+                        </li>
+                    </> :
                     <input 
                         type="text" 
                         key={checklist.checklistNo} 

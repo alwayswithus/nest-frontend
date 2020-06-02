@@ -35,11 +35,6 @@ export default class ModalCalendar extends React.Component {
 
   render() {
     const { from, to } = this.state;
-
-    console.log("2 :"+this.state.from+' ~ '+this.state.to)
-    
-    console.log("1 :"+moment(this.state.from).format('YYYY-MM-DD hh:mm:ss') +' ~ '+moment(this.state.to).format('YYYY-MM-DD hh:mm:ss'))
-    
     const modifiers = { start: from, end: to };
     return (
       <>

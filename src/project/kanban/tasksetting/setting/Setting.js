@@ -25,6 +25,8 @@ class Setting extends Component {
             tags:null,
             closeValue:false, // 태그 모달
             closeTag: false, // 새태그만들기 모달
+            projectMembers:null, // 프로젝트멤버
+            closeProjectMembers:false // 프로젝트 멤버 모달  
         }
     }
     onOpenCalendar() {
@@ -53,6 +55,7 @@ class Setting extends Component {
 
     //click check box
     clickCheckBox(checklistNo, checklistState){
+        console.log("check!!+Setting")
         this.props.taskCallbacks.checklistStateUpdate(this.props.match.params.taskListNo, this.props.match.params.taskNo, checklistNo, checklistState);
     }
     
@@ -135,11 +138,24 @@ class Setting extends Component {
     }
 
     onClickTaskMember(){
-        console.log("!!!!")
+        this.setState({
+            closeProjectMembers:!this.state.closeProjectMembers
+        })
     }
 
-    onDelteMember(){
-        console.log("delete!!!!")
+    // 업무 멤버 삭제
+    onDelteMember(userNo){
+        this.props.taskCallbacks.addDeleteMember(
+            userNo, 
+            this.state.projectMembers, 
+            this.props.match.params.taskListNo,
+            this.props.match.params.taskNo)
+    }
+
+    //checklist delete
+    onClickDeleteChecklist(checklistNo){
+        alert('체크리스트 항목을 삭제하시겠습니끼?')
+        this.props.taskCallbacks.deleteCheckList(checklistNo , this.props.match.params.taskListNo, this.props.match.params.taskNo);
     }
     render() {
 
@@ -150,14 +166,17 @@ class Setting extends Component {
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
+
         return (
+            <>
             <div className = "taskSetting-setting">
                 <div style={{ height: '100%', marginTop: '-49px', position: 'absolute', right: '0', zIndex: '999'}}>
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
                         <Header 
+                            onClickTag = {this.onClickTag.bind(this)}
                             name='김우경' 
-                            date='2020.05.06' 
+                            date='2020.05.06'
                             taskContents = {taskItem.taskContents}
                             projectNo={this.props.projectNo}
                             params={this.props.match.params}/>
@@ -195,15 +214,22 @@ class Setting extends Component {
                                 <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                                 <div style={{ float: 'left' }}>
                                     <Button onClick={this.onClickTaskMember.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
-                                    {/* <TaskMember /> */}
+                                    <TaskMember
+                                        closeProjectMembers = {this.state.closeProjectMembers} // 프로젝트 멤버 모달 상태변수
+                                        onClickTaskMember = {this.onClickTaskMember.bind(this)} // 프로젝트 멤버 모달 상태 변경 해주는 함수
+                                        taskListNo = {this.props.match.params.taskListNo}
+                                        taskNo = {taskItem.taskNo}
+                                        taskItem = {taskItem}
+                                        taskCallbacks = {this.props.taskCallbacks}
+                                        projectMembers = {this.state.projectMembers}/>
                                 </div>
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {/* 업무 멤버 리스트 */}
                                     {taskItem.memberList.map(member => 
-                                        <div className="Member">
+                                        <div key={member.userNo} className="Member">
                                             <img src={member.userPhoto} className="img-circle" alt="Cinque Terre" />
                                             <span>{member.userName}</span>
-                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
+                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,)}>
                                                 <i className="fas fa-times"></i>
                                             </span>
                                         </div>
@@ -273,11 +299,12 @@ class Setting extends Component {
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
-                                                                taskListNo : this.props.taskListNo, 
+                                                                taskListNo : this.props.match.params.taskListNo, 
                                                                 taskNo : taskItem.taskNo}} 
                                                                 taskCallbacks={this.props.taskCallbacks} 
                                                                 checklist={checklist} 
                                                                 key={checklist.checklistNo}/>
+                                                        <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
                                                     </div>)}
                                     <div className = "insert">
                                         <button>
@@ -300,6 +327,8 @@ class Setting extends Component {
                     </div>
                 </div>
             </div>
+            </>
+
         )
     }
 
@@ -311,12 +340,12 @@ class Setting extends Component {
                 })
             })
 
-        // ApiService.fetchProjectMember(this.props.projectNo)
-        //     // .then(response => {
-        //     //     this.setState({
-
-        //     //     })
-        //     // })
+        ApiService.fetchProjectMember(this.props.projectNo)
+            .then(response => {
+                this.setState({
+                    projectMembers:response.data.data
+                })
+            })
         }
 }
 export default Setting;

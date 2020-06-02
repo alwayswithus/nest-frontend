@@ -7,9 +7,9 @@ class ApiService {
         return axios.get(`/nest/api/dashboard/${window.sessionStorage.getItem("authUserNo")}`);
     }
 
-    // fetchProjectMember(projectNo) {
-    //     return axios.get(`/nest/api/dashboard/${projectNo}`)
-    // }
+    fetchProjectMember(projectNo) {
+        return axios.get(`/nest/api/dashboard/member/${projectNo}`)
+    }
 
     fetchKanbanMain(no){
         return axios.get(`/nest/api/kanbanMain/${no}`);
