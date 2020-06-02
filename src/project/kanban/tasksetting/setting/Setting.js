@@ -166,7 +166,7 @@ class Setting extends Component {
                     <div className="Home">
                         <div style={{ fontSize: '1.3rem', margin: '4%', color: '#27B6BA' }}><b>설명 추가</b></div>
                         <hr style={{ marginBottom: '20px', color: '#555555' }} />
-                        <ul>
+                        <ul> 
                             {/* 업무 마감일 */}
                             <li className="taskSettingList">
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-calendar-week"></i></div>
