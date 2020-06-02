@@ -18,9 +18,8 @@ export default class Navigator extends React.Component {
         })
     }
 
-    sessionClear(){
-        sessionStorage.clear();
-    }
+    /* 세션 스토리지 초기화. (로그아웃시 사용...) */
+    sessionClear(){ sessionStorage.clear(); }
 
     render() {
         return (

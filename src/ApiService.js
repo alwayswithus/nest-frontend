@@ -26,6 +26,10 @@ class ApiService {
     fetchLogin(email, password){
         return axios.post(`/nest/api/login?email=${email}&password=${password}`)
     }
+
+    fetchGantt(no){
+        return axios.post(`/nest/api/kanbanGantt/${no}`);
+    }
 }
 
 export default new ApiService();
