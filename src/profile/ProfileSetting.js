@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import './profileset.scss';
 import ProfileNav from './ProfileNav';
 import Navigator from '../navigator/Navigator';
