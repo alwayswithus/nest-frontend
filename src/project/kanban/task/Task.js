@@ -3,6 +3,7 @@ import TaskInnerContents from "./TaskInnerContents";
 import "./Task.scss";
 import { Draggable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
+
 class Task extends Component {
   constructor() {
     super(...arguments);
@@ -76,6 +77,7 @@ class Task extends Component {
             <Link
               style={{ textDecoration: "none", color: "black" }}
               to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.taskListNo}/task/${taskItem.taskNo}`}
+              onClick={this.props.taskCallbacks.modalStateFalse}
             >
               <div
                 className={

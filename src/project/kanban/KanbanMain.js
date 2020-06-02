@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component , useRef} from "react";
 import update from "react-addons-update";
 import KanbanBoard from "./KanbanBoard";
 import Navigator from "../../navigator/Navigator";
@@ -24,7 +24,8 @@ class KanbanMain extends Component {
     this.state = {
       taskList: null,
       url: window.sessionStorage.getItem("authUserBg"),
-      taskTagNo:[] //task tag의 no만 모아둔 배열
+      taskTagNo:[], //task tag의 no만 모아둔 배열
+      modalState:false
     };
   }
 
@@ -282,7 +283,6 @@ class KanbanMain extends Component {
       taskWriter: sessionStorage.getItem("authUserNo")
     };
 
-    console.log(sessionStorage.getItem("authUserNo"));
     fetch(`${API_URL}/api/task/insert`, {
       method: "post",
       headers: API_HEADERS,
@@ -299,7 +299,7 @@ class KanbanMain extends Component {
           taskState: "do",
           memberList: [],
           taskContents: json.data.taskContents,
-          taskNo: json.data.taskNo,
+          taskNo: json.data.taskNo+"",
           checkList: [],
           taskPoint: json.data.taskPoint,
           taskLabel: json.data.taskLabel,
@@ -307,6 +307,7 @@ class KanbanMain extends Component {
           taskWriter:json.data.taskWriter
         };
 
+        console.log(json.data.taskNo);
         let newTaskList = this.state.taskList;
         newTaskList[TaskListIndex].tasks.splice(0, 0, newTask);
 
@@ -379,6 +380,7 @@ class KanbanMain extends Component {
       originalTaskNo: task.taskNo,
       taskNo: null,
       checkList: task.checkList,
+      taskWriter:sessionStorage.getItem("authUserNo"),
     };
 
     fetch(`${API_URL}/api/task/copy/insert`, {
@@ -406,6 +408,8 @@ class KanbanMain extends Component {
               taskPoint: task.taskPoint,
               taskLabel: task.taskLabel,
               fileList: [],
+              
+
             },
           },
         });
@@ -1136,6 +1140,65 @@ class KanbanMain extends Component {
         taskTagNo:array.concat(TaskList[taskListIndex].tasks[taskIndex].tagList.map(tag => tag.tagNo))
     })
 }
+
+// 업무 날짜 수정
+callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
+  
+  if(from === 'Invalid date'){
+    from = undefined;
+  }
+  if(to === 'Invalid date'){
+    to = undefined;
+  }
+
+  let newTaskList = update(this.state.taskList, {
+    [taskListIndex]: {
+      tasks: {
+        [taskIndex]: {
+          taskStart: {
+            $set: from,
+          },
+          taskEnd: {
+            $set: to,
+          },
+        },
+      },
+    },
+  });
+  // console.log(
+  //   newTaskList[taskListIndex].tasks[taskIndex].taskStart
+  // )
+  // console.log(
+  //   newTaskList[taskListIndex].tasks[taskIndex].taskEnd
+  // )
+  this.setState({
+    taskList:newTaskList
+  })
+
+  const task= newTaskList[taskListIndex].tasks[taskIndex]
+
+  fetch(`${API_URL}/api/tasksetting/calendar/update`, {
+    method:'post',
+    headers:API_HEADERS,
+    body:JSON.stringify(task)
+  })
+
+  
+
+}
+
+// 설정 화면 중 다른 테스크 클릭 시
+modalStateFalse(){
+ this.setState({
+  modalState : false
+ })
+}
+
+modalStateUpdate(){
+  this.setState({
+    modalState : !this.state.modalState
+   })
+}
   render() {
     return (
       <>
@@ -1147,6 +1210,7 @@ class KanbanMain extends Component {
             render={(match) => (
               <Setting
                 {...match}
+                modalState={this.state.modalState}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
                 taskTagNo={this.state.taskTagNo}
@@ -1158,7 +1222,9 @@ class KanbanMain extends Component {
                   addDeletetag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
-                  updateTaskTag: this.onSetStateTaskTagNo.bind(this)
+                  updateTaskTag: this.onSetStateTaskTagNo.bind(this),
+                  updateTaskDate:this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
+                  modalStateUpdate:this.modalStateUpdate.bind(this)
                 }}
               />
             )}
@@ -1232,9 +1298,8 @@ class KanbanMain extends Component {
                       addList: this.callbackAddTaskList.bind(this), // taskList 추가
                       deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
                       checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind(
-                        this
-                      ), // checklist check 업데이트
+                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
+                      modalStateFalse:this.modalStateFalse.bind(this)
                     }}
                   />
                 </DragDropContext>
