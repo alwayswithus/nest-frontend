@@ -30,7 +30,7 @@ export default class Dashboard extends React.Component {
     this.state = {
       projects: null,                                               // projects data
       users: null,                                                  // user data
-      allProjectAndRoleNo: null,                                       // authUser projectNo and roleNo
+      userProject: [],                                              // authUser projectNo and roleNo
 
       url: window.sessionStorage.getItem("authUserBg"),             // background image url
       project: [],                                                  // project
@@ -338,6 +338,43 @@ export default class Dashboard extends React.Component {
       })
   }
 
+  // CallBack Member Role Change Function
+  callbackRoleChange(projectNo, userNo, roleNo) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    const memberIndex = this.state.project.members.findIndex(member =>
+      member.userNo === userNo)
+
+    let userProject = {
+      projectNo: projectNo,
+      userNo: userNo,
+      roleNo: roleNo
+    }
+
+    fetch(`${API_URL}/api/userproject/rolechange`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(userProject)
+    })
+      .then(response => response.json())
+      .then(json => {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            members: {
+              [memberIndex] : {
+                roleNo: { $set: json.data.roleNo}
+              }
+            }
+          }
+        })
+
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      })
+  }
+
   // State Change Function
   onStateChange(projectNo, state) {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
@@ -372,9 +409,23 @@ export default class Dashboard extends React.Component {
 
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
    
-    this.setState({
-      setOn: !this.state.setOn,
-      project: this.state.projects[projectIndex]
+    let userProject = {
+      projectNo: projectNo,
+      userNo: window.sessionStorage.getItem("authUserNo")
+    }
+
+    fetch(`${API_URL}/api/userproject`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(userProject)
+    })
+    .then(response => response.json())
+    .then(json => {
+      this.setState({
+        userProject: json.data,
+        setOn: !this.state.setOn,
+        project: this.state.projects[projectIndex]
+      })
     })
     document.getElementById('projectSet').style.display = 'block'
   }
@@ -596,6 +647,7 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
+    console.log(this.state.userProject);
     return (
       <div className="Dashboard">
         <AlertList
@@ -619,6 +671,7 @@ export default class Dashboard extends React.Component {
             <ProjectSetting
               users={this.state.users}
               project={this.state.project}
+              userProject={this.state.userProject}
               callbackProjectSetting={{
                 close: this.callbackCloseProjectSetting.bind(this),
                 addDeleteMember: this.callbackAddDeleteMember.bind(this),
@@ -626,7 +679,8 @@ export default class Dashboard extends React.Component {
                 changeState: this.callbackChangeState.bind(this),
                 changeTitle: this.callbackProjectTitleChange.bind(this),
                 changeDesc: this.callbackProjectDescChange.bind(this),
-                inviteMember: this.callbackInviteMember.bind(this)
+                inviteMember: this.callbackInviteMember.bind(this),
+                changeRole: this.callbackRoleChange.bind(this),
               }} />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -653,6 +707,7 @@ export default class Dashboard extends React.Component {
                       <div className="panel-body">
                         <Link to="#">
                           <div className="btn-group">
+                            {this.state.userProject.roleNo === 1 ? 
                             <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
                               data-toggle="dropdown"
                               style={project.projectState === "상태없음" ?
@@ -662,7 +717,17 @@ export default class Dashboard extends React.Component {
                                       { backgroundColor: "#337AB7" } : ""}>
                               &nbsp;&nbsp;{project.projectState}
                               <span className="caret"></span>
-                            </button>
+                            </button> : 
+                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                                data-toggle="dropdown"
+                                style={project.projectState === "상태없음" ?
+                                  { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
+                                    { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                      { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                        { backgroundColor: "#337AB7" } : ""} disabled>
+                                &nbsp;&nbsp;{project.projectState}
+                                <span className="caret"></span>
+                              </button>}
                             <div className="dropdown-menu" role="menu">
                               <div className="dropdown-list">
                                 <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>

@@ -28,8 +28,7 @@ class ProjectSetting extends Component {
             isMemberEmailValid: false,
             inviteMemberButton: false,
             inviteMemberEmail: "",
-            inviteMemberName: "",
-            role: ""
+            inviteMemberName: ""
         }
     }
 
@@ -72,6 +71,11 @@ class ProjectSetting extends Component {
             userListOpen: false,
             inviteMemberButton: false
         })
+    }
+
+    // CallBack Member Role Change Function
+    callbackRoleChange(projectNo, userNo, roleNo) {
+        this.props.callbackProjectSetting.changeRole(projectNo, userNo, roleNo);
     }
 
     handleClickOpenCalendar() {
@@ -165,18 +169,11 @@ class ProjectSetting extends Component {
         })
     }
 
-    // Role Select Function
-    onAccessRole(role) {
-        this.setState({
-            role: role
-        })
-    }
-
     render() {
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
-                <ProjectHeader project={this.props.project}
+                <ProjectHeader userProject={this.props.userProject} project={this.props.project}
                     callbackSettingListAllClose={{ close: this.callbackSettingListAllClose.bind(this) }}
                     callbackProjectSetting={this.props.callbackProjectSetting} />
                 {/* 프로젝트 리스트 */}
@@ -185,7 +182,8 @@ class ProjectSetting extends Component {
                         <hr />
                         <div className="project-description-header">
                             <div className="project-introduce"><b>설명</b></div>
-                            <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i>
+                            {this.props.userProject.roleNo === 1 ? 
+                            <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i> : ""}
                         </div>
                         {this.state.projectDescCheck ?
                             <div className="project-description-contents">
@@ -205,14 +203,16 @@ class ProjectSetting extends Component {
                             {/* 프로젝트상태 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
-                                <div style={{ display: 'inline-block' }}><ProjectStatus callbackProjectSetting={this.props.callbackProjectSetting} project={this.props.project} /> </div>
+                                <div style={{ display: 'inline-block' }}><ProjectStatus userProject={this.props.userProject} project={this.props.project} callbackProjectSetting={this.props.callbackProjectSetting} /> </div>
                             </li>
 
                             {/* 마감일 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
+                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ? 
+                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button> :
+                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant="" disabled><i className="fas fa-plus fa-1x"></i></Button>}
                                     {this.state.show ? <ModalCalendar project={this.props.project} /> : ""}
                                 </div>
 
@@ -224,7 +224,9 @@ class ProjectSetting extends Component {
                                     <h5><b>프로젝트멤버</b></h5>
                                 </div>
                                 <div style={{ float: 'left' }}>
-                                    <Button onClick={this.onUserListOpen.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
+                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
+                                        <Button onClick={this.onUserListOpen.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button> :
+                                        <Button onClick={this.onUserListOpen.bind(this)} variant="" disabled><i className="fas fa-plus fa-1x"></i></Button>}
                                     <div>
                                         {this.state.userListOpen ?
                                             <ProjectMemberAdd project={this.props.project} users={this.props.users}
@@ -277,58 +279,70 @@ class ProjectSetting extends Component {
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {this.props.project.members && this.props.project.members.map(member =>
                                         <div className="dropdown" key={member.userNo}>
-                                            <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown">
-                                                <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
-                                                <span>{member.userName}</span>
-                                                <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
-                                                    <i className="fas fa-times"></i>
-                                                </span>
-                                            </button>
+
+                                            {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
+                                                <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown">
+                                                    <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                                    <span>{member.userName}</span>
+                                                    <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo)}>
+                                                        <i className="fas fa-times"></i>
+                                                    </span>
+                                                </button> :
+                                                <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown" disabled>
+                                                    <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                                    <span>{member.userName}</span>
+                                                    <span className="delete-member">
+                                                        <i className="fas fa-times"></i>
+                                                    </span>
+                                                </button>}
                                             <div className="dropdown-menu" role="menu">
                                                 <div className="dropdown-list">
-                                                    <div className="dropdown-list-contents" onClick={this.onAccessRole.bind(this, "전체")} role="menuitem">
+                                                    <div className="dropdown-list-contents" role="menuitem"
+                                                        onClick={this.callbackRoleChange.bind(this, this.props.project.projectNo, member.userNo, 1)}>
                                                         <div className="access-title">
                                                             전체 엑세스
                                                         </div>
-                                                        {member.roleNo === 1 ? 
-                                                        <div className="access-check">
-                                                            <i className="fas fa-check"></i>
-                                                        </div> : ""}
+                                                        {member.roleNo === 1 ?
+                                                            <div className="access-check">
+                                                                <i className="fas fa-check"></i>
+                                                            </div> : ""}
                                                     </div>
-                                                    <div className="dropdown-list-contents" onClick={this.onAccessRole.bind(this, "제한")} role="menuitem">
+                                                    <div className="dropdown-list-contents" role="menuitem"
+                                                        onClick={this.callbackRoleChange.bind(this, this.props.project.projectNo, member.userNo, 2)}>
                                                         <div className="access-title">
                                                             제한 엑세스
                                                         </div>
-                                                        {member.roleNo === 2 ? 
-                                                        <div className="access-check">
-                                                            <i className="fas fa-check"></i>
-                                                        </div> : ""}
+                                                        {member.roleNo === 2 ?
+                                                            <div className="access-check">
+                                                                <i className="fas fa-check"></i>
+                                                            </div> : ""}
                                                     </div>
-                                                    <div className="dropdown-list-contents" onClick={this.onAccessRole.bind(this, "통제")} role="menuitem">
+                                                    <div className="dropdown-list-contents" role="menuitem"
+                                                        onClick={this.callbackRoleChange.bind(this, this.props.project.projectNo, member.userNo, 3)}>
                                                         <div className="access-title">
                                                             통제 엑세스
                                                         </div>
-                                                        {member.roleNo === 3 ? 
-                                                        <div className="access-check">
-                                                            <i className="fas fa-check"></i>
-                                                        </div> : ""}
+                                                        {member.roleNo === 3 ?
+                                                            <div className="access-check">
+                                                                <i className="fas fa-check"></i>
+                                                            </div> : ""}
                                                     </div>
                                                     <div className="divider"></div>
                                                     <div className="dropdown-list-description" role="menuitem">
                                                         <div className="entire-access-description" role="menuitem">
-                                                            <strong>전체 엑세스</strong>
+                                                            <strong style={{ color: "Red" }}>전체 엑세스</strong>
                                                             : 모든 프로젝트 멤버는 프로젝트 안에 있는 업무 보기, 수정이 가능합니다.
                                                         </div>
                                                         <br />
                                                         <div className="limit-access-description" role="menuitem">
-                                                            <strong>제한 엑세스</strong>
+                                                            <strong style={{ color: "#808000" }}>제한 엑세스</strong>
                                                             : 모든 프로젝트 멤버는 업무, 제목, 설명, 위치, 시작일, 마감일, 멤버 배정에 대해
                                                             추가/수정을 할 수 없습니다. <br /> 단, 코멘트, 태그, 색상 라벨, 체크 리스트에 대해
                                                             추가/수정은 가능합니다.
                                                         </div>
                                                         <br />
                                                         <div className="control-access-description" role="menuitem">
-                                                            <strong>통제 엑세스</strong>
+                                                            <strong style={{ color: "green" }}>통제 엑세스</strong>
                                                             : 프로젝트 멤버는 업무만 볼 수 있습니다. 그 이외 모든 활동은 불가능합니다.
                                                         </div>
                                                     </div>
@@ -351,13 +365,13 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }} className="link">
                                     <button onClick={this.handleClickOpenExit.bind(this)} >프로젝트 나가기</button>
                                     <Dialog onClose={this.handleClose.bind(this)} open={this.state.Exist}>
-                                        <DialogTitle style={{paddingBottom: "0px"}} onClose={this.handleClose.bind(this)}>
+                                        <DialogTitle style={{ paddingBottom: "0px" }} onClose={this.handleClose.bind(this)}>
                                             <h2><b>이 프로젝트 나가기</b></h2>
                                         </DialogTitle>
-                                        <DialogContent style={{paddingTop: "0px", fontSize: "17px"}}>
+                                        <DialogContent style={{ paddingTop: "0px", fontSize: "17px" }}>
                                             정말 이 프로젝트를 나가시겠습니까?
                                         </DialogContent>
-                                        <DialogActions style={{display: "grid"}}>
+                                        <DialogActions style={{ display: "grid" }}>
                                             <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: 'black', fontWeight: 'bold', marginBottom: "7px" }} onClick={this.handleClose.bind(this)}>아니오, 이 프로젝트에 머뭅니다.</Button>
                                             <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white', fontWeight: 'bold' }} onClick={this.handleClose.bind(this)}>네, 이 프로젝트를 나갑니다.</Button>
                                         </DialogActions>
