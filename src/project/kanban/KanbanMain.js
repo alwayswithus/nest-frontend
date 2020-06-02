@@ -1,4 +1,4 @@
-import React, { Component , useRef} from "react";
+import React, { Component } from "react";
 import update from "react-addons-update";
 import KanbanBoard from "./KanbanBoard";
 import Navigator from "../../navigator/Navigator";
@@ -307,7 +307,6 @@ class KanbanMain extends Component {
           taskWriter:json.data.taskWriter
         };
 
-        console.log(json.data.taskNo);
         let newTaskList = this.state.taskList;
         newTaskList[TaskListIndex].tasks.splice(0, 0, newTask);
 
