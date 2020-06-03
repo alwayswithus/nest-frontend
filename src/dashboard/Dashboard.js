@@ -98,7 +98,8 @@ export default class Dashboard extends React.Component {
       userNo: userNo,
       userName: userName,
       userPhoto: userPhoto,
-      projectNo: projectNo
+      projectNo: projectNo,
+      roleNo: 3
     }
 
     let newProject;
@@ -149,7 +150,8 @@ export default class Dashboard extends React.Component {
     let member = {
       userNo: userNo,
       userName: userName,
-      userPhoto: userPhoto
+      userPhoto: userPhoto,
+      roleNo: 3
     }
 
     let members;
@@ -301,7 +303,8 @@ export default class Dashboard extends React.Component {
       userName: memberName !== "" ? memberName : memberEmail,
       userEmail: memberEmail,
       userPhoto: "assets/images/arrowloding.jpg",
-      projectNo: projectNo
+      projectNo: projectNo,
+      roleNo: 3
     }
 
     const newAlert = {
@@ -310,7 +313,7 @@ export default class Dashboard extends React.Component {
       message: this.state.newMessage
     };
 
-    fetch(`${API_URL}/api/settinguser/invite/`, {
+    fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(member)
@@ -452,6 +455,7 @@ export default class Dashboard extends React.Component {
       projectRegDate: regDate,
       projectWriter: projectWriter,
       projectWriterName: projectWriterName,
+      roleNo: 1,
       members: members
     };
 
@@ -511,7 +515,8 @@ export default class Dashboard extends React.Component {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
       userEmail: memberEmail,
-      userPhoto: "assets/images/arrowloding.jpg"
+      userPhoto: "assets/images/arrowloding.jpg",
+      roleNo: 3
     }
 
     const newAlert = {
@@ -706,6 +711,7 @@ export default class Dashboard extends React.Component {
                       <div className="panel-body">
                         <Link to="#">
                           <div className="btn-group">
+                            {project.roleNo === 1 ? 
                             <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
                               data-toggle="dropdown"
                               style={project.projectState === "상태없음" ?
@@ -715,7 +721,17 @@ export default class Dashboard extends React.Component {
                                       { backgroundColor: "#337AB7" } : ""}>
                               &nbsp;&nbsp;{project.projectState}
                               <span className="caret"></span>
-                            </button>
+                            </button> :
+                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                              data-toggle="dropdown"
+                              style={project.projectState === "상태없음" ?
+                                { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
+                                  { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                    { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                      { backgroundColor: "#337AB7" } : ""} disabled>
+                              &nbsp;&nbsp;{project.projectState}
+                              <span className="caret"></span>
+                            </button>}
                             <div className="dropdown-menu" role="menu">
                               <div className="dropdown-list">
                                 <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
