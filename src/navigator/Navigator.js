@@ -20,7 +20,15 @@ export default class Navigator extends React.Component {
     }
 
     /* 세션 스토리지 초기화. (로그아웃시 사용...) */
-    sessionClear(){ sessionStorage.clear(); }
+    sessionClear(){ 
+        sessionStorage.clear(); 
+        this.modalClose();
+    }
+
+    modalClose(){
+        window.jQuery(document.body).removeClass("modal-open");
+        window.jQuery(".modal-backdrop").remove();
+    }
 
     render() {
         return (
@@ -107,7 +115,7 @@ export default class Navigator extends React.Component {
                         {/* Content */}
                         <div className="modal-content">
                             {/* Header */}
-                            <Link to="/nest/profile" className="profile-setting-page">
+                            <Link to="/nest/profile" className="profile-setting-page" onClick={this.modalClose.bind(this)}>
                                 <div className="modal-header">
                                     <img src={`${window.sessionStorage.getItem("authUserPhoto")}`} alt="avatar" className="rounded-circle img-responsive" />
                                     <div className="text-center">

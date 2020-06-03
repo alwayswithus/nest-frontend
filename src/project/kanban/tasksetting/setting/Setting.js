@@ -190,10 +190,12 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
                                     <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate}> 
-                                    <b className="taskDate">{!taskItem.taskStart && !taskItem.taskEnd && <i className="fas fa-plus fa-1x"></i>}
-                                        {taskItem.taskStart && !taskItem.taskEnd && `${taskItem.taskStart} ~`}
-                                        {taskItem.taskStart && taskItem.taskEnd && `${taskItem.taskStart} ~ ${taskItem.taskEnd}`}
-                                    </b>  </Button>
+                                        <b className="taskDate">
+                                            {!taskItem.taskStart && !taskItem.taskEnd && <i className="fas fa-plus fa-1x"></i>}
+                                            {taskItem.taskStart && !taskItem.taskEnd && `${taskItem.taskStart} ~`}
+                                            {taskItem.taskStart && taskItem.taskEnd && `${taskItem.taskStart} ~ ${taskItem.taskEnd}`}
+                                        </b>  
+                                    </Button>
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
 
                                     {this.props.modalState ? 

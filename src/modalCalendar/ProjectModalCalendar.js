@@ -1,13 +1,12 @@
 import React from "react";
-
 import DayPicker, { DateUtils } from "react-day-picker";
 import "react-day-picker/lib/style.css";
-import "./ModalCalendar.scss";
+import "./ProjectModalCalendar.scss";
 import moment, { now } from "moment";
 
 export default class ModalCalendar extends React.Component {
   static defaultProps = {
-    numberOfMonths: 1,
+    numberOfMonths: 2,
   };
 
   constructor(props) {
@@ -42,12 +41,11 @@ export default class ModalCalendar extends React.Component {
   // 날짜 지정 확인
   onClickConfirm() {
     // this.props.onClickCalendar(); // 창 닫기
-    this.props.taskCallbacks.modalStateUpdate();
+    this.props.callbackProjectSetting.modalStateUpdate();
     this.props.onClickConfirm(
       this.state.from,
       this.state.to,
-      this.props.taskListIndex,
-      this.props.taskIndex
+      this.props.project.projectNo
     );
   }
 
@@ -56,15 +54,15 @@ export default class ModalCalendar extends React.Component {
     const modifiers = { start: from, end: to };
     return (
       <> 
-        <div className="container Range">
+        <div className="container projectRange ">
           <div className="calendar">
             <div className="calendar-header">
-              <h6>업무 마감일 지정</h6>
+              <h6>프로젝트 마감일 지정</h6>
 
               <button
                 type="button"
                 className="close"
-                onClick={this.props.taskCallbacks.modalStateUpdate}
+                onClick={this.props.callbackProjectSetting.modalStateUpdate}
               >
                 &times;
               </button>
