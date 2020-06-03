@@ -4,7 +4,7 @@
     height:120px;
     float: right;
     margin-top: 100px;
-    i{
+    .fa-times{
         float: right;
         padding:2%;
         cursor: pointer;
@@ -13,7 +13,31 @@
         }
     }
     .Header-list{
-        h2, span{
+        .Header-input{
+            border:2px solid black;
+            width: 524px;
+            border-radius: 3px;
+        }
+        h2{
+            margin:1%;
+            padding:2%;
+            cursor: pointer;
+            .fa-edit{
+                display: none;
+            }
+            &:hover{
+                background-color: #DCDCDC;
+                cursor: pointer;
+                border-radius: 4px;
+                width: 550px;
+                .fa-edit{
+                    display: block;
+                    float: right;
+                    transform: scale(0.5);
+                }
+            }
+        }
+        span{
             margin:2%;
             padding:2%;
         }

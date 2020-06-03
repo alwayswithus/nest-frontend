@@ -2,10 +2,11 @@ import React from "react";
 import Table from 'react-bootstrap/Table'
 import ReactTooltip from "react-tooltip";
 import { Link } from "react-router-dom";
-
+import moment from 'moment';
 import Navigator from '../../navigator/Navigator'
 import TopBar from '../topBar/TopBar';
 import './file.scss';
+import ApiService from "../../ApiService";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -15,7 +16,8 @@ export default class File extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
-            url: sessionStorage.getItem("authUserBg")
+            url: sessionStorage.getItem("authUserBg"),
+            projectFiles:null
         }
     }
 
@@ -40,6 +42,7 @@ export default class File extends React.Component {
     }
 
     render() {
+        console.log()
         return (
             <div className="File" style={{ backgroundImage: `url(${this.state.url})` }}>
                 <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
@@ -55,28 +58,32 @@ export default class File extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className="file-contents">
-                                <td>
-                                    <div className="file-name-cell">
-                                        <div className="file-name-cell-image">
-                                            <img className="file-image" src="/nest/assets/images/toy.png" />
-                                        </div>
-                                        <div className="file-name-and-path">
-                                            <span className="file-name">plug.png</span>
-                                            <Link to="#">
-                                                <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom">
-                                                    코드의 숲 > 계획 업무 1
-                                                </div>
-                                                <ReactTooltip />
-                                            </Link>
+                            {this.state.projectFiles && this.state.projectFiles.map(projectFile => 
+                                <tr className="file-contents">
+                                    <td>
+                                        <div className="file-name-cell">
+                                            <div className="file-name-cell-image">
+                                                <img className="file-image" src={`${API_URL}${projectFile.filePath}`} />
+                                            </div>
+                                            <div className="file-name-and-path">
+                                                <span className="file-name">{projectFile.fileName}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td style={{ paddingTop: "23px" }}>2.87 KB</td>
-                                <td style={{ paddingTop: "23px" }}>2020년 5월 25일 19:43</td>
+                                <td style={{ paddingTop: "23px" }}>
+                                    <Link 
+                                        style={{color:'black', textDecoration:'none'}} 
+                                        to={`/nest/dashboard/${this.props.match.params.projectNo}/kanbanboard/${projectFile.tasklistNo}/task/${projectFile.taskNo}/file`}>
+                                        <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom">
+                                            {projectFile.tasklistName} > {projectFile.taskContents}
+                                        </div>
+                                        <ReactTooltip />
+                                    </Link>
+                                </td>
+                                <td style={{ paddingTop: "23px" }}>{moment(projectFile.fileRegdate).format("MM월 DD일 hh:mm")}</td>
                                 <td style={{ paddingTop: "17px" }}>
                                     <div className="share-person">
-                                        김우경                      
+                                        {projectFile.userName}                    
                                     </div>
                                     <div className="contents-dropdown">
                                         <div className="dropdown">
@@ -91,10 +98,19 @@ export default class File extends React.Component {
                                     </div>
                                 </td>
                             </tr>
-                        </tbody>
+                            )}
+                            </tbody>
                     </Table>
                 </div>
             </div>
         )
+    }
+    componentDidMount(){
+        ApiService.fetchFile(this.props.match.params.projectNo)
+        .then(response => {
+            this.setState({
+                projectFiles:response.data.data
+            })
+        })
     }
 }

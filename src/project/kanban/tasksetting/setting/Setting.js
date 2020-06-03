@@ -27,7 +27,7 @@ class Setting extends Component {
             tags:null,
             closeValue:false, // 태그 모달
             closeTag: false, // 새태그만들기 모달
-            projectMembers:null, // 프로젝트멤버 
+            projectMembers:null, // 프로젝트멤버
         }
     }
     onOpenCalendar() {
@@ -155,6 +155,7 @@ class Setting extends Component {
         alert('체크리스트 항목을 삭제하시겠습니끼?')
         this.props.taskCallbacks.deleteCheckList(checklistNo , this.props.match.params.taskListNo, this.props.match.params.taskNo);
     }
+
     render() {
         if(!this.props.task){
             return <></>;
@@ -174,6 +175,7 @@ class Setting extends Component {
                             onClickTag = {this.onClickTag.bind(this)}
                             name='김우경' 
                             date='2020.05.06'
+                            taskCallbacks={this.props.taskCallbacks}
                             taskContents = {taskItem.taskContents}
                             projectNo={this.props.projectNo}
                             params={this.props.match.params}/>
@@ -282,11 +284,14 @@ class Setting extends Component {
                             </li>
                             {/* 중요도 */}
                             <li className="taskSettingList">
-                                <div style={{ display: 'inline-block' }}><i className="fas fa-star"></i></div>
-                                <div style={{ display: 'inline-block' }}><h5><b>중요도</b></h5></div>
-                                <div style={{ display: 'inline-block' }} className="link">
-                                    <Important />
-                                </div>
+                                <div style={{ float:'left'}}><i className="fas fa-star"></i></div>
+                                <div style={{ float:'left'}}><h5><b>중요도</b></h5></div>
+                                <Important 
+                                    point={this.state.point}
+                                    params={this.props.match.params}
+                                    taskCallbacks = {this.props.taskCallbacks}
+                                    taskItem={taskItem}
+                                />
                             </li>
                             {/* 색상라벨 */}
                             <li>
@@ -294,7 +299,6 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>색상라벨</b></h5></div>
                                 <div style={{ display: 'inline-block' }}> <ColorPicker style={{transForm: 'scale(0.5)'}}/></div>
                             </li>
-
                             {/* 하위 할일 */}
                             <li className="taskSettingList">
                                 <div className="checkList">

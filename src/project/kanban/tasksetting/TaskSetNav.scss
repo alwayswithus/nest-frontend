@@ -1,19 +1,14 @@
 .Navigation{
     background-color: white;
     margin-top: 16px;
-    a{
-        font-size: 1.5rem;
-        color:black;
-        #setting {
-            width:'180px';
-            text-align:'center';
-            border-bottom:'3px solid #27B6BA';
+    padding-left: 36px;
+    .nav-tabs {
+        a:hover{
+            height: 43px;
         }
     }
-
-    #nav-item--setting{
-        width:'205px';
-        text-align:'center';
-        border-bottom:'3px solid #27B6BA';
+    .nav-link{
+        font-size: 1.5rem;
+        color:black;
     }
 }

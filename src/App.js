@@ -51,7 +51,9 @@ function App() {
           render={(match) => <Gantt {...match}/>} />
 
         {/* 파일 */}
-        <Route path="/nest/dashboard/:projectNo/file" exact component={File} />
+        <Route 
+          path="/nest/dashboard/:projectNo/file" exact 
+          render={(match) => <File {...match} />} />
 
         {/* 프로젝트 세팅*/}
         <Route path="/nest/projectset" exact component={ProjectSetting} />
