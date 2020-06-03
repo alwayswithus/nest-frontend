@@ -1278,7 +1278,6 @@ class KanbanMain extends Component {
       }
   }
 
-
 // 업무 날짜 수정
 callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
   
