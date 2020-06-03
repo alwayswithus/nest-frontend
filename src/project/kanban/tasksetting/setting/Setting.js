@@ -11,6 +11,8 @@ import update from "react-addons-update";
 import ApiService from '../../../../ApiService'
 import TaskMember from './TaskMember';
 import moment, { now }  from 'moment';
+import Comment from "../comment/Comment";
+import { Route, Switch } from "react-router-dom";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -25,8 +27,7 @@ class Setting extends Component {
             tags:null,
             closeValue:false, // 태그 모달
             closeTag: false, // 새태그만들기 모달
-            projectMembers:null, // 프로젝트멤버
-            closeProjectMembers:false // 프로젝트 멤버 모달  
+            projectMembers:null, // 프로젝트멤버 
         }
     }
     onOpenCalendar() {
@@ -137,9 +138,7 @@ class Setting extends Component {
     }
 
     onClickTaskMember(){
-        this.setState({
-            closeProjectMembers:!this.state.closeProjectMembers
-        })
+        this.props.taskCallbacks.taskMemberState();
     }
 
     // 업무 멤버 삭제
@@ -218,14 +217,15 @@ class Setting extends Component {
                                 <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                                 <div style={{ float: 'left' }}>
                                     <Button onClick={this.onClickTaskMember.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
-                                    <TaskMember
+                                    {this.props.taskMemberState ? <TaskMember
                                         closeProjectMembers = {this.state.closeProjectMembers} // 프로젝트 멤버 모달 상태변수
                                         onClickTaskMember = {this.onClickTaskMember.bind(this)} // 프로젝트 멤버 모달 상태 변경 해주는 함수
                                         taskListNo = {this.props.match.params.taskListNo}
                                         taskNo = {taskItem.taskNo}
                                         taskItem = {taskItem}
                                         taskCallbacks = {this.props.taskCallbacks}
-                                        projectMembers = {this.state.projectMembers}/>
+                                        projectMembers = {this.state.projectMembers}/> : null
+                                    }
                                 </div>
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {/* 업무 멤버 리스트 */}
@@ -249,7 +249,7 @@ class Setting extends Component {
                                     <Button onClick ={this.onClickTag.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
                                         {/* tag 검색창 */}
-                                        <TagModal
+                                       {this.state.closeValue ? <TagModal
                                             closeValue = {this.state.closeValue} // 태그 모달 띄우는 상태변수
                                             closeTag = {this.state.closeTag} // 새 태그 만들기 모달 띄우는 상태 변수
                                             onClickTag={this.onClickTag.bind(this, taskItem)} // 태그 모달 띄우는 함수
@@ -265,7 +265,8 @@ class Setting extends Component {
                                             settingTagCallbakcs={{
                                                 add:this.callbackAddTags.bind(this),
                                                 delete: this.callbackDeleteTags.bind(this)
-                                            }} />
+                                            }} /> : null
+                                        } 
                                     </div>
                                 </div>
 
