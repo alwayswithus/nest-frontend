@@ -30,6 +30,10 @@ class ApiService {
     fetchGantt(no){
         return axios.post(`/nest/api/kanbanGantt/${no}`);
     }
+
+    fetchFile(projectNo) {
+        return axios.get(`/nest/api/dashboard/${projectNo}/file`);
+    }
 }
 
 export default new ApiService();

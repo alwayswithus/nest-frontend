@@ -25,7 +25,8 @@ class KanbanMain extends Component {
       url: window.sessionStorage.getItem("authUserBg"),
       taskTagNo:[], //task tag의 no만 모아둔 배열
       modalState:false,
-      taskMemberState: false //task memer modal 상태변수
+      taskMemberState: false, //task memer modal 상태변수
+      point: null // 업무 중요도 상태변수
     };
   }
 
@@ -601,40 +602,6 @@ class KanbanMain extends Component {
         });
       });
   }
-
-  // checkList 체크
-  // callbackCheckListCheck(taskListNo, taskNo, checkListNo, checklistState) {
-  //   const TaskListIndex = this.state.taskList.findIndex(
-  //     (taskList) => taskList.taskListNo === taskListNo
-  //   );
-
-  //   const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-  //     (task) => task.taskNo === taskNo
-  //   );
-
-  //   const ChecklistIndex = this.state.taskList[TaskListIndex].tasks[
-  //     TaskIndex
-  //   ].checkList.findIndex((checkList) => checkList.checklistNo === checkListNo);
-
-  //     let newTaskList = update(this.state.taskList, {
-  //       [TaskListIndex]: {
-  //         tasks: {
-  //           [TaskIndex]: {
-  //             checkList: {
-  //               [ChecklistIndex]: {
-  //                 checklistState: {
-  //                   $set: checklistState === "done" ? "do" : "done",
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //     });
-  //     this.setState({
-  //       taskList: newTaskList,
-  //     });
-  // }
 
   //checkList 추가하기
   callbackAddCheckList(contents, taskNo, taskListNo) {
@@ -1341,6 +1308,44 @@ taskMemberState(){
     taskMemberState: !this.state.taskMemberState
   })
 }
+
+//업무 중요도 업데이트
+callbackUpdateTaskPoint(point , taskListNo, taskNo){
+  const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+  const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+  
+  let newPoint = {
+    taskNo:taskNo,
+    taskPoint: point
+  }
+  fetch(`${API_URL}/api/tasksetting/point/update`, {
+    method:'post',
+    headers:API_HEADERS,
+    body: JSON.stringify(newPoint) 
+  })
+  .then(response => response.json())
+  .then(json => {
+    // console.log(json.data.taskPoint)
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]:{
+        tasks:{
+          [taskIndex]:{
+            taskPoint:{
+              $set:json.data.taskPoint
+            }
+          }
+        }
+      }
+    })
+    this.setState({
+      taskList:newTaskList
+    })
+  })
+}
+
+callbackUpdateTaskContents(){
+  console.log("!!!!")
+}
   render() {
     return (
       <>
@@ -1369,7 +1374,9 @@ taskMemberState(){
                   updateTaskDate:this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
                   modalStateUpdate:this.modalStateUpdate.bind(this),
                   taskMemberState: this.taskMemberState.bind(this),
-                  addDeleteMember: this.addDeleteMember.bind(this)
+                  addDeleteMember: this.addDeleteMember.bind(this),
+                  updateTaskPoint: this.callbackUpdateTaskPoint.bind(this), // 업무 포인트 업뎃
+                  updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
                 }}
               />
             )}
@@ -1422,7 +1429,8 @@ taskMemberState(){
                 />
               </div>
               {/*상단바*/}
-              <TopBar projectNo={this.props.match.params.projectNo} />
+              <TopBar 
+                projectNo={this.props.match.params.projectNo} />
               {/* 메인 영역 */}
               <div className="mainArea">
                 {/*칸반보드*/}
@@ -1440,8 +1448,7 @@ taskMemberState(){
                       doneTask: this.callbackDoneTask.bind(this), // task 완료 체크
                       addList: this.callbackAddTaskList.bind(this), // taskList 추가
                       deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
-                      // checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
+                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind( this), // checklist check 업데이트
                       modalStateFalse:this.modalStateFalse.bind(this)
                     }}
                   />
