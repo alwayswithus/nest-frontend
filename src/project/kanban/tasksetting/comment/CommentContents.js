@@ -61,7 +61,7 @@ class commentContents extends Component {
         return (
             <Fragment>
                 <div key = {this.props.comment.commentNo} style={{height:'20px'}}/>
-                <a className="pull-left" href="#"><img className="img-circle" src={`/${this.props.comment.userPhoto}`} alt="" /></a>
+                <a className="pull-left" href="#"><img className="img-circle" src={`${this.props.comment.userPhoto}`} alt="" /></a>
                 <div className="media-body">
                     <span className="media-heading"><b>{this.props.comment.userName}</b></span>
                     <span className="media-heading">{moment(this.props.comment.commentRegdate).format('YYYY-MM-DD hh:mm:ss')}</span>

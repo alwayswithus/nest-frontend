@@ -12,7 +12,6 @@ import Setting from "../kanban/tasksetting/setting/Setting";
 import Comment from "../kanban/tasksetting/comment/Comment";
 import File from "../kanban/tasksetting/file/File";
 import moment, { now }  from 'moment';
-import Task from "./task/Task";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -25,7 +24,8 @@ class KanbanMain extends Component {
       taskList: null,
       url: window.sessionStorage.getItem("authUserBg"),
       taskTagNo:[], //task tag의 no만 모아둔 배열
-      modalState:false
+      modalState:false,
+      taskMemberState: false //task memer modal 상태변수
     };
   }
 
@@ -1327,7 +1327,8 @@ callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
 // 설정 화면 중 다른 테스크 클릭 시
 modalStateFalse(){
  this.setState({
-  modalState : false
+  modalState : false,
+  taskMemberState:false
  })
 }
 
@@ -1336,18 +1337,26 @@ modalStateUpdate(){
     modalState : !this.state.modalState
    })
 }
+
+taskMemberState(){
+  console.log("click!")
+  this.setState({
+    taskMemberState: !this.state.taskMemberState
+  })
+}
   render() {
     return (
       <>
         {/* taskSetting 띄우는 route */}
         <Switch>
           <Route
-            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo"
+            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/"
             exact
             render={(match) => (
               <Setting
                 {...match}
                 modalState={this.state.modalState}
+                taskMemberState={this.state.taskMemberState}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
                 taskTagNo={this.state.taskTagNo}
@@ -1361,7 +1370,9 @@ modalStateUpdate(){
                   addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
                   updateTaskTag: this.onSetStateTaskTagNo.bind(this),
                   updateTaskDate:this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
-                  modalStateUpdate:this.modalStateUpdate.bind(this)
+                  modalStateUpdate:this.modalStateUpdate.bind(this),
+                  taskMemberState: this.taskMemberState.bind(this),
+                  addDeleteMember: this.addDeleteMember.bind(this)
                 }}
               />
             )}
