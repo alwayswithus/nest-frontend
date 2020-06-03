@@ -647,7 +647,6 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    console.log(this.state.userProject);
     return (
       <div className="Dashboard">
         <AlertList
@@ -707,7 +706,6 @@ export default class Dashboard extends React.Component {
                       <div className="panel-body">
                         <Link to="#">
                           <div className="btn-group">
-                            {this.state.userProject.roleNo === 1 ? 
                             <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
                               data-toggle="dropdown"
                               style={project.projectState === "상태없음" ?
@@ -717,17 +715,7 @@ export default class Dashboard extends React.Component {
                                       { backgroundColor: "#337AB7" } : ""}>
                               &nbsp;&nbsp;{project.projectState}
                               <span className="caret"></span>
-                            </button> : 
-                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
-                                data-toggle="dropdown"
-                                style={project.projectState === "상태없음" ?
-                                  { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
-                                    { backgroundColor: "orange" } : project.projectState === "진행중" ?
-                                      { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
-                                        { backgroundColor: "#337AB7" } : ""} disabled>
-                                &nbsp;&nbsp;{project.projectState}
-                                <span className="caret"></span>
-                              </button>}
+                            </button>
                             <div className="dropdown-menu" role="menu">
                               <div className="dropdown-list">
                                 <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
@@ -777,14 +765,14 @@ export default class Dashboard extends React.Component {
                         <span className="update-date" style={{ width: "100%" }}><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
                         <div className="progress">
                           {project.projectState === "완료됨" ?
-                            <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="70"
-                              aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{(project.completedTask / project.taskCount) * 100}%</div> :
+                            <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="100"
+                              aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
                             project.projectState === "진행중" ?
-                              <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-                                aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{(project.completedTask / project.taskCount) * 100}%</div> :
+                              <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100"
+                                aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
                               project.projectState === "계획됨" ?
-                                <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                                  aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{(project.completedTask / project.taskCount) * 100}%</div> :
+                                <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100"
+                                  aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
                                 ""}
                         </div>
                       </div>

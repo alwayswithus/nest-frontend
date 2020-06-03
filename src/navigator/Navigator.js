@@ -1,6 +1,7 @@
 import React from 'react';
 import './navigator.scss';
-import ReactTooltip from "react-tooltip";
+
+import { Link } from 'react-router-dom';
 
 export default class Navigator extends React.Component {
 
@@ -35,36 +36,36 @@ export default class Navigator extends React.Component {
                             {/*<!-- Notification link -->*/}
                             <li className="nav-item">
                                 <span data-tooltip-text="Notification">
-                                    <a href="/nest/notification" className="link">
+                                    <Link to="/nest/notification" className="link">
                                         <i className="far fa-bell icon"></i>
-                                    </a>
+                                    </Link>
                                 </span>
                             </li>
 
                             {/*<!-- Calendar link -->*/}
                             <li className="nav-item">
-                                <a href="/nest/calendar" className="link">
+                                <Link to="/nest/calendar" className="link">
                                     <span data-tooltip-text="Calendar">
                                         <i className="fas fa-calendar-alt icon"></i>
                                     </span>
-                                </a>
+                                </Link>
                             </li>
 
                             {/*<!-- Projects link-- >*/}
                             <li className="nav-item">
                                 <span data-tooltip-text="Projects">
-                                    <a href="/nest/dashboard" className="link">
+                                    <Link to="/nest/dashboard" className="link">
                                         <i className="fas fa-tasks icon"></i>
-                                    </a>
+                                    </Link>
                                 </span>
                             </li >
 
                             {/*< !-- Slack link-- >*/}
                             <li className="nav-item">
                                 <span data-tooltip-text="Slack">
-                                    <a href="#" className="link">
+                                    <Link to="#" className="link">
                                         <i className="fas fa-comment-dots icon"></i>
-                                    </a>
+                                    </Link>
                                 </span>
                             </li >
 
@@ -106,7 +107,7 @@ export default class Navigator extends React.Component {
                         {/* Content */}
                         <div className="modal-content">
                             {/* Header */}
-                            <a href="/nest/profile" className="profile-setting-page">
+                            <Link to="/nest/profile" className="profile-setting-page">
                                 <div className="modal-header">
                                     <img src={`${window.sessionStorage.getItem("authUserPhoto")}`} alt="avatar" className="rounded-circle img-responsive" />
                                     <div className="text-center">
@@ -114,7 +115,7 @@ export default class Navigator extends React.Component {
                                         <h5 className="mt-1 mb-2">{window.sessionStorage.getItem("authUserEmail")}</h5>
                                     </div>
                                 </div>
-                            </a>
+                            </Link>
                             {/* Body */}
                             <div className="modal-body">
                                 <h4 className="mt-1 mb-2">배경화면 설정</h4>
@@ -129,11 +130,11 @@ export default class Navigator extends React.Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <a href="/nest/"  >
+                                <Link to="/nest/">
                                     <div className="text-center mt-4 user-logout">
                                         <button className="btn btn-cyan mt-1" onClick={this.sessionClear.bind(this)} >Logout <i className="fas fa-sign-in ml-1"></i></button>
                                     </div>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
