@@ -1,21 +1,24 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import "./CheckContents.scss";
 
 class CheckContents extends Component {
+
   // checkList 체크
-  doneCheckList() { 
+  doneCheckList(event) { 
+    event.preventDefault();
+    
     this.props.taskCallbacks.checklistStateUpdate(
       this.props.taskListNo,
       this.props.taskNo,
       this.props.checkList.checklistNo,
-      this.props.checkList.checklistState
+      this.props.checkList.checklistState,
     );
-
+    
   }
   
   render() {
     return (
-      <Fragment>
+      <>
         <div className="checklist">
             <input
                 type="checkbox"
@@ -29,9 +32,11 @@ class CheckContents extends Component {
                   : <div className="text">&nbsp;{this.props.checkList.checklistContents}</div>}
         </div>
         <hr></hr>
-      </Fragment>
+      </>
     );
   }
+
+
 }
 
 export default CheckContents;

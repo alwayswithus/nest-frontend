@@ -4,12 +4,14 @@ import Button from 'react-bootstrap/Button';
 import './projectset.scss';
 import ProjectHeader from './ProjectHeader';
 import ProjectStatus from './ProjectStatus';
-import ModalCalendar from '../../modalCalendar/ModalCalendar';
+import ProjectModalCalendar from '../../modalCalendar/ProjectModalCalendar';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ProjectMemberAdd from './ProjectMemberAdd';
+import ApiService from '../../ApiService';
+import moment, { now }  from 'moment';
 import RoleTransfer from './RoleTransfer';
 
 class ProjectSetting extends Component {
@@ -87,13 +89,13 @@ class ProjectSetting extends Component {
         this.props.callbackProjectSetting.changeRole(projectNo, userNo, roleNo);
     }
 
-    handleClickOpenCalendar() {
-        this.setState({
-            Exist: false,
-            Delete: false,
-            show: !this.state.show
-        })
-    }
+    // handleClickOpenCalendar() {
+    //     this.setState({
+    //         Exist: false,
+    //         Delete: false,
+    //         show: !this.state.show
+    //     })
+    // }
 
     handleClickOpenExit() {
         this.setState({
@@ -197,7 +199,12 @@ class ProjectSetting extends Component {
         })
     }
 
+    onClickConfirm(from, to, projectNo){
+        this.props.callbackProjectSetting.updateProjectDate(moment(from).format('YYYY-MM-DD'),moment(to).format('YYYY-MM-DD'), projectNo)
+    }
+
     render() {
+        // console.log(this.props.project)
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
@@ -238,10 +245,23 @@ class ProjectSetting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
-                                        <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button> :
-                                        <Button onClick={this.handleClickOpenCalendar.bind(this)} variant="" disabled><i className="fas fa-plus fa-1x"></i></Button>}
-                                    {this.state.show ? <ModalCalendar project={this.props.project} /> : ""}
+                                  <Button variant="" onClick={this.props.callbackProjectSetting.modalStateUpdate} disabled={this.props.userProject.roleNo && this.props.userProject.roleNo !== 1}>
+                                      <b className="taskDate">
+                                          {!this.props.project.projectStart && !this.props.project.projectEnd && <i className="fas fa-plus fa-1x"></i>}
+                                          {this.props.project.projectStart && !this.props.project.projectEnd && `${this.props.project.projectStart} ~`}
+                                          {this.props.project.projectStart && this.props.project.projectEnd && `${this.props.project.projectStart} ~ ${this.props.project.projectEnd}`}
+                                      </b>
+                                  </Button>
+                                  {this.props.modalState 
+                                      ?<div style={{position:"relative"}}>
+                                          <ProjectModalCalendar 
+                                              project={this.props.project} 
+                                              onClickConfirm={this.onClickConfirm.bind(this)}
+                                              from = {this.props.project.projectStart}
+                                              to = {this.props.project.projectEnd}
+                                              callbackProjectSetting={this.props.callbackProjectSetting}/> 
+                                          </div>
+                                      : null}
                                 </div>
 
                             </li>
@@ -252,9 +272,7 @@ class ProjectSetting extends Component {
                                     <h5><b>프로젝트멤버</b></h5>
                                 </div>
                                 <div style={{ float: 'left' }}>
-                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
-                                        <Button onClick={this.onUserListOpen.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button> :
-                                        <Button onClick={this.onUserListOpen.bind(this)} variant="" disabled><i className="fas fa-plus fa-1x"></i></Button>}
+                                        <Button onClick={this.onUserListOpen.bind(this)} variant="" disabled={this.props.userProject.roleNo && this.props.userProject.roleNo !== 1}><i className="fas fa-plus fa-1x"></i></Button>
                                     <div>
                                         {this.state.userListOpen ?
                                             <ProjectMemberAdd project={this.props.project} users={this.props.users}

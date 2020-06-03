@@ -777,7 +777,10 @@ class KanbanMain extends Component {
     taskNo,
     checklistNo,
     checklistState
-  ) {
+  ) 
+  {
+
+
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -788,8 +791,6 @@ class KanbanMain extends Component {
       taskIndex
     ].checkList.findIndex((checklist) => checklist.checklistNo === checklistNo);
 
-    // console.log("KanbanMain + " + checklistIndex + " : " + checklistState)
-    
     let newCheckList = {
       checklistNo: checklistNo,
       checklistContents: null,
@@ -797,7 +798,7 @@ class KanbanMain extends Component {
       taskNo: taskNo,
     };
 
-    console.log("check")
+    // console.log("check")
 
     fetch(`${API_URL}/api/tasksetting/checklist/update`, {
       method: "post",
@@ -805,6 +806,7 @@ class KanbanMain extends Component {
       body: JSON.stringify(newCheckList),
     })
     .then(response => response.json())
+    .then(json => {
     let newTaskList = update(this.state.taskList, {
       [taskListIndex]: {
         tasks: {
@@ -824,6 +826,7 @@ class KanbanMain extends Component {
     this.setState({
       taskList: newTaskList,
     });
+  })
   }
 
   //task checkList text 업데이트
@@ -1302,12 +1305,6 @@ callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
       },
     },
   });
-  // console.log(
-  //   newTaskList[taskListIndex].tasks[taskIndex].taskStart
-  // )
-  // console.log(
-  //   newTaskList[taskListIndex].tasks[taskIndex].taskEnd
-  // )
   this.setState({
     taskList:newTaskList
   })
@@ -1331,7 +1328,7 @@ modalStateFalse(){
   taskMemberState:false
  })
 }
-
+// 모달 상태 변경
 modalStateUpdate(){
   this.setState({
     modalState : !this.state.modalState
@@ -1444,7 +1441,7 @@ taskMemberState(){
                       addList: this.callbackAddTaskList.bind(this), // taskList 추가
                       deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
                       // checklistCheck: this.callbackCheckListCheck.bind(this), // checklist 체크
-                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind( this), // checklist check 업데이트
+                      checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
                       modalStateFalse:this.modalStateFalse.bind(this)
                     }}
                   />
