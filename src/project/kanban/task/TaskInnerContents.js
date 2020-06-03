@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CheckList from "./CheckList";
 import TagList from "./TagList";
 import Date from "./Date";
-import "./Task.scss";
+import "./TaskInnerContents.scss";
 
 class TaskInnerContents extends Component {
   // constructor() {
@@ -14,7 +14,9 @@ class TaskInnerContents extends Component {
 
   // task 삭제
   deleteTask() {
-    this.props.taskCallbacks.delete(this.props.taskListNo, this.props.task.taskNo);
+    if(window.confirm("삭제하시겠습니까?")){
+      this.props.taskCallbacks.delete(this.props.taskListNo, this.props.task.taskNo);
+    }    
   }
 
   // task 복사
@@ -46,16 +48,46 @@ class TaskInnerContents extends Component {
       borderLeft: `5px solid ${labelColor}`,
     };
 
+    const fullIcon = <div className="circle1"></div>
+    const emptyIcon = <div className="circle2"></div>
+    let checkListCount = 0;
+    let commentListCount = 0;
+    let fileListCount = 0;
+    let memberListCount = 0;
+
+    // console.log(taskItem.checkList)
+    taskItem.checkList.map( checkList => {
+      if(checkList.checklistState === "done"){
+        return checkListCount = checkListCount+1
+      }
+    })
+
+    taskItem.commentList.map( comment => {
+      commentListCount = commentListCount+1
+    })
+
+    taskItem.fileList.map( file => {
+      fileListCount = fileListCount+1
+    })
+
+    taskItem.memberList.map( member => {
+      memberListCount = memberListCount+1
+    })
+    // console.log(commentListCount)
+   
+
     return (
       <div className="panel panel-primary" style={labelStyle}>
         <div className="panel-body">
           <div className="task-item task-top">
             <div className="point">
-              <i className="fas fa-circle"></i>&nbsp;
-              <i className="fas fa-circle"></i>&nbsp;
-              <i className="fas fa-circle"></i>&nbsp;
-              <i className="far fa-circle"></i>&nbsp;
-              <i className="far fa-circle"></i>&nbsp;
+              {/* {console.log(taskItem.taskPoint === null)} */}
+              {taskItem.taskPoint === null ? <div className="nonePoint"><b>중요도 평가 없음</b></div> : null }  
+              {taskItem.taskPoint >= 1 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
+              {taskItem.taskPoint >= 2 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
+              {taskItem.taskPoint >= 3 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
+              {taskItem.taskPoint >= 4 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
+              {taskItem.taskPoint >= 5 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
             </div>
             <div className="setting">
               <div className="btn-group">
@@ -131,12 +163,12 @@ class TaskInnerContents extends Component {
           </div>
           <div className="task-item task-bottom">
             <div className="count">
-              <i className="fas fa-tasks"> 0/3</i>
-              <i className="fas fa-comment"> 3</i>
-              <i className="fas fa-paperclip"> 2</i>
+              <i className="fas fa-tasks"> {checkListCount}/{taskItem.checkList.length}</i>
+              <i className="fas fa-comment"> {commentListCount}</i>
+              <i className="fas fa-paperclip"> {fileListCount}</i>
             </div>
             <div className="userCocunt">
-              <i className="fas fa-user"> 3</i>
+              <i className="fas fa-user"> {memberListCount}</i>
             </div>
           </div>
         </div>

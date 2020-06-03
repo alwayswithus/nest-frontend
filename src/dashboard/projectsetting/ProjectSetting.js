@@ -4,13 +4,15 @@ import Button from 'react-bootstrap/Button';
 import './projectset.scss';
 import ProjectHeader from './ProjectHeader';
 import ProjectStatus from './ProjectStatus';
-import ModalCalendar from '../../modalCalendar/ModalCalendar';
+import ProjectModalCalendar from '../../modalCalendar/ProjectModalCalendar';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ProjectMemberAdd from './ProjectMemberAdd';
 import ApiService from '../../ApiService';
+import moment, { now }  from 'moment';
+import RoleTransfer from './RoleTransfer';
 
 class ProjectSetting extends Component {
     constructor() {
@@ -18,6 +20,8 @@ class ProjectSetting extends Component {
         this.state = {
             Exist: false,
             Delete: false,
+            isExistRoleOne: false,
+            roleTransferCloseButton: false,
 
             show: false,
             userListOpen: false,
@@ -57,8 +61,8 @@ class ProjectSetting extends Component {
     }
 
     // CallBack Invite Member Function
-    callbackInviteMember(memberEmail, memberName) {
-        this.props.callbackProjectSetting.inviteMember(this.props.project.projectNo, memberEmail, memberName);
+    callbackInviteMember(projectNo, memberEmail, memberName) {
+        this.props.callbackProjectSetting.inviteMember(projectNo, memberEmail, memberName);
         this.setState({
             inviteMemberEmail: "",
             inviteMemberName: ""
@@ -73,18 +77,25 @@ class ProjectSetting extends Component {
         })
     }
 
+    // CallBack RoleTransfer Close Button Function
+    callbackRoleTransferClose() {
+        this.setState({
+            roleTransferCloseButton: true
+        })
+    }
+
     // CallBack Member Role Change Function
     callbackRoleChange(projectNo, userNo, roleNo) {
         this.props.callbackProjectSetting.changeRole(projectNo, userNo, roleNo);
     }
 
-    handleClickOpenCalendar() {
-        this.setState({
-            Exist: false,
-            Delete: false,
-            show: !this.state.show
-        })
-    }
+    // handleClickOpenCalendar() {
+    //     this.setState({
+    //         Exist: false,
+    //         Delete: false,
+    //         show: !this.state.show
+    //     })
+    // }
 
     handleClickOpenExit() {
         this.setState({
@@ -99,11 +110,30 @@ class ProjectSetting extends Component {
             Delete: true
         })
     }
-    handleClose() {
+
+    handleStay() {
         this.setState({
             Exist: false,
             Delete: false
         })
+    }
+
+    // Project Esc Function
+    handleClose() {
+        const bool = this.props.project.members.some(member => member.roleNo === 1)
+        if (bool) {
+            this.setState({
+                isExistRoleOne: false,
+                Exist: false,
+                Delete: false
+            })
+        }
+        else {
+            this.setState({
+                isExistRoleOne: true,
+                roleTransferCloseButton: false
+            })
+        }
     }
 
     // Project Desc Enter Function 
@@ -169,7 +199,12 @@ class ProjectSetting extends Component {
         })
     }
 
+    onClickConfirm(from, to, projectNo){
+        this.props.callbackProjectSetting.updateProjectDate(moment(from).format('YYYY-MM-DD'),moment(to).format('YYYY-MM-DD'), projectNo)
+    }
+
     render() {
+        // console.log(this.props.project)
         return (
             <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
                 {/* 프로젝트 헤더 */}
@@ -182,8 +217,8 @@ class ProjectSetting extends Component {
                         <hr />
                         <div className="project-description-header">
                             <div className="project-introduce"><b>설명</b></div>
-                            {this.props.userProject.roleNo === 1 ? 
-                            <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i> : ""}
+                            {this.props.userProject.roleNo === 1 ?
+                                <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i> : ""}
                         </div>
                         {this.state.projectDescCheck ?
                             <div className="project-description-contents">
@@ -210,10 +245,23 @@ class ProjectSetting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ? 
-                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button> :
-                                    <Button onClick={this.handleClickOpenCalendar.bind(this)} variant="" disabled><i className="fas fa-plus fa-1x"></i></Button>}
-                                    {this.state.show ? <ModalCalendar project={this.props.project} /> : ""}
+                                  <Button variant="" onClick={this.props.callbackProjectSetting.modalStateUpdate} disabled={this.props.userProject.roleNo && this.props.userProject.roleNo !== 1}>
+                                      <b className="taskDate">
+                                          {!this.props.project.projectStart && !this.props.project.projectEnd && <i className="fas fa-plus fa-1x"></i>}
+                                          {this.props.project.projectStart && !this.props.project.projectEnd && `${this.props.project.projectStart} ~`}
+                                          {this.props.project.projectStart && this.props.project.projectEnd && `${this.props.project.projectStart} ~ ${this.props.project.projectEnd}`}
+                                      </b>
+                                  </Button>
+                                  {this.props.modalState 
+                                      ?<div style={{position:"relative"}}>
+                                          <ProjectModalCalendar 
+                                              project={this.props.project} 
+                                              onClickConfirm={this.onClickConfirm.bind(this)}
+                                              from = {this.props.project.projectStart}
+                                              to = {this.props.project.projectEnd}
+                                              callbackProjectSetting={this.props.callbackProjectSetting}/> 
+                                          </div>
+                                      : null}
                                 </div>
 
                             </li>
@@ -224,9 +272,7 @@ class ProjectSetting extends Component {
                                     <h5><b>프로젝트멤버</b></h5>
                                 </div>
                                 <div style={{ float: 'left' }}>
-                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
-                                        <Button onClick={this.onUserListOpen.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button> :
-                                        <Button onClick={this.onUserListOpen.bind(this)} variant="" disabled><i className="fas fa-plus fa-1x"></i></Button>}
+                                        <Button onClick={this.onUserListOpen.bind(this)} variant="" disabled={this.props.userProject.roleNo && this.props.userProject.roleNo !== 1}><i className="fas fa-plus fa-1x"></i></Button>
                                     <div>
                                         {this.state.userListOpen ?
                                             <ProjectMemberAdd project={this.props.project} users={this.props.users}
@@ -263,11 +309,11 @@ class ProjectSetting extends Component {
                                                             <hr />
                                                             {this.state.isMemberEmailValid ? <input type="button" id="add-member-invite"
                                                                 className="btn btn-outline-primary btn-rounded"
-                                                                onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                                                onClick={this.callbackInviteMember.bind(this, this.props.project.projectNo, this.state.inviteMemberEmail, this.state.inviteMemberName)}
                                                                 value="멤버 초대하기" /> :
                                                                 <input type="button" id="add-member-invite"
                                                                     className="btn btn-outline-primary btn-rounded"
-                                                                    onClick={this.callbackInviteMember.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                                                    onClick={this.callbackInviteMember.bind(this, this.props.project.projectNo, this.state.inviteMemberEmail, this.state.inviteMemberName)}
                                                                     value="멤버 초대하기" disabled />}
                                                         </div>
                                                     </div>
@@ -364,7 +410,7 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 나가기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">
                                     <button onClick={this.handleClickOpenExit.bind(this)} >프로젝트 나가기</button>
-                                    <Dialog onClose={this.handleClose.bind(this)} open={this.state.Exist}>
+                                    <Dialog open={this.state.Exist}>
                                         <DialogTitle style={{ paddingBottom: "0px" }} onClose={this.handleClose.bind(this)}>
                                             <h2><b>이 프로젝트 나가기</b></h2>
                                         </DialogTitle>
@@ -372,10 +418,15 @@ class ProjectSetting extends Component {
                                             정말 이 프로젝트를 나가시겠습니까?
                                         </DialogContent>
                                         <DialogActions style={{ display: "grid" }}>
-                                            <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: 'black', fontWeight: 'bold', marginBottom: "7px" }} onClick={this.handleClose.bind(this)}>아니오, 이 프로젝트에 머뭅니다.</Button>
+                                            <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: 'black', fontWeight: 'bold', marginBottom: "7px" }} onClick={this.handleStay.bind(this)}>아니오, 이 프로젝트에 머뭅니다.</Button>
                                             <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white', fontWeight: 'bold' }} onClick={this.handleClose.bind(this)}>네, 이 프로젝트를 나갑니다.</Button>
+                                            {this.state.isExistRoleOne ? 
+                                            <RoleTransfer roleTransferCloseButton={this.state.roleTransferCloseButton}
+                                            project={this.props.project} 
+                                            roleTransferSetting={{close: this.callbackRoleTransferClose.bind(this)}}/> : 
+                                            ""}  
                                         </DialogActions>
-                                    </Dialog>
+                                    </Dialog> 
                                 </div>
                             </li>
 

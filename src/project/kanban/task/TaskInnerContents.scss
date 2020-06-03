@@ -1,0 +1,23 @@
+.point {
+  display: flex;
+  .fa-circle {
+    color: #f6b6b4;
+  }
+  .circle1{
+    background-color: #f6b6b4;
+    width:10px;
+    height:10px;
+    border-radius: 50%;
+    margin-right:2px;
+  }
+  .circle2{
+    border: 1px solid #f6b6b4;
+    width:10px;
+    height:10px;
+    border-radius: 50%;
+    margin-right:2px;
+  }
+  .nonePoint{
+    color: #bdbdbd;
+  }
+}

@@ -54,7 +54,9 @@ export default class Dashboard extends React.Component {
 
       projectWriter: "",                                             // project writer
       projectKeyword: "",                                            // project search
-      memberKeyword: ""                                              // member search
+      memberKeyword: "" ,                                             // member search
+
+      modalState:false,
     }
   }
 
@@ -98,7 +100,8 @@ export default class Dashboard extends React.Component {
       userNo: userNo,
       userName: userName,
       userPhoto: userPhoto,
-      projectNo: projectNo
+      projectNo: projectNo,
+      roleNo: 3
     }
 
     let newProject;
@@ -149,7 +152,8 @@ export default class Dashboard extends React.Component {
     let member = {
       userNo: userNo,
       userName: userName,
-      userPhoto: userPhoto
+      userPhoto: userPhoto,
+      roleNo: 3
     }
 
     let members;
@@ -301,7 +305,8 @@ export default class Dashboard extends React.Component {
       userName: memberName !== "" ? memberName : memberEmail,
       userEmail: memberEmail,
       userPhoto: "assets/images/arrowloding.jpg",
-      projectNo: projectNo
+      projectNo: projectNo,
+      roleNo: 3
     }
 
     const newAlert = {
@@ -310,7 +315,7 @@ export default class Dashboard extends React.Component {
       message: this.state.newMessage
     };
 
-    fetch(`${API_URL}/api/settinguser/invite/`, {
+    fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(member)
@@ -407,6 +412,8 @@ export default class Dashboard extends React.Component {
   // Project Setting button Click Function
   onProjectSetting(projectNo) {
 
+    this.modalStateFalse();
+
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
    
     let userProject = {
@@ -452,6 +459,7 @@ export default class Dashboard extends React.Component {
       projectRegDate: regDate,
       projectWriter: projectWriter,
       projectWriterName: projectWriterName,
+      roleNo: 1,
       members: members
     };
 
@@ -511,7 +519,8 @@ export default class Dashboard extends React.Component {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
       userEmail: memberEmail,
-      userPhoto: "assets/images/arrowloding.jpg"
+      userPhoto: "assets/images/arrowloding.jpg",
+      roleNo: 3
     }
 
     const newAlert = {
@@ -646,6 +655,59 @@ export default class Dashboard extends React.Component {
     }
   }
 
+  // 설정 화면 중 다른 프로젝트 클릭 시
+  modalStateFalse(){
+    this.setState({
+     modalState : false,
+    })
+   }
+
+  // 모달 상태 변경
+  modalStateUpdate(){
+    this.setState({
+      modalState : !this.state.modalState
+     })
+  }
+
+  callbackProjectDateUpdate(from ,to, projectNo){
+    if(from === 'Invalid date'){
+      from = undefined;
+    }
+    if(to === 'Invalid date'){
+      to = undefined;
+    }
+    
+
+    const projectIndex = this.state.projects.findIndex(project =>
+      project.projectNo === projectNo)
+
+      // console.log(this.state.projects)
+      console.log(from , to, projectIndex)
+
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectStart: {
+            $set: from
+          },
+          projectEnd: {
+            $set: to
+          }
+        }
+      })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+  
+   fetch(`${API_URL}/api/projectsetting/calendar`, {
+      method:'post',
+      headers:API_HEADERS,
+      body:JSON.stringify(newProject[projectIndex])
+    })
+  
+  }
+
   render() {
     return (
       <div className="Dashboard">
@@ -668,6 +730,7 @@ export default class Dashboard extends React.Component {
           {/* Main Area */}
           <div id="projectSet" style={{ display: 'none' }}>
             <ProjectSetting
+              modalState={this.state.modalState}
               users={this.state.users}
               project={this.state.project}
               userProject={this.state.userProject}
@@ -680,6 +743,8 @@ export default class Dashboard extends React.Component {
                 changeDesc: this.callbackProjectDescChange.bind(this),
                 inviteMember: this.callbackInviteMember.bind(this),
                 changeRole: this.callbackRoleChange.bind(this),
+                modalStateUpdate:this.modalStateUpdate.bind(this),
+                updateProjectDate:this.callbackProjectDateUpdate.bind(this), // 업무 날짜 수정
               }} />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -706,6 +771,7 @@ export default class Dashboard extends React.Component {
                       <div className="panel-body">
                         <Link to="#">
                           <div className="btn-group">
+                            {project.roleNo === 1 ? 
                             <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
                               data-toggle="dropdown"
                               style={project.projectState === "상태없음" ?
@@ -715,7 +781,17 @@ export default class Dashboard extends React.Component {
                                       { backgroundColor: "#337AB7" } : ""}>
                               &nbsp;&nbsp;{project.projectState}
                               <span className="caret"></span>
-                            </button>
+                            </button> :
+                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                              data-toggle="dropdown"
+                              style={project.projectState === "상태없음" ?
+                                { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
+                                  { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                    { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                      { backgroundColor: "#337AB7" } : ""} disabled>
+                              &nbsp;&nbsp;{project.projectState}
+                              <span className="caret"></span>
+                            </button>}
                             <div className="dropdown-menu" role="menu">
                               <div className="dropdown-list">
                                 <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
