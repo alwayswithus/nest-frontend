@@ -71,7 +71,7 @@ class Task extends Component {
         <Draggable
           draggableId={taskItem.taskNo}
           index={this.props.index}
-          isDragDisabled={this.props.complete}
+          isDragDisabled={this.props.complete || this.props.authUserRole !== 1}
         >
           {(provided, snapshot) => (
             <Link
@@ -99,6 +99,7 @@ class Task extends Component {
 
                 {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
                 <TaskInnerContents
+                  authUserRole = {this.props.authUserRole}
                   key={taskItem.taskNo}
                   index={this.props.index}
                   task={taskItem}

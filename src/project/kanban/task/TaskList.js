@@ -53,7 +53,7 @@ class TaskList extends Component {
       method: "post",
       headers: API_HEADERS,
       body: JSON.stringify(newTaskList),
-    })
+    });
 
     this.setState({
       taskList: newTaskList,
@@ -133,6 +133,7 @@ class TaskList extends Component {
       <Draggable
         draggableId={this.props.taskList.taskListNo}
         index={this.props.index}
+        isDragDisabled={this.props.authUserRole !== 1}
       >
         {(provided) => (
           <div
@@ -163,10 +164,14 @@ class TaskList extends Component {
                         {this.state.taskInsertState ? (
                           ""
                         ) : (
-                          <i
-                            className="far fa-edit Icon"
-                            onClick={this.editNameInputState.bind(this)}
-                          />
+                          <>
+                            {this.props.authUserRole === 1 ? (
+                              <i
+                                className="far fa-edit Icon"
+                                onClick={this.editNameInputState.bind(this)}
+                              />
+                            ) : null}
+                          </>
                         )}
                       </div>
                     )}
@@ -187,18 +192,22 @@ class TaskList extends Component {
                         ""
                       ) : (
                         <>
-                          <div className="head-insertBtn">
-                            <i
-                              className="fas fa-plus Icon"
-                              onClick={this.showTaskInsertArea.bind(this)}
-                            ></i>
-                          </div>
-                          <div className="head-deleteBtn">
-                            <i
-                              className="far fa-trash-alt Icon"
-                              onClick={this.deleteTaskList.bind(this)}
-                            ></i>
-                          </div>
+                          {this.props.authUserRole === 1 ? (
+                            <>
+                              <div className="head-insertBtn">
+                                <i
+                                  className="fas fa-plus Icon"
+                                  onClick={this.showTaskInsertArea.bind(this)}
+                                ></i>
+                              </div>
+                              <div className="head-deleteBtn">
+                                <i
+                                  className="far fa-trash-alt Icon"
+                                  onClick={this.deleteTaskList.bind(this)}
+                                ></i>
+                              </div>
+                            </>
+                          ) : null}
                         </>
                       )}
                     </>
@@ -243,7 +252,7 @@ class TaskList extends Component {
               <Droppable
                 droppableId={this.props.taskList.taskListNo}
                 type="task"
-              > 
+              >
                 {(provided, snapshot) => (
                   <div
                     className="tasks"
@@ -260,9 +269,10 @@ class TaskList extends Component {
                           ) !== -1
                       )
                       .map((task, index) =>
-                      task.taskState === "done" ? null :  (
+                        task.taskState === "done" ? null : (
                           <Task
-                            projectNo = {this.props.projectNo}
+                            authUserRole={this.props.authUserRole}
+                            projectNo={this.props.projectNo}
                             key={task.taskNo}
                             taskListNo={this.props.taskList.taskListNo}
                             task={task}

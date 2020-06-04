@@ -46,7 +46,7 @@ export default class File extends React.Component {
         return (
             <div className="File" style={{ backgroundImage: `url(${this.state.url})` }}>
                 <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
-                <TopBar projectNo={this.props.match.params.projectNo}/>
+                <TopBar projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname}/>
                 <div className="file-resource-table">
                     <Table>
                         <thead>

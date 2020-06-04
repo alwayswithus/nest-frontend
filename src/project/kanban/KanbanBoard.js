@@ -95,6 +95,7 @@ class KanbanBoard extends Component {
                   {allTaskList && allTaskList.map((taskList, index) => {
                     return ( 
                       <TaskList
+                        authUserRole={this.props.authUserRole}
                         searchKeyword={this.state.searchKeyword}
                         key={taskList.taskListNo}
                         listNo={taskList.taskListNo}
@@ -142,13 +143,14 @@ class KanbanBoard extends Component {
                 </>
               ) : (
                 <>
-                  <button
+                {this.props.authUserRole === 1 ? <button
                     type="button"
                     className="btn btn-default addTaskListBtn"
                     onClick={this.taskListStateBtn.bind(this)}
                   >
                     + 업무 목록 추가
-                  </button>
+                  </button> : null}
+                  
                 </>
               )}
             </div>

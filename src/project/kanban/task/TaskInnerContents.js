@@ -89,6 +89,7 @@ class TaskInnerContents extends Component {
               {taskItem.taskPoint >= 4 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
               {taskItem.taskPoint >= 5 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
             </div>
+            {this.props.authUserRole ===1 ? 
             <div className="setting">
               <div className="btn-group">
                 <button
@@ -112,6 +113,7 @@ class TaskInnerContents extends Component {
                 </ul>
               </div>
             </div>
+            : null}
           </div>
           <div className="task-item task-title">
             <div className="title">
