@@ -35,131 +35,129 @@
     .taskDate {
       font-size: 15px;
     }
-  }
-}
-
-.checkList {
-  background-color: #f3f4f5;
-  border: none;
-  border-radius: 3px;
-  .inner-checklist {
-    padding-left: 10px;
-    display: flex;
-    background-color: white;
-    height: 50px;
-    border-radius: 3px;
-    .doneCheck {
-      width: auto;
-      transform: scale(1.5);
-      cursor: pointer;
-      margin: 3.5% 1% 0;
-    }
-  }
-  .insert {
-    background: white;
-    height: 38px;
-    button {
-      height: 25px;
+    .checkList {
+      background-color: #f3f4f5;
       border: none;
-      width: 30px;
-      outline: none;
-      background: none;
-      margin-right: 1%;
-      vertical-align: middle;
-    }
-    .checkListInput {
-      height: 20px;
-      width: 200px;
-      display: inline-block;
-      vertical-align: middle;
-      input {
-        border: none;
-        border-radius: 2px;
-        font-size: 1.5rem;
-        width: 250px;
-        vertical-align: sub;
-        &:focus {
+      border-radius: 3px;
+      .inner-checklist {
+        padding-left: 10px;
+        display: flex;
+        background-color: white;
+        height: 50px;
+        border-radius: 3px;
+        .doneCheck {
+          width: auto;
+          transform: scale(1.5);
+          cursor: pointer;
+          margin: 3.5% 1% 0;
+        }
+      }
+      .insert {
+        background: white;
+        height: 38px;
+        button {
+          height: 25px;
+          border: none;
+          width: 30px;
           outline: none;
+          background: none;
+          margin-right: 1%;
+          vertical-align: middle;
         }
-      }
-    }
-  }
-
-  Button {
-    border: none;
-    outline: none;
-    background: none;
-    margin-right: 1%;
-  }
-
-  Button:hover {
-    border: 0px;
-  }
-}
-
-ul {
-  vertical-align: middle;
-  li {
-    margin: 10% 0 5% 5%;
-    list-style: none;
-    div {
-      margin: 1%;
-      Button {
-        background: none;
-      }
-
-      h5 {
-        width: 120px;
-      }
-    }
-
-    .Member-list {
-      width: 300px;
-      .Member {
-        border: none;
-        border-radius: 5px;
-        background-color: #e6e8ec;
-        margin: 2%;
-        padding: 1%;
-        width: 80px;
-        display: inline-block;
-        cursor: pointer;
-        img {
-          width: 20px;
-        }
-        span {
-          padding-top: 1%;
-        }
-        .delete-member {
-          .fa-times {
-            color: #b9bbbc;
-            padding-left: 2px;
-            &:hover {
-              color: #979ca4;
-              padding-left: 2px;
+        .checkListInput {
+          height: 20px;
+          width: 200px;
+          display: inline-block;
+          vertical-align: middle;
+          input {
+            border: none;
+            border-radius: 2px;
+            font-size: 1.5rem;
+            width: 250px;
+            vertical-align: sub;
+            &:focus {
+              outline: none;
             }
           }
         }
       }
 
-      .Member:hover {
+      Button {
         border: none;
-        border-radius: 5px;
-        background-color: #d7d7d7;
-        margin: 2%;
-        padding: 1%;
-        width: 80px;
-        img {
-          width: 20px;
-        }
-        span {
-          padding-top: 1%;
-        }
+        outline: none;
+        background: none;
+        margin-right: 1%;
+      }
+
+      Button:hover {
+        border: 0px;
       }
     }
+  }
+  ul {
+    vertical-align: middle;
+    li {
+      margin: 10% 0 5% 5%;
+      list-style: none;
+      div {
+        margin: 1%;
+        Button {
+          background: none;
+        }
 
-    .TagList {
-      width: 300px;
+        h5 {
+          width: 120px;
+        }
+      }
+
+      .Member-list {
+        width: 300px;
+        .Member {
+          border: none;
+          border-radius: 5px;
+          background-color: #e6e8ec;
+          margin: 2%;
+          padding: 1%;
+          width: 80px;
+          display: inline-block;
+          cursor: pointer;
+          img {
+            width: 20px;
+          }
+          span {
+            padding-top: 1%;
+          }
+          .delete-member {
+            .fa-times {
+              color: #b9bbbc;
+              padding-left: 2px;
+              &:hover {
+                color: #979ca4;
+                padding-left: 2px;
+              }
+            }
+          }
+        }
+
+        .Member:hover {
+          border: none;
+          border-radius: 5px;
+          background-color: #d7d7d7;
+          margin: 2%;
+          padding: 1%;
+          width: 80px;
+          img {
+            width: 20px;
+          }
+          span {
+            padding-top: 1%;
+          }
+        }
+      }
+
+      .TagList {
+        width: 300px;
+      }
     }
   }
 }
