@@ -191,13 +191,21 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-calendar-week"></i></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>업무마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                    <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false}> 
-                                        <b className="taskDate">
-                                            {!taskItem.taskStart && !taskItem.taskEnd && <i className="fas fa-plus fa-1x"></i>}
-                                            {taskItem.taskStart && !taskItem.taskEnd && `${taskItem.taskStart} ~`}
-                                            {taskItem.taskStart && taskItem.taskEnd && `${taskItem.taskStart} ~ ${taskItem.taskEnd}`}
-                                        </b>  
-                                    </Button>
+                                    <div className="dateBtn">
+                                    
+                                        {!taskItem.taskStart && !taskItem.taskEnd && 
+                                        <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} > 
+                                        <i className="fas fa-plus fa-1x"></i>
+                                        </Button>}
+                                        {taskItem.taskStart && !taskItem.taskEnd &&
+                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                        <b className="taskDate">  {taskItem.taskStart} ~</b> 
+                                         </Button>}
+                                        {taskItem.taskStart && taskItem.taskEnd && 
+                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                        <b className="taskDate"> {taskItem.taskStart} ~ {taskItem.taskEnd}</b> 
+                                        </Button>}
+                                    </div>
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
 
                                     {this.props.modalState ? 
@@ -210,9 +218,6 @@ class Setting extends Component {
                                         taskCallbacks={this.props.taskCallbacks}/> 
                                         : null }
                                     </div>
-                                </div>
-                                <div className="Date" style={{ display: 'inline-block' }}>
-                                    {}
                                 </div>
                             </li>
                             {/* 배정된 멤버 */}

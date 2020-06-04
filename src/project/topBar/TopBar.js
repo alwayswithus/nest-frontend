@@ -15,12 +15,12 @@ class TopBar extends Component {
         <div className="topBar">
           <nav className="navbar navbar-default">
             <div className="container-fluid">
-              <div className="navbar-header col-sm-1">
+              <div className="navbar-header col-sm-3">
                 <Link to={`#`} className="navbar-brand">
-                  NEST
+                  <b>{this.props.projectTitle}</b>
                 </Link>
               </div>
-              <div className="col-sm-10 topCenterOut">
+              <div className="col-sm-6 topCenterOut">
                 <div className="topCenterIn">
                   <ul className="nav navbar-nav">
                     <li className={kanbanboard === true ? "active" : null}>
@@ -38,7 +38,7 @@ class TopBar extends Component {
                   </ul>
                 </div>
               </div>
-              <div className="col-sm-1">
+              <div className="col-sm-3">
                 <ul className="nav navbar-nav navbar-right">
                   <i className="fas fa-cog fa-2x fa-spin gearIcon"></i>
                 </ul>

@@ -245,13 +245,22 @@ class ProjectSetting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>마감일</b></h5></div>
                                 <div style={{ display: 'inline-block' }}>
-                                  <Button variant="" onClick={this.props.callbackProjectSetting.modalStateUpdate} disabled={this.props.userProject.roleNo && this.props.userProject.roleNo !== 1}>
-                                      <b className="taskDate">
-                                          {!this.props.project.projectStart && !this.props.project.projectEnd && <i className="fas fa-plus fa-1x"></i>}
-                                          {this.props.project.projectStart && !this.props.project.projectEnd && `${this.props.project.projectStart} ~`}
-                                          {this.props.project.projectStart && this.props.project.projectEnd && `${this.props.project.projectStart} ~ ${this.props.project.projectEnd}`}
-                                      </b>
-                                  </Button>
+
+                                <div className="dateBtn">
+                                    
+                                    {!this.props.project.projectStart && !this.props.project.projectEnd && 
+                                    <Button variant="" onClick={this.props.callbackProjectSetting.modalStateUpdate} disabled={this.props.userProject.roleNo !== 1 ? true: false} > 
+                                    <i className="fas fa-plus fa-1x"></i>
+                                    </Button>}
+                                    {this.props.project.projectStart && !this.props.project.projectEnd &&
+                                     <Button variant="" onClick={this.props.callbackProjectSetting.modalStateUpdate} disabled={this.props.userProject.roleNo !== 1 ? true: false} className="dateButtom"> 
+                                    <b className="taskDate">  {this.props.project.projectStart} ~</b> 
+                                     </Button>}
+                                    {this.props.project.projectStart && this.props.project.projectEnd && 
+                                     <Button variant="" onClick={this.props.callbackProjectSetting.modalStateUpdate} disabled={this.props.userProject.roleNo !== 1 ? true: false} className="dateButtom"> 
+                                    <b className="taskDate"> {this.props.project.projectStart} ~ {this.props.project.projectEnd}</b> 
+                                    </Button>}
+                                </div>
                                   {this.props.modalState 
                                       ?<div style={{position:"relative"}}>
                                           <ProjectModalCalendar 
