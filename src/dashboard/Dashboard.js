@@ -838,7 +838,13 @@ export default class Dashboard extends React.Component {
                       </div>
                       <div className="panel-footer">
                         <span className="update-task" style={{ width: "100%" }}><h6>{project.taskCount}개 중 {project.completedTask}개 업무 완료</h6></span>
-                        <span className="update-date" style={{ width: "100%" }}><h6>{project.projectStart} ~ {project.projectEnd}</h6></span><br></br>
+                        <span className="update-date" style={{ width: "100%" }}>
+                          <h6>
+                            {!project.projectStart && !project.projectEnd && "프로젝트 일정 미정"}
+                            {project.projectStart && !project.projectEnd && `${project.projectStart} ~ 마감일 미정`}
+                            {project.projectStart && project.projectEnd && `${project.projectStart} ~ ${project.projectEnd}`}
+                          </h6>
+                        </span><br></br>
                         <div className="progress">
                           {project.projectState === "완료됨" ?
                             <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="100"
