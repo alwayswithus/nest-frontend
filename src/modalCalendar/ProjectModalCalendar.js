@@ -69,20 +69,23 @@ export default class ModalCalendar extends React.Component {
               <hr />
             </div>
             <div className="calendar-body">
-              <p>
-                {!from && !to && "날짜 미정"}
-                {from && !to && `${from.toLocaleDateString()} ~`}
-                {from &&
-                  to &&
-                  `${from.toLocaleDateString()} ~ ${to.toLocaleDateString()}`}
-                <button
-                  type="button"
-                  onClick={this.onClickConfirm.bind(this)}
-                  className="confirm btn btn-info"
-                >
-                  적용
-                </button>
-              </p>
+            <b>
+                {from && `${from.toLocaleDateString()}`}
+                {!from && "시작일 미정"}&nbsp;~&nbsp;
+              </b>
+
+              <b>
+                {!to && "마감일 미정"}
+                {to && `${to.toLocaleDateString()}`}
+              </b>
+              
+              <button
+                type="button"
+                onClick={this.onClickConfirm.bind(this)}
+                className="confirm btn btn-info"
+              >
+                적용
+              </button>
               <DayPicker
                 className="Selectable"
                 numberOfMonths={this.props.numberOfMonths}

@@ -11,7 +11,7 @@ const API_HEADERS = {
   "Content-Type": "application/json",
 };
 // 간트차트 스타일 설정
-const ganttStyleConfig = {
+const ganttStyleConfigs = {
     header: {
         top: {
             style: {
@@ -54,12 +54,13 @@ const ganttStyleConfig = {
         verticalSeparator: {
             style: {
                 backgroundColor: "#8798a8"
-            },
-            grip: {
-                style: {
-                   // backgroundColor: "red"
-                }
             }
+            // ,
+            // grip: {
+            //     style: {
+            //        // backgroundColor: "red"
+            //     }
+            // }
         }
     },
     dataViewPort: {
@@ -96,7 +97,8 @@ class Gantt extends React.Component {
             url: sessionStorage.getItem("authUserBg"),
             data: [],
             links: [], 
-            selectedItem: null 
+            selectedItem: null ,
+            ganttStyleConfig: ganttStyleConfigs
         };
     }
 
@@ -196,7 +198,7 @@ class Gantt extends React.Component {
                                         onCreateLink={this.onCreateLink}
                                         onSelectItem={this.onSelectItem}
                                         selectedItem={this.state.selectedItem}
-                                        config={ganttStyleConfig}
+                                        config={this.state.ganttStyleConfig}
                                         mode={"month"}
                                     />
                                 </div>

@@ -165,6 +165,18 @@
                         margin-bottom: 5px;
                     }
                 }
+                .dateBtn{
+                    .dateButtom {
+                        // border: 2px solid lightgray;
+                        background-color: #e6e8ec;
+                        &:hover{
+                            background-color: #d7d7d7
+                        }
+                        .taskDate {
+                        font-size: 15px;
+                        }
+                    }
+                }
             }
         }
     }

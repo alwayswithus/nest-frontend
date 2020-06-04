@@ -11,7 +11,11 @@ export default class TransferText extends React.Component {
         super(...arguments)
 
         this.state = {
-            projectMemberList: false
+            imageChange: false,
+            projectMemberList: false,
+            userNo: null,
+            userName: "",
+            userPhoto: ""
         }
     }
 
@@ -20,6 +24,18 @@ export default class TransferText extends React.Component {
         this.setState({
             projectMemberList: false
         })
+    }
+
+    // CallBack Image Change Function
+    callbackImageChange(userNo, userName, userPhoto) {
+        this.setState({
+            imageChange: true,
+            userNo: userNo,
+            userName: userName,
+            userPhoto: userPhoto
+        })
+
+        this.props.TransferTextSetting.getData(userNo, userName, userPhoto)
     }
 
     // Project Member List Open and Close
@@ -36,15 +52,21 @@ export default class TransferText extends React.Component {
                     <img className="img-authUser" src={window.sessionStorage.getItem("authUserPhoto")}
                         data-tip={window.sessionStorage.getItem("authUserName")}
                         data-place="bottom" />
+                    <ReactTooltip />
                     <i className="fas fa-arrow-right"></i>
-                    <img className="img-roleUser" src='/nest/assets/images/no-profile.jpg' onClick={this.onProjectMember.bind(this)} />
+                    {this.state.imageChange ? 
+                    <img className="img-roleUser" src={this.state.userPhoto} onClick={this.onProjectMember.bind(this)} data-tip={this.state.userName} data-place="bottom" /> :
+                    <img className="img-roleUser" src='/nest/assets/images/no-profile.jpg' data-tip={this.state.userName} data-place="bottom" onClick={this.onProjectMember.bind(this)} />}
+                    <ReactTooltip />
                     {this.state.projectMemberList ?
                         <ProjectMemberList
-                            ProjectMemberListSetting={{close: this.callbackProjectMemberList.bind(this)}}
+                            ProjectMemberListSetting={{
+                                close: this.callbackProjectMemberList.bind(this),
+                                imageChange: this.callbackImageChange.bind(this)
+                            }}
                             project={this.props.project} /> :
                         ""}
                 </div>
-                <ReactTooltip />
             </div>
         )
     }

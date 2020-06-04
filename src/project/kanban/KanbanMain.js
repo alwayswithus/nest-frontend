@@ -23,7 +23,8 @@ class KanbanMain extends Component {
     this.state = {
       taskList: null,
       authUserRole:null,
-      url: window.sessionStorage.getItem("authUserBg"),
+      projectTitle:null,
+      // url: window.sessionStorage.getItem("authUserBg"),
       taskTagNo:[], //task tag의 no만 모아둔 배열
       modalState:false,
       taskMemberState: false, //task memer modal 상태변수
@@ -250,23 +251,7 @@ class KanbanMain extends Component {
   };
 
   // 배경화면 변경
-  callbackChangeBackground(url) {
-    let authUser = {
-      userNo: window.sessionStorage.getItem("authUserNo"),
-      userBg: url,
-    };
-
-    fetch(`${API_URL}/api/user/backgroundChange`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(authUser),
-    });
-
-    window.sessionStorage.setItem("authUserBg", url);
-    this.setState({
-      url: url,
-    });
-  }
+ 
 
   // task 추가
   callbackAddTask(taskListNo, taskContents, projectNo) {
@@ -1447,22 +1432,24 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
           className="scroll-container"
           hideScrollbars={false}
           ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
-          style={{ backgroundImage: `url(${this.state.url})` }}
+          // style={{ backgroundImage: `url(${this.state.url})` }}
         >
           <div className="container-fluid kanbanMain">
             <div className="row content ">
               {/* 네비게이션바 */}
               <div className="navibar">
                 <Navigator 
-                  callbackChangeBackground={{
-                    change: this.callbackChangeBackground.bind(this),
-                  }}
+                callbackChangeBackground = {this.props.callbackChangeBackground}
+                  // callbackChangeBackground={{
+                  //   change: this.callbackChangeBackground,
+                  // }}
                 />
               </div>
               {/*상단바*/}
               <TopBar 
                 projectNo={this.props.match.params.projectNo}
-                activePath={this.props.location.pathname} />
+                activePath={this.props.location.pathname}
+                projectTitle={this.state.projectTitle} />
                 
               {/* 메인 영역 */}
               <div className="mainArea">
@@ -1500,7 +1487,8 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
       (response) => {
         this.setState({
           taskList: response.data.data.allTaskList,
-          authUserRole: response.data.data.authUserRole
+          authUserRole: response.data.data.authUserRole,
+          projectTitle: response.data.data.projectTitle
         });
       }
     );
