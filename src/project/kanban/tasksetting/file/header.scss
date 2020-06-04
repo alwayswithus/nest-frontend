@@ -17,11 +17,17 @@
             border:2px solid black;
             width: 524px;
             border-radius: 3px;
+            font-size: 1.75rem;
+            padding: 1%;
+            font-weight: bold;
         }
         h2{
             margin:1%;
             padding:2%;
             cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             .fa-edit{
                 display: none;
             }
@@ -30,6 +36,7 @@
                 cursor: pointer;
                 border-radius: 4px;
                 width: 550px;
+                padding: 4px;
                 .fa-edit{
                     display: block;
                     float: right;

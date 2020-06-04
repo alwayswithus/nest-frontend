@@ -14,7 +14,7 @@ class Header extends Component {
     onClickTaskContents(){
         this.setState({
             input:!this.state.input,
-            keyword: this.props.taskContents
+            keyword: this.props.taskItem.taskContents
         })
     }
 
@@ -23,8 +23,14 @@ class Header extends Component {
             this.setState({
                 input: !this.state.input
             })
-            this.props.taskCallbacks.updateTaskContents()
+            this.props.taskCallbacks.updateTaskContents(this.state.keyword, this.props.params.taskListNo, this.props.params.taskNo)
         }
+    }
+
+    onChangeInput(event){
+        this.setState({
+            keyword:event.target.value
+        })
     }
     render(){
     return (
@@ -39,10 +45,12 @@ class Header extends Component {
                     <h2>
                         <input
                             value={this.state.keyword} 
-                            onKeyPress={this.onKeyPressEnter.bind(this)} className="Header-input"></input>
+                            onKeyPress={this.onKeyPressEnter.bind(this)}
+                            onChange={this.onChangeInput.bind(this)}
+                            className="Header-input"></input>
                     </h2> : 
                     <h2 onClick={this.onClickTaskContents.bind(this)}>
-                        <b>{this.props.taskContents}</b>
+                        <b>{this.props.taskItem.taskContents}</b>
                         <i className="far fa-edit Icon"></i>
                     </h2>
                 } 

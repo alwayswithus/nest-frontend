@@ -176,7 +176,7 @@ class Setting extends Component {
                             name='김우경' 
                             date='2020.05.06'
                             taskCallbacks={this.props.taskCallbacks}
-                            taskContents = {taskItem.taskContents}
+                            taskItem = {taskItem}
                             projectNo={this.props.projectNo}
                             params={this.props.match.params}/>
                     </div>
