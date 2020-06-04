@@ -13,6 +13,9 @@ const SignUp = () => {
   };
 
   const SignUp = e => {
+
+    console.log(email);
+
     e.preventDefault();
   };
 
