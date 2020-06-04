@@ -1,10 +1,21 @@
-.TransferText{
+.TransferText {
     
-    .transfer{
+    .transfer {
+
         img {
             width:40px;
             border-radius: 50px;
-            margin:2%
+            margin:2%;
         }
+        .img-authUser {
+            margin-right: 20px;
+        }
+
+        .img-roleUser {
+            cursor: pointer;
+
+            width: 55px;
+        }
+        
     }
 }
