@@ -53,7 +53,19 @@ class CommentInput extends Component {
                     </div>
                 </form>
                 <div className="Bottom-bar">
-                    <button onClick={this.onClickSubmit.bind(this)} className="pull-right" type="submit">보내기</button>
+                    {this.props.authUserRole === 3 ? 
+                        <button 
+                            style={{backgroundColor:'#CCCCCC'}}
+                            className="pull-right" 
+                            type="submit"
+                            disabled='true'>보내기</button> :
+
+                        <button 
+                            onClick={this.onClickSubmit.bind(this)} 
+                            className="pull-right" 
+                            type="submit">보내기</button>
+
+                    }
                     <ul className="list-unstyled list-inline media-detail pull-left">
                         <li><a href="#"><i className="fas fa-paperclip"></i></a></li>
                         <li style={{ verticalAlign: 'text-bottom' }}><a href="#"><b>@</b></a></li>

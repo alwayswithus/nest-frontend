@@ -50,7 +50,7 @@ class Header extends Component {
                             className="Header-input"></input>
                     </h2> : 
                     <h2 onClick={this.onClickTaskContents.bind(this)}>
-                        <b>{this.props.taskItem.taskContents}</b>
+                        <div className="header-list-div"><b>{this.props.taskItem.taskContents}</b></div>
                         <i className="far fa-edit Icon"></i>
                     </h2>
                 } 

@@ -17,6 +17,17 @@
         }
         .FileMenu{
             align-items: center;
+            .disabled-submit-button {
+                border: none;
+                padding: 5px 12px;
+                margin-top: 11px;
+                background: #CCCCCC;
+                color: #fff;
+                font-size: 1em;
+                transition: all .4s;
+                cursor: pointer;
+                border-radius: 3px;
+            }
             input[type="file"]::-webkit-file-upload-button {
                 border: none;
                 padding: 5px 12px;
@@ -27,10 +38,14 @@
                 transition: all .4s;
                 cursor: pointer;
                 border-radius: 3px;
-              }
+            }
 
             .input-group{
                 position: none;
+                .form-control {
+                    width: 513px;
+                    border-radius: 5px;
+                }
             }
             .btn .btn-info{
                 color: black;

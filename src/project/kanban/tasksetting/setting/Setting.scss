@@ -16,6 +16,13 @@
     box-shadow: -60px -50px 50px -90px #000000,
     60px 0px 50px -90px #000000;
     .taskSettingList{
+        .fa-lock{
+            margin-top: 7px;
+            margin-left: 11px;
+            transform: scale(1.3);
+            color: #777777;
+            cursor: pointer;
+        }
         .taskDate{
             font-size: 15px;
         }
