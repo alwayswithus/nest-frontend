@@ -25,7 +25,7 @@ export default class RoleTransfer extends React.Component {
                         전체 엑세스 권한을 줄 멤버 한 명을 선택해주시기 바랍니다.
                     </div>
                     <div className="content">
-                        <p><TransferText /></p>
+                        <p><TransferText project={this.props.project}/></p>
                     </div>
                     <div className="button-wrap">
                         <button> 프로젝트 나가기 </button>

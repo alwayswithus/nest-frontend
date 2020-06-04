@@ -1,7 +1,9 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
-import ProjectMemberAdd from './ProjectMemberAdd';
+import ProjectMemberList from './ProjectMemberList';
 import './transferText.scss';
+
 
 export default class TransferText extends React.Component {
 
@@ -9,25 +11,40 @@ export default class TransferText extends React.Component {
         super(...arguments)
 
         this.state = {
-            open: false
+            projectMemberList: false
         }
     }
 
-    onClickMemberList() {
+    // CallBack Project Member List Open and Close
+    callbackProjectMemberList() {
         this.setState({
-            open:!this.state.open
+            projectMemberList: false
+        })
+    }
+
+    // Project Member List Open and Close
+    onProjectMember() {
+        this.setState({
+            projectMemberList: !this.state.projectMemberList
         })
     }
 
     render() {
         return (
             <div className="TransferText">
-                <div className="transfer" onClick={this.onClickMemberList.bind(this)}>
-                    <img src='/nest/assets/images/unnamed.jpg'></img>
-                    <i class="fas fa-arrow-right"></i>
-                    <img src='/nest/assets/images/unnamed.jpg'></img>
-                    {this.state.open ? <ProjectMemberAdd /> : "" }
+                <div className="transfer">
+                    <img className="img-authUser" src={window.sessionStorage.getItem("authUserPhoto")}
+                        data-tip={window.sessionStorage.getItem("authUserName")}
+                        data-place="bottom" />
+                    <i className="fas fa-arrow-right"></i>
+                    <img className="img-roleUser" src='/nest/assets/images/no-profile.jpg' onClick={this.onProjectMember.bind(this)} />
+                    {this.state.projectMemberList ?
+                        <ProjectMemberList
+                            ProjectMemberListSetting={{close: this.callbackProjectMemberList.bind(this)}}
+                            project={this.props.project} /> :
+                        ""}
                 </div>
+                <ReactTooltip />
             </div>
         )
     }
