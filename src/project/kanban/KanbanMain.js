@@ -1398,13 +1398,15 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
             render={(match) => (
               <Comment
                 {...match}
+                authUserRole={this.state.authUserRole}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList} 
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
-                  deleteComment: this.callbackDeleteComment.bind(this) // 코멘트 삭제하기
+                  deleteComment: this.callbackDeleteComment.bind(this), // 코멘트 삭제하기
+                  updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
                 }}
               />)} 
           /> 
@@ -1414,11 +1416,13 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
             render={(match) => (
               <File
                 {...match}
+                authUserRole={this.state.authUserRole}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
                 taskCallbacks={{
                   addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
+                  updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
                 }}
               />
             )}

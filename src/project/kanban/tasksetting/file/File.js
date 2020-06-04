@@ -53,7 +53,11 @@ class File extends Component {
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
         return (
             <div className="SettingFile">
-                <Header taskContents={taskItem.taskContents} params={this.props.match.params} projectNo={this.props.projectNo} />
+                <Header 
+                    taskItem={taskItem} 
+                    taskCallbacks={this.props.taskCallbacks}
+                    params={this.props.match.params} 
+                    projectNo={this.props.projectNo} />
                 <div className="File">
                     <div className="FileMenu">
                         <form className="navbar-form navbar-left">
@@ -62,9 +66,13 @@ class File extends Component {
                                 <div className="input-group-btn"></div>
                             </div>
                         </form>
-                            <input  
+                            {this.props.authUserRole == 3 ?
+                                <button className="disabled-submit-button"> 파일첨부</button>
+                                :
+                                <input 
                                 onChange={this.onChangeFileUpload.bind(this)} 
                                 type='file' className="fileUpload" name="file" />
+                            }
                     </div>
                     <hr />
                     <table>

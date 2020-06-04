@@ -222,10 +222,14 @@ class Setting extends Component {
                             </li>
                             {/* 배정된 멤버 */}
                             <li className="taskSettingList">
-                                <div style={{ float: 'left', marginTop: '10px' }}><i className="fas fa-user-plus"></i></div>
+                                <div style={{ float: 'left', marginTop: '12px' }}><i className="fas fa-user-plus"></i></div>
                                 <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                                 <div style={{ float: 'left' }}>
-                                    <Button onClick={this.onClickTaskMember.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i></Button>
+                                    {this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
+                                        <Button 
+                                            onClick={this.onClickTaskMember.bind(this)} 
+                                            variant="" ><i className="fas fa-plus fa-1x"></i></Button>
+                                    }
                                     {this.props.taskMemberState ? <TaskMember
                                         closeProjectMembers = {this.state.closeProjectMembers} // 프로젝트 멤버 모달 상태변수
                                         onClickTaskMember = {this.onClickTaskMember.bind(this)} // 프로젝트 멤버 모달 상태 변경 해주는 함수
@@ -251,11 +255,13 @@ class Setting extends Component {
                             </li>
                             {/* 태그 */}
                             <li className="taskSettingList">
-                                <div style={{ float:'left'}}><i className="fas fa-tags"></i></div>
+                                <div style={{ float:'left', marginTop: '12px'}}><i className="fas fa-tags"></i></div>
                                 <div style={{ float:'left' }}><h5><b>태그</b></h5></div>
 
                                 <div style={{ float:'left' }} className="link">
-                                    <Button onClick ={this.onClickTag.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                {this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
+                                        <Button onClick ={this.onClickTag.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                    }
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
                                         {/* tag 검색창 */}
                                        {this.state.closeValue ? <TagModal
@@ -291,9 +297,10 @@ class Setting extends Component {
                             </li>
                             {/* 중요도 */}
                             <li className="taskSettingList">
-                                <div style={{ float:'left'}}><i className="fas fa-star"></i></div>
+                                <div style={{ float:'left', marginTop: '12px'}}><i className="fas fa-star"></i></div>
                                 <div style={{ float:'left'}}><h5><b>중요도</b></h5></div>
                                 <Important 
+                                    authUserRole={this.props.authUserRole}
                                     point={this.state.point}
                                     params={this.props.match.params}
                                     taskCallbacks = {this.props.taskCallbacks}
@@ -301,7 +308,7 @@ class Setting extends Component {
                                 />
                             </li>
                             {/* 색상라벨 */}
-                            <li>
+                            <li className="taskSettingList">
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-palette" /></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>색상라벨</b></h5></div>
                                 <div style={{ display: 'inline-block' }}> <ColorPicker style={{transForm: 'scale(0.5)'}}/></div>
@@ -311,30 +318,51 @@ class Setting extends Component {
                                 <div className="checkList">
                                     {taskItem.checkList && taskItem.checkList.map(checklist =>
                                         <div key={checklist.checklistNo} className="inner-checklist">
-                                                <input type="checkbox" className="doneCheck" checked={checklist.checklistState === "done"} onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState)} readOnly></input>
+                                                <input 
+                                                    disabled={this.props.authUserRole === 3 ? true : false}
+                                                    type="checkbox" 
+                                                    className="doneCheck" 
+                                                    checked={checklist.checklistState === "done"} 
+                                                    onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState)} 
+                                                    readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
+                                                                authUserRole: this.props.authUserRole,
                                                                 taskListNo : this.props.match.params.taskListNo, 
                                                                 taskNo : taskItem.taskNo}} 
                                                                 taskCallbacks={this.props.taskCallbacks} 
                                                                 checklist={checklist} 
                                                                 key={checklist.checklistNo}/>
-                                                        <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
+                                                        {this.props.authUserRole == 3 ? null : 
+                                                            <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
+                                                        }
+                                                        
                                                     </div>)}
                                     <div className = "insert">
                                         <button>
                                             <i style = {{marginLeft: '40%'}} className="fas fa-plus fa-2x"></i>
                                         </button>
                                         <div className = "checkListInput">
-                                            <input 
-                                                type="text"
-                                                onChange={this.onChecklistChange.bind(this)} 
-                                                style = {{marginLeft: '5%'}} 
-                                                value = {this.state.checklist} 
-                                                placeholder='체크리스트 아이템 추가하기'
-                                                onKeyPress={this.onKeypress.bind(this)} 
-                                                autoFocus/>
+                                            {this.props.authUserRole === 3 ? 
+                                                <input 
+                                                    readOnly
+                                                    type="text"
+                                                    onChange={this.onChecklistChange.bind(this)} 
+                                                    style = {{marginLeft: '5%', cursor:'default'}} 
+                                                    value = {this.state.checklist} 
+                                                    placeholder='체크리스트 아이템 추가하기'
+                                                    onKeyPress={this.onKeypress.bind(this)} 
+                                                    autoFocus/> : 
+                                                    
+                                                    <input 
+                                                        type="text"
+                                                        onChange={this.onChecklistChange.bind(this)} 
+                                                        style = {{marginLeft: '5%'}} 
+                                                        value = {this.state.checklist} 
+                                                        placeholder='체크리스트 아이템 추가하기'
+                                                        onKeyPress={this.onKeypress.bind(this)} 
+                                                        autoFocus/> }
                                         </div>
                                     </div>
                                 </div>
