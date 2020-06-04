@@ -1343,8 +1343,33 @@ callbackUpdateTaskPoint(point , taskListNo, taskNo){
   })
 }
 
-callbackUpdateTaskContents(){
-  console.log("!!!!")
+//업무 내용 수정하기
+callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
+  const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+  const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+  console.log(taskNo)
+  let newTaskList = update(this.state.taskList, {
+    [taskListIndex]:{
+      tasks:{
+        [taskIndex]:{
+          taskContents:{
+            $set:taskContents
+          }
+        }
+      }
+    }
+  })
+  this.setState({
+    taskList:newTaskList
+  })
+
+  fetch(`${API_URL}/api/tasksetting/task/${taskNo}`, {
+    method:'post',
+    headers:API_HEADERS,
+    body:taskContents
+  })
+  .then(response => response.json())
+
 }
   render() {
     return (
