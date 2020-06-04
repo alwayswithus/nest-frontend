@@ -1,3 +1,4 @@
+#RoleTransfer {
 .Modal-overlay{
     position: fixed;
     top: 50%;
@@ -47,7 +48,7 @@
     .button-wrap{
       margin: 0;
       margin-top: 8px;
-      button{
+      .button-able{
         width: 100%;
         padding: 12px 0;
         border-radius: 0 0 10px 10px;
@@ -63,5 +64,15 @@
           background-color: #7e49c8;
         }
       }
+
+      .button-disable {
+        color: black;
+
+        &:hover {
+          cursor: wait;
+          background-color: #ad7cef;
+        }
+      }
     }
   }
+}

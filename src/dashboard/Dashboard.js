@@ -54,9 +54,9 @@ export default class Dashboard extends React.Component {
 
       projectWriter: "",                                             // project writer
       projectKeyword: "",                                            // project search
-      memberKeyword: "" ,                                             // member search
+      memberKeyword: "",                                             // member search
 
-      modalState:false,
+      modalState: false,
     }
   }
 
@@ -366,8 +366,8 @@ export default class Dashboard extends React.Component {
         let newProject = update(this.state.projects, {
           [projectIndex]: {
             members: {
-              [memberIndex] : {
-                roleNo: { $set: json.data.roleNo}
+              [memberIndex]: {
+                roleNo: { $set: json.data.roleNo }
               }
             }
           }
@@ -378,6 +378,99 @@ export default class Dashboard extends React.Component {
           project: newProject[projectIndex]
         })
       })
+  }
+
+  // CallBack Project Delete Function
+  callbackProjectDelete(projectNo, userNo) {
+
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+
+    const memberIndex = this.state.project.members.findIndex(
+      (member) => member.userNo === userNo
+    );
+
+    let project = {
+      projectNo: projectNo,
+      userNo: userNo,
+      sessionUserNo: window.sessionStorage.getItem("authUserNo")
+    }
+
+    fetch(`${API_URL}/api/dashboard/delete`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+        let deleteProject = update(this.state.projects, {
+          [projectIndex]: {
+          members: {
+            [memberIndex]: {
+              roleNo: {$set : 1}
+            }
+          }
+        }
+      })
+
+      deleteProject = update(this.state.projects, {
+        $splice: [[projectIndex, 1]]
+      })
+
+      this.setState({
+        projects: deleteProject
+      })
+    })
+  }
+
+  // CallBack Not Transfer Role Project Delete Function
+  callbackProjectNotTransferDelete(projectNo) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+
+    let project = {
+      projectNo: projectNo,
+      sessionUserNo: window.sessionStorage.getItem("authUserNo")
+    }
+
+    fetch(`${API_URL}/api/dashboard/notTransferDelete`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let deleteProject = update(this.state.projects, {
+        $splice: [[projectIndex, 1]]
+      })
+  
+      this.setState({
+        projects: deleteProject
+      })
+    })
+  }
+
+  // CallBack Project Forever Delete Function
+  callbackProjectForeverDelete(projectNo) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+
+    let project = {
+      projectNo: projectNo
+    }
+
+    fetch(`${API_URL}/api/dashboard/foreverdelete`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+    .then(response => response.json())
+    .then(json => {
+      let deleteProject = update(this.state.projects, {
+        $splice: [[projectIndex, 1]]
+      })
+  
+      this.setState({
+        projects: deleteProject
+      })
+    })
   }
 
   // State Change Function
@@ -415,7 +508,7 @@ export default class Dashboard extends React.Component {
     this.modalStateFalse();
 
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
-   
+
     let userProject = {
       projectNo: projectNo,
       userNo: window.sessionStorage.getItem("authUserNo")
@@ -426,14 +519,14 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(userProject)
     })
-    .then(response => response.json())
-    .then(json => {
-      this.setState({
-        userProject: json.data,
-        setOn: !this.state.setOn,
-        project: this.state.projects[projectIndex]
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          userProject: json.data,
+          setOn: !this.state.setOn,
+          project: this.state.projects[projectIndex]
+        })
       })
-    })
     document.getElementById('projectSet').style.display = 'block'
   }
 
@@ -656,56 +749,56 @@ export default class Dashboard extends React.Component {
   }
 
   // 설정 화면 중 다른 프로젝트 클릭 시
-  modalStateFalse(){
+  modalStateFalse() {
     this.setState({
-     modalState : false,
+      modalState: false,
     })
-   }
-
-  // 모달 상태 변경
-  modalStateUpdate(){
-    this.setState({
-      modalState : !this.state.modalState
-     })
   }
 
-  callbackProjectDateUpdate(from ,to, projectNo){
-    if(from === 'Invalid date'){
+  // 모달 상태 변경
+  modalStateUpdate() {
+    this.setState({
+      modalState: !this.state.modalState
+    })
+  }
+
+  callbackProjectDateUpdate(from, to, projectNo) {
+    if (from === 'Invalid date') {
       from = undefined;
     }
-    if(to === 'Invalid date'){
+    if (to === 'Invalid date') {
       to = undefined;
     }
-    
+
 
     const projectIndex = this.state.projects.findIndex(project =>
       project.projectNo === projectNo)
 
-      // console.log(this.state.projects)
-      console.log(from , to, projectIndex)
+    // console.log(this.state.projects)
+    console.log(from, to, projectIndex)
 
-      let newProject = update(this.state.projects, {
-        [projectIndex]: {
-          projectStart: {
-            $set: from
-          },
-          projectEnd: {
-            $set: to
-          }
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        projectStart: {
+          $set: from
+        },
+        projectEnd: {
+          $set: to
         }
-      })
+      }
+    })
 
     this.setState({
       projects: newProject,
       project: newProject[projectIndex]
     })
-  
-   fetch(`${API_URL}/api/projectsetting/calendar`, {
-      method:'post',
-      headers:API_HEADERS,
-      body:JSON.stringify(newProject[projectIndex])
+
+    fetch(`${API_URL}/api/projectsetting/calendar`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(newProject[projectIndex])
     })
-  
+
   }
 
   render() {
@@ -743,8 +836,11 @@ export default class Dashboard extends React.Component {
                 changeDesc: this.callbackProjectDescChange.bind(this),
                 inviteMember: this.callbackInviteMember.bind(this),
                 changeRole: this.callbackRoleChange.bind(this),
-                modalStateUpdate:this.modalStateUpdate.bind(this),
-                updateProjectDate:this.callbackProjectDateUpdate.bind(this), // 업무 날짜 수정
+                modalStateUpdate: this.modalStateUpdate.bind(this),
+                updateProjectDate: this.callbackProjectDateUpdate.bind(this), // 업무 날짜 수정
+                projectDelete: this.callbackProjectDelete.bind(this),
+                projectNotTransferDelete: this.callbackProjectNotTransferDelete.bind(this),
+                projectForeverDelete: this.callbackProjectForeverDelete.bind(this)
               }} />
           </div>
           <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
@@ -771,27 +867,27 @@ export default class Dashboard extends React.Component {
                       <div className="panel-body">
                         <Link to="#">
                           <div className="btn-group">
-                            {project.roleNo === 1 ? 
-                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
-                              data-toggle="dropdown"
-                              style={project.projectState === "상태없음" ?
-                                { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
-                                  { backgroundColor: "orange" } : project.projectState === "진행중" ?
-                                    { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
-                                      { backgroundColor: "#337AB7" } : ""}>
-                              &nbsp;&nbsp;{project.projectState}
-                              <span className="caret"></span>
-                            </button> :
-                            <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
-                              data-toggle="dropdown"
-                              style={project.projectState === "상태없음" ?
-                                { backgroundColor: "#C7C7C7" } : project.projectState === "계획됨" ?
-                                  { backgroundColor: "orange" } : project.projectState === "진행중" ?
-                                    { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
-                                      { backgroundColor: "#337AB7" } : ""} disabled>
-                              &nbsp;&nbsp;{project.projectState}
-                              <span className="caret"></span>
-                            </button>}
+                            {project.roleNo === 1 ?
+                              <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                                data-toggle="dropdown"
+                                style={project.projectState === "상태없음" ?
+                                  { backgroundColor: "#D9534F" } : project.projectState === "계획됨" ?
+                                    { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                      { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                        { backgroundColor: "#337AB7" } : ""}>
+                                &nbsp;&nbsp;{project.projectState}
+                                <span className="caret"></span>
+                              </button> :
+                              <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
+                                data-toggle="dropdown"
+                                style={project.projectState === "상태없음" ?
+                                  { backgroundColor: "#D9534F" } : project.projectState === "계획됨" ?
+                                    { backgroundColor: "orange" } : project.projectState === "진행중" ?
+                                      { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                        { backgroundColor: "#337AB7" } : ""} disabled>
+                                &nbsp;&nbsp;{project.projectState}
+                                <span className="caret"></span>
+                              </button>}
                             <div className="dropdown-menu" role="menu">
                               <div className="dropdown-list">
                                 <div className="dropdown-list-contents" onClick={this.onStateChange.bind(this, project.projectNo, "계획됨")}>
@@ -823,7 +919,7 @@ export default class Dashboard extends React.Component {
                                     상태없음
                                 </span>
                                   <div className="status-color">
-                                    <i className="fas fa-circle fa-xs" style={{ color: "#C7C7C7" }}></i>
+                                    <i className="fas fa-circle fa-xs" style={{ color: "red" }}></i>
                                   </div>
                                 </div>
                               </div>
@@ -855,6 +951,9 @@ export default class Dashboard extends React.Component {
                               project.projectState === "계획됨" ?
                                 <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100"
                                   aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
+                                project.projectState === "상태없음" ? 
+                                <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100"
+                                aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
                                 ""}
                         </div>
                       </div>
