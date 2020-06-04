@@ -22,6 +22,7 @@ class KanbanMain extends Component {
     super(...arguments);
     this.state = {
       taskList: null,
+      authUserRole:null,
       url: window.sessionStorage.getItem("authUserBg"),
       taskTagNo:[], //task tag의 no만 모아둔 배열
       modalState:false,
@@ -1357,6 +1358,7 @@ callbackUpdateTaskContents(){
             render={(match) => (
               <Setting
                 {...match}
+                authUserRole={this.state.authUserRole}
                 modalState={this.state.modalState}
                 taskMemberState={this.state.taskMemberState}
                 projectNo={this.props.match.params.projectNo}
@@ -1430,7 +1432,9 @@ callbackUpdateTaskContents(){
               </div>
               {/*상단바*/}
               <TopBar 
-                projectNo={this.props.match.params.projectNo} />
+                projectNo={this.props.match.params.projectNo}
+                activePath={this.props.location.pathname} />
+                
               {/* 메인 영역 */}
               <div className="mainArea">
                 {/*칸반보드*/}
@@ -1439,6 +1443,7 @@ callbackUpdateTaskContents(){
                   onDragStart={this.onDragStart}
                 >
                   <KanbanBoard
+                    authUserRole={this.state.authUserRole}
                     tasks={this.state.taskList}
                     projectNo={this.props.match.params.projectNo}
                     taskCallbacks={{
@@ -1462,10 +1467,11 @@ callbackUpdateTaskContents(){
   }
 
   componentDidMount() {
-    ApiService.fetchKanbanMain(this.props.match.params.projectNo).then(
+    ApiService.fetchKanbanMain(this.props.match.params.projectNo,sessionStorage.getItem("authUserNo")).then(
       (response) => {
         this.setState({
           taskList: response.data.data.allTaskList,
+          authUserRole: response.data.data.authUserRole
         });
       }
     );

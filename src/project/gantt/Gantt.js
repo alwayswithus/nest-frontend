@@ -174,7 +174,7 @@ class Gantt extends React.Component {
                 {/* 네비게이션바 */}
                 <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
                 {/*상단바*/}
-                <TopBar projectNo={this.props.match.params.projectNo}/>
+                <TopBar projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname}/>
                 <div className="container-fluid ganntMain">
                     <div className="row content">
                         {/* 메인 영역 */}
