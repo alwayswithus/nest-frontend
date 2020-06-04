@@ -19,6 +19,7 @@ class ProjectSetting extends Component {
         super(...arguments)
         this.state = {
             Exist: false,
+            projectDeleteOpen: false,
             Delete: false,
             isExistRoleOne: false,
             roleTransferCloseButton: false,
@@ -89,18 +90,44 @@ class ProjectSetting extends Component {
         this.props.callbackProjectSetting.changeRole(projectNo, userNo, roleNo);
     }
 
-    // handleClickOpenCalendar() {
-    //     this.setState({
-    //         Exist: false,
-    //         Delete: false,
-    //         show: !this.state.show
-    //     })
-    // }
+    // CallBack Project Delete Function
+    callbackProjectDelete(projectNo, userNo, userName, userPhoto) {
+        this.setState({
+            roleTransferCloseButton: true,
+            Exist: false,
+            Delete: false
+        })
+
+        this.props.callbackProjectSetting.projectDelete(projectNo, userNo, userName, userPhoto);
+        this.props.callbackProjectSetting.close(true);
+
+    }
 
     handleClickOpenExit() {
         this.setState({
             Exist: true,
             Delete: false
+        })
+    }
+
+    callbackProjectForeverDelete() {
+        this.setState({
+            projectDeleteOpen: false
+        })
+
+        this.props.callbackProjectSetting.projectForeverDelete(this.props.project.projectNo);
+        this.props.callbackProjectSetting.close(true);
+    }
+
+    handleProjectDeleteOpen() {
+        this.setState({
+            projectDeleteOpen: true
+        })
+    }
+
+    handleProjectDeleteClose() {
+        this.setState({
+            projectDeleteOpen: false
         })
     }
 
@@ -127,6 +154,9 @@ class ProjectSetting extends Component {
                 Exist: false,
                 Delete: false
             })
+            
+            this.props.callbackProjectSetting.projectNotTransferDelete(this.props.project.projectNo);
+            this.props.callbackProjectSetting.close(true);
         }
         else {
             this.setState({
@@ -410,7 +440,7 @@ class ProjectSetting extends Component {
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 나가기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">
                                     <button onClick={this.handleClickOpenExit.bind(this)} >프로젝트 나가기</button>
-                                    <Dialog open={this.state.Exist}>
+                                    <Dialog open={this.state.Exist} onClose={this.handleStay.bind(this)}>
                                         <DialogTitle style={{ paddingBottom: "0px" }} onClose={this.handleClose.bind(this)}>
                                             <h2><b>이 프로젝트 나가기</b></h2>
                                         </DialogTitle>
@@ -422,8 +452,11 @@ class ProjectSetting extends Component {
                                             <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white', fontWeight: 'bold' }} onClick={this.handleClose.bind(this)}>네, 이 프로젝트를 나갑니다.</Button>
                                             {this.state.isExistRoleOne ? 
                                             <RoleTransfer roleTransferCloseButton={this.state.roleTransferCloseButton}
-                                            project={this.props.project} 
-                                            roleTransferSetting={{close: this.callbackRoleTransferClose.bind(this)}}/> : 
+                                            project={this.props.project}
+                                            roleTransferSetting={{
+                                                close: this.callbackRoleTransferClose.bind(this),
+                                                projectDelete: this.callbackProjectDelete.bind(this)
+                                            }}/> : 
                                             ""}  
                                         </DialogActions>
                                     </Dialog> 
@@ -434,16 +467,19 @@ class ProjectSetting extends Component {
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 영구삭제</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">
-                                    <button onClick={this.handleClickOpenDel.bind(this)} style={{ backgroundColor: '#FF4040', color: 'white' }}>프로젝트 삭제하기</button>
-                                    <Dialog onClose={this.handleClose.bind(this)} open={this.state.Delete}>
-                                        <DialogTitle onClose={this.handleClose.bind(this)}>
+                                    {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
+                                    <Button onClick={this.handleProjectDeleteOpen.bind(this)} style={{ backgroundColor: '#E95E51', color: 'white' }}>프로젝트 삭제하기</Button> : 
+                                    <Button onClick={this.handleProjectDeleteOpen.bind(this)} style={{ backgroundColor: '#E95E51', color: 'white' }} disabled>프로젝트 삭제하기</Button>}
+                                    <Dialog open={this.state.projectDeleteOpen} onClose={this.handleProjectDeleteClose.bind(this)}>
+                                        <DialogTitle style={{paddingBottom: "0"}}>
                                             <h2><b>프로젝트 삭제</b></h2>
                                         </DialogTitle>
                                         <DialogContent>
-                                            정말 삭제하시겠습니까? Project Name이 영구 삭제됩니다.
+                                        정말 삭제하시겠습니까? <strong>{this.props.project.projectTitle}</strong>이(가) 영구 삭제됩니다.
                                         </DialogContent>
                                         <DialogActions>
-                                            <Button variant="outlined" style={{ backgroundColor: '#FF4040', color: 'white' }} onClick={this.handleClose.bind(this)}>닫기</Button>
+                                            <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: '#696F7A' }} onClick={this.handleProjectDeleteClose.bind(this)}>아니오</Button>
+                                            <Button variant="outlined" style={{ backgroundColor: '#E95E51', color: 'white' }} onClick={this.callbackProjectForeverDelete.bind(this)}>네</Button>
                                         </DialogActions>
                                     </Dialog>
                                 </div>
