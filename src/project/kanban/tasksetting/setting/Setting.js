@@ -352,8 +352,7 @@ class Setting extends Component {
                                                     style = {{marginLeft: '5%', cursor:'default'}} 
                                                     value = {this.state.checklist} 
                                                     placeholder='체크리스트 아이템 추가하기'
-                                                    onKeyPress={this.onKeypress.bind(this)} 
-                                                    autoFocus/> : 
+                                                    onKeyPress={this.onKeypress.bind(this)} /> : 
                                                     
                                                     <input 
                                                         type="text"
@@ -361,8 +360,7 @@ class Setting extends Component {
                                                         style = {{marginLeft: '5%'}} 
                                                         value = {this.state.checklist} 
                                                         placeholder='체크리스트 아이템 추가하기'
-                                                        onKeyPress={this.onKeypress.bind(this)} 
-                                                        autoFocus/> }
+                                                        onKeyPress={this.onKeypress.bind(this)} /> }
                                         </div>
                                     </div>
                                 </div>

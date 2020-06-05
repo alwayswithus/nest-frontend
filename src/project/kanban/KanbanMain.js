@@ -1067,6 +1067,7 @@ class KanbanMain extends Component {
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
     const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === fileNo);
 
+    console.log(commentIndex + " : " +  fileIndex)
     if(fileNo == null){
       fileNo = 0;
     }
@@ -1358,6 +1359,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
 
 }
   render() {
+
     return (
       <>
         {/* taskSetting 띄우는 route */}
@@ -1422,6 +1424,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                 taskCallbacks={{
                   addFile: this.callbackAddFile.bind(this), // 파일 업로드 하기.
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
+                  deleteComment: this.callbackDeleteComment.bind(this), // 코멘트 삭제하기
                   updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
                 }}
               />

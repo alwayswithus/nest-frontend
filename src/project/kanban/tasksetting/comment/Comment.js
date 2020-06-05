@@ -3,9 +3,30 @@ import CommentList from './CommentList'
 import CommentInput from "./CommentInput";
 import Header from '../file/Header';
 
-class Comment extends Component  {
-    render(){
-        if(!this.props.task){
+class Comment extends Component {
+    constructor() {
+        super(...arguments)
+        this.state = {
+            upDown: 'd'
+                , value: 'To Bottom'
+        }
+    }
+    updownChange = () => {
+        if (this.state.upDown === 'd') {
+            this.setState({
+                upDown: 'u'
+                , value: 'To Top'
+            });
+        } else {
+            this.setState({
+                upDown: 'd'
+                , value: 'To Bottom'
+            });
+        }
+    }
+
+    render() {
+        if (!this.props.task) {
             return <></>;
         }
 
@@ -16,27 +37,28 @@ class Comment extends Component  {
 
         return (
             <div className="TaskSetComment">
-                 <Header 
-                    name='김우경' 
-                    date='2020.05.06' 
-                    taskItem = {taskItem}
+                <Header
+                    name='김우경'
+                    date='2020.05.06'
+                    taskItem={taskItem}
                     taskCallbacks={this.props.taskCallbacks}
                     params={this.props.match.params}
-                    projectNo={this.props.projectNo}/>
+                    projectNo={this.props.projectNo} />
                 <div className="Comment">
                     {/* 코멘트 내용 */}
-                    <CommentList 
+                    <CommentList
+                        ref={(ref) => this.CommentList = ref}
                         authUserRole={this.props.authUserRole}
-                        taskListNo={this.props.match.params.taskListNo} 
-                        taskItem={taskItem} 
-                        taskCallbacks={this.props.taskCallbacks}/>
-    
+                        taskListNo={this.props.match.params.taskListNo}
+                        taskItem={taskItem}
+                        taskCallbacks={this.props.taskCallbacks} />
+
                     {/* 코멘트 입력창 */}
-                    <CommentInput 
+                    <CommentInput
                         authUserRole={this.props.authUserRole}
-                        taskCallbacks = {this.props.taskCallbacks}
-                        taskItem = {taskItem}
-                        taskListNo = {this.props.match.params.taskListNo}/>
+                        taskCallbacks={this.props.taskCallbacks}
+                        taskItem={taskItem}
+                        taskListNo={this.props.match.params.taskListNo} />
                 </div>
             </div>
         );

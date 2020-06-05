@@ -3,6 +3,7 @@ import './file.scss';
 import FileList from './FileList'
 import Header from './Header';
 import axios from 'axios';
+import { AlertList } from "react-bs-notifier";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -14,34 +15,73 @@ class File extends Component {
     constructor(){
         super(...arguments)
         this.state = {
-            selectedFile:null
+            selectedFile:null,
+            // danger: false,
+            position: "top-right",
+            alerts: [],
+            timeout: 2000,
+            newMessage: "지원하지 않는 파일 형식입니다.",
         }
     }
 
     // 파일 선택 했을 때.
     onChangeFileUpload(event) {
+
         this.setState({
-            selectedFile : event.target.files[0]
+            selectedFile : event.target.files[0],
         })
 
-        const formData = new FormData();
-        formData.append('file', event.target.files[0])
-        formData.append('taskNo', this.props.match.params.taskNo);
-        formData.append('userNo', sessionStorage.getItem("authUserNo"));
+        console.log(event.target.files[0].type)
+        if(event.target.files.length !== 0 && (event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            || event.target.files[0].type === 'image/png' || event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+            || event.target.files[0].type === 'text/plain' || event.target.files[0].type ==='image/jpeg')) {
 
-        fetch(`${API_URL}/api/upload`, {
-            method:'post',
-            headers:API_HEADERS,
-            body: formData,
-          })
-          .then((response) => response.json())
-          .then((json) => {
-                this.props.taskCallbacks.addFile(
-                  json.data,
-                  this.props.match.params.taskListNo, 
-                  this.props.match.params.taskNo)
-            })
+                const formData = new FormData();
+            formData.append('file', event.target.files[0])
+            formData.append('taskNo', this.props.match.params.taskNo);
+            formData.append('userNo', sessionStorage.getItem("authUserNo"));
+    
+            fetch(`${API_URL}/api/upload`, {
+                method:'post',
+                headers:API_HEADERS,
+                body: formData,
+              })
+              .then((response) => response.json())
+              .then((json) => {
+                    this.props.taskCallbacks.addFile(
+                      json.data,
+                      this.props.match.params.taskListNo, 
+                      this.props.match.params.taskNo)
+                })
+            }
+        else {
+            const newAlert = {
+                id: (new Date()).getTime(),
+                type: "danger",
+                message: this.state.newMessage
+              };
+            
+              this.setState({
+                    alerts: [...this.state.alerts, newAlert]
+                })
+        }
     }
+
+    // Invite Member Alert Function
+  onAlertDismissed(alert) {
+    const alerts = this.state.alerts;
+
+    // find the index of the alert that was dismissed
+    const idx = alerts.indexOf(alert);
+
+    if (idx >= 0) {
+      this.setState({
+        // remove the alert from the array
+        alerts: [...alerts.slice(0, idx), ...alerts.slice(idx + 1)]
+      });
+    }
+  }
+
     render() {
         if (!this.props.task) {
             return <></>;
@@ -53,6 +93,13 @@ class File extends Component {
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
         return (
             <div className="SettingFile">
+                <AlertList
+                    position={this.state.position}
+                    alerts={this.state.alerts}
+                    timeout={this.state.timeout}
+                    dismissTitle="cancel"
+                    onDismiss={this.onAlertDismissed.bind(this)}
+                    />
                 <Header 
                     taskItem={taskItem} 
                     taskCallbacks={this.props.taskCallbacks}
@@ -71,7 +118,9 @@ class File extends Component {
                                 :
                                 <input 
                                 onChange={this.onChangeFileUpload.bind(this)} 
-                                type='file' className="fileUpload" name="file" />
+                                type='file'
+                                className="fileUpload" 
+                                name="file" />
                             }
                     </div>
                     <hr />
@@ -85,7 +134,11 @@ class File extends Component {
                         </thead>
                     </table>
                     <hr style={{ paddingLeft: '10px' }} />
-                    <FileList taskItem={taskItem}/>
+                    <FileList
+                        taskListNo={this.props.match.params.taskListNo}
+                        taskNo={this.props.match.params.taskNo}
+                        taskCallbacks={this.props.taskCallbacks} 
+                        taskItem={taskItem}/>
                 </div>
             </div>
         )

@@ -128,7 +128,6 @@ class TaskList extends Component {
   }
   render() {
     let completeTaskState = false;
-    // console.log(this.props.taskList.tasks);
     return (
       <Draggable
         draggableId={this.props.taskList.taskListNo}
