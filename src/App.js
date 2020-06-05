@@ -6,6 +6,7 @@ import KanbanMain from "./project/kanban/KanbanMain";
 import Login from "./user/login/Login";
 import SignUp from "./user/signup/SignUp";
 import PwFind from "./user/pwfind/PwFind";
+import Errors from "./errors/Errors";
 
 import Gantt from "./project/gantt/Gantt";
 import File from "./project/file/File";
@@ -51,10 +52,13 @@ function App() {
     
     <div className="App" style={{ backgroundImage: `url(${url})` }}>
       <BrowserRouter>
-        {/*메인 */}
+        {/* 오류 페이지 */}
+        <Route path="/nest/errors" exact component={Errors}/>
+
+        {/* 메인 */}
         <Route  path="/nest" exact component={Login} />
 
-        {/*회원 */}
+        {/* 회원 */}
         <Route path="/nest/signup" exact component={SignUp} />
         <Route path="/nest/pwfind" exact component={PwFind} />
 

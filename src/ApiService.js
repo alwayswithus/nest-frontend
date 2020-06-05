@@ -34,6 +34,10 @@ class ApiService {
     fetchFile(projectNo) {
         return axios.get(`/nest/api/dashboard/${projectNo}/file`);
     }
+
+    fetchEmailCheck(email){
+        return axios.post(`/nest/api/emailcheck?email=${email}`)
+    }
 }
 
 export default new ApiService();
