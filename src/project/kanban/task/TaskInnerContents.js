@@ -73,12 +73,12 @@ class TaskInnerContents extends Component {
     taskItem.memberList.map( member => {
       memberListCount = memberListCount+1
     })
-    // console.log(commentListCount)
-   
+
+   const locationTaskNo = window.location.href.split("/");
 
     return (
       <div className="panel panel-primary" style={labelStyle}>
-        <div className="panel-body">
+        <div className="panel-body" style={locationTaskNo[9] === this.props.task.taskNo ? {backgroundColor:"#f0d7d2c4"}:null}>
           <div className="task-item task-top">
             <div className="point">
               {/* {console.log(taskItem.taskPoint === null)} */}

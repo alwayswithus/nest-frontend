@@ -72,18 +72,18 @@ class commentContents extends Component {
                                         <i onClick = {this.onClickThumsUp.bind(this, this.props.comment.commentNo)} className="far fa-thumbs-up thumsup"/>
                                     </span>
                                 </li>
-                                <>( {this.props.comment.fileNo == null && this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
+                                <>{this.props.comment.fileNo == null && this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
                                     <li>
                                         <span data-tooltip-text="수정하기">
                                             <i onClick= {this.onClickModifyText.bind(this)} className="fas fa-pen" />
                                         </span>
-                                    </li> : null} )</>
-                                <>({this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
+                                    </li> : null} </>
+                                <>{this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
                                     <li>
                                         <span data-tooltip-text="삭제하기">
                                             <i onClick = {this.onClickDeleteContents.bind(this)} className="far fa-trash-alt" />
                                         </span>
-                                    </li> : null})</>
+                                    </li> : null}</>
                                 </ul>
                         }
                         {this.props.comment.fileNo == null ? null : 
