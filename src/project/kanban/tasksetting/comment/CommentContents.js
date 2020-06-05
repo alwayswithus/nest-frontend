@@ -54,8 +54,9 @@ class commentContents extends Component {
 
     //삭제하기 버튼 누르기
     onClickDeleteContents(){
-        alert('삭제 하시겠습니까?')
-        this.props.taskCallbacks.deleteComment(this.props.comment.fileNo, this.props.taskListNo, this.props.taskNo, this.props.comment.commentNo)
+        if(window.confirm("코멘트를 삭제하시겠습니까?")){
+            this.props.taskCallbacks.deleteComment(this.props.comment.fileNo, this.props.taskListNo, this.props.taskNo, this.props.comment.commentNo)
+        }
     }
     render(){
         return (
@@ -101,10 +102,11 @@ class commentContents extends Component {
                             <i onClick={this.onClickUpdateComment.bind(this)} className="fas fa-paper-plane">&nbsp;수정 완료</i>
                             </p> : 
                                 <ReactQuill 
-                                theme = "bubble"
-                                value= {this.props.comment.commentContents}
-                                readOnly
-                            />
+                                    theme = "bubble"
+                                    value= {this.props.comment.commentContents}
+                                    readOnly
+                                    autoFocus
+                                />
                         }
                     <ul className="list-unstyled list-inline media-detail pull-left">
                         {this.props.comment.commentLike === 0 ? null : <li><i className="fa fa-thumbs-up"></i>&nbsp;{this.props.comment.commentLike}</li> }

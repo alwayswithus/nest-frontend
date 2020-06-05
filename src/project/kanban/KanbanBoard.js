@@ -64,7 +64,6 @@ class KanbanBoard extends Component {
     // console.log("//");
     // console.log(allTaskList);
     // console.log("//");
-
     return (
       <>
         <div className="kanbanBoard">
