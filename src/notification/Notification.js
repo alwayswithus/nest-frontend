@@ -42,6 +42,8 @@ class Notification extends React.Component {
         })
     }
 
+
+
     render() {
         return (
             <div className="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>

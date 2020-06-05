@@ -16,7 +16,6 @@ class Important extends Component {
     render(){
       const fullIcon = <i style={{color: '#f6b6b4', transform: 'scale(0.7)'}} className="fas fa-circle"></i>;
       const emptyIcon = <i style={{color: '#f6b6b4', transform: 'scale(0.7)'}} className="far fa-circle"></i>;
-      console.log(this.props.taskItem.taskPoint)
       return (
         
             <div className="Important">

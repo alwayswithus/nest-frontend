@@ -48,15 +48,16 @@ function App() {
   }
 
   return (
-    
-    <div className="App" style={{ backgroundImage: `url(${url})` }}>
-      <BrowserRouter>
-        {/*메인 */}
-        <Route  path="/nest" exact component={Login} />
+    <BrowserRouter>
 
-        {/*회원 */}
-        <Route path="/nest/signup" exact component={SignUp} />
-        <Route path="/nest/pwfind" exact component={PwFind} />
+     {/*메인 */}
+    <Route  path="/nest" exact component={Login} />
+
+    {/*회원 */}
+    <Route path="/nest/signup" exact component={SignUp} />
+    <Route path="/nest/pwfind" exact component={PwFind} />
+
+      <div className="App" style={{ backgroundImage: `url(${url})` }}>
 
         {/* 프로필설정 */}
         <Route path="/nest/profile" exact component={Profile} callbackChangeBackground={{change: callbackChangeBackground}}/>
@@ -88,9 +89,9 @@ function App() {
 
         {/* 캘린더 */}
         <Route path="/nest/calendar" exact component={Calendar} callbackChangeBackground={{change: callbackChangeBackground}}/>
-
-      </BrowserRouter>
-    </div>
+      
+      </div>
+    </BrowserRouter>
   );
 }
 
