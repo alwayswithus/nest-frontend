@@ -6,6 +6,7 @@ import KanbanMain from "./project/kanban/KanbanMain";
 import Login from "./user/login/Login";
 import SignUp from "./user/signup/SignUp";
 import PwFind from "./user/pwfind/PwFind";
+import SendMail from "./user/sendmail/sendmail";
 import Errors from "./errors/Errors";
 
 import Gantt from "./project/gantt/Gantt";
@@ -60,6 +61,7 @@ function App() {
     {/*회원 */}
     <Route path="/nest/signup" exact component={SignUp} />
     <Route path="/nest/pwfind" exact component={PwFind} />
+    <Route path="/nest/sendmail/:signup" component={SendMail} />
 
       <div className="App" style={{ backgroundImage: `url(${url})` }}>
 

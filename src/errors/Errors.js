@@ -6,6 +6,11 @@ import { Button, InputLabel } from "@material-ui/core";
 import "./errors.scss"
 
 const Errors = () => {
+  
+  const Clear = e =>{
+    sessionStorage.clear(); 
+  };
+
   return (
     <>
       <div className="Errors">
@@ -14,7 +19,7 @@ const Errors = () => {
           <InputLabel id="ErrorsText">Errors!!</InputLabel>
           <br/>
           <Link to="/nest">
-            <Button className="ErrorsButtons" id="MainBtn">메인으로 돌아가기</Button>
+            <Button className="ErrorsButtons" id="MainBtn" onClick={Clear}>메인으로 돌아가기</Button>
           </Link>
         </div>
       </div>
