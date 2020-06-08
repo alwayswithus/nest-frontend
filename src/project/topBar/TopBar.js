@@ -6,9 +6,11 @@ class TopBar extends Component {
 
   
   render() {
-    const kanbanboard = this.props.activePath.indexOf("kanbanboard") !== -1
-    const timeline = this.props.activePath.indexOf("timeline") !== -1
-    const file = this.props.activePath.indexOf("file") !== -1
+    let activePath = this.props.activePath.split('/')[4];
+    
+    const kanbanboard = activePath.indexOf("kanbanboard") !== -1
+    const timeline = activePath.indexOf("timeline") !== -1
+    const file = activePath.indexOf("file") !== -1
     // const log = this.props.activePath.indexOf("log") !== -1
     return (
       <>

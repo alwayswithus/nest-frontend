@@ -66,35 +66,73 @@ function App() {
       <div className="App" style={{ backgroundImage: `url(${url})` }}>
 
         {/* 프로필설정 */}
-        <Route path="/nest/profile" exact component={Profile} callbackChangeBackground={{change: callbackChangeBackground}}/>
-        <Route path="/nest/profileset" exact component={ProfileSetting} callbackChangeBackground={{change: callbackChangeBackground}}/>
+        <Route 
+          path="/nest/profile" 
+          exact 
+          render={(match) => 
+            <Profile {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
+        <Route 
+          path="/nest/profileset"
+          exact 
+          render={(match) => 
+            <ProfileSetting {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
 
         {/* 알림설정 */}
-        <Route path="/nest/notification" exact component={Notification} callbackChangeBackground={{change: callbackChangeBackground}}/>
+        <Route path="/nest/notification"
+          exact 
+          render={(match) => 
+            <Notification {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
 
         {/*칸반보드 */}
         <Route 
-          path="/nest/dashboard/:projectNo/kanbanboard" 
-          render={(match) => <KanbanMain {...match} callbackChangeBackground={{change: callbackChangeBackground}}/>} />
+          path="/nest/dashboard/:projectNo/kanbanboard"
+          render={(match) => 
+            <KanbanMain {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
 
         {/* 대시보드 */}
-        <Route path="/nest/dashboard" exact component={Dashboard} callbackChangeBackground={{change: callbackChangeBackground}} />
+        <Route path="/nest/dashboard"
+          exact 
+          render={(match) => 
+            <Dashboard {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
         
         {/* 간트차트 */}
         <Route 
-          path="/nest/dashboard/:projectNo/timeline" exact 
-          render={(match) => <Gantt {...match}/>} callbackChangeBackground={{change: callbackChangeBackground}}/>
+          path="/nest/dashboard/:projectNo/timeline"
+          render={(match) => 
+            <Gantt {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
 
         {/* 파일 */}
         <Route 
-          path="/nest/dashboard/:projectNo/file" exact 
-          render={(match) => <File {...match} />} callbackChangeBackground={{change: callbackChangeBackground}}/>
+          path="/nest/dashboard/:projectNo/file" 
+          exact 
+          render={(match) => 
+            <File {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
 
-        {/* 프로젝트 세팅*/}
-        <Route path="/nest/projectset" exact component={ProjectSetting} />
+        {/* 프로젝트 세팅
+        <Route path="/nest/projectset" exact component={ProjectSetting} /> */}
 
         {/* 캘린더 */}
-        <Route path="/nest/calendar" exact component={Calendar} callbackChangeBackground={{change: callbackChangeBackground}}/>
+        <Route 
+          path="/nest/calendar" 
+          exact 
+          render={(match) => 
+            <Calendar {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          }
+        />
       
       </div>
     </BrowserRouter>

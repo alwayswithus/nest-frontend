@@ -1444,9 +1444,6 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
               <div className="navibar">
                 <Navigator 
                 callbackChangeBackground = {this.props.callbackChangeBackground}
-                  // callbackChangeBackground={{
-                  //   change: this.callbackChangeBackground,
-                  // }}
                 />
               </div>
               {/*상단바*/}

@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 class ProfileNav extends Component {
     render(){
         const { location } = this.props;
-        console.log(this.props);
         const styleNav = {
           borderRadius:'0px', 
           width:'200px',

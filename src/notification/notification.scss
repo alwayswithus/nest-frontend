@@ -1,154 +1,72 @@
 .Notification {
-    margin-left: 62px;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    overflow: auto;
+  margin-left: 62px;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow: auto;
 
-    .notice-header-background {
-        height: 240px;
-        background-color: #8798A8;
-        opacity: 0.8;
+  .notice-header-background {
+    height: 240px;
+    background-color: #8798a8;
+    opacity: 0.8;
+  }
+  .notice-contents {
+    position: relative;
+    margin: 0 auto;
+    top: -90px;
+    width: 70%;
+
+    .notice-header-contents {
+      .notice-header-icon {
+        float: left;
+        text-align: center;
+        width: 45px;
+        height: 45px;
+        background-color: #000000;
+        border-radius: 2px;
+
+        .notice-header-title-month {
+          padding-top: 3px;
+
+          .notice-header-title-month-text {
+            color: #fff;
+          }
+        }
+
+        .notice-header-title-day-text {
+          color: #fff;
+        }
+      }
+
+      .notice-header-title-text {
+        padding-left: 70px;
+        padding-top: 5px;
+
+        .notice-header-title-plural {
+          font-weight: 600;
+          font-size: 24px;
+          opacity: 1;
+          color: black;
+        }
+      }
     }
-    .notice-contents {
-        position: relative;
-        margin: 0 auto;
-        top: -90px;
-        width: 70%;
+    .notice-body-contents {
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      margin-top: 20px;
 
-        .notice-header-contents {
-        
-            .notice-header-icon {
-                float: left;
-                text-align: center;
-                width: 45px;
-                height: 45px;
-                background-color: #000000;
-                border-radius: 2px;
+      .notice-body-today {
+        .notice-body-header-today {
+          padding: 20px;
 
-                .notice-header-title-month {
-                    
-                    padding-top: 3px;
-
-                    .notice-header-title-month-text {
-                        color: #fff;
-                        
-                    }
-                }
-
-                .notice-header-title-day-text {
-                    color: #fff;
-                }
-            }
-        
-            .notice-header-title-text {
-                padding-left: 70px;
-                padding-top: 5px;
-
-                .notice-header-title-plural {
-                    font-weight: 600;
-                    font-size: 24px;
-                    opacity: 1;
-                    color: black;
-                }
-            }
+          .notice-body-header-date {
+            color: #6a7074;
+            display: inline-block;
+          }
         }
-        .notice-body-contents {
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            margin-top: 20px;
-
-            .notice-body-today {
-
-                .notice-body-header-today {
-                    padding: 20px;
-
-                    .notice-body-header-date {
-                        color: #6A7074;
-                        display: inline-block;
-                    }
-
-                    .notice-body-action-buttons {
-                        color: #6A7074;
-                        display: inline-block;
-                        float: right;
-
-                        .notice-body-action-all-read {
-                            padding-right: 10px;
-                            display: inline-block;
-                        
-                            &:hover {
-                                cursor: pointer;
-                                color: #27B6BA;
-                            }
-                        }
-                        
-                        .notice-body-action-all-remove {
-                            padding-left: 10px;
-                            display: inline-block;
-
-                            &:hover {
-                                cursor: pointer;
-                                color: #27B6BA;
-                            }
-                        }
-                    }
-                }
-
-                .notice-body-contents-today {
-                    background-color: #FFF7E9;
-                    display: flex;
-                    padding: 10px 0 20px 20px;
-                    
-                    .notice-body-contents-avatar-image {
-                        display: inline-block;
-
-                        .notice-avatar-image {
-                            width: 39px;
-                            height: 39px;
-                            border-radius: 50%;
-                        }
-                    }
-
-                    .notice-body-contents-avatar-name {
-                        line-height: 38px;
-                        font-weight: 600;
-                        width: 170px;
-                        display: inline-block;
-                        margin-left: 15px;
-                    }
-
-                    .notice-body-contents-avatar-activities {               
-                        color: #6A7074;
-                        margin: 0 20px;
-                        flex: 1;
-
-                        .notice-body-contents-path {  
-                            margin-left: 10px;
-                            margin-top: 5px;
-                            font-size: xx-small;
-
-                            .contents-path {
-                                color: #6A7074;
-                                padding-left: 5px;
-                            }
-                        }
-                    }
-
-                    .notice-body-avatar-timeline {
-                        font-size: xx-small;
-                        color: #6A7074;
-                        padding: 0 20px;
-                        display: inline-block;
-                    }
-
-                    &:hover {
-                        background-color: #DFDFDF;
-                    }
-                }
-            }
-        }
-    }   
+      }
+    }
+  }
 }

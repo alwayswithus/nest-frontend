@@ -102,27 +102,6 @@ class Gantt extends React.Component {
         };
     }
 
-    // CallBack Background Image Setting 
-    callbackChangeBackground(url) {
-
-        let authUser = {
-            userNo: window.sessionStorage.getItem("authUserNo"),
-            userBg: url
-          }
-      
-          fetch(`${API_URL}/api/user/backgroundChange`, {
-            method: 'post',
-            headers: API_HEADERS,
-            body: JSON.stringify(authUser)
-          })
-          
-          sessionStorage.setItem("authUserBg", url)
-          this.setState({
-            url: url
-          })
-    }
-
-
     genID() {
         function S4() {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -174,7 +153,7 @@ class Gantt extends React.Component {
         return (
             <div className="Gantt" style={{ backgroundImage: `url(${this.state.url})` }}>
                 {/* 네비게이션바 */}
-                <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
+                <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 {/*상단바*/}
                 <TopBar projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname}/>
                 <div className="container-fluid ganntMain">

@@ -1,8 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import Pagination from 'react-bootstrap/Pagination'
-import noticeSendData from './noticeSendData.json';
-import dates from './dateData.json';
+import ApiService from "../ApiService";
+import update from "react-addons-update";
 
 import NoticeDate from './NoticeDate';
 import Navigator from '../navigator/Navigator';
@@ -16,40 +16,47 @@ class Notification extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
-            notices: noticeSendData,                               // notice send Data
-            dates: dates,                                          // date Data
-            url: window.sessionStorage.getItem("authUserBg")       // background url
+            notices: [],                               // notice send Data
+            dates: [],                                          // date Data
         }
     }
 
-    // CallBack Background Image Setting 
-    callbackChangeBackground(url) {
+    callbackMessageCheck(noticeNo){
+        // console.log(noticeNo);
 
-        let authUser = {
-            userNo: window.sessionStorage.getItem("authUserNo"),
-            userBg: url
-        }
+        const noticeIndex = this.state.notices.findIndex(
+            (notice) => notice.noticeNo === noticeNo
+          );
 
-        fetch(`${API_URL}/api/user/backgroundChange`, {
-            method: 'post',
-            headers: API_HEADERS,
-            body: JSON.stringify(authUser)
+          console.log(this.state.notices[noticeIndex])
+
+        let newNotices = this.state.notices
+
+
+        newNotices = update(newNotices,{
+            [noticeIndex]:{
+                messageCheck:{
+                    $set : 'Y'
+                }
+            }
         })
-
-        window.sessionStorage.setItem("authUserBg", url)
         this.setState({
-            url: url
+            notices :newNotices
         })
+
+        fetch(`${API_URL}/api/notification/update/${noticeNo}`, {
+            method:'post',
+            headers:API_HEADERS,
+          })
     }
-
-
 
     render() {
+        
         return (
-            <div className="Notification" style={{ backgroundImage: `url(${this.state.url})` }}>
+            <div className="Notification" >
                 {/* 사이드바 */}
                 <div className="sidebar">
-                    <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
+                    <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 </div>
                 <div className="notice-header-background"></div>
                 <div className="notice-contents">
@@ -75,7 +82,7 @@ class Notification extends React.Component {
                                     <div className="notice-body-header-date">
                                         <span>Update on {date.dateMonth} {date.dateDay}, {date.dateYear}</span>
                                     </div>
-                                    <NoticeDate notices={this.state.notices} date={date} />
+                                    <NoticeDate notices={this.state.notices} date={date} callbackMessageCheck={{MessageCheck:this.callbackMessageCheck.bind(this)}}/>
                                 </div>
                             </div>)}
                     </div>
@@ -83,6 +90,16 @@ class Notification extends React.Component {
             </div>
         );
     }
+    componentDidMount() {
+        ApiService.fetchNotification().then(
+          (response) => {
+            this.setState({
+                dates:response.data.data.date,
+                notices:response.data.data.notice
+            });
+          }
+        );
+      }
 }
 
 export default Notification;

@@ -51,7 +51,7 @@ class myCalendar extends Component {
       <div id="Calendar" style={{ backgroundImage: `url(${this.state.url})` }}>
         {/* 사이드바 */}
         <div className="sidebar">
-          <Navigator />
+          <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
         </div>
         <div className="calendar-contents">
           <div className="calendar-body-contents">

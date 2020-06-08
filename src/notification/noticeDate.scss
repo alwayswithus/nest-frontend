@@ -1,3 +1,67 @@
 .NoticeDate {
-    padding-top: 10px;
+  padding-top: 10px;
+  .newMessage {
+    background-color: #fff7e9;
+  }
+  .notice-body-contents-today {
+    display: flex;
+    padding: 10px 0 20px 20px;
+    &:hover {
+      background-color: #dfdfdf;
+    }
+
+    .notice-body-contents-avatar-image {
+      display: inline-block;
+
+      .notice-avatar-image {
+        width: 39px;
+        height: 39px;
+        border-radius: 50%;
+      }
+    }
+
+    .notice-body-contents-avatar-name {
+      line-height: 38px;
+      font-weight: 600;
+      width: 170px;
+      display: inline-block;
+      margin-left: 15px;
+    }
+
+    .notice-body-contents-avatar-activities {
+      color: #6a7074;
+      margin: 0 20px;
+      flex: 1;
+
+      .notice-body-contents-path {
+        margin-left: 10px;
+        margin-top: 5px;
+        font-size: xx-small;
+
+        .contents-path {
+          color: #6a7074;
+          padding-left: 5px;
+        }
+      }
+    }
+    .notice-body-avatar-timeline {
+      font-size: xx-small;
+      color: #6a7074;
+      padding: 0 20px;
+      display: inline-block;
+      text-align: center;
+      .messageCheck {
+        margin-top: 5px;
+        .fa-eye-slash {
+          display: none;
+        }
+        &:hover .fa-eye-slash {
+          display: block;
+        }
+        &:hover .fa-eye {
+          display: none;
+        }
+      }
+    }
+  }
 }

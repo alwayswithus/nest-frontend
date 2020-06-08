@@ -26,27 +26,7 @@ export default class File extends React.Component {
             count: null
         }
     }
-
-    // CallBack Background Image Setting 
-    callbackChangeBackground(url) {
-
-        let authUser = {
-            userNo: window.sessionStorage.getItem("authUserNo"),
-            userBg: url
-        }
-
-        fetch(`${API_URL}/api/user/backgroundChange`, {
-            method: 'post',
-            headers: API_HEADERS,
-            body: JSON.stringify(authUser)
-        })
-
-        sessionStorage.setItem("authUserBg", url)
-        this.setState({
-            url: url
-        })
-    }
-
+    
     callbackFirstPage() {
         this.setState({
             currentPage: 1
@@ -108,7 +88,7 @@ export default class File extends React.Component {
 
         return (
             <div className="File" style={{ backgroundImage: `url(${this.state.url})` }}>
-                <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
+                <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 <TopBar projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname} />
                 <div className="file-resource-table">
                     <Table>
