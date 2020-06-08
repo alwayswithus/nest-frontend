@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import './file.scss';
 import FileList from './FileList'
 import Header from './Header';
-import axios from 'axios';
 import { AlertList } from "react-bs-notifier";
 
 const API_URL = "http://localhost:8080/nest";
@@ -17,7 +16,7 @@ class File extends Component {
         this.state = {
             selectedFile:null,
             // danger: false,
-            position: "top-right",
+            position: "bottom-right",
             alerts: [],
             timeout: 2000,
             newMessage: "지원하지 않는 파일 형식입니다.",
@@ -31,7 +30,6 @@ class File extends Component {
             selectedFile : event.target.files[0],
         })
 
-        console.log(event.target.files[0].type)
         if(event.target.files.length !== 0 && (event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || event.target.files[0].type === 'image/png' || event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             || event.target.files[0].type === 'text/plain' || event.target.files[0].type ==='image/jpeg')) {
@@ -94,12 +92,13 @@ class File extends Component {
         return (
             <div className="SettingFile">
                 <AlertList
+                    style={{top:'70px'}}
                     position={this.state.position}
                     alerts={this.state.alerts}
                     timeout={this.state.timeout}
                     dismissTitle="cancel"
                     onDismiss={this.onAlertDismissed.bind(this)}
-                    />
+                />
                 <Header 
                     taskItem={taskItem} 
                     taskCallbacks={this.props.taskCallbacks}

@@ -9,6 +9,9 @@ import './file.scss';
 import ApiService from "../../ApiService";
 import Pagination from './Pagination';
 import { paginate } from './Paginate';
+import update from "react-addons-update";
+import Viewer from 'react-viewer'
+import EachFile from "./EachFile";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -23,10 +26,20 @@ export default class File extends React.Component {
             currentPage: 1,
             projectFiles: [],
             fileSearch: "",
-            count: null
+            count: null,
+            visible: false,
+            loading: false,
+            rotatable: false
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            loading: true
+        });
+
+
+    }
     // CallBack Background Image Setting 
     callbackChangeBackground(url) {
 
@@ -99,6 +112,51 @@ export default class File extends React.Component {
         })
     }
 
+    //파일 다운로드
+    downloadEmployeeData(fileNo) {
+        //blob : 이미지, 사운드, 비디오와 같은 멀티미디어 데이터를 다룰 때 사용, MIME 타입을 알아내거나, 데이터를 송수신
+        fetch(`${API_URL}/api/download/${fileNo}`)
+            .then(response => {
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    console.log(a.href)
+                    a.download = filename;
+                    a.click();
+                });
+            });
+    }
+
+    //파일 삭제하기
+    onClickDeleteFile(fileNo, commentNo) {
+        if (window.confirm("파일을 삭제하시겠습니까?")) {
+
+            const fileIndex = this.state.projectFiles.findIndex((file) => file.fileNo === fileNo);
+    
+            fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
+            method: "delete"
+            })
+            .then(response => response.json())
+            .then(json => {
+                let newFileList = update(this.state.projectFiles, {
+                    $splice: [[fileIndex, 1]],
+                });
+
+                this.setState({
+                    projectFiles:newFileList
+                })
+            })
+        }
+    }
+
+    //이미지 뷰어
+    onClickImage() {
+        this.setState({
+            visible: !this.state.visible
+        })
+    }
     render() {
 
         if (this.state.count === 0)
@@ -115,7 +173,7 @@ export default class File extends React.Component {
                         <thead>
                             <tr style={{ backgroundColor: "#E3E3E3" }}>
                                 <th style={{ paddingLeft: "17px" }}>이름</th>
-                                <th>크기</th>
+                                <th>위치</th>
                                 <th>공유한 날짜</th>
                                 <th>공유한 사람</th>
                             </tr>
@@ -123,46 +181,10 @@ export default class File extends React.Component {
                         <tbody>
                             {files && files
                             .map(projectFile =>
-                                <tr className="file-contents" key={projectFile.fileNo}>
-                                    <td>
-                                        <div className="file-name-cell">
-                                            <div className="file-name-cell-image">
-                                                <img className="file-image" src={`${API_URL}${projectFile.filePath}`} />
-                                                {projectFile.originName}
-                                            </div>
-                                            <div className="file-name-and-path">
-                                                <span className="file-name">{projectFile.fileName}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style={{ paddingTop: "23px" }}>
-                                        <Link
-                                            style={{ color: 'black', textDecoration: 'none' }}
-                                            to={`/nest/dashboard/${this.props.match.params.projectNo}/kanbanboard/${projectFile.tasklistNo}/task/${projectFile.taskNo}/file`}>
-                                            <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom">
-                                                {projectFile.tasklistName} > {projectFile.taskContents}
-                                            </div>
-                                            <ReactTooltip />
-                                        </Link>
-                                    </td>
-                                    <td style={{ paddingTop: "23px" }}>{moment(projectFile.fileRegdate).format("MM월 DD일 hh:mm")}</td>
-                                    <td style={{ paddingTop: "17px" }}>
-                                        <div className="share-person">
-                                            {projectFile.userName}
-                                        </div>
-                                        <div className="contents-dropdown">
-                                            <div className="dropdown">
-                                                <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                                    <i className="fas fa-ellipsis-v"></i>
-                                                </button>
-                                                <ul className="dropdown-menu">
-                                                    <li><a href="#">다운로드</a></li>
-                                                    <li><a href="#">삭제</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <EachFile 
+                                    projectFile = {projectFile}
+                                    projectNo={this.props.match.params.projectNo}
+                                />
                             )}
                         </tbody>
                     </Table>

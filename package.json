@@ -31,7 +31,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-tabbordion": "^1.0.5",
-    "react-tooltip": "^4.2.6"
+    "react-tooltip": "^4.2.6",
+    "react-viewer": "^3.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
