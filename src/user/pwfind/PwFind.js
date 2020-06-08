@@ -28,7 +28,7 @@ const PwFind = () => {
       setEmail("");
       return;
     } else {
-      ApiService.fetchEmailCheck(email, name)
+      ApiService.fetchEmailCheckName(email, name)
       .then(response => {
         if(response.data.data.userGrade=="정회원"){
           setMessageText("확인됨.");
