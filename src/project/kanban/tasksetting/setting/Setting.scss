@@ -13,6 +13,7 @@
   margin-top: 31px;
   clear: both;
   overflow: auto;
+  overflow-x: hidden;
   box-shadow: -60px -50px 50px -90px #000000, 60px 0px 50px -90px #000000;
   .taskSettingList {
     .fa-lock {

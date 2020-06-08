@@ -9,6 +9,8 @@ import PwFind from "./user/pwfind/PwFind";
 import SendMail from "./user/sendmail/sendmail";
 import Errors from "./errors/Errors";
 
+import SignUpEmail from "./user/signup/SignUpEmail";
+
 import Gantt from "./project/gantt/Gantt";
 import File from "./project/file/File";
 
@@ -61,7 +63,9 @@ function App() {
     {/*회원 */}
     <Route path="/nest/signup" exact component={SignUp} />
     <Route path="/nest/pwfind" exact component={PwFind} />
+    <Route path="/nest/sendmail" component={SendMail} />
     <Route path="/nest/sendmail/:signup" component={SendMail} />
+    <Route path="/nest/signup/emailConfirm/:keys" component={SignUpEmail} />
 
       <div className="App" style={{ backgroundImage: `url(${url})` }}>
 

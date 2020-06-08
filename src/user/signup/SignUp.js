@@ -40,6 +40,9 @@ const SignUp = () => {
     if(messageText!="확인됨."){
       e.preventDefault();
     }
+
+    
+
   };
 
   return (

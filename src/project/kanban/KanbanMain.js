@@ -629,16 +629,12 @@ class KanbanMain extends Component {
   }
 
   //task에 tag 추가하기
-  callbackAddTag(tagNo, tagName, taskListNo, taskNo, array) {
+  callbackAddTag(tagNo, tagName, taskListNo, taskNo) {
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
       (task) => task.taskNo === taskNo
-    );
-
-    const tagIndex = this.state.taskList[taskIndex].tasks[taskIndex].tagList.findIndex(
-      (tag) => tag.tagNo == tagNo
     );
     
     let newTag = {
@@ -690,7 +686,7 @@ class KanbanMain extends Component {
   }
 
   //task에 tag 삭제하기
-  callbackDeleteTag(tagNo, taskListNo, taskNo, array) {
+  callbackDeleteTag(tagNo, taskListNo, taskNo) {
     console.log("KanbanMain : " + tagNo + ":" + taskListNo + ":" + taskNo);
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
@@ -1388,6 +1384,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                   updateTaskTag: this.onSetStateTaskTagNo.bind(this),
                   updateTaskDate:this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
                   modalStateUpdate:this.modalStateUpdate.bind(this),
+                  tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
                   taskMemberState: this.taskMemberState.bind(this),
                   addDeleteMember: this.addDeleteMember.bind(this),
                   updateTaskPoint: this.callbackUpdateTaskPoint.bind(this), // 업무 포인트 업뎃
