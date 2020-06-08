@@ -62,11 +62,15 @@ class Setting extends Component {
     
     //태그 + 버튼 클릭.(모달창 띄우기)
     onClickTag(){
-        this.setState({
-            closeValue:!this.state.closeValue
-        })
-        var array = [...this.props.taskTagNo]
-        this.props.taskCallbacks.updateTaskTag(array, this.props.task, this.props.match.params.taskListNo, this.props.match.params.taskNo)
+        this.props.taskCallbacks.tagModalStateUpdate();
+
+        const taskList = this.props.task;
+        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
+        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
+        const taskItem = taskList[taskListIndex].tasks[taskIndex]
+
+        this.props.taskCallbacks.updateTaskTag(taskItem)
+        
     }
 
     
@@ -87,7 +91,7 @@ class Setting extends Component {
         this.setState({
             closeTag:!this.state.closeTag
         })
-        this.onClickTag()
+        this.props.taskCallbacks.tagModalStateUpdate();
     }
 
     //새 태그 만들기
@@ -264,10 +268,9 @@ class Setting extends Component {
                                     }
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
                                         {/* tag 검색창 */}
-                                       {this.state.closeValue ? <TagModal
-                                            closeValue = {this.state.closeValue} // 태그 모달 띄우는 상태변수
+                                       <TagModal
+                                            tagModal={this.props.tagModal} // 태그 모달 띄우는 상태변수
                                             closeTag = {this.state.closeTag} // 새 태그 만들기 모달 띄우는 상태 변수
-                                            onClickTag={this.onClickTag.bind(this, taskItem)} // 태그 모달 띄우는 함수
                                             onClicknewTagModal = {this.onClicknewTagModal.bind(this)} // 새 태그 만들기 모달 띄우는 함수
                                             key={this.props.task.taskNo} 
                                             taskListNo = {this.props.match.params.taskListNo}
@@ -280,8 +283,7 @@ class Setting extends Component {
                                             settingTagCallbakcs={{
                                                 add:this.callbackAddTags.bind(this),
                                                 delete: this.callbackDeleteTags.bind(this)
-                                            }} /> : null
-                                        } 
+                                            }} />
                                     </div>
                                 </div>
 

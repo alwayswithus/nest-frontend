@@ -28,7 +28,8 @@ class KanbanMain extends Component {
       taskTagNo:[], //task tag의 no만 모아둔 배열
       modalState:false,
       taskMemberState: false, //task memer modal 상태변수
-      point: null // 업무 중요도 상태변수
+      point: null, // 업무 중요도 상태변수
+      tagModal:false, // 태그 모달 상태변수
     };
   }
 
@@ -680,7 +681,7 @@ class KanbanMain extends Component {
             },
           },
         })
-        this.onSetStateTaskTagNo(array, newTagData, taskListNo, taskNo)
+        this.onSetStateTaskTagNo(newTagData[taskListIndex].tasks[taskIndex])
         this.setState({
           taskList: newTagData,
         });
@@ -717,7 +718,7 @@ class KanbanMain extends Component {
           },
         },
       });
-    this.onSetStateTaskTagNo(array, newTaskList, taskListNo, taskNo)
+    this.onSetStateTaskTagNo(newTaskList[taskListIndex].tasks[taskIndex])
     this.setState({
       taskList: newTaskList,
     });
@@ -1144,20 +1145,12 @@ class KanbanMain extends Component {
   }
 
   // 태그가 추가 될 때마다 taskTagNo를 set 해줌.
-  onSetStateTaskTagNo(array, TaskList, taskListNo, taskNo){
-    const taskListIndex = TaskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-    const taskIndex = TaskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
-
-    array.splice(0, TaskList[taskListIndex].tasks[taskIndex].tagList.length)
+  onSetStateTaskTagNo(newTaskList){
+    let array = []
+    array = array.concat(newTaskList.tagList.map(tag => tag.tagNo))
     this.setState({
-        taskTagNo:array.concat(TaskList[taskListIndex].tasks[taskIndex].tagList.map(tag => tag.tagNo))
+        taskTagNo:array
     })
-
-    console.log("kanbanMain + ")
   }
 
   //업무에 멤버 추가 & 삭제
@@ -1279,7 +1272,8 @@ callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
 modalStateFalse(){
  this.setState({
   modalState : false,
-  taskMemberState:false
+  taskMemberState:false,
+  tagModal: false
  })
 }
 // 모달 상태 변경
@@ -1290,9 +1284,15 @@ modalStateUpdate(){
 }
 
 taskMemberState(){
-  console.log("click!")
   this.setState({
     taskMemberState: !this.state.taskMemberState
+  })
+}
+
+//tag modal update
+tagModalStateUpdate(){
+  this.setState({
+    tagModal: !this.state.tagModal
   })
 }
 
@@ -1372,10 +1372,11 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                 {...match}
                 authUserRole={this.state.authUserRole}
                 modalState={this.state.modalState}
+                tagModal = {this.state.tagModal} // 태그 모달 띄우는 상태변수
                 taskMemberState={this.state.taskMemberState}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
-                taskTagNo={this.state.taskTagNo}
+                taskTagNo={this.state.taskTagNo} //업무 태그 번호만 모아둔 상태배열
                 taskCallbacks={{
                   checklistStateUpdate: this.callbackCheckListStateUpdate.bind( this), // checklist state 업데이트
                   checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
