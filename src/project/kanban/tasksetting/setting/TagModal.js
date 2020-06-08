@@ -32,14 +32,12 @@ class TagModal extends Component {
                 tagNo,
                 tagName,
                 this.props.taskListNo,
-                this.props.taskNo,
-                array);
+                this.props.taskNo);
         } else {
             this.props.taskCallbacks.deletetag(
                 tagNo,
                 this.props.taskListNo,
-                this.props.taskNo,
-                array)
+                this.props.taskNo)
         }
     }
 
