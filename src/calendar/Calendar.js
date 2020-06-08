@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import update from 'react-addons-update';
 
+import CalendarEvent from './CalendarEvent';
 import Navigator from '../navigator/Navigator';
-// import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.scss';
 import ApiService from '../ApiService';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
+
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+  'Content-Type': 'application/json'
+}
 
 class myCalendar extends Component {
   constructor() {
     super(...arguments);
 
     this.state = {
+      projectNumber: [],
       projects: [],
       events: [],
       showProjectList: false,
@@ -43,6 +48,37 @@ class myCalendar extends Component {
     obj[event.target.value] = event.target.checked
     this.setState({
       radioGroup: obj
+    })
+  }
+
+  onCheckProject(event) {
+    let projects = this.state.projects;
+    let projectNumber = this.state.projectNumber;
+
+    projects.forEach(project => {
+      if(project.projectNo == event.target.value) {
+        project.isChecked = event.target.checked
+        if(project.isChecked === true) {
+          if(projectNumber.includes(project.projectNo)) {
+            const projectNumberIndex = projectNumber.findIndex(projectNumber => projectNumber === project.projectNo)
+            projectNumber = projectNumber.splice(projectNumberIndex, 1)
+          } else {
+            projectNumber.push(project.projectNo)
+          }
+        }
+        else {
+          const projectNumberIndex = projectNumber.findIndex(projectNumber => projectNumber === project.projectNo)
+          projectNumber.splice(projectNumberIndex, 1)
+          
+          if(projectNumber.length === 0) {
+            this.state.projects.map(project => projectNumber.push(project.projectNo))
+          }
+        }
+      }
+    })
+    this.setState({
+      projectNumber: projectNumber,
+      projects: projects
     })
   }
 
@@ -80,25 +116,27 @@ class myCalendar extends Component {
                       <div>
                         <div onClick={this.onShowProjectList.bind(this)}>
                           {this.state.showProjectList ?
-                          <div>
-                            <div>
-                              <div style={{ display: "inline-block", width: "20px" }}>
-                                <i className="fas fa-chevron-down"></i>
-                              </div>
-                              <div style={{ display: "inline-block" }}>
-                                <h6 style={{ fontWeight: "bold", fontSize: "16px" }}>프로젝트</h6>
-                              </div>
-                            </div>
-                          </div> :
-                            <div>
-                            <div style={{ display: "inline-block", width: "20px" }}>
+                            <div style={{ display: "inline-block", width: "15px" }}>
+                              <i className="fas fa-chevron-down"></i>
+                            </div> :
+                            <div style={{ display: "inline-block", width: "15px" }}>
                               <i className="fas fa-chevron-right"></i>
-                            </div>
-                            <div style={{ display: "inline-block" }}>
-                              <h6 style={{ fontWeight: "bold", fontSize: "16px" }}>프로젝트</h6>
-                            </div>
-                          </div>}
+                            </div>}
+                            <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
+                              프로젝트
+                            </h6>
                         </div>
+                        {this.state.showProjectList ?
+                          <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
+                            {this.state.projects && this.state.projects.map(project => 
+                              <div key={project.projectNo}>
+                                <input type="checkbox" checked={project.isChecked} onChange={this.onCheckProject.bind(this)} value={project.projectNo}/>
+                                <p style={{display: "inline-block", marginBottom: "0px", marginLeft: "5px"}}>
+                                  {project.projectTitle}
+                                </p>
+                              </div>  
+                            )}
+                        </div> : ""}
                       </div>
                     </div>
                   </div>
@@ -140,7 +178,9 @@ class myCalendar extends Component {
               <Calendar
                 localizer={localizer}
                 defaultDate={moment().toDate()}
-                events={this.state.events}
+                events={this.state.events.filter(event => 
+                  this.state.projectNumber.indexOf(event.projectNo) !== -1 ? this.state.events : ""
+                )}
                 startAccessor="start"
                 endAccessor="end"
                 eventPropGetter={event => {
@@ -169,8 +209,16 @@ class myCalendar extends Component {
       })
     ApiService.fetchDashboard()
       .then(response => {
+        let projectNumber = [];
+        response.data.data.allProject.map(project => {
+          project["isChecked"] = false
+        })
+        response.data.data.allProject.map(project => {
+          projectNumber.push(project.projectNo);
+        })
         this.setState({
-          projects: response.data.data.allProject
+          projects: response.data.data.allProject,
+          projectNumber: projectNumber
         })
       })
   }
