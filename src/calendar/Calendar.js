@@ -1,132 +1,49 @@
 import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import update from 'react-addons-update';
+
 import Navigator from '../navigator/Navigator';
 // import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.scss';
+import ApiService from '../ApiService';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
 
 class myCalendar extends Component {
   constructor() {
-    super();
-    const now = new Date();
-    const events = [
-      {
-        id: 0,
-        title: 'All Day Event very long title',
-        allDay: true,
-        start: new Date(2015, 3, 0),
-        end: new Date(2015, 3, 1),
-      },
-      {
-        id: 1,
-        title: 'Long Event',
-        start: new Date(2015, 3, 7),
-        end: new Date(2015, 3, 10),
-      },
+    super(...arguments);
 
-      {
-        id: 2,
-        title: 'DTS STARTS',
-        start: new Date(2016, 2, 13, 0, 0, 0),
-        end: new Date(2016, 2, 20, 0, 0, 0),
-      },
-
-      {
-        id: 3,
-        title: 'DTS ENDS',
-        start: new Date(2016, 10, 6, 0, 0, 0),
-        end: new Date(2016, 10, 13, 0, 0, 0),
-      },
-
-      {
-        id: 4,
-        title: 'Some Event',
-        start: new Date(2015, 3, 9, 0, 0, 0),
-        end: new Date(2015, 3, 10, 0, 0, 0),
-      },
-      {
-        id: 5,
-        title: 'Conference',
-        start: new Date(2015, 3, 11),
-        end: new Date(2015, 3, 13),
-        desc: 'Big conference for important people',
-      },
-      {
-        id: 6,
-        title: 'Meeting',
-        start: new Date(2015, 3, 12, 10, 30, 0, 0),
-        end: new Date(2015, 3, 12, 12, 30, 0, 0),
-        desc: 'Pre-meeting meeting, to prepare for the meeting',
-      },
-      {
-        id: 7,
-        title: 'Lunch',
-        start: new Date(2015, 3, 12, 12, 0, 0, 0),
-        end: new Date(2015, 3, 12, 13, 0, 0, 0),
-        desc: 'Power lunch',
-      },
-      {
-        id: 8,
-        title: 'Meeting',
-        start: new Date(2015, 3, 12, 14, 0, 0, 0),
-        end: new Date(2015, 3, 12, 15, 0, 0, 0),
-      },
-      {
-        id: 9,
-        title: 'Happy Hour',
-        start: new Date(2015, 3, 12, 17, 0, 0, 0),
-        end: new Date(2015, 3, 12, 17, 30, 0, 0),
-        desc: 'Most important meal of the day',
-      },
-      {
-        id: 10,
-        title: 'Dinner',
-        start: new Date(2015, 3, 12, 20, 0, 0, 0),
-        end: new Date(2015, 3, 12, 21, 0, 0, 0),
-      },
-      {
-        id: 11,
-        title: 'Birthday Party',
-        start: new Date(2015, 3, 13, 7, 0, 0),
-        end: new Date(2015, 3, 13, 10, 30, 0),
-      },
-      {
-        id: 12,
-        title: 'Late Night Event',
-        start: new Date(2015, 3, 17, 19, 30, 0),
-        end: new Date(2015, 3, 18, 2, 0, 0),
-      },
-      {
-        id: 12.5,
-        title: 'Late Same Night Event',
-        start: new Date(2015, 3, 17, 19, 30, 0),
-        end: new Date(2015, 3, 17, 23, 30, 0),
-      },
-      {
-        id: 13,
-        title: 'Multi-day Event',
-        start: new Date(2015, 3, 20, 19, 30, 0),
-        end: new Date(2015, 3, 22, 2, 0, 0),
-      },
-      {
-        id: 14,
-        title: 'Today',
-        start: new Date(new Date().setHours(new Date().getHours() - 3)),
-        end: new Date(new Date().setHours(new Date().getHours() + 3)),
-      },
-      {
-        id: 15,
-        title: 'Point in Time Event',
-        start: now,
-        end: now,
-      },
-    ]
     this.state = {
-      name: 'React',
-      events
-    };
+      projects: [],
+      events: [],
+      showProjectList: false,
+      showTaskList: false,
+      radioGroup: {
+        myTask: false,
+        allTask: true
+      }
+    }
+  }
+
+  onShowProjectList() {
+    this.setState({
+      showProjectList: !this.state.showProjectList
+    })
+  }
+
+  onShowTaskList() {
+    this.setState({
+      showTaskList: !this.state.showTaskList
+    })
+  }
+
+  onTaskChange(event) {
+    let obj = {}
+    obj[event.target.value] = event.target.checked
+    this.setState({
+      radioGroup: obj
+    })
   }
 
   render() {
@@ -136,47 +53,126 @@ class myCalendar extends Component {
         <div className="sidebar">
           <Navigator />
         </div>
-        {/* <div className="calendar-header-background"/> */}
         <div className="calendar-contents">
-          {/* <div className="calendar-header-contents">
-            <div className="calendar-header-icon">
-              <div className="calendar-header-title-month">
-                <span className="calendar-header-title-month-text">may</span>
-              </div>
-              <div className="calendar-header-title-day">
-                <span className="calendar-header-title-day-text">8</span>
-              </div>
-            </div>
-            <div className="calendar-header-title-text">
-              <span className="calendar-header-title-plural">
-                어쩌구 저쩌구
-              </span>
-            </div>
-          </div> */}
           <div className="calendar-body-contents">
             <div className="calendar-body-contents-filter">
-              <table className="filterList" >
+              <table className="filterList">
                 <tr>
-                  <div style={{ height: "30px", width: "100%", backgroundColor: "#615161" }} />
+                  <div style={{ width: "100%", paddingTop: "26px", fontWeight: "bold" }}>
+                    <input onChange={this.onTaskChange.bind(this)} type="radio" checked={this.state.radioGroup["myTask"]} value="myTask" name="radioGroup" /> &nbsp; 내 업무 <br />
+                    <input onChange={this.onTaskChange.bind(this)} type="radio" checked={this.state.radioGroup["allTask"]} value="allTask" name="radioGroup" /> &nbsp; 전체 업무
+                    <hr style={{ borderTop: "1px solid #CBCBCB" }} />
+                  </div>
                 </tr>
                 <tr>
-                  <div style={{ height: "30px", width: "60px", backgroundColor: "#615161" }} />
+                  <div style={{ width: "100%" }}>
+                    <h4 style={{ marginTop: "0px", fontWeight: "bold" }}>빠른 필터</h4>
+                    <div style={{ fontWeight: "bold" }}>
+                      <input type="checkbox" /> &nbsp; 나에게 배정된 업무
+                      <input type="checkbox" /> &nbsp; 내가 작성한 업무
+                      <hr style={{ borderTop: "1px solid #CBCBCB" }} />
+                    </div>
+                  </div>
+                </tr>
+                <tr>
+                  <div style={{ width: "100%" }}>
+                    <div className="show-project-list">
+                      <div>
+                        <div onClick={this.onShowProjectList.bind(this)}>
+                          {this.state.showProjectList ?
+                          <div>
+                            <div>
+                              <div style={{ display: "inline-block", width: "20px" }}>
+                                <i className="fas fa-chevron-down"></i>
+                              </div>
+                              <div style={{ display: "inline-block" }}>
+                                <h6 style={{ fontWeight: "bold", fontSize: "16px" }}>프로젝트</h6>
+                              </div>
+                            </div>
+                          </div> :
+                            <div>
+                            <div style={{ display: "inline-block", width: "20px" }}>
+                              <i className="fas fa-chevron-right"></i>
+                            </div>
+                            <div style={{ display: "inline-block" }}>
+                              <h6 style={{ fontWeight: "bold", fontSize: "16px" }}>프로젝트</h6>
+                            </div>
+                          </div>}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr style={{ borderTop: "1px solid #CBCBCB" }} />
+                </tr>
+                <tr>
+                  <div style={{ width: "100%" }}>
+                    <div className="show-task-list">
+                      <div>
+                        <div onClick={this.onShowTaskList.bind(this)}>
+                          {this.state.showTaskList ?
+                            <div style={{ display: "inline-block", width: "15px" }}>
+                              <i className="fas fa-chevron-down"></i>
+                            </div> :
+                            <div style={{ display: "inline-block", width: "15px" }}>
+                              <i className="fas fa-chevron-right"></i>
+                            </div>}
+                          <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
+                            업무 리스트
+                            </h6>
+                        </div>
+                        {this.state.showTaskList ?
+                          <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
+                            <input type="checkbox" /> &nbsp; 계획
+                        </div> : ""}
+                      </div>
+                    </div>
+                  </div>
+                  <hr style={{ borderTop: "1px solid #CBCBCB" }} />
+                </tr>
+                <tr>
+                  <div className="filter-cancel">
+                    필터 전부 취소하기
+                  </div>
                 </tr>
               </table>
             </div>
             <div className="calendar-body-contents-calendar">
               <Calendar
+                localizer={localizer}
+                defaultDate={moment().toDate()}
                 events={this.state.events}
                 startAccessor="start"
                 endAccessor="end"
-                defaultDate={moment().toDate()}
-                localizer={localizer}
+                eventPropGetter={event => {
+                  const eventData = this.state.events.find(ot => ot.id === event.id);
+                  const backgroundColor = eventData && eventData.color;
+                  return { style: { backgroundColor: backgroundColor } }
+                }}
               />
             </div>
           </div>
         </div>
       </div>
     )
+  }
+
+  componentDidMount() {
+    ApiService.fetchCalendar()
+      .then(response => {
+        response.data.data.allTask.map(task => {
+          task["start"] = new Date(task.start);
+          task["end"] = new Date(task.end + 1)
+        })
+        this.setState({
+          events: response.data.data.allTask
+        })
+      })
+    ApiService.fetchDashboard()
+      .then(response => {
+        this.setState({
+          projects: response.data.data.allProject
+        })
+      })
   }
 }
 export default myCalendar;

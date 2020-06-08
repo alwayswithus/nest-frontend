@@ -7,6 +7,10 @@ class ApiService {
         return axios.get(`/nest/api/dashboard/${window.sessionStorage.getItem("authUserNo")}`);
     }
 
+    fetchCalendar() {
+        return axios.get(`/nest/api/calendar/${window.sessionStorage.getItem("authUserNo")}`);
+    }
+
     fetchProjectMember(projectNo) {
         return axios.get(`/nest/api/dashboard/member/${projectNo}`)
     }
