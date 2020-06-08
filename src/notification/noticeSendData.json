@@ -1,194 +1,162 @@
-[
+{
+  "date": [
+    { "dateYear": "2020", "dateMonth": "Jun", "dateDay": "14" },
+    { "dateYear": "2020", "dateMonth": "Jun", "dateDay": "12" },
+    { "dateYear": "2020", "dateMonth": "Jun", "dateDay": "10" },
+    { "dateYear": "2020", "dateMonth": "Jun", "dateDay": "06" },
+    { "dateYear": "2020", "dateMonth": "Jun", "dateDay": "05" },
+    { "dateYear": "2020", "dateMonth": "Jun", "dateDay": "01" }
+  ],
+  "notice": [
     {
-        "noticeNo": 1,
-        "noticeMessage": "한해용님의 코멘트에 공감했습니다.",
-        "noticeType": "like",
-        "noticeDate": "2020-05-26 14:19",
-        "sendUser": {
-            "userNo": 2,
-            "userName": "최인효",
-            "userPhoto": "/nest/assets/images/toy.png"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "진행 업무 1"
-        },
-        "project": {
-            "projectNo": 2,
-            "projectName": "Git Book"
-        }
+      "taskListNo": 18,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 30,
+      "messageCheck": "N",
+      "userNo": 4,
+      "noticeMessage": "김둥지님의 코멘트에 공감했습니다.",
+      "noticeType": "comment",
+      "userName": "김우경",
+      "projectNo": 5,
+      "noticeDate": "2020-06-14 09:40:00.0",
+      "taskContents": "SQL 공부",
+      "taskNo": 90,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 2,
-        "noticeMessage": "한해용님의 코멘트에 공감했습니다.",
-        "noticeType": "like",
-        "noticeDate": "2020-05-26 08:00",
-        "sendUser": {
-            "userNo": 1,
-            "userName": "김우경",
-            "userPhoto": "/nest/assets/images/ko.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "진행 업무 1"
-        },
-        "project": {
-            "projectNo": 2,
-            "projectName": "코드의 숲"
-        }
-        
+      "taskListNo": 18,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 29,
+      "messageCheck": "N",
+      "userNo": 4,
+      "noticeMessage": "김둥지님의 코멘트에 공감했습니다.",
+      "noticeType": "comment",
+      "userName": "김우경",
+      "projectNo": 5,
+      "noticeDate": "2020-06-14 09:40:00.0",
+      "taskContents": "DB 생성",
+      "taskNo": 89,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 3,
-        "noticeMessage": "최인효님의 코멘트가 달렸습니다.",
-        "noticeType": "comment",
-        "noticeDate": "2020-05-25 17:30",
-        "sendUser": {
-            "userNo": 2,
-            "userName": "최인효",
-            "userPhoto": "/nest/assets/images/toy.png"
-        },
-        "task": {
-            "taskNo": 3,
-            "taskContents": "계획 업무 3"
-        },
-        "project": {
-            "projectNo": 1,
-            "projectName": "서마트 커스텀 스토어"
-        }
-        
+      "taskListNo": 18,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 28,
+      "messageCheck": "N",
+      "userNo": 1,
+      "noticeMessage": "최인효님의 코멘트가 달렸습니다.",
+      "noticeType": "comment",
+      "userName": "허길행",
+      "projectNo": 5,
+      "noticeDate": "2020-06-12 09:40:00.0",
+      "taskContents": "framwork공부",
+      "taskNo": 88,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 4,
-        "noticeMessage": "한해용님을 멘션했습니다.",
-        "noticeType": "mention",
-        "noticeDate": "2020-05-25 13:30",
-        "sendUser": {
-            "userNo": 3,
-            "userName": "허길행",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 18,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 27,
+      "messageCheck": "Y",
+      "userNo": 4,
+      "noticeMessage": "김둥지님을 멘션했습니다.",
+      "noticeType": "comment",
+      "userName": "김우경",
+      "projectNo": 5,
+      "noticeDate": "2020-06-12 09:40:00.0",
+      "taskContents": "개발 환경 셋팅",
+      "taskNo": 87,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 5,
-        "noticeMessage": "한해용님을 배정했습니다.",
-        "noticeType": "assign",
-        "noticeDate": "2020-05-24 13:30",
-        "sendUser": {
-            "userNo": 1,
-            "userName": "김우경",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 18,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 26,
+      "messageCheck": "Y",
+      "userNo": 4,
+      "noticeMessage": "김둥지님을 배정했습니다.",
+      "noticeType": "task",
+      "userName": "김우경",
+      "projectNo": 5,
+      "noticeDate": "2020-06-10 09:40:00.0",
+      "taskContents": "front-end 공부",
+      "taskNo": 86,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 6,
-        "noticeMessage": "한해용님을 배정했습니다.",
-        "noticeType": "assign",
-        "noticeDate": "2020-05-24 13:30",
-        "sendUser": {
-            "userNo": 1,
-            "userName": "김우경",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 17,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 25,
+      "messageCheck": "Y",
+      "userNo": 4,
+      "noticeMessage": "김둥지님을 배정했습니다.",
+      "noticeType": "task",
+      "userName": "김우경",
+      "projectNo": 5,
+      "noticeDate": "2020-06-10 09:40:00.0",
+      "taskContents": "react 공부",
+      "taskNo": 85,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 7,
-        "noticeMessage": "한해용님을 배정했습니다.",
-        "noticeType": "assign",
-        "noticeDate": "2020-05-24 13:30",
-        "sendUser": {
-            "userNo": 1,
-            "userName": "김우경",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 17,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 24,
+      "messageCheck": "Y",
+      "userNo": 1,
+      "noticeMessage": "김둥지님을 배정했습니다.",
+      "noticeType": "task",
+      "userName": "허길행",
+      "projectNo": 5,
+      "noticeDate": "2020-06-10 09:40:00.0",
+      "taskContents": "전체적으로 복습",
+      "taskNo": 84,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 8,
-        "noticeMessage": "한해용님을 배정했습니다.",
-        "noticeType": "assign",
-        "noticeDate": "2020-05-23 13:30",
-        "sendUser": {
-            "userNo": 3,
-            "userName": "허길행",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 17,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 22,
+      "messageCheck": "Y",
+      "userNo": 4,
+      "noticeMessage": "김둥지님을 배정했습니다.",
+      "noticeType": "task",
+      "userName": "김우경",
+      "projectNo": 5,
+      "noticeDate": "2020-06-06 09:40:00.0",
+      "taskContents": "점검하기",
+      "taskNo": 82,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 9,
-        "noticeMessage": "한해용님을 배정했습니다.",
-        "noticeType": "assign",
-        "noticeDate": "2020-05-23 13:30",
-        "sendUser": {
-            "userNo": 1,
-            "userName": "김우경",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 17,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 21,
+      "messageCheck": "Y",
+      "userNo": 20,
+      "noticeMessage": "김둥지님을 배정했습니다.",
+      "noticeType": "task",
+      "userName": "최인효",
+      "projectNo": 5,
+      "noticeDate": "2020-06-05 09:40:00.0",
+      "taskContents": "시현 준비",
+      "taskNo": 81,
+      "projectTitle": "NEST"
     },
     {
-        "noticeNo": 9,
-        "noticeMessage": "한해용님을 배정했습니다.",
-        "noticeType": "assign",
-        "noticeDate": "2020-05-22 13:30",
-        "sendUser": {
-            "userNo": 1,
-            "userName": "김우경",
-            "userPhoto": "/nest/assets/images/unnamed.jpg"
-        },
-        "task": {
-            "taskNo": 1,
-            "taskContents": "완료 업무 1"
-        },
-        "project": {
-            "projectNo": 3,
-            "projectName": "코드의 숲"
-        }
+      "taskListNo": 17,
+      "userPhoto": "/nest/assets/images/unnamed.jpg",
+      "noticeNo": 23,
+      "messageCheck": "Y",
+      "userNo": 20,
+      "noticeMessage": "김둥지님을 배정했습니다.",
+      "noticeType": "task",
+      "userName": "최인효",
+      "projectNo": 5,
+      "noticeDate": "2020-06-01 09:40:00.0",
+      "taskContents": "웹 구축하기",
+      "taskNo": 83,
+      "projectTitle": "NEST"
     }
-]
+  ]
+}

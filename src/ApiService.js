@@ -46,6 +46,10 @@ class ApiService {
     fetchEmailCheck(email,name){
         return axios.post(`/nest/api/emailnamecheck?email=${email}&name=${name}`)
     }
+
+    fetchNotification(){
+        return axios.get(`/nest/api/notification/${window.sessionStorage.getItem("authUserNo")}`)
+    }
 }
 
 export default new ApiService();

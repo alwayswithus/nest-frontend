@@ -6,8 +6,8 @@ import Navigator from "../navigator/Navigator";
 const Profile = (props) => {
     return (
         <>
-            <Navigator />
-            <div style={{ textAlign: 'center', backgroundColor:'#E7E7E7'}}>
+            <Navigator callbackChangeBackground = {props.callbackChangeBackground}/>
+            <div style={{ textAlign: 'center'}}>
                 <div className="Profile">
                     <ProfileNav />
                     <div className="profileLayout">

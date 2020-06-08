@@ -8,8 +8,8 @@ const ProfileSetting = (props) => {
  
     return (
         <>
-            <Navigator />
-            <div style={{ textAlign: 'center', backgroundColor:'#E7E7E7'}}>
+            <Navigator callbackChangeBackground = {props.callbackChangeBackground}/>
+            <div style={{ textAlign: 'center'}}>
                 <div className="ProfileSetting">
                 <ProfileNav />
                     <div className="profileLayout">

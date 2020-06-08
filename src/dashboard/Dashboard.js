@@ -60,26 +60,6 @@ export default class Dashboard extends React.Component {
     }
   }
 
-  // CallBack Background Image Setting 
-  callbackChangeBackground(url) {
-
-    let authUser = {
-      userNo: window.sessionStorage.getItem("authUserNo"),
-      userBg: url
-    }
-
-    fetch(`${API_URL}/api/user/backgroundChange`, {
-      method: 'post',
-      headers: API_HEADERS,
-      body: JSON.stringify(authUser)
-    })
-
-    sessionStorage.setItem("authUserBg", url)
-    this.setState({
-      url: url
-    })
-  }
-
   // CallBack Project Setting Close Button 
   callbackCloseProjectSetting(setOn) {
     this.setState({
@@ -814,7 +794,7 @@ export default class Dashboard extends React.Component {
         <div className="container-fluid">
           {/* Side Bar */}
           <div className="sidebar">
-            <Navigator callbackChangeBackground={{ change: this.callbackChangeBackground.bind(this) }} />
+            <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
           </div>
 
           {/* Top Bar */}
