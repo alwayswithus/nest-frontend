@@ -27,6 +27,22 @@
 		}
 	
 		form .pwFindItems {
+			height: 42px;
+			font-size: 12pt;
+		}
+
+		#errorText {
+			font-size: 12pt;
+			color: #ff0000;
+		}
+
+		#doneText {
+			font-size: 12pt;
+			color: #007800;
+		}
+
+		#Btn{
+			width: 200px;
 			font-size: 12pt;
 		}
 		

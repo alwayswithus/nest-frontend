@@ -1,5 +1,5 @@
 
-.Errors {
+.SendMail {
 	height: 100%;
 	text-align: center;
 	&:before {
@@ -11,7 +11,7 @@
 		vertical-align: middle;
 	}
 }
-.ErrorsBox {
+.SendMailBox {
 	display: inline-block;
 	vertical-align: middle;
 	width: 300px;
@@ -20,7 +20,7 @@
 	border-radius: 10px;
 	background-color: #e7e7e7;
 
-	#ErrorsText {
+	#SendMailText {
 		color: #000;
 		font-size: 17pt;
 		font-weight: bold;

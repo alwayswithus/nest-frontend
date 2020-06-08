@@ -42,6 +42,10 @@ class ApiService {
     fetchEmailCheck(email){
         return axios.post(`/nest/api/emailcheck?email=${email}`)
     }
+
+    fetchEmailCheck(email,name){
+        return axios.post(`/nest/api/emailnamecheck?email=${email}&name=${name}`)
+    }
 }
 
 export default new ApiService();
