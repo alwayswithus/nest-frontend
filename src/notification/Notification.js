@@ -51,7 +51,10 @@ class Notification extends React.Component {
     }
 
     render() {
-        
+        let count = 0;
+        this.state.notices.map(notice => 
+            notice.messageCheck === 'N' ? (count +=1) : null
+        )
         return (
             <div className="Notification" >
                 {/* 사이드바 */}
@@ -71,7 +74,7 @@ class Notification extends React.Component {
                         </div>
                         <div className="notice-header-title-text">
                             <span className="notice-header-title-plural">
-                                {this.state.notices.length} 개의 새 업데이트가 있습니다.
+                                {count} 개의 새 업데이트가 있습니다.
                             </span>
                         </div>
                     </div>
@@ -93,6 +96,7 @@ class Notification extends React.Component {
     componentDidMount() {
         ApiService.fetchNotification().then(
           (response) => {
+            console.log(response);  
             this.setState({
                 dates:response.data.data.date,
                 notices:response.data.data.notice
