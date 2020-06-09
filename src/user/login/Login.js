@@ -7,29 +7,38 @@ import ApiService from '../../ApiService';
 
 import "./login.scss"
 
-const Login = () => {
+const Login = (it) => {
+  const ck = it.location.search;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [textbox, setTextbox] = useState((ck=="?error")?"이메일 또는 비밀번호가 불일치 합니다.":"");
 
   const setEmailText = e => {
+    setTextbox("");
     setEmail(e.target.value);
   };
 
   const setPasswordText = e => {
+    setTextbox("");
     setPassword(e.target.value);
   };
 
   const login = e => {
-    //e.preventDefault();
-    ApiService.fetchLogin(e.target.email.value, e.target.password.value)
-    .then(response => {
-      sessionStorage.setItem("authUserNo", response.data.data.userNo)
-      sessionStorage.setItem("authUserEmail", response.data.data.userEmail)
-      sessionStorage.setItem("authUserName", response.data.data.userName)
-      sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
-      sessionStorage.setItem("authUserBg", response.data.data.userBg)
+    // e.preventDefault();
 
-    });
+    ApiService.fetchLogin(e.target.email.value, e.target.password.value)
+      .then(response => {
+        if (response.data.data) {
+          // setTextbox("접속중...");
+          sessionStorage.setItem("authUserNo", response.data.data.userNo)
+          sessionStorage.setItem("authUserEmail", response.data.data.userEmail)
+          sessionStorage.setItem("authUserName", response.data.data.userName)
+          sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
+          sessionStorage.setItem("authUserBg", response.data.data.userBg)
+        }
+      });
+
+      // setTextbox("이메일 또는 비밀번호가 불일치 합니다.");
   };
 
   return (
@@ -39,7 +48,8 @@ const Login = () => {
           <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
           <form onSubmit={login}  action="/nest/auth" method="POST" >
             <InputLabel id="loginText">Log In</InputLabel>
-            <br/>
+            <p id="note_texts"> {textbox} <br/></p>
+
             <Input
                     className="loginItems"
                     name="email"
@@ -59,7 +69,7 @@ const Login = () => {
                     value={password}
                   />
             <br/><br/>
-
+          
             <Input className="loginItems" id="loginSubmit" type="submit" value="로그인" />
 				  </form>
 
