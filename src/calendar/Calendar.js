@@ -19,6 +19,21 @@ class myCalendar extends Component {
 
     this.state = {
       userNumber: window.sessionStorage.getItem("authUserNo"),
+      isDoChecked: false,
+      isDoneChecked: false,
+      taskState: [],
+      taskNumber: [],
+
+      isPointFive: false,
+      isPointFour: false,
+      isPointThree: false,
+      isPointTwo: false,
+      isPointOne: false,
+      isPointZero: false,
+      isPointNull: false,
+      taskPoint: [],
+      taskPointNumber: [],
+
       projectNumber: [],
       projects: [],
       events: [],
@@ -53,9 +68,140 @@ class myCalendar extends Component {
   onTaskChange(event) {
     let obj = {}
     obj[event.target.value] = event.target.checked
-    
+
     this.setState({
       radioGroup: obj
+    })
+  }
+
+  onCheckFilter(event) {
+    let isDoChecked = this.state.isDoChecked;
+    let isDoneChecked = this.state.isDoneChecked;
+    let taskState = this.state.taskState;
+    let taskNumber = this.state.taskNumber;
+
+    if (event.target.value === "do") {
+      isDoChecked = event.target.checked
+      if (isDoChecked === true) {
+        taskState.forEach(task => {
+          if (task.state === "done") {
+            const index = taskNumber.findIndex(taskNumberIndex => taskNumberIndex === task.id)
+            taskNumber.splice(index, 1)
+          }
+        })
+      }
+      else {
+        taskState.forEach(task => {
+          if (task.state === "do") {
+            const index = taskNumber.findIndex(taskNumberIndex => taskNumberIndex === task.id)
+            taskNumber.splice(index, 1)
+          }
+        })
+      }
+    }
+    else if (event.target.value === "done") {
+      isDoneChecked = event.target.checked
+      if (isDoneChecked === true) {
+        taskState.forEach(task => {
+          if (task.state === "do") {
+            const index = taskNumber.findIndex(taskNumberIndex => taskNumberIndex === task.id)
+            taskNumber.splice(index, 1)
+          }
+        })
+      }
+      else {
+        taskState.forEach(task => {
+          if (task.state === "done") {
+            const index = taskNumber.findIndex(taskNumberIndex => taskNumberIndex === task.id)
+            taskNumber.splice(index, 1)
+          }
+        })
+      }
+    }
+
+    if (isDoneChecked === false && isDoChecked === false) {
+      taskState.forEach(task => {
+        taskNumber.push(task.id)
+      })
+    }
+    else if (isDoneChecked === true && isDoChecked === true) {
+      taskState.forEach(task => {
+        taskNumber.push(task.id)
+      })
+    }
+
+    this.setState({
+      isDoChecked: isDoChecked,
+      isDoneChecked: isDoneChecked,
+      taskNumber: taskNumber
+    })
+  }
+
+  onCheckPoint(event) {
+    let isPointFive = this.state.isPointFive
+    let isPointFour = this.state.isPointFour
+    let isPointThree = this.state.isPointThree
+    let isPointTwo = this.state.isPointTwo
+    let isPointOne = this.state.isPointOne
+    let isPointZero = this.state.isPointZero
+    let isPointNull = this.state.isPointNull
+    let taskPoint = this.state.taskPoint
+    let taskPointNumber = this.state.taskPointNumber
+
+    taskPoint.forEach(task => {
+      if(task.point+"" == event.target.value) {
+        if(task.point == "5") {
+          isPointFive = event.target.checked
+        }
+        else if(task.point == "4") {
+          isPointFour = event.target.checked
+        }
+        else if(task.point == "3") {
+          isPointThree = event.target.checked
+        }
+        else if(task.point == "2") {
+          isPointTwo = event.target.checked
+        }
+        else if(task.point == "1") {
+          isPointOne = event.target.checked
+        }
+        else if(task.point == "0") {
+          isPointZero = event.target.checked
+        }
+        else if(task.point+"" === "null") {
+          isPointNull = event.target.checked
+        }
+        task.isChecked = event.target.checked
+        if(task.isChecked === true) {
+          if(taskPointNumber.includes(task.id)) {
+            const taskPointNumberIndex = taskPointNumber.findIndex(taskPointNumber => taskPointNumber === task.id)
+            taskPointNumber = taskPointNumber.splice(taskPointNumberIndex, 1)
+          }
+          else {
+            taskPointNumber.push(task.id)
+          }
+        }
+        else {
+          const taskPointNumberIndex = taskPointNumber.findIndex(taskPointNumber => taskPointNumber === task.id)
+          taskPointNumber.splice(taskPointNumberIndex, 1)
+        
+          if (taskPointNumber.length === 0) {
+            this.state.taskPoint.map(task => taskPointNumber.push(task.id))
+          }
+        }
+      }
+    })
+
+    this.setState({
+      isPointFive: isPointFive,
+      isPointFour: isPointFour,
+      isPointThree: isPointThree,
+      isPointTwo: isPointTwo,
+      isPointOne: isPointOne,
+      isPointZero: isPointZero,
+      isPointNull: isPointNull,
+      taskPoint: taskPoint,
+      taskPointNumber: taskPointNumber
     })
   }
 
@@ -91,8 +237,11 @@ class myCalendar extends Component {
     })
   }
 
+  onFilterCancel() {
+    
+  }
+
   render() {
-    console.log(this.state.events);
     return (
       <div id="Calendar" style={{ backgroundImage: `url(${this.state.url})` }}>
         {/* 사이드바 */}
@@ -114,9 +263,8 @@ class myCalendar extends Component {
                   <div style={{ width: "100%" }}>
                     <h4 style={{ marginTop: "0px", fontWeight: "bold" }}>빠른 필터</h4>
                     <div style={{ fontWeight: "bold" }}>
-                      <input type="checkbox" /> &nbsp; 내가 작성한 업무 <br />
-                      <input type="checkbox" /> &nbsp; 현재 진행중인 업무 <br />
-                      <input type="checkbox" /> &nbsp; 현재 완료된 업무
+                      <input type="checkbox" checked={this.state.isDoChecked} value="do" onChange={this.onCheckFilter.bind(this)} /> &nbsp; 현재 진행중인 업무 <br />
+                      <input type="checkbox" checked={this.state.isDoneChecked} value="done" onChange={this.onCheckFilter.bind(this)} /> &nbsp; 현재 완료된 업무
                       <hr style={{ borderTop: "1px solid #CBCBCB" }} />
                     </div>
                   </div>
@@ -133,8 +281,8 @@ class myCalendar extends Component {
                             <div style={{ display: "inline-block", width: "15px" }}>
                               <i className="fas fa-chevron-right"></i>
                             </div>}
-                            <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
-                              프로젝트
+                          <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
+                            프로젝트
                             </h6>
                         </div>
                         {this.state.showProjectList ?
@@ -155,34 +303,6 @@ class myCalendar extends Component {
                 </tr>
                 <tr>
                   <div style={{ width: "100%" }}>
-                    <div className="show-date">
-                      <div>
-                        <div onClick={this.onShowDate.bind(this)}>
-                          {this.state.showDate ?
-                            <div style={{ display: "inline-block", width: "15px" }}>
-                              <i className="fas fa-chevron-down"></i>
-                            </div> :
-                            <div style={{ display: "inline-block", width: "15px" }}>
-                              <i className="fas fa-chevron-right"></i>
-                            </div>}
-                            <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
-                              마감일
-                            </h6>
-                        </div>
-                        {this.state.showDate ?
-                          <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
-                            <input type="checkbox" /> &nbsp; 마감일 한 달 전 <br />
-                            <input type="checkbox" /> &nbsp; 마감일 일주일 전 <br />
-                            <input type="checkbox" /> &nbsp; 마감일 하루 전 <br />
-                            <input type="checkbox" /> &nbsp; 마감일 지남 <br />
-                        </div> : ""}
-                      </div>
-                    </div>
-                  </div>
-                  <hr style={{ borderTop: "1px solid #CBCBCB" }} />
-                </tr>
-                <tr>
-                  <div style={{ width: "100%" }}>
                     <div className="show-important">
                       <div>
                         <div onClick={this.onShowImportant.bind(this)}>
@@ -193,26 +313,27 @@ class myCalendar extends Component {
                             <div style={{ display: "inline-block", width: "15px" }}>
                               <i className="fas fa-chevron-right"></i>
                             </div>}
-                           <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
-                              중요도
+                          <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
+                            중요도
                             </h6>
                         </div>
                         {this.state.showImportant ?
                           <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
-                            <input type="checkbox" /> &nbsp; 중요도 5 <br />
-                            <input type="checkbox" /> &nbsp; 중요도 4 <br />
-                            <input type="checkbox" /> &nbsp; 중요도 3 <br />
-                            <input type="checkbox" /> &nbsp; 중요도 2 <br />
-                            <input type="checkbox" /> &nbsp; 중요도 1 <br />
-                            <input type="checkbox" /> &nbsp; 평가되지 않음 <br />
-                        </div> : ""}
+                            <input type="checkbox" checked={this.state.isPointFive} value="5" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 5 <br />
+                            <input type="checkbox" checked={this.state.isPointFour} value="4" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 4 <br />
+                            <input type="checkbox" checked={this.state.isPointThree} value="3" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 3 <br />
+                            <input type="checkbox" checked={this.state.isPointTwo} value="2" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 2 <br />
+                            <input type="checkbox" checked={this.state.isPointOne} value="1" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 1 <br />
+                            <input type="checkbox" checked={this.state.isPointZero} value="0" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 0 <br />
+                            <input type="checkbox" checked={this.state.isPointNull} value="null" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 평가되지 않음 <br />
+                          </div> : ""}
                       </div>
                     </div>
                   </div>
                   <hr style={{ borderTop: "1px solid #CBCBCB" }} />
                 </tr>
                 <tr>
-                  <div className="filter-cancel">
+                  <div className="filter-cancel" onClick={this.onFilterCancel.bind(this)}>
                     필터 전부 취소하기
                   </div>
                 </tr>
@@ -223,9 +344,9 @@ class myCalendar extends Component {
                 localizer={localizer}
                 defaultDate={moment().toDate()}
                 events={this.state.events.filter(event =>
-                  this.state.radioGroup["allTask"] === true ? 
-                    (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? this.state.events : "") : 
-                    (this.state.userNumber == event.userNo ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? this.state.events : "") : "")
+                  this.state.radioGroup["allTask"] === true ?
+                    (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
+                    (this.state.userNumber == event.userNo ? (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
                 )}
                 startAccessor="start"
                 endAccessor="end"
@@ -245,13 +366,29 @@ class myCalendar extends Component {
   componentDidMount() {
     ApiService.fetchCalendar()
       .then(response => {
+        let taskState = [];
+        let taskNumber = [];
+        let taskPoint = [];
+        let taskPointNumber = [];
+
         response.data.data.allTask.map(task => {
           task["start"] = new Date(task.start);
           task["end"] = new Date(task.end + 1)
         })
 
+        response.data.data.allTask.map(task => {
+          taskState.push({ id: task.id, state: task.taskState })
+          taskNumber.push(task.id)
+          taskPoint.push({ id: task.id, point: task.taskPoint, isChecked: false })
+          taskPointNumber.push(task.id)
+        })
+
         this.setState({
-          events: response.data.data.allTask
+          events: response.data.data.allTask,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber
         })
       })
     ApiService.fetchDashboard()
