@@ -18,7 +18,7 @@ class NoticeDate extends React.Component {
         return (
             <div className="NoticeDate">
                 {this.props.notices && this.props.notices.map(notice =>
-                    moment(notice.noticeDate).format('YYYY-MMM-DD') === date ?
+                    moment(notice.noticeDate).locale('en').format('YYYY-MMM-DD') === date ?
                         <div key={notice.noticeNo} className={`notice-body-contents-today ${notice.messageCheck === 'N' ? "newMessage": ""}`} >
                             
                             <div className="notice-body-contents-avatar-image">
@@ -63,9 +63,7 @@ class NoticeDate extends React.Component {
                             </div>
                             
                         </div>
-                        : <div>
-                            {console.log(moment(notice.noticeDate).locale('en').format('YYYY-MMM-DD'))}
-                        </div>)}
+                        : null)}
             </div>
         )
     }
