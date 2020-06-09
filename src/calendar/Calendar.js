@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 
-import CalendarEvent from './CalendarEvent';
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
 import ApiService from '../ApiService';
@@ -19,11 +18,13 @@ class myCalendar extends Component {
     super(...arguments);
 
     this.state = {
+      userNumber: window.sessionStorage.getItem("authUserNo"),
       projectNumber: [],
       projects: [],
       events: [],
       showProjectList: false,
-      showTaskList: false,
+      showDate: false,
+      showImportant: false,
       radioGroup: {
         myTask: false,
         allTask: true
@@ -37,15 +38,22 @@ class myCalendar extends Component {
     })
   }
 
-  onShowTaskList() {
+  onShowDate() {
     this.setState({
-      showTaskList: !this.state.showTaskList
+      showDate: !this.state.showDate
+    })
+  }
+
+  onShowImportant() {
+    this.setState({
+      showImportant: !this.state.showImportant
     })
   }
 
   onTaskChange(event) {
     let obj = {}
     obj[event.target.value] = event.target.checked
+    
     this.setState({
       radioGroup: obj
     })
@@ -56,10 +64,10 @@ class myCalendar extends Component {
     let projectNumber = this.state.projectNumber;
 
     projects.forEach(project => {
-      if(project.projectNo == event.target.value) {
+      if (project.projectNo == event.target.value) {
         project.isChecked = event.target.checked
-        if(project.isChecked === true) {
-          if(projectNumber.includes(project.projectNo)) {
+        if (project.isChecked === true) {
+          if (projectNumber.includes(project.projectNo)) {
             const projectNumberIndex = projectNumber.findIndex(projectNumber => projectNumber === project.projectNo)
             projectNumber = projectNumber.splice(projectNumberIndex, 1)
           } else {
@@ -69,13 +77,14 @@ class myCalendar extends Component {
         else {
           const projectNumberIndex = projectNumber.findIndex(projectNumber => projectNumber === project.projectNo)
           projectNumber.splice(projectNumberIndex, 1)
-          
-          if(projectNumber.length === 0) {
+
+          if (projectNumber.length === 0) {
             this.state.projects.map(project => projectNumber.push(project.projectNo))
           }
         }
       }
     })
+
     this.setState({
       projectNumber: projectNumber,
       projects: projects
@@ -83,11 +92,12 @@ class myCalendar extends Component {
   }
 
   render() {
+    console.log(this.state.events);
     return (
       <div id="Calendar" style={{ backgroundImage: `url(${this.state.url})` }}>
         {/* 사이드바 */}
         <div className="sidebar">
-          <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
+          <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
         </div>
         <div className="calendar-contents">
           <div className="calendar-body-contents">
@@ -104,8 +114,9 @@ class myCalendar extends Component {
                   <div style={{ width: "100%" }}>
                     <h4 style={{ marginTop: "0px", fontWeight: "bold" }}>빠른 필터</h4>
                     <div style={{ fontWeight: "bold" }}>
-                      <input type="checkbox" /> &nbsp; 나에게 배정된 업무
-                      <input type="checkbox" /> &nbsp; 내가 작성한 업무
+                      <input type="checkbox" /> &nbsp; 내가 작성한 업무 <br />
+                      <input type="checkbox" /> &nbsp; 현재 진행중인 업무 <br />
+                      <input type="checkbox" /> &nbsp; 현재 완료된 업무
                       <hr style={{ borderTop: "1px solid #CBCBCB" }} />
                     </div>
                   </div>
@@ -128,14 +139,42 @@ class myCalendar extends Component {
                         </div>
                         {this.state.showProjectList ?
                           <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
-                            {this.state.projects && this.state.projects.map(project => 
+                            {this.state.projects && this.state.projects.map(project =>
                               <div key={project.projectNo}>
-                                <input type="checkbox" checked={project.isChecked} onChange={this.onCheckProject.bind(this)} value={project.projectNo}/>
-                                <p style={{display: "inline-block", marginBottom: "0px", marginLeft: "5px"}}>
+                                <input type="checkbox" checked={project.isChecked} onChange={this.onCheckProject.bind(this)} value={project.projectNo} />
+                                <p style={{ display: "inline-block", marginBottom: "0px", marginLeft: "5px" }}>
                                   {project.projectTitle}
                                 </p>
-                              </div>  
+                              </div>
                             )}
+                          </div> : ""}
+                      </div>
+                    </div>
+                  </div>
+                  <hr style={{ borderTop: "1px solid #CBCBCB" }} />
+                </tr>
+                <tr>
+                  <div style={{ width: "100%" }}>
+                    <div className="show-date">
+                      <div>
+                        <div onClick={this.onShowDate.bind(this)}>
+                          {this.state.showDate ?
+                            <div style={{ display: "inline-block", width: "15px" }}>
+                              <i className="fas fa-chevron-down"></i>
+                            </div> :
+                            <div style={{ display: "inline-block", width: "15px" }}>
+                              <i className="fas fa-chevron-right"></i>
+                            </div>}
+                            <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
+                              마감일
+                            </h6>
+                        </div>
+                        {this.state.showDate ?
+                          <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
+                            <input type="checkbox" /> &nbsp; 마감일 한 달 전 <br />
+                            <input type="checkbox" /> &nbsp; 마감일 일주일 전 <br />
+                            <input type="checkbox" /> &nbsp; 마감일 하루 전 <br />
+                            <input type="checkbox" /> &nbsp; 마감일 지남 <br />
                         </div> : ""}
                       </div>
                     </div>
@@ -144,23 +183,28 @@ class myCalendar extends Component {
                 </tr>
                 <tr>
                   <div style={{ width: "100%" }}>
-                    <div className="show-task-list">
+                    <div className="show-important">
                       <div>
-                        <div onClick={this.onShowTaskList.bind(this)}>
-                          {this.state.showTaskList ?
+                        <div onClick={this.onShowImportant.bind(this)}>
+                          {this.state.showImportant ?
                             <div style={{ display: "inline-block", width: "15px" }}>
                               <i className="fas fa-chevron-down"></i>
                             </div> :
                             <div style={{ display: "inline-block", width: "15px" }}>
                               <i className="fas fa-chevron-right"></i>
                             </div>}
-                          <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
-                            업무 리스트
+                           <h6 style={{ display: "inline-block", marginLeft: "5px", fontSize: "16px", fontWeight: "bold" }}>
+                              중요도
                             </h6>
                         </div>
-                        {this.state.showTaskList ?
+                        {this.state.showImportant ?
                           <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
-                            <input type="checkbox" /> &nbsp; 계획
+                            <input type="checkbox" /> &nbsp; 중요도 5 <br />
+                            <input type="checkbox" /> &nbsp; 중요도 4 <br />
+                            <input type="checkbox" /> &nbsp; 중요도 3 <br />
+                            <input type="checkbox" /> &nbsp; 중요도 2 <br />
+                            <input type="checkbox" /> &nbsp; 중요도 1 <br />
+                            <input type="checkbox" /> &nbsp; 평가되지 않음 <br />
                         </div> : ""}
                       </div>
                     </div>
@@ -178,8 +222,10 @@ class myCalendar extends Component {
               <Calendar
                 localizer={localizer}
                 defaultDate={moment().toDate()}
-                events={this.state.events.filter(event => 
-                  this.state.projectNumber.indexOf(event.projectNo) !== -1 ? this.state.events : ""
+                events={this.state.events.filter(event =>
+                  this.state.radioGroup["allTask"] === true ? 
+                    (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? this.state.events : "") : 
+                    (this.state.userNumber == event.userNo ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? this.state.events : "") : "")
                 )}
                 startAccessor="start"
                 endAccessor="end"
@@ -203,6 +249,7 @@ class myCalendar extends Component {
           task["start"] = new Date(task.start);
           task["end"] = new Date(task.end + 1)
         })
+
         this.setState({
           events: response.data.data.allTask
         })
