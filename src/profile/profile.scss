@@ -53,6 +53,9 @@
                 border: 2px solid darkgrey; 
                 border-radius: 10px; 
                 padding-left: 10px;
+                &:hover{
+                    border: 2px solid black; 
+                }
             }
             .profileMenu{
                 margin-top: 10px; 

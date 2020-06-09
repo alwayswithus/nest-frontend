@@ -1,29 +1,30 @@
-.SettingFile{
+.SettingFile {
     position: fixed;
     right: 0;
     margin-top: -49px;
     height: calc(100% - 215px);
+    z-index: 1;
     .File {
-        width:632px;
-        background-color: #F3F4F5;
-        float:right;
+        width: 632px;
+        background-color: #f3f4f5;
+        float: right;
         margin-top: 31px;
-        clear:both;
+        clear: both;
         box-shadow: -58px -58px 50px -92px #000000, 60px 0px 50px -90px #000000;
 
-        hr{
-            border: 0.5px solid #DFDFDF;
+        hr {
+            border: 0.5px solid #dfdfdf;
         }
-        .FileMenu{
+        .FileMenu {
             align-items: center;
             .disabled-submit-button {
                 border: none;
                 padding: 5px 12px;
                 margin-top: 11px;
-                background: #CCCCCC;
+                background: #cccccc;
                 color: #fff;
                 font-size: 1em;
-                transition: all .4s;
+                transition: all 0.4s;
                 cursor: pointer;
                 border-radius: 3px;
             }
@@ -31,65 +32,74 @@
                 border: none;
                 padding: 5px 12px;
                 margin-top: 11px;
-                background: #27B6BA;
+                background: #27b6ba;
                 color: #fff;
                 font-size: 1em;
-                transition: all .4s;
+                transition: all 0.4s;
                 cursor: pointer;
                 border-radius: 3px;
             }
 
-            .input-group{
+            .input-group {
                 position: none;
                 .form-control {
                     width: 323px;
                     border-radius: 5px;
                 }
             }
-            .btn .btn-info{
+            .btn .btn-info {
                 color: black;
                 margin: 8px 0px;
             }
-    
-            .navbar-form .navbar-left{
-                .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+
+            .navbar-form .navbar-left {
+                .input-group > .custom-select:not(:last-child),
+                .input-group > .form-control:not(:last-child) {
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
                     width: 120px;
                 }
             }
         }
-    
-        table td { 
-            width:200px; 
+
+        table td {
+            width: 200px;
         }
-    
-        table { 
-            margin:10px;
+
+        table {
+            margin: 10px;
         }
     }
-    
-    .FileList{
+
+    .FileList {
         overflow: auto;
-        .FileList-tr{
+        .FileList-tr {
             border-radius: 5px;
-            td{
+            td {
                 padding-left: 10px;
-                img{
+                .filelist-orginName {
+                    display: inline-block;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    width: 65px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                img {
                     cursor: pointer;
                 }
             }
         }
-        table tr{
+        table tr {
             height: 55px;
             vertical-align: middle;
             background-color: white;
-            button{
+            button {
                 background: none;
                 border: none;
                 margin-top: 37%;
             }
-            li{
+            li {
                 list-style: none;
                 .contents-dropdown {
                     display: inline-block;
@@ -105,38 +115,12 @@
                         }
                     }
                 }
-                
             }
-        //     li button:hover, li button:hover i{
-        //         background: rgb(31,31,31);
-        //         color:#FFFFFF;
-        //         text-decoration:none;
-        //     }
-    
-        //     li ul{
-        //         background: white;
-        //         display:none; 
-        //         height:auto;
-        //         border:0px;
-        //         border-radius: 2px;
-        //         position:absolute;
-        //         width:100px;
-        //         z-index:200;
-        //         right: 30px;
-        //     }
-    
-        //     li, ul li{
-        //         list-style: none;
-        //         margin:5%;
-        //         a{
-        //             color: black;
-        //             text-decoration: none;
-        //         }
-        //     }
-    
-        //     li:hover ul{
-        //         display: block;
-        //     }
         }
     }
+}
+.react-viewer-transition {
+    -webkit-transition: opacity 0.01s ease-out !important;
+    -o-transition: opacity 0.01s ease-out !important;
+    transition: opacity 0.01s ease-out !important;
 }
