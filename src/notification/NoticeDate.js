@@ -63,7 +63,9 @@ class NoticeDate extends React.Component {
                             </div>
                             
                         </div>
-                        : <div>{console.log(moment(notice.noticeDate).format('YYYY-MMM-DD')," 한 / 영 ", console.log(moment(notice.noticeDate).lang("en").format('YYYY-MMM-DD')))}</div>)}
+                        : <div>
+                            {console.log(moment(notice.noticeDate).locale('en').format('YYYY-MMM-DD'))}
+                        </div>)}
             </div>
         )
     }
