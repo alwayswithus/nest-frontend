@@ -93,7 +93,6 @@ class Notification extends React.Component {
     componentDidMount() {
         ApiService.fetchNotification().then(
           (response) => {
-            console.log(response);  
             this.setState({
                 dates:response.data.data.date,
                 notices:response.data.data.notice
