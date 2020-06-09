@@ -80,7 +80,7 @@ class FileComponent extends Component {
                                 }</>
                             }</>
                         }
-                        {this.props.file.originName}</td>
+                        <div className="filelist-orginName">{this.props.file.originName}</div></td>
                     <td>{moment(this.props.file.fileRegDate).format('YYYY년 MM월 DD일')}</td>
                     <td>{this.props.file.userName}</td>
                     <li>

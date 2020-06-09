@@ -50,6 +50,10 @@ class ApiService {
     fetchNotification(){
         return axios.get(`/nest/api/notification/${window.sessionStorage.getItem("authUserNo")}`)
     }
+
+    fetchProfileUser(userNo){
+        return axios.get(`/nest/api/profile/${userNo}`)
+    }
 }
 
 export default new ApiService();
