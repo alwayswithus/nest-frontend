@@ -28,10 +28,7 @@ class Notification extends React.Component {
             (notice) => notice.noticeNo === noticeNo
           );
 
-          console.log(this.state.notices[noticeIndex])
-
         let newNotices = this.state.notices
-
 
         newNotices = update(newNotices,{
             [noticeIndex]:{

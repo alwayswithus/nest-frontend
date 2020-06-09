@@ -13,15 +13,17 @@ class NoticeDate extends React.Component {
     
     render() {
         let date = `${this.props.date.dateYear}-${this.props.date.dateMonth}-${this.props.date.dateDay}`;
+        console.log("date : ", date)
         const today = new Date();
 
         return (
             <div className="NoticeDate">
-                {this.props.notices.map(notice =>
+                {this.props.notices && this.props.notices.map(notice =>
                     moment(notice.noticeDate).format('YYYY-MMM-DD') === date ?
                         <div key={notice.noticeNo} className={`notice-body-contents-today ${notice.messageCheck === 'N' ? "newMessage": ""}`} >
+                            {console.log("true")}
                             <div className="notice-body-contents-avatar-image">
-                                <img src={`../${notice.userPhoto}`} className="notice-avatar-image" />
+                                <img src={`../${notice.userPhoto}`} className="notice-avatar-image" alt="userimg"/>
                             </div>
                             <div className="notice-body-contents-avatar-name">
                                 <span>{notice.userName}</span>
@@ -62,7 +64,7 @@ class NoticeDate extends React.Component {
                             </div>
                             
                         </div>
-                        : "")}
+                        : <div>{console.log("false")}</div>)}
             </div>
         )
     }
