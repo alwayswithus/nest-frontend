@@ -979,19 +979,19 @@ class KanbanMain extends Component {
 
     // 받는사람
     // 알림 번호 , 받는사람 번호 , 읽음 여부(Y)
-    console.log("/////////////////////// 받는사람");
-    console.log("notice_no : ?");
-    console.log("user_no : ",this.state.taskList[taskListIndex].tasks[taskIndex].memberList[0].userNo,"...");
+    // console.log("/////////////////////// 받는사람");
+    // console.log("notice_no : ?");
+    // console.log("user_no : ",this.state.taskList[taskListIndex].tasks[taskIndex].memberList[0].userNo,"...");
 
-    // 보내는 사람
-    // 메세지(수신자님), 타입, 작성날짜, 보내는사람 번호, 업무번호, 플젝번호
-    console.log("/////////////////////// 보내는 사람");
-    console.log("message : ", this.state.taskList[taskListIndex].tasks[taskIndex].memberList[0].userName,"님에게 블라블라")
-    console.log("notice_type : commentInsert")
-    console.log("notice_date : ",Date.now())
-    console.log("user_no : ",sessionStorage.getItem("authUserNo"));
-    console.log("taskNo : ",taskNo);
-    console.log("project_no : ",this.props.match.params.projectNo);
+    // // 보내는 사람
+    // // 메세지(수신자님), 타입, 작성날짜, 보내는사람 번호, 업무번호, 플젝번호
+    // console.log("/////////////////////// 보내는 사람");
+    // console.log("message : ", this.state.taskList[taskListIndex].tasks[taskIndex].memberList[0].userName,"님에게 블라블라")
+    // console.log("notice_type : commentInsert")
+    // console.log("notice_date : ",Date.now())
+    // console.log("user_no : ",sessionStorage.getItem("authUserNo"));
+    // console.log("taskNo : ",taskNo);
+    // console.log("project_no : ",this.props.match.params.projectNo);
 
     
     

@@ -44,14 +44,61 @@
             flex-shrink: 1;
             display: inline-block; 
             position: absolute;
-            
+            .profileBirth{
+                .profileBirth-input{
+                    width:300px;
+                    height: 50px;
+                }
+                .date{
+                    width:65px;
+                    display: inline-block;
+                    margin-right: 15px;
+                    height: 34.4px;
+                    border: 1px solid #CCCCCC;
+                    vertical-align: middle;
+                }
+                
+                .year{
+                    width:95px;
+                    display: inline-block;
+                    margin-left: 15px;
+                    height: 34.4px;
+                    border: 1px solid #CCCCCC;
+                    vertical-align: middle;
+                }
+                .dropup{
+                    display: inline-block;
+                    .btn .caret{
+                        margin-left: 50px;
+                    }
+                    .dropdown-menu{
+                        height: 211px;
+                        overflow: auto;
+                        li{
+                            &:hover{
+                                background-color: #E6E8EC;
+                            }
+                        }
+                        .dropdown-span{
+                            display: block;
+                            padding: 3px 20px;
+                            clear: both;
+                            font-weight: 400;
+                            line-height: 1.42857143;
+                            color: #333;
+                            white-space: nowrap;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
             input {
                 margin-top: 10px; 
                 margin-bottom: 10px; 
                 width:300px; 
                 height: 40px; 
                 border: 2px solid darkgrey; 
-                border-radius: 10px; 
+                border-radius: 5px; 
                 padding-left: 10px;
                 &:hover{
                     border: 2px solid black; 
