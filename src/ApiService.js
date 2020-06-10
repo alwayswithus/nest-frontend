@@ -56,7 +56,7 @@ class ApiService {
     }
 
     fetchEmailKeyCK(key){
-        return axios.get(`/nest/api/emailConfirm?key=${key}`)
+        return axios.post(`/nest/api/emailConfirm?key=${key}`)
     }
 }
 

@@ -10,7 +10,7 @@ const SendMail = () => {
     <>
       <div className="SendMail">
         <div className="SendMailBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black-errors.png" />
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black-errors.png"  alt="메일사진"/>
           <InputLabel id="SendMailText">메일을 전송합니다.</InputLabel>
 
           <br/>
