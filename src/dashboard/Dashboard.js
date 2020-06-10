@@ -19,6 +19,7 @@ const API_HEADERS = {
 export default class Dashboard extends React.Component {
 
   constructor() {
+    super(...arguments);
     const {history} = this.props;
     // 세션 체크...
     if (!sessionStorage.getItem("authUserNo")) {
@@ -26,7 +27,6 @@ export default class Dashboard extends React.Component {
       return;
     }
 
-    super(...arguments);
     this.state = {
       projects: null,                                               // projects data
       users: null,                                                  // user data
@@ -832,10 +832,10 @@ export default class Dashboard extends React.Component {
             {/* Projects */}
             <div className="panel-group">
               {this.state.details ? this.state.projects && this.state.projects
-                .filter(project => project.projectTitle.indexOf(this.state.projectKeyword) != -1 ||
-                  project.projectState.indexOf(this.state.projectKeyword) != -1 ||
-                  project.projectStart.indexOf(this.state.projectKeyword) != -1 ||
-                  project.projectEnd && project.projectEnd.indexOf(this.state.projectKeyword) != -1)
+                .filter(project => project.projectTitle.indexOf(this.state.projectKeyword) !== -1 ||
+                  project.projectState.indexOf(this.state.projectKeyword) !== -1 ||
+                  project.projectStart.indexOf(this.state.projectKeyword) !== -1 ||
+                  (project.projectEnd && project.projectEnd.indexOf(this.state.projectKeyword) !== -1))
                 .map(project =>
                   <div key={project.projectNo} className="panel panel-default projects">
                     <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
@@ -1008,8 +1008,8 @@ export default class Dashboard extends React.Component {
                                     {/* All Users */}
                                     <div className="invite-card-member-list">
                                       {this.state.users && this.state.users
-                                        .filter(user => user.userName.indexOf(this.state.memberKeyword) != -1 ||
-                                          user.userEmail.indexOf(this.state.memberKeyword) != -1)
+                                        .filter(user => user.userName.indexOf(this.state.memberKeyword) !== -1 ||
+                                          user.userEmail.indexOf(this.state.memberKeyword) !== -1)
                                         .map(user =>
                                           <User key={user.userNo} user={user} members={this.state.members}
                                             callbackUser={{ joinExitMember: this.callbackJoinExitMember.bind(this) }} />)

@@ -4,16 +4,11 @@ import ProfileNav from './ProfileNav';
 import Navigator from "../navigator/Navigator";
 import ApiService from '../ApiService';
 import moment from 'moment';
-import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
     "Content-Type": "application/json",
   };
-
-  const API_HEADERS2 = {
-    'Content-Type': 'multipart/form-data; charset=UTF-8'
-}
 
 class Profile extends Component {
     constructor(){
@@ -71,6 +66,8 @@ class Profile extends Component {
         this.setState({
             change:false
         })
+
+        sessionStorage.setItem("authUserPhoto", this.state.photo);
     }
 
     //이름 변경
@@ -178,7 +175,6 @@ class Profile extends Component {
             return <></>
         }
         
-        const month = [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10 , 11, 12]
         
         return (
             <>

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './CheckList.scss'
 class CheckList extends Component {
 
@@ -36,12 +36,12 @@ class CheckList extends Component {
         const checklist = this.props.checklist;
         return (
             <ul className="CheckList">
-                {this.props.params.authUserRole == 3 ? 
+                {this.props.params.authUserRole === 3 ? 
                     <li style={{margin:'2% 0 0 0', cursor:'default'}} key={checklist.checklistNo}>
                         {checklist.checklistState === "done" ? <del>{this.state.keyword}</del> :  this.state.keyword }
                         <i className="fas fa-pen fa-1x" />
                     </li> : 
-                    <>(
+                    <>
                     {this.state.click ? 
                         <>
                             <li style={{margin:'2% 0 0 0'}} key={checklist.checklistNo} onClick = {this.onClickText.bind(this)}>
@@ -55,7 +55,7 @@ class CheckList extends Component {
                             value={this.state.keyword} 
                             onChange={this.onInputChange.bind(this)} 
                             onKeyPress={this.onEnter.bind(this)}></input> }
-                    )</>}
+                    </>}
                 </ul>
             )
         }
