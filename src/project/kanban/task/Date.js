@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment";
 import "./Date.scss";
 
 class Date extends Component {
@@ -9,8 +10,8 @@ class Date extends Component {
       <>
         <div className="task-date">
           {!startDate && !endDate && "일정 미정"}
-          {startDate && !endDate && `${startDate} ~`}
-          {startDate && endDate && `${startDate} ~ ${endDate}`}
+          {startDate && !endDate && `${moment(startDate).format('YYYY-MM-DD')} ~`}
+          {startDate && endDate && `${moment(startDate).format('YYYY-MM-DD')} ~ ${moment(endDate).format('YYYY-MM-DD')}`}
         </div>
       </>
     );
