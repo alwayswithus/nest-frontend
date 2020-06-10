@@ -977,6 +977,7 @@ class KanbanMain extends Component {
 
     ApiNotification.fetchInsertNotice(sessionStorage.getItem("authUserNo"), sessionStorage.getItem("authUserName") ,this.state.taskList[taskListIndex].tasks[taskIndex].memberList, "commentInsert", taskNo, this.props.match.params.projectNo)
 
+
     let newComment = []
     if(file == null){
       newComment = {
