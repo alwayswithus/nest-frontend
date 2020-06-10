@@ -25,20 +25,38 @@ const Login = (it) => {
 
   const login = e => {
     // e.preventDefault();
-
-    ApiService.fetchLogin(e.target.email.value, e.target.password.value)
-      .then(response => {
-        if (response.data.data) {
-          // setTextbox("접속중...");
-          sessionStorage.setItem("authUserNo", response.data.data.userNo)
-          sessionStorage.setItem("authUserEmail", response.data.data.userEmail)
-          sessionStorage.setItem("authUserName", response.data.data.userName)
-          sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
-          sessionStorage.setItem("authUserBg", response.data.data.userBg)
-        }
-      });
-
+    const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+    if(email == ""){
+      setTextbox("이메일을 입력해 주십시오.");
+      setEmail("");
+      setPassword("");
+      e.preventDefault();
+      return;
+    } else if(!email.match(emailRegExp)){
+      setTextbox("이메일 형식이 올바르지 않습니다.");
+      setEmail("");
+      setPassword("");
+      e.preventDefault();
+      return;
+    } else if(password == ""){
+      setTextbox("비밀번호를 입력해 주십시오.");
+      setPassword("");
+      e.preventDefault();
+      return;
+    } else {
+      ApiService.fetchLogin(e.target.email.value, e.target.password.value)
+        .then(response => {
+          if (response.data.data) {
+            // setTextbox("접속중...");
+            sessionStorage.setItem("authUserNo", response.data.data.userNo)
+            sessionStorage.setItem("authUserEmail", response.data.data.userEmail)
+            sessionStorage.setItem("authUserName", response.data.data.userName)
+            sessionStorage.setItem("authUserPhoto", response.data.data.userPhoto)
+            sessionStorage.setItem("authUserBg", response.data.data.userBg)
+          }
+        });
       // setTextbox("이메일 또는 비밀번호가 불일치 합니다.");
+    }
   };
 
   return (

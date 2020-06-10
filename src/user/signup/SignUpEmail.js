@@ -11,11 +11,13 @@ class SignUpEmail extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
+      no:null,
       name:"",
       password:"",
       passwordck:"",
       messageText:""
     }
+    
   }  
 
   render(){
@@ -27,6 +29,9 @@ class SignUpEmail extends React.Component {
     } else if(key) {
       console.log(key);
     }
+    ApiService.fetchEmailKeyCK(key).then();
+    // 0609 작업 여기까지.....
+
 
     const setNameText = e => {
       let keyword = e.target.value;

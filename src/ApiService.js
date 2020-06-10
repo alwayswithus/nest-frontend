@@ -54,6 +54,10 @@ class ApiService {
     fetchProfileUser(userNo){
         return axios.get(`/nest/api/profile/${userNo}`)
     }
+
+    fetchEmailKeyCK(key){
+        return axios.get(`/nest/api/emailConfirm?key=${key}`)
+    }
 }
 
 export default new ApiService();
