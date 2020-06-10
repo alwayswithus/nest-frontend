@@ -11,7 +11,7 @@ const Login = (it) => {
   const ck = it.location.search;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [textbox, setTextbox] = useState((ck=="?error")?"이메일 또는 비밀번호가 불일치 합니다.":"");
+  const [textbox, setTextbox] = useState((ck==="?error")?"이메일 또는 비밀번호가 불일치 합니다.":"");
 
   const setEmailText = e => {
     setTextbox("");
@@ -26,7 +26,7 @@ const Login = (it) => {
   const login = e => {
     // e.preventDefault();
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
-    if(email == ""){
+    if(email === ""){
       setTextbox("이메일을 입력해 주십시오.");
       setEmail("");
       setPassword("");
@@ -38,7 +38,7 @@ const Login = (it) => {
       setPassword("");
       e.preventDefault();
       return;
-    } else if(password == ""){
+    } else if(password === ""){
       setTextbox("비밀번호를 입력해 주십시오.");
       setPassword("");
       e.preventDefault();
@@ -63,7 +63,7 @@ const Login = (it) => {
     <>
       <div className="Login">
         <div className="loginBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
           <form onSubmit={login}  action="/nest/auth" method="POST" >
             <InputLabel id="loginText">Log In</InputLabel>
             <p id="note_texts"> {textbox} <br/></p>

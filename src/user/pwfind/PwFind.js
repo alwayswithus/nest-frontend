@@ -30,7 +30,7 @@ const PwFind = () => {
     } else {
       ApiService.fetchEmailCheckName(email, name)
       .then(response => {
-        if(response.data.data.userGrade=="정회원"){
+        if(response.data.data.userGrade==="정회원"){
           setMessageText("확인됨.");
         }else{
           setMessageText("이메일 또는 이름이 맞지 않습니다.");
@@ -42,7 +42,7 @@ const PwFind = () => {
   };
 
   const pwFind = e => {
-    if(messageText!="확인됨."){
+    if(messageText!=="확인됨."){
       e.preventDefault();
     }
   };
@@ -51,7 +51,7 @@ const PwFind = () => {
     <>
       <div className="PwFind">
         <div className="pwFindBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
 
           <form onSubmit={pwFind} action="/nest/sendmail?mode=findpw" method="POST">
             <InputLabel id="pwFindText">비밀번호 찾기</InputLabel>
@@ -76,9 +76,9 @@ const PwFind = () => {
                   />
             <br/>
             <br/>
-            <p id={(messageText=="확인됨.") ? "doneText":"errorText"}> {messageText} <br/></p>
+            <p id={(messageText==="확인됨.") ? "doneText":"errorText"}> {messageText} <br/></p>
             {
-              (messageText=="확인됨.") ?
+              (messageText==="확인됨.") ?
                   <Input className="pwFindItems" id="pwFindSubmit" type="submit" value="인증 메일 발송"/>
                 :
                   <Button className="pwFindItems" id="Btn" onClick={mailCheck}>이메일 유효성 검사</Button>

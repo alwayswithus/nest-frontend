@@ -10,13 +10,15 @@ const SendMail = () => {
     <>
       <div className="SendMail">
         <div className="SendMailBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black-errors.png" />
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black-mail_1.png"  alt="메일사진"/>
           <InputLabel id="SendMailText">메일을 전송합니다.</InputLabel>
 
           <br/>
           <p>
-              메일을 통해 제공되는 링크로 접속하시여 회원가입을 진행해 주세요.
-              메일전송이 완료될 때 까지 다소의 시간이 걸립니다.
+              메일을 통해 제공되는 <br/>
+              지시를 따라 진행해 주세요.<br/>
+              메일전송이 완료될 때 까지 <br/>
+              다소의 시간이 걸립니다.
           </p>
 
           <br/>

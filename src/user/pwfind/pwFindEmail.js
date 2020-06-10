@@ -4,15 +4,14 @@ import Input from "@material-ui/core/Input";
 import { Button, InputLabel } from "@material-ui/core";
 import ApiService from '../../ApiService';
 
-import "./signup.scss";
+import "./pwFind.scss";
 
-class SignUpEmail extends React.Component {
+class PwFindEmail extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
       no:null,
       email:"",
-      name:"",
       password:"",
       passwordck:"",
       messageText:""
@@ -44,21 +43,12 @@ class SignUpEmail extends React.Component {
           no: response.data.data.userNo,
           email : response.data.data.userEmail
         });
-        // console.log(response.data.data);
-        // console.log(this.state.no);
       }
     );
     
   }
 
   render(){
-    const setNameText = e => {
-      let keyword = e.target.value;
-      this.setState({
-        messageText: "",
-        name: keyword
-      });
-    };
 
     const setPasswordText = e => {
       let keyword = e.target.value;
@@ -96,13 +86,6 @@ class SignUpEmail extends React.Component {
           messageText: "비밀번호가 일치 하지 않습니다."
         })
       } else {
-
-        if(this.state.name === ""){
-          this.setState({
-            name:this.state.email
-          })
-        }
-
         this.setState({
           messageText: "확인됨."
         })
@@ -112,12 +95,12 @@ class SignUpEmail extends React.Component {
 
     return (
       <>
-        <div className="SignUp">
-          <div className="SignUpBox">
+        <div className="PwFind">
+          <div className="pwFindBox">
             <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
   
-            <form action="/nest/signupset" method="POST" >
-              <InputLabel id="signUpText">회원가입</InputLabel>
+            <form action="/nest/pwupdate" method="POST" >
+              <InputLabel id="pwFindText">비밀번호 변경</InputLabel>
               <InputLabel>{this.state.email}</InputLabel>
               <Input
                       name="no"
@@ -125,18 +108,9 @@ class SignUpEmail extends React.Component {
                       type="hidden"
                       value={this.state.no}
                     />
-              <Input
-                      className="SignUpItems"
-                      name="name"
-                      id="name"
-                      placeholder="이름 입력."
-                      onChange={setNameText}
-                      value={this.state.name}
-                    />
-              <br/><br/>
   
               <Input
-                      className="SignUpItems"
+                      className="pwFindItems"
                       name="password"
                       id="password"
                       type="password"
@@ -147,7 +121,7 @@ class SignUpEmail extends React.Component {
               <br/><br/>
   
               <Input
-                      className="SignUpItems"
+                      className="pwFindItems"
                       name="passwordck"
                       id="passwordck"
                       type="password"
@@ -160,9 +134,9 @@ class SignUpEmail extends React.Component {
                   <p id={(this.state.messageText === "확인됨.") ? "doneText" : "errorText"}> { this.state.messageText } <br /></p>
                   {
                       (this.state.messageText === "확인됨.") ?
-                          <Input className="SignUpItems" id="SignUpSubmit" type="submit" value="입력완료" />
+                          <Input className="pwFindItems" id="pwFindSubmit" type="submit" value="입력완료" />
                             :
-                          <Button className="SignUpItems" id="Btn" onClick={Check}>입력확인</Button>
+                          <Button className="pwFindItems" id="Btn" onClick={Check}>입력확인</Button>
                   }
   
             </form>
@@ -174,4 +148,4 @@ class SignUpEmail extends React.Component {
   }
 }
 
-export default SignUpEmail;
+export default PwFindEmail;

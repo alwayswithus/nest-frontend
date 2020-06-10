@@ -24,7 +24,7 @@ const SignUp = () => {
     } else {
       ApiService.fetchEmailCheck(email)
       .then(response => {
-        if(response.data.data.userGrade=="정회원"){
+        if(response.data.data.userGrade==="정회원"){
           setMessageText("이미 가입된 이메일 입니다.");
           setEmail("");
         }else{
@@ -35,12 +35,10 @@ const SignUp = () => {
   };
 
   const SignUp = e => {
-    if(messageText!="확인됨."){
+    if(messageText!=="확인됨."){
       e.preventDefault();
       return;
     }
-
-    window.location.href = "/nest/sendmail"
 
   };
 
@@ -48,7 +46,7 @@ const SignUp = () => {
     <>
       <div className="SignUp">
         <div className="SignUpBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" />
+          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
 
           <form onSubmit={SignUp} action="/nest/sendmail?mode=signup" method="POST" >
             <InputLabel id="signUpText">회원가입</InputLabel>
@@ -63,10 +61,10 @@ const SignUp = () => {
                   />
             <br/><br/>
 
-            <p id={(messageText=="확인됨.") ? "doneText":"errorText"}> {messageText} <br/></p>
+            <p id={(messageText==="확인됨.") ? "doneText":"errorText"}> {messageText} <br/></p>
 
             {
-              (messageText=="확인됨.") ?
+              (messageText==="확인됨.") ?
                   <Input className="SignUpItems" id="SignUpSubmit" type="submit" value="가입하기"/>
                 :
                   <Button className="SignUpItems" id="Btn" onClick={mailCheck}>이메일 중복확인</Button>

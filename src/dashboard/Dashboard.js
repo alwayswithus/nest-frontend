@@ -19,10 +19,10 @@ const API_HEADERS = {
 export default class Dashboard extends React.Component {
 
   constructor() {
-
+    const {history} = this.props;
     // 세션 체크...
     if (!sessionStorage.getItem("authUserNo")) {
-      window.location.href = "/nest/";
+      history.push("/nest/");
       return;
     }
 
