@@ -899,7 +899,7 @@ export default class Dashboard extends React.Component {
                                     상태없음
                                 </span>
                                   <div className="status-color">
-                                    <i className="fas fa-circle fa-xs" style={{ color: "red" }}></i>
+                                    <i className="fas fa-circle fa-xs" style={{ color: "#D9534F" }}></i>
                                   </div>
                                 </div>
                               </div>

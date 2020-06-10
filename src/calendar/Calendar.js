@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from 'react-bootstrap/Button';
 
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
@@ -43,7 +48,8 @@ class myCalendar extends Component {
       radioGroup: {
         myTask: false,
         allTask: true
-      }
+      },
+      privateTask: false
     }
   }
 
@@ -148,32 +154,33 @@ class myCalendar extends Component {
     let taskPoint = this.state.taskPoint
     let taskPointNumber = this.state.taskPointNumber
 
+    if (event.target.value == "5") {
+      isPointFive = event.target.checked
+    }
+    else if (event.target.value == "4") {
+      isPointFour = event.target.checked
+    }
+    else if (event.target.value == "3") {
+      isPointThree = event.target.checked
+    }
+    else if (event.target.value == "2") {
+      isPointTwo = event.target.checked
+    }
+    else if (event.target.value == "1") {
+      isPointOne = event.target.checked
+    }
+    else if (event.target.value == "0") {
+      isPointZero = event.target.checked
+    }
+    else if (event.target.value + "" === "null") {
+      isPointNull = event.target.checked
+    }
+
     taskPoint.forEach(task => {
-      if(task.point+"" == event.target.value) {
-        if(task.point == "5") {
-          isPointFive = event.target.checked
-        }
-        else if(task.point == "4") {
-          isPointFour = event.target.checked
-        }
-        else if(task.point == "3") {
-          isPointThree = event.target.checked
-        }
-        else if(task.point == "2") {
-          isPointTwo = event.target.checked
-        }
-        else if(task.point == "1") {
-          isPointOne = event.target.checked
-        }
-        else if(task.point == "0") {
-          isPointZero = event.target.checked
-        }
-        else if(task.point+"" === "null") {
-          isPointNull = event.target.checked
-        }
+      if (task.point + "" == event.target.value) {
         task.isChecked = event.target.checked
-        if(task.isChecked === true) {
-          if(taskPointNumber.includes(task.id)) {
+        if (task.isChecked === true) {
+          if (taskPointNumber.includes(task.id)) {
             const taskPointNumberIndex = taskPointNumber.findIndex(taskPointNumber => taskPointNumber === task.id)
             taskPointNumber = taskPointNumber.splice(taskPointNumberIndex, 1)
           }
@@ -184,7 +191,7 @@ class myCalendar extends Component {
         else {
           const taskPointNumberIndex = taskPointNumber.findIndex(taskPointNumber => taskPointNumber === task.id)
           taskPointNumber.splice(taskPointNumberIndex, 1)
-        
+
           if (taskPointNumber.length === 0) {
             this.state.taskPoint.map(task => taskPointNumber.push(task.id))
           }
@@ -201,7 +208,8 @@ class myCalendar extends Component {
       isPointZero: isPointZero,
       isPointNull: isPointNull,
       taskPoint: taskPoint,
-      taskPointNumber: taskPointNumber
+      taskPointNumber: taskPointNumber,
+
     })
   }
 
@@ -238,7 +246,65 @@ class myCalendar extends Component {
   }
 
   onFilterCancel() {
-    
+    let taskState = this.state.taskState;
+    let taskNumber = [];
+
+    taskState.forEach(task => {
+      taskNumber.push(task.id)
+    })
+
+    let projects = this.state.projects;
+    let projectNumber = []
+
+    projects.forEach(project => {
+      project["isChecked"] = false;
+      projectNumber.push(project.projectNo);
+    })
+
+    let taskPoint = this.state.taskPoint;
+    let taskPointNumber = []
+
+    taskPoint.forEach(task => {
+      taskPointNumber.push(task.id);
+    })
+
+    this.setState({
+      isDoChecked: false,
+      isDoneChecked: false,
+      isPointFive: false,
+      isPointFour: false,
+      isPointThree: false,
+      isPointTwo: false,
+      isPointOne: false,
+      isPointZero: false,
+      isPointNull: false,
+      radioGroup: {
+        myTask: false,
+        allTask: true
+      },
+      taskNumber: taskNumber,
+      projects: projects,
+      projectNumber: projectNumber,
+      taskPointNumber: taskPointNumber
+    })
+  }
+
+  onSelectEvent(event) {
+    alert(event.title)
+  }
+
+  onSelectSlot(start, end) {
+    console.log(start, end)
+
+    this.setState({
+      privateTask: true
+    })
+  }
+
+  onPrivateTaskClose() {
+    this.setState({
+      privateTask: false
+    })
   }
 
   render() {
@@ -341,6 +407,7 @@ class myCalendar extends Component {
             </div>
             <div className="calendar-body-contents-calendar">
               <Calendar
+                selectable
                 localizer={localizer}
                 defaultDate={moment().toDate()}
                 events={this.state.events.filter(event =>
@@ -355,8 +422,22 @@ class myCalendar extends Component {
                   const backgroundColor = eventData && eventData.color;
                   return { style: { backgroundColor: backgroundColor } }
                 }}
+                onSelectEvent={event => this.onSelectEvent(event)}
+                onSelectSlot={this.onSelectSlot.bind(this)}
               />
             </div>
+            <Dialog open={this.state.privateTask} onClose={this.onPrivateTaskClose.bind(this)}>
+              <DialogTitle style={{ paddingBottom: "0" }}>
+                <h2><b>개인 일정 추가</b></h2>
+              </DialogTitle>
+                <DialogContent>
+                  정말 삭제하시겠습니까? 
+                </DialogContent>
+              <DialogActions>
+                <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: '#696F7A' }}>아니오</Button>
+                <Button variant="outlined" style={{ backgroundColor: '#E95E51', color: 'white' }}>네</Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       </div>
