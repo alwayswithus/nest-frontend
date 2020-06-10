@@ -26,7 +26,8 @@ class File extends Component {
 
     // 파일 선택 했을 때.
     onChangeFileUpload(event) {
-       console.log(event.target.files[0].type)
+       
+        console.log("fileUpload")
         this.setState({
             selectedFile: event.target.files[0],
         })

@@ -977,7 +977,6 @@ class KanbanMain extends Component {
 
     ApiNotification.fetchInsertNotice(sessionStorage.getItem("authUserNo"), sessionStorage.getItem("authUserName") ,this.state.taskList[taskListIndex].tasks[taskIndex].memberList, "commentInsert", taskNo, this.props.match.params.projectNo)
 
-
     let newComment = []
     if(file == null){
       newComment = {
@@ -1080,7 +1079,6 @@ class KanbanMain extends Component {
     fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
       method: "delete"
     })
-    .then(response => response.json())
     .then(json => {
       let newTaskList = update(this.state.taskList, {
         [taskListIndex]: {
@@ -1143,9 +1141,7 @@ class KanbanMain extends Component {
       file,
       taskListNo,
       taskNo,
-      sessionStorage.getItem("authUserNo"),
-      sessionStorage.getItem("authUserName"),
-      sessionStorage.getItem("authUserPhoto")
+      file.originName
     );
   }
 

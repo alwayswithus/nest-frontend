@@ -29,7 +29,6 @@ class CommentList extends Component {
         })
     }
     render(){
-        // const commentListLength = this.props.taskItem.commentList.length;
         
         return (
             <div className="CommentList">

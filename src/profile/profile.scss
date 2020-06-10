@@ -11,26 +11,126 @@
         height:625px; 
         padding-top: 20px;
 
+        .profileSave {
+            float: right;
+            margin-top: 420px;
+            margin-right: 30px;
+            .profileButton { 
+                align-items: center; 
+                border-radius: 3px; 
+                border:none;
+                outline:none;
+                margin-top: 115px;
+                font-size: 1.25rem; 
+                font-weight: bold;
+                height:40px; 
+                width:100px;
+                color:#B0B4BB;
+                background: #E6E8EC;
+            }
+
+            .profileButton-true { 
+                align-items: center; 
+                border-radius: 3px; 
+                border:none;
+                outline:none;
+                margin-top: 115px;
+                font-size: 1.25rem; 
+                font-weight: bold;
+                height:40px; 
+                width:100px;
+                color:white;
+                background: #27B6BA;
+                cursor: pointer;
+            }
+
+            .profileButton-false { 
+                align-items: center; 
+                border-radius: 3px; 
+                border:none;
+                outline:none;
+                margin-top: 115px;
+                font-size: 1.25rem; 
+                font-weight: bold;
+                height:40px; 
+                width:100px;
+                color:#B0B4BB;
+                background: #E6E8EC;
+                cursor: default;
+            }
+        }
+
         .profileImg{
             display: inline-block;
             margin-left: 20px;
-            width:90px;
-            height:100px;
-            margin-left:12%;
+            width: 130px;
+            height: 135px;
+            margin-left: 10%;
             margin-top:1%;
-            .img-circle { 
-                border-radius: 50%; 
+            border: 1px solid black;
+            padding:2px;
+            
+            .photoupdate-reset{
+                width: 50px;
+                height: 30px;
+                padding-top: 6px;
+                margin-top: 12px;
+                margin-left: 8px;
+                margin-right: 18px;
+                border-radius: 3px;
+                color: #696F7A;
+                text-align: center;
+                font-size: 1.5rem;
+                font-weight: bolder;
+                background-color: #E6E8EC;
+                cursor: pointer;
+            }
+
+            .photoupdate-confirm{
+                width: 50px;
+                height: 30px;
+                padding-top: 6px;
+                margin-top: 12px;
+                border-radius: 3px;
+                color: white;
+                text-align: center;
+                font-size: 1.5rem;
+                font-weight: bolder;
+                background-color: #27B6BA;
+                cursor: pointer;
+            }
+
+            .PhotoUpdate{
+                background-color: rgba(black, 0.5);
+                color: white;
+                font-weight: bolder;
+                position: absolute;
+                margin-top: -31px;
+                width: 124px;
+                text-align: center;
+                padding-top:2px;
+                cursor: pointer;
+                &:hover{
+                    background-color: rgba(black, 0.5);
+                    height: 30px;
+                    padding-top: 6px;
+                    margin-top: -39px;
+                    // margin-top: -2
+                }
+            }
+            .userPhoto{ 
+                // border-radius: 50%; 
                 width: 100%; 
-                height:80%; 
+                height:100%; 
                 display: block; 
             }
 
             button {
-                text-align: left;
-                border:none;
+                text-align: center;
+                border: none;
                 background: none;
-                width:150px;
-                margin-left: -15%;
+                width: 150px;
+                margin-left: -14.6%;
                 margin-top: 15%;
                 .icon-camera { 
                     vertical-align: middle;
@@ -97,34 +197,23 @@
                 margin-bottom: 10px; 
                 width:300px; 
                 height: 40px; 
-                border: 2px solid darkgrey; 
-                border-radius: 5px; 
+                border: 1px solid darkgrey; 
+                border-radius: 3px; 
                 padding-left: 10px;
+                &:focus {
+                    outline:1px solid #27B6BA;
+                    border-radius: 3px; 
+                }
                 &:hover{
-                    border: 2px solid black; 
+                    border: 1px solid black; 
                 }
             }
             .profileMenu{
                 margin-top: 10px; 
                 font-size: 1.25rem;
+                font-weight: bold;
             }
 
-            .profileSave {
-                float: right;
-                #profileButton { 
-                    align-items: center;
-                    background: #E3E3E3; 
-                    border-radius: 3px; 
-                    border:none;
-                    outline:none;
-                    margin-top: 10%;
-                    font-size: 1.25rem; 
-                    font-weight: bold;
-                    color:#4D4D4D;
-                    height:40px; 
-                    width:100px;
-                }
-            }
         }
     }
 }
