@@ -49,7 +49,12 @@ class myCalendar extends Component {
         myTask: false,
         allTask: true
       },
-      privateTask: false
+      privateTask: false,
+      eventStart: "",
+      eventShowStart: "",
+      newTaskContents: "",
+
+      pathSelect: false
     }
   }
 
@@ -293,17 +298,77 @@ class myCalendar extends Component {
     alert(event.title)
   }
 
-  onSelectSlot(start, end) {
-    console.log(start, end)
+  onOpenDialog(event) {
+
+    let eventShowStart = moment(event.start).format('M월 DD일 HH:mm');
 
     this.setState({
+      eventShowStart: eventShowStart,
+      eventStart: event.start,
       privateTask: true
+    })
+  }
+
+  onTaskAdd() {
+    let newEvent = {
+      taskState: "do",
+      projectNo: 5,
+      color: "black",
+      tasklistNo: 20,
+      userNo: window.sessionStorage.getItem("authUserNo"),
+      start: this.state.eventStart,
+      id: 102,
+      end: this.state.eventStart,
+      taskPoint: null,
+      title: "123123213213213213213213213"
+    }
+
+    let events = [
+      ...this.state.events,
+      newEvent
+    ]
+
+    let taskState = this.state.taskState;
+    taskState.push({ id: newEvent.id, state: newEvent.taskState })
+    let taskNumber = this.state.taskNumber;
+    taskNumber.push(newEvent.id);
+
+    let taskPoint = this.state.taskPoint;
+    taskPoint.push({ id: newEvent.id, point: newEvent.taskPoint, isChecked: false })
+    let taskPointNumber = this.state.taskPointNumber;
+    taskPointNumber.push(newEvent.id);
+
+    this.setState({
+      taskState: taskState,
+      taskNumber: taskNumber,
+      taskPoint: taskPoint,
+      taskPointNumber: taskPointNumber,
+      events: events,
+      privateTask: false
     })
   }
 
   onPrivateTaskClose() {
     this.setState({
       privateTask: false
+    })
+  }
+
+  onNewTaskContentsChange(event) {
+    this.setState({
+      newTaskContents: event.target.value
+    })
+  }
+
+  onPathSelect() {
+    this.setState({
+      pathSelect: true
+    })
+  }
+
+  onSlectPathClose() {
+    this.setState({
+      pathSelect: false
     })
   }
 
@@ -423,19 +488,84 @@ class myCalendar extends Component {
                   return { style: { backgroundColor: backgroundColor } }
                 }}
                 onSelectEvent={event => this.onSelectEvent(event)}
-                onSelectSlot={this.onSelectSlot.bind(this)}
+                onSelectSlot={this.onOpenDialog.bind(this)}
               />
             </div>
             <Dialog open={this.state.privateTask} onClose={this.onPrivateTaskClose.bind(this)}>
-              <DialogTitle style={{ paddingBottom: "0" }}>
-                <h2><b>개인 일정 추가</b></h2>
+              <DialogTitle style={{ textAlign: "center", padding: "10px 10px", paddingBottom: "0" }}>
+                <div style={{ height: "5px" }}>
+                  <button className="close"
+                    onClick={this.onPrivateTaskClose.bind(this)}>
+                    <i className="fas fa-times fa-1x"></i>
+                  </button>
+                </div>
+                <h2><b>새 업무</b></h2>
               </DialogTitle>
-                <DialogContent>
-                  정말 삭제하시겠습니까? 
-                </DialogContent>
-              <DialogActions>
-                <Button variant="outlined" style={{ backgroundColor: '#E6E8EC', color: '#696F7A' }}>아니오</Button>
-                <Button variant="outlined" style={{ backgroundColor: '#E95E51', color: 'white' }}>네</Button>
+              <DialogContent>
+                <div>
+                  <div className="task-location-select" onClick={this.onPathSelect.bind(this)}>
+                    위치 선택
+                  </div>
+                  {this.state.pathSelect ? 
+                  <div className="container card-member" style={{position: "absolute", top: "38px", left: "100px", height: "253px"}}>
+                    <div className="card">
+                      <div className="card-header">
+                        <h6 style={{ display: "inline-block", fontSize: "14px", marginTop: "15px", marginRight: "199px", fontWeight: "bold", color: "black" }}>위치 선택</h6>
+                        <button type="button" onClick={this.onSlectPathClose.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
+                        <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
+                      </div>
+                      <div className="card-body">
+                        <div className="select-project" style={{ marginBottom: "10px", border: "1px solid #d4d6db" }}>
+                          <div style={{ padding: "10px", display: "inline-block" }}>
+                            <div style={{paddingBottom: "5px", color: "#696f7a", fontSize: "14px"}}>
+                              프로젝트
+                            </div>
+                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
+                              프로젝트를 선택해주세요
+                            </div>
+                          </div>
+                          <div style={{color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right"}}>
+                            <i className="fas fa-chevron-right fa-1x"></i>
+                          </div>
+                        </div>
+                        <div className="select-project" style={{ border: "1px solid #d4d6db" }}>
+                          <div style={{ padding: "10px", display: "inline-block" }}>
+                            <div style={{paddingBottom: "5px", color: "#696f7a", fontSize: "14px"}}>
+                              업무 리스트
+                            </div>
+                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
+                              업무 리스트를 선택해주세요
+                            </div>
+                          </div>
+                          <div style={{color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right"}}>
+                            <i className="fas fa-chevron-right fa-1x"></i>
+                          </div>
+                        </div>
+                        <div>
+                          <Button style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }}>위치 변경</Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div> : ""}
+                </div>
+                <div style={{ border: "1px solid #d4d6db", marginTop: "5px" }}>
+                  <div>
+                    <textarea placeholder="새 업무는 무엇인가요?"
+                      value={this.state.newTaskContents}
+                      onChange={this.onNewTaskContentsChange.bind(this)} cols="50"
+                      style={{ outline: "none", padding: "10px", overflow: "auto", border: "none", resize: "none" }}>
+                    </textarea>
+                  </div>
+                  <div>
+                    <div className="event-start-date" style={{ display: "inline-block", padding: "10px" }}>
+                      <i className="far fa-calendar-alt" style={{ marginRight: "5px" }}></i>
+                      {this.state.eventShowStart}
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+              <DialogActions style={{ display: "block", textAlign: "center" }}>
+                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }}>업무 작성</Button>
               </DialogActions>
             </Dialog>
           </div>
@@ -454,7 +584,7 @@ class myCalendar extends Component {
 
         response.data.data.allTask.map(task => {
           task["start"] = new Date(task.start);
-          task["end"] = new Date(task.end + 1)
+          task["end"] = new Date(task.end + 1);
         })
 
         response.data.data.allTask.map(task => {
