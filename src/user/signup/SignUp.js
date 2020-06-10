@@ -40,8 +40,6 @@ const SignUp = () => {
       return;
     }
 
-    window.location.href = "/nest/sendmail"
-
   };
 
   return (
