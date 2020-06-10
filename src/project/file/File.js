@@ -151,12 +151,6 @@ export default class File extends React.Component {
         }
     }
 
-    //이미지 뷰어
-    onClickImage() {
-        this.setState({
-            visible: !this.state.visible
-        })
-    }
     render() {
 
         if (this.state.count === 0)
@@ -182,6 +176,7 @@ export default class File extends React.Component {
                             {files && files
                             .map(projectFile =>
                                 <EachFile 
+                                    onClickDeleteFile = {this.onClickDeleteFile.bind(this)}
                                     projectFile = {projectFile}
                                     projectNo={this.props.match.params.projectNo}
                                 />

@@ -40,24 +40,7 @@ class EachFile extends Component {
 
     //파일 삭제하기
     onClickDeleteFile(fileNo, commentNo) {
-        if (window.confirm("파일을 삭제하시겠습니까?")) {
-
-            const fileIndex = this.state.projectFiles.findIndex((file) => file.fileNo === fileNo);
-    
-            fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
-            method: "delete"
-            })
-            .then(response => response.json())
-            .then(json => {
-                let newFileList = update(this.state.projectFiles, {
-                    $splice: [[fileIndex, 1]],
-                });
-
-                this.setState({
-                    projectFiles:newFileList
-                })
-            })
-        }
+        this.props.onClickDeleteFile(fileNo, commentNo)
     }
        //이미지 뷰어
        onClickImage() {

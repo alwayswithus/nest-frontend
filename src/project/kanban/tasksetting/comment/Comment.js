@@ -4,26 +4,6 @@ import CommentInput from "./CommentInput";
 import Header from '../file/Header';
 
 class Comment extends Component {
-    constructor() {
-        super(...arguments)
-        this.state = {
-            upDown: 'd'
-                , value: 'To Bottom'
-        }
-    }
-    updownChange = () => {
-        if (this.state.upDown === 'd') {
-            this.setState({
-                upDown: 'u'
-                , value: 'To Top'
-            });
-        } else {
-            this.setState({
-                upDown: 'd'
-                , value: 'To Bottom'
-            });
-        }
-    }
 
     render() {
         if (!this.props.task) {
@@ -47,7 +27,6 @@ class Comment extends Component {
                 <div className="Comment">
                     {/* 코멘트 내용 */}
                     <CommentList
-                        ref={(ref) => this.CommentList = ref}
                         authUserRole={this.props.authUserRole}
                         taskListNo={this.props.match.params.taskListNo}
                         taskItem={taskItem}
