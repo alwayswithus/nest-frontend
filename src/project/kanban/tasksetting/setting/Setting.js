@@ -14,6 +14,7 @@ import moment, { now }  from 'moment';
 import Comment from "../comment/Comment";
 import { Route, Switch } from "react-router-dom";
 
+
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
     'Content-Type' : 'application/json'
@@ -76,8 +77,8 @@ class Setting extends Component {
     
 
     // 날짜 정보 callback
-    onClickConfirm(from, to, taskListIndex, taskIndex){
-        this.props.taskCallbacks.updateTaskDate(moment(from).format('YYYY-MM-DD'),moment(to).format('YYYY-MM-DD'), taskListIndex, taskIndex)
+    onClickConfirm(from,to,taskListIndex,taskIndex){
+        this.props.taskCallbacks.updateTaskDate(moment(from).format('YYYY-MM-DD HH:mm'),moment(to).format('YYYY-MM-DD HH:mm'), taskListIndex, taskIndex)
     }
 
     onSetStateTaskTagNo(array){
@@ -197,6 +198,7 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }}>
                                     <div className="dateBtn">
                                     
+                                    
                                         {!taskItem.taskStart && !taskItem.taskEnd && 
                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} > 
                                         <i className="fas fa-plus fa-1x"></i>
@@ -210,7 +212,7 @@ class Setting extends Component {
                                         <b className="taskDate"> {taskItem.taskStart} ~ {taskItem.taskEnd}</b> 
                                         </Button>}
                                     </div>
-                                    <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
+                                    <div style={{position:'relative', marginLeft:'20%', right: '370px'}}>
 
                                     {this.props.modalState ? 
                                         <ModalCalendar 
@@ -219,7 +221,8 @@ class Setting extends Component {
                                         to = {taskItem.taskEnd}
                                         taskListIndex ={taskListIndex}
                                         taskIndex={taskIndex}
-                                        taskCallbacks={this.props.taskCallbacks}/> 
+                                        taskCallbacks={this.props.taskCallbacks}
+                                        /> 
                                         : null }
                                     </div>
                                 </div>

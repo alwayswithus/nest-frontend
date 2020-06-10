@@ -1247,10 +1247,10 @@ callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
       tasks: {
         [taskIndex]: {
           taskStart: {
-            $set: from,
+            $set: moment(from).format("YYYY-MM-DD HH:mm"),
           },
           taskEnd: {
-            $set: to,
+            $set: moment(to).format("YYYY-MM-DD HH:mm"),
           },
         },
       },
