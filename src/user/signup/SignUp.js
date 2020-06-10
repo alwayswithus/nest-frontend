@@ -24,8 +24,6 @@ const SignUp = () => {
     } else {
       ApiService.fetchEmailCheck(email)
       .then(response => {
-        // console.log(email);
-        // console.log(response.data);
         if(response.data.data.userGrade=="정회원"){
           setMessageText("이미 가입된 이메일 입니다.");
           setEmail("");
@@ -39,8 +37,11 @@ const SignUp = () => {
   const SignUp = e => {
     if(messageText!="확인됨."){
       e.preventDefault();
+      return;
     }
-    
+
+    window.location.href = "/nest/sendmail"
+
   };
 
   return (
