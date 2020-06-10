@@ -284,7 +284,7 @@ export default class Dashboard extends React.Component {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
       userEmail: memberEmail,
-      userPhoto: "assets/images/arrowloding.jpg",
+      userPhoto: "/nest/assets/images/arrowloding.jpg",
       projectNo: projectNo,
       roleNo: 3
     }
@@ -592,7 +592,7 @@ export default class Dashboard extends React.Component {
       userNo: this.state.users.length + 1,
       userName: memberName !== "" ? memberName : memberEmail,
       userEmail: memberEmail,
-      userPhoto: "assets/images/arrowloding.jpg",
+      userPhoto: "/nest/assets/images/arrowloding.jpg",
       roleNo: 3
     }
 

@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import DateTime from "react-datetime";
 import "./ModalCalendar.scss";
-import "react-datetime/css/react-datetime.css";
+import "./react-datetime.css";
 
 export default class ModalCalendar extends React.Component {
   constructor() {

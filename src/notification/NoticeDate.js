@@ -34,7 +34,7 @@ class NoticeDate extends React.Component {
                                 
                                 <div className="notice-body-contents-path">
                                     <i className="fas fa-project-diagram fa-xs"></i>
-                                    <Link to={`/nest/dashboard/${notice.projectNo}/kanbanboard/${notice.taskListNo}/task/${notice.taskNo}${notice.noticeType === 'comment'?"/comment":""}`}>
+                                    <Link to={`/nest/dashboard/${notice.projectNo}/kanbanboard/${notice.taskListNo}/task/${notice.taskNo}${(notice.noticeType === 'commentInsert')||(notice.noticeType === 'commentLike')?"/comment":""}`}>
                                         <span className="contents-path" data-tip="프로젝트로 가기" data-place="bottom">
                                             {`${notice.projectTitle} > ${notice.taskContents}`}
                                         </span>

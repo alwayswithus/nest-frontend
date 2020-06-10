@@ -38,8 +38,8 @@ export default class ProjectMemberList extends React.Component {
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.props.project.members && this.props.project.members
-                                    .filter(member => member.userName.indexOf(this.state.memberKeyword)  != -1 ||
-                                        member.userEmail.indexOf(this.state.memberKeyword) != -1)
+                                    .filter(member => member.userName.indexOf(this.state.memberKeyword)  !== -1 ||
+                                        member.userEmail.indexOf(this.state.memberKeyword) !== -1)
                                     .map(member =>
                                         <ProjectMember key={member.userNo} member={member} ProjectMemberListSetting={this.props.ProjectMemberListSetting}/>)}
                             </div>
