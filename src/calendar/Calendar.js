@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from 'react-bootstrap/Button';
 
+import ProjectList from './ProjectList';
+import TaskList from './TaskList';
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
 import ApiService from '../ApiService';
@@ -49,15 +51,52 @@ class myCalendar extends Component {
         myTask: false,
         allTask: true
       },
-      privateTask: false,
+
       eventStart: "",
       eventShowStart: "",
       newTaskContents: "",
 
-      pathSelect: false
+      privateTask: false,
+      pathChange: "",
+      pathSelect: false,
+      projectList: false,
+      taskList: false,
+      allTaskList: [],
+      projectNo: "",
+      projectTitle: "",
+      tasklistNo: "",
+      tasklistName: ""
     }
   }
 
+  callbackProjectListClose() {
+    this.setState({
+      pathSelect: true,
+      projectList: false
+    })
+  }
+
+  callbackTaskListClose() {
+    this.setState({
+      pathSelect: true,
+      taskList: false
+    })
+  }
+
+  callbackProjectNo(projectNo, projectTitle) {
+    this.setState({
+      projectNo: projectNo,
+      projectTitle: projectTitle
+    })
+  }
+
+  callbackTaskListNo(tasklistNo, taskListName) {
+    this.setState({
+      tasklistNo: tasklistNo,
+      tasklistName: taskListName
+    })
+  }
+ 
   onShowProjectList() {
     this.setState({
       showProjectList: !this.state.showProjectList
@@ -350,7 +389,14 @@ class myCalendar extends Component {
 
   onPrivateTaskClose() {
     this.setState({
-      privateTask: false
+      privateTask: false,
+      pathSelect: false,
+      projectList: false,
+      taskList: false,
+      projectNo: "",
+      projectTitle: "",
+      pathChange: "",
+      newTaskContents: ""
     })
   }
 
@@ -362,17 +408,57 @@ class myCalendar extends Component {
 
   onPathSelect() {
     this.setState({
-      pathSelect: true
+      pathSelect: true,
+      projectList: false,
+      taskList: false,
+      projectTitle: "",
+      tasklistName: ""
     })
   }
 
-  onSlectPathClose() {
+  onPathSelectClose() {
     this.setState({
       pathSelect: false
     })
   }
 
+  onProjectList() {
+    this.setState({
+      projectList: !this.state.ProjectList,
+    })
+  }
+
+  onTaskList() {
+    if(this.state.projectTitle !== "") {
+      
+      fetch(`${API_URL}/api/calendar/${this.state.projectNo}`, {
+        method: 'post',
+        headers: API_HEADERS,
+      })
+      .then(response => response.json())
+      .then(json => {  
+        this.setState({
+          taskList: !this.state.taskList,
+          allTaskList: json.data.allTaskList
+        })
+      })
+    }
+  }
+
+  onPathChange() {
+    let pathChange = this.state.pathChange
+
+    pathChange = `${this.state.projectTitle} > ${this.state.tasklistName}`
+
+    this.setState({
+      pathSelect: false,
+      pathChange: pathChange
+    })
+  }
+
   render() {
+    console.log(this.state.tasklistNo)
+    console.log(this.state.projectNo)
     return (
       <div id="Calendar" style={{ backgroundImage: `url(${this.state.url})` }}>
         {/* 사이드바 */}
@@ -504,45 +590,59 @@ class myCalendar extends Component {
               <DialogContent>
                 <div>
                   <div className="task-location-select" onClick={this.onPathSelect.bind(this)}>
-                    위치 선택
+                    {this.state.pathChange === "" ? "위치 선택" : this.state.pathChange}
                   </div>
                   {this.state.pathSelect ? 
-                  <div className="container card-member" style={{position: "absolute", top: "38px", left: "100px", height: "253px"}}>
+                  <div className="container card-member" style={{position: "absolute", top: "38px", left: "70px", height: "253px"}}>
                     <div className="card">
                       <div className="card-header">
                         <h6 style={{ display: "inline-block", fontSize: "14px", marginTop: "15px", marginRight: "199px", fontWeight: "bold", color: "black" }}>위치 선택</h6>
-                        <button type="button" onClick={this.onSlectPathClose.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
+                        <button type="button" onClick={this.onPathSelectClose.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
                         <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                       </div>
                       <div className="card-body">
-                        <div className="select-project" style={{ marginBottom: "10px", border: "1px solid #d4d6db" }}>
+                        <div className="select-project" onClick={this.onProjectList.bind(this)} style={{ marginBottom: "10px", border: "1px solid #d4d6db" }}>
                           <div style={{ padding: "10px", display: "inline-block" }}>
                             <div style={{paddingBottom: "5px", color: "#696f7a", fontSize: "14px"}}>
                               프로젝트
                             </div>
+                            {this.state.projectTitle === "" ? 
                             <div style={{color: "#27B6BA", fontWeight: "bold"}}>
                               프로젝트를 선택해주세요
-                            </div>
+                            </div> : 
+                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
+                              {this.state.projectTitle}
+                            </div>}
                           </div>
                           <div style={{color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right"}}>
                             <i className="fas fa-chevron-right fa-1x"></i>
                           </div>
                         </div>
-                        <div className="select-project" style={{ border: "1px solid #d4d6db" }}>
+                        <div onClick={this.onTaskList.bind(this)} className="select-project" style={{ border: "1px solid #d4d6db" }}>
                           <div style={{ padding: "10px", display: "inline-block" }}>
                             <div style={{paddingBottom: "5px", color: "#696f7a", fontSize: "14px"}}>
                               업무 리스트
                             </div>
+                            {this.state.projectTitle === "" ? 
+                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
+                              프로젝트를 먼저 선택해주세요
+                            </div> : this.state.tasklistName === "" ?
                             <div style={{color: "#27B6BA", fontWeight: "bold"}}>
                               업무 리스트를 선택해주세요
-                            </div>
+                            </div> : 
+                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
+                              {this.state.tasklistName}
+                            </div>}
                           </div>
                           <div style={{color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right"}}>
                             <i className="fas fa-chevron-right fa-1x"></i>
                           </div>
                         </div>
                         <div>
-                          <Button style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }}>위치 변경</Button>
+                          {this.state.projectTitle !== "" ? (this.state.tasklistName !== "" ?
+                            <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} >위치 변경</Button> : 
+                            <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} disabled>위치 변경</Button>) : 
+                            <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} disabled>위치 변경</Button>}
                         </div>
                       </div>
                     </div>
@@ -565,8 +665,30 @@ class myCalendar extends Component {
                 </div>
               </DialogContent>
               <DialogActions style={{ display: "block", textAlign: "center" }}>
-                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }}>업무 작성</Button>
+                {this.state.pathChange !== "" ?  
+                (this.state.newTaskContents !== "" ? 
+                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }}>업무 작성</Button> : 
+                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }} disabled>업무 작성</Button>) : 
+                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }} disabled>업무 작성</Button>}
               </DialogActions>
+              {this.state.projectList ? 
+              <div>
+                <ProjectList 
+                  projectList={{
+                    close: this.callbackProjectListClose.bind(this),
+                    projectNo: this.callbackProjectNo.bind(this)
+                  }}
+                  projects={this.state.projects} />
+              </div> : ""}
+              {this.state.taskList ? 
+              <div>
+                <TaskList 
+                  taskList={{
+                    close: this.callbackTaskListClose.bind(this),
+                    tasklistNo: this.callbackTaskListNo.bind(this)
+                  }} 
+                    allTaskList={this.state.allTaskList} />
+              </div> : ""}
             </Dialog>
           </div>
         </div>

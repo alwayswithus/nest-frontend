@@ -1,0 +1,23 @@
+.ProjectList {
+
+    .fa-chevron-left {
+        cursor: pointer;
+    }
+
+    .project-name {
+        margin-bottom: 5px;
+        margin-top: 5px;
+        margin-left: 10px;
+        margin-right: 10px; 
+        font-weight: bold;
+
+        &:hover {
+            cursor: pointer;
+            background-color: #EBEBEB;
+        }
+    }
+
+    .fa-check {
+        float: right;
+    }
+}
