@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './profilenav.scss';
-import { Navbar, Nav } from "react-bootstrap";
+import Nav from 'react-bootstrap/Nav'
 import { withRouter } from 'react-router-dom';
 
 
@@ -12,21 +12,28 @@ class ProfileNav extends Component {
           width:'200px',
           margin: '0px',
           paddingTop:'20px', 
-          background:'#D0D0D0',
+          // background:'#D0D0D0',
           border:'none',
-          fontSize: '1.5rem'
+          fontSize: '1.5rem',
+          paddingLeft: '17px'
         }
+
+        console.log(location.pathname)
 
     return (
       <>
         <div className="ProfileNav">
         <h3><b>계정설정</b></h3>
-          <Navbar className="navsbar" style={styleNav} variant="light">
-            <Nav activeKey={location.pathname}>
-              <Nav.Link style={{color:'black' }}className="nav-link" href="/nest/profile">프로필</Nav.Link>
-              <Nav.Link style={{color:'black'}} className="nav-link" href="/nest/profileset">설정</Nav.Link>
+          {/* <Navbar className="navsbar" style={styleNav}> */}
+            <Nav variant="pills" defaultActiveKey="/nest/profile">
+              <Nav.Item>
+                <Nav.Link style={{color:'black', fontWeight:'bolder'}} href="/nest/profile">프로필</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link style={{color:'black'}}  href="/nest/profileset">설정</Nav.Link>
+              </Nav.Item>
             </Nav>
-          </Navbar>
+          {/* </Navbar> */}
         </div>
       </>
         );
