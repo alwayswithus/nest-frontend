@@ -184,7 +184,7 @@ class Profile extends Component {
                         <ProfileNav />
                         <div className="profileLayout">
                             <div className="profileImg">
-                                <img src={this.state.photo} className="userPhoto" alt="Cinque Terre" />
+                                <div className="userPhoto" style={{ backgroundImage: `url(${this.state.photo})` }}></div>
                                 {this.state.photoUpdate ? 
                                     <ul className="list-unstyled list-inline media-detail"> 
                                         <li className="photoupdate-reset" onClick={this.onClickReset.bind(this)}>취소</li>

@@ -37,45 +37,38 @@ export default class Navigator extends React.Component {
                     <ul className="nav-list">
                         <div className="exclude-nest-li">
                             {/*<!-- About link -->*/}
-                            <li className="nav-item" data-toggle="modal" data-target="#use-profile">
-                                <img className="nav-item-profile" src={`${window.sessionStorage.getItem("authUserPhoto")}`}></img><br />
-                            </li>
+                            <div className="nav-item profile" data-toggle="modal" data-target="#use-profile" >
+                                <div className="nav-item-profile" style={{ backgroundImage: `url(${window.sessionStorage.getItem("authUserPhoto")})` }}></div>
+                            </div>
 
                             {/*<!-- Notification link -->*/}
-                            <li className="nav-item">
+                            <div className="nav-item button">
                                 <span data-tooltip-text="Notification">
                                     <Link to="/nest/notification" className="link">
                                         <i className="far fa-bell icon"></i>
                                     </Link>
                                 </span>
-                            </li>
+                            </div>
 
                             {/*<!-- Calendar link -->*/}
-                            <li className="nav-item">
+                            <div className="nav-item button">
                                 <Link to="/nest/calendar" className="link">
                                     <span data-tooltip-text="Calendar">
                                         <i className="fas fa-calendar-alt icon"></i>
                                     </span>
                                 </Link>
-                            </li>
+                            </div>
 
                             {/*<!-- Projects link-- >*/}
-                            <li className="nav-item">
+                            <div className="nav-item button">
                                 <span data-tooltip-text="Projects">
                                     <Link to="/nest/dashboard" className="link">
                                         <i className="fas fa-tasks icon"></i>
                                     </Link>
                                 </span>
-                            </li >
+                            </div >
 
-                            {/*< !-- Slack link-- >*/}
-                            <li className="nav-item">
-                                <span data-tooltip-text="Slack">
-                                    <Link to="#" className="link">
-                                        <i className="fas fa-comment-dots icon"></i>
-                                    </Link>
-                                </span>
-                            </li >
+                            
 
                             {/*<!-- nest -->*/}
                         </div>

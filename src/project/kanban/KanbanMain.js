@@ -597,6 +597,14 @@ class KanbanMain extends Component {
 
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
 
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"), 
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[taskListIndex].tasks[taskIndex].memberList, 
+      "taskCheckListInsert", 
+      taskNo, 
+      this.props.match.params.projectNo)
+
     let newCheckList = {
       checklistNo: null,
       checklistContents: contents,
@@ -910,6 +918,14 @@ class KanbanMain extends Component {
       });
     })
 
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"), 
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[taskListIndex].tasks[taskIndex].memberList, 
+      "commentLike", 
+      taskNo, 
+      this.props.match.params.projectNo)
+
 
   }
 
@@ -975,7 +991,13 @@ class KanbanMain extends Component {
     const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
 
-    ApiNotification.fetchInsertNotice(sessionStorage.getItem("authUserNo"), sessionStorage.getItem("authUserName") ,this.state.taskList[taskListIndex].tasks[taskIndex].memberList, "commentInsert", taskNo, this.props.match.params.projectNo)
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"), 
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[taskListIndex].tasks[taskIndex].memberList, 
+      "commentInsert", 
+      taskNo, 
+      this.props.match.params.projectNo)
 
     let newComment = []
     if(file == null){
@@ -1202,6 +1224,14 @@ class KanbanMain extends Component {
             taskList:newTaskList
           })
         })
+
+        ApiNotification.fetchInsertNotice(
+          sessionStorage.getItem("authUserNo"), 
+          sessionStorage.getItem("authUserName"),
+          newMember.userNo, 
+          "taskJoin", 
+          taskNo, 
+          this.props.match.params.projectNo)
       } else {
         fetch(`${API_URL}/api/task/member/${userNo}/${taskNo}`, {
           method:'delete'
@@ -1230,6 +1260,14 @@ class KanbanMain extends Component {
 
 // 업무 날짜 수정
 callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
+
+  ApiNotification.fetchInsertNotice(
+    sessionStorage.getItem("authUserNo"), 
+    sessionStorage.getItem("authUserName"),
+    this.state.taskList[taskListIndex].tasks[taskIndex].memberList, 
+    "taskDateChange", 
+    this.state.taskList[taskListIndex].tasks[taskIndex].taskNo, 
+    this.props.match.params.projectNo)
   
   if(from === 'Invalid date'){
     from = undefined;
@@ -1300,6 +1338,14 @@ tagModalStateUpdate(){
 callbackUpdateTaskPoint(point , taskListNo, taskNo){
   const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
   const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+  ApiNotification.fetchInsertNotice(
+    sessionStorage.getItem("authUserNo"), 
+    sessionStorage.getItem("authUserName"),
+    this.state.taskList[taskListIndex].tasks[taskIndex].memberList, 
+    "taskPointChange", 
+    taskNo, 
+    this.props.match.params.projectNo)
   
   let newPoint = {
     taskNo:taskNo,
