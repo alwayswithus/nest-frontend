@@ -100,7 +100,8 @@ class Profile extends Component {
         if(regExp.test(event.target.value)){
             this.setState({
                 validNumber:false,
-                number:event.target.value
+                number:event.target.value,
+                change:true
             })
         } else {
             this.setState({
@@ -115,7 +116,8 @@ class Profile extends Component {
         if(moment(event.target.value,"YYYY-MM-DD",true).isValid()){
             this.setState({
                 birth:event.target.value,
-                validDate:false
+                validDate:false,
+                change:true
             })
         } else {
             this.setState({
