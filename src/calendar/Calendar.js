@@ -8,7 +8,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from 'react-bootstrap/Button';
 import ReactTooltip from 'react-tooltip';
 import { Link } from 'react-router-dom'
-
 import ProjectList from './ProjectList';
 import TaskList from './TaskList';
 import Navigator from '../navigator/Navigator';

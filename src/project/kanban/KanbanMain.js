@@ -696,7 +696,6 @@ class KanbanMain extends Component {
 
   //task에 tag 삭제하기
   callbackDeleteTag(tagNo, taskListNo, taskNo) {
-    console.log("KanbanMain : " + tagNo + ":" + taskListNo + ":" + taskNo);
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -887,7 +886,8 @@ class KanbanMain extends Component {
 
     let commentData = {
       commentContents: null,
-      commentLike:commentLike
+      commentLike:commentLike,
+      userNo:sessionStorage.getItem("authUserNo")
     }
 
     fetch(`${API_URL}/api/comment/${commentNo}`, {
@@ -895,28 +895,28 @@ class KanbanMain extends Component {
       headers:API_HEADERS,
       body: JSON.stringify(commentData)
     })
-    .then(response => response.json())
-    .then((json) => {
-      let newTaskList = update(this.state.taskList, {
-        [taskListIndex]: {
-          tasks: {
-            [taskIndex]: {
-              commentList: {
-                [commentIndex]: {
-                  commentLike: {
-                    $set:json.data+1,
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
+    // .then(response => response.json())
+    // .then((json) => {
+    //   let newTaskList = update(this.state.taskList, {
+    //     [taskListIndex]: {
+    //       tasks: {
+    //         [taskIndex]: {
+    //           commentList: {
+    //             [commentIndex]: {
+    //               commentLike: {
+    //                 $set:json.data+1,
+    //               },
+    //             },
+    //           },
+    //         },
+    //       },
+    //     },
+    //   });
   
-      this.setState({
-        taskList: newTaskList,
-      });
-    })
+    //   this.setState({
+    //     taskList: newTaskList,
+    //   });
+    // })
 
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"), 
@@ -998,7 +998,6 @@ class KanbanMain extends Component {
       "commentInsert", 
       taskNo, 
       this.props.match.params.projectNo)
-
     let newComment = []
     if(file == null){
       newComment = {
@@ -1026,6 +1025,7 @@ class KanbanMain extends Component {
       };
     }
 
+    console.log(sessionStorage.getItem("authUserPhoto"))
     fetch(`${API_URL}/api/comment`, {
       method:'post',
       headers:API_HEADERS,
@@ -1094,7 +1094,6 @@ class KanbanMain extends Component {
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
     const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === fileNo);
 
-    console.log(commentIndex + " : " +  fileIndex)
     if(fileNo == null){
       fileNo = 0;
     }
@@ -1404,6 +1403,31 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
   .then(response => response.json())
 
 }
+  // 라벨 색 수정하기
+  callbackUpdateTaskLabel(color, taskListNo, taskNo){
+    const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    
+    let newTaskList = update(this.state.taskList,{
+      [taskListIndex]:{
+        tasks:{
+          [taskIndex]:{
+            taskLabel:{$set: color}
+          }
+        }
+      }
+    })
+    this.setState({
+      taskList:newTaskList
+    })
+
+    fetch(`${API_URL}/api/tasksetting/tasklabel/${taskNo}`,{
+      method:'post',
+      headers:API_HEADERS,
+      body:color
+    })
+  
+  }
   render() {
 
     return (
@@ -1439,6 +1463,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                   addDeleteMember: this.addDeleteMember.bind(this),
                   updateTaskPoint: this.callbackUpdateTaskPoint.bind(this), // 업무 포인트 업뎃
                   updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
+                  updateTaskLabel: this.callbackUpdateTaskLabel.bind(this), // 업무 라벨 수정
                 }}
               />
             )}
@@ -1450,7 +1475,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                 {...match}
                 authUserRole={this.state.authUserRole}
                 projectNo={this.props.match.params.projectNo}
-                task={this.state.taskList} 
+                task={this.state.taskList}
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트

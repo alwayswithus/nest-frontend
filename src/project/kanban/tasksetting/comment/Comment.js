@@ -14,7 +14,6 @@ class Comment extends Component {
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
-
         return (
             <div className="TaskSetComment">
                 <Header
@@ -33,11 +32,11 @@ class Comment extends Component {
                         taskCallbacks={this.props.taskCallbacks} />
 
                     {/* 코멘트 입력창 */}
-                    <CommentInput
+                    {/* <CommentInput
                         authUserRole={this.props.authUserRole}
                         taskCallbacks={this.props.taskCallbacks}
                         taskItem={taskItem}
-                        taskListNo={this.props.match.params.taskListNo} />
+                        taskListNo={this.props.match.params.taskListNo} /> */}
                 </div>
             </div>
         );
