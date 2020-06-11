@@ -10,6 +10,8 @@ class SignUpEmail extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
+      passError:false,
+
       no:null,
       email:"",
       name:"",

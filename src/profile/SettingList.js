@@ -1,12 +1,25 @@
 import React,{Component} from 'react';
 import './profileset.scss';
 import DeleteModal from './DeleteModal';
+import { displayName } from 'react-quill';
+
+const API_URL = "http://localhost:8080/nest";
+const API_HEADERS = {
+    "Content-Type": "application/json",
+  };
 
 class SettingList extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-            opne:false
+            opne:false,
+
+            passError:false,
+            errortext:"",
+            currentPass:"",
+            newPass:"",
+            confirmPass:""
+
         }
     }
     onModalOpen(){
@@ -14,7 +27,117 @@ class SettingList extends Component {
             open:!this.state.open
         })
     }
+
     render(){
+        const passwordFormSubmit = e =>{
+            e.preventDefault();
+            if(this.state.currentPass === "") {
+                this.setState({
+                    passError:false,
+                    currentPass:"",
+                    newPass:"",
+                    confirmPass:"",
+                    errortext:"현재 비밀번호가 입력되지 않았습니다."
+                })
+            } else if(this.state.newPass === "") {
+                this.setState({
+                    passError:false,
+                    currentPass:"",
+                    newPass:"",
+                    confirmPass:"",
+                    errortext:"새 비밀번호가 입력되지 않았습니다."
+                })
+            } else if (this.state.confirmPass === "") {
+                this.setState({
+                    passError:false,
+                    currentPass:"",
+                    newPass:"",
+                    confirmPass:"",
+                    errortext:"새 비밀번호 확인을 입력하세요."
+                })
+            } else if (this.state.newPass !== this.state.confirmPass) {
+                this.setState({
+                    passError:false,
+                    currentPass:"",
+                    newPass:"",
+                    confirmPass:"",
+                    errortext:"새 비밀번호 확인이 일치하지 않습니다."
+                })
+            } else {
+                let userInfo = {
+                    userNo: sessionStorage.getItem("authUserNo"),
+                    userPassword: this.state.currentPass,
+                    userNewPassword: this.state.newPass
+                }
+                fetch(`${API_URL}/api/profile/passUpdate`, {
+                    method: 'post',
+                    headers: API_HEADERS,
+                    body: JSON.stringify(userInfo)
+                }).then(response => response.json()).then(response => {
+                    if (!response.data) {
+                        this.setState({
+                            passError:false,
+                            currentPass: "",
+                            newPass: "",
+                            confirmPass: "",
+                            errortext: "현재 비밀번호가 일치하지 않습니다."
+                        });
+                    } else {
+                        this.setState({
+                            passError:true,
+                            currentPass: "",
+                            newPass: "",
+                            confirmPass: "",
+                            errortext: "업데이트 되었습니다."
+                        });
+                    }
+                });
+            }
+        }
+        const currentPassSet = e => {
+            let keyword = e.target.value;
+            this.setState({
+                errortext:"",
+                currentPass:keyword
+            })
+        }
+        const newPassSet = e => {
+            let keyword = e.target.value;
+            this.setState({
+                newPass:keyword
+            })
+            if(this.state.confirmPass === ""){
+                this.setState({
+                    errortext:"",
+                })
+            }else if(this.state.confirmPass === keyword){
+                this.setState({
+                    passError:true,
+                    errortext:"일치.",
+                })
+            }else{
+                this.setState({
+                    passError:false,
+                    errortext:"새 비밀번호 확인이 일치하지 않습니다.",
+                })
+            }
+        }
+        const confirmPassSet = e => {
+            let keyword = e.target.value;
+            this.setState({ confirmPass:keyword })
+            if(this.state.newPass === keyword){
+                this.setState({
+                    passError:true,
+                    errortext:"일치.",
+                })
+            }else{
+                this.setState({
+                    passError:false,
+                    errortext:"새 비밀번호 확인이 일치하지 않습니다.",
+                })
+            }
+        }
+
         return (
             <div className="panel-group" id="accordion">
                 <div className="panel panel-default">
@@ -25,20 +148,36 @@ class SettingList extends Component {
                     </div>
                     <div id="collapse1" class="panel-collapse collapse in">
                         <div className="panel-body">
-                            <form className="passwordForm">
+                            <form className="passwordForm" onSubmit={passwordFormSubmit}>
                                 <div className="Current-pass">
                                     <span>현재 비밀번호</span><br/>
-                                    <input />
+                                    <input 
+                                        name="currentPass"
+                                        type="password"
+                                        onChange={currentPassSet}
+                                        value={this.state.currentPass}/>
                                 </div>
                                 <div className="New-pass">
                                     <span>새 비밀번호</span><br/>
-                                    <input />
+                                    <input 
+                                        name="newPass"
+                                        type="password"
+                                        onChange={newPassSet}
+                                        value={this.state.newPass}/>
                                 </div>
                                 <div className="Confirm-pass">
                                     <span>새 비밀번호 확인</span><br/>
-                                    <input />
+                                    <input 
+                                        name="confirmPass"
+                                        type="password"
+                                        onChange={confirmPassSet}
+                                        value={this.state.confirmPass}/>
                                 </div>
                                 <input id='submit' type="submit" value="비밀번호변경"/>
+                                <p style={{display:"inline-block", paddingLeft:"20px"}} 
+                                   id={(this.state.passError) ? "doneText" : "errorText"}> 
+                                    {this.state.errortext} <br/>
+                                </p>
                             </form>
                         </div>
                     </div>
