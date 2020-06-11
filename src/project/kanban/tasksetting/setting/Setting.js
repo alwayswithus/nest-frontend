@@ -11,8 +11,6 @@ import update from "react-addons-update";
 import ApiService from '../../../../ApiService'
 import TaskMember from './TaskMember';
 import moment, { now }  from 'moment';
-import Comment from "../comment/Comment";
-import { Route, Switch } from "react-router-dom";
 
 
 const API_URL = "http://localhost:8080/nest";
@@ -316,7 +314,14 @@ class Setting extends Component {
                             <li className="taskSettingList">
                                 <div style={{ display: 'inline-block' }}><i className="fas fa-palette" /></div>
                                 <div style={{ display: 'inline-block' }}><h5><b>색상라벨</b></h5></div>
-                                <div style={{ display: 'inline-block' }}> <ColorPicker style={{transForm: 'scale(0.5)'}}/></div>
+                                <div style={{ display: 'inline-block' }}> 
+                                    <ColorPicker 
+                                        taskCallbacks={this.props.taskCallbacks} 
+                                        taskItem = {taskItem}
+                                        taskListNo={this.props.match.params.taskListNo}
+                                        taskNo={this.props.match.params.taskNo}
+                                    />
+                                </div>
                             </li>
                             {/* 하위 할일 */}
                             <li className="taskSettingList">

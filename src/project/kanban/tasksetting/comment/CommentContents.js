@@ -59,13 +59,27 @@ class commentContents extends Component {
         }
     }
     render(){
+        const today = new Date();
         return (
             <Fragment>
                 <div key = {this.props.comment.commentNo} style={{height:'20px'}}/>
-                <a className="pull-left" href="#"><img className="img-circle" src={`${this.props.comment.userPhoto}`} alt="" /></a>
+                <a className="pull-left" href="#">
+                    <div className="img-circle" style={{backgroundImage:`url(${this.props.comment.userPhoto})`}} ></div>
+                </a>
                 <div className="media-body">
                     <span className="media-heading"><b>{this.props.comment.userName}</b></span>
-                    <span className="media-heading">{moment(this.props.comment.commentRegdate).format('YYYY-MM-DD hh:mm:ss')}</span>
+                    {/* 날짜 계산하기 */}
+                    <span className="media-heading">
+                        {
+                            moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).days() !== 0 
+                            ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).days()} 일 전` 
+                            : moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).hours() !== 0 
+                                ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).hours()} 시간 전` 
+                                : moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).minutes() !== 0 
+                                    ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).minutes()} 분 전` 
+                                    : `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).seconds()} 초 전`
+                        }
+                    </span>
                         {this.props.authUserRole === 3 ? null :
                             <ul className="list-unstyled list-inline media-detail pull-right">
                                 <li>

@@ -6,7 +6,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from 'react-bootstrap/Button';
-
 import ProjectList from './ProjectList';
 import TaskList from './TaskList';
 import Navigator from '../navigator/Navigator';

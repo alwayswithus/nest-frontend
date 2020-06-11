@@ -2,11 +2,20 @@ import React from 'react';
 import { CirclePicker } from 'react-color';
 
 class ColorPicker extends React.Component {
-    handleChange(color,event) { 
-        console.log(color.hex + ' !!!!!!!! ');
+    constructor(){
+      super(...arguments)
+      this.state = {
+        color:'',
+        circleSize:'28px'
+      }
+    }
+    handleChange(color) { 
+        this.props.taskCallbacks.updateTaskLabel(color.hex, this.props.taskListNo, this.props.taskNo)
     }
   render() {
-    return <CirclePicker onChange = {this.handleChange.bind(this)}/>;
+    return <CirclePicker
+            color={this.props.taskItem.taskLabel}
+            onChange = {this.handleChange.bind(this)}/>;
   }
 }
 

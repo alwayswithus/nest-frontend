@@ -2,18 +2,18 @@ import React, { Component, Fragment } from "react";
 import './comment.scss';
 import moment from 'moment';
 import CommentContents from './CommentContents'
-
+import Editor from "./Editor";
+import ReactQuill from 'react-quill';
+import PropTypes from 'prop-types';
 class CommentList extends Component {
 
-    scrollToChange = (param) => {
-        console.log("!!!!!")
-        const{ scrollHeight, clientHeight } = this.box;
-        this.box.scrollTop = scrollHeight - clientHeight;
-        // if(param === 'd') {
-        //     this.box.scrollTop = scrollHeight - clientHeight;
-        // } else{
-        //     this.box.scrollTop = 0;
-        // }
+    constructor() {
+        super(...arguments)
+        this.state = {
+            editorHtml: '', 
+            theme: 'snow',
+        }
+        this.handleChange = this.handleChange.bind(this)
     }
 
     onClickThumsUp(commentNo){
@@ -28,14 +28,41 @@ class CommentList extends Component {
             change: !this.state.change
         })
     }
-    render(){
+
+
+    //보내기 버튼을 눌렀을 때 코멘트 생성
+    onClickSubmit() {
+        this.props.taskCallbacks.addComment(
+            null,
+            this.props.taskListNo,
+            this.props.taskItem.taskNo,
+            this.state.editorHtml,
+        )
+        this.setState({
+            editorHtml: ''
+        })
+    }
+
+    handleChange (html) {
         
+        this.setState({ 
+           editorHtml: html ,
+        });
+    }
+
+    componentDidMount(){
+        window.jQuery(document.getElementsByClassName("media")).scrollTop(10000000000000000000000);
+    }
+    componentDidUpdate(){
+        window.jQuery(document.getElementsByClassName("media")).scrollTop(1000000000000000000000);
+    }
+
+    render(){
         return (
+            <>
             <div className="CommentList">
                 {/* comment List */}
-                <div
-                    ref={(ref) => {this.box=ref}}
-                    className="media">
+                <div className="media">
                     {/* comment */}
                     {this.props.taskItem.commentList.map(comment =>
                         <CommentContents 
@@ -49,6 +76,45 @@ class CommentList extends Component {
                     )}
                 </div>
             </div>
+            <div className="Comment-input">
+                <form>
+                    <div className="InputForm">
+                        <div>
+                            <ReactQuill
+                                theme={this.state.theme}
+                                onChange={this.handleChange.bind(this)}
+                                value={this.state.editorHtml}
+                                modules={Editor.modules}
+                                formats={Editor.formats}
+                                bounds={'.app'}
+                                placeholder={this.props.placeholder}
+                                style={{ height: '80px' }}
+                            />
+                        </div>
+                    </div>
+                </form>
+                <div className="Bottom-bar">
+                    {this.props.authUserRole === 3 ? 
+                        <button 
+                            style={{backgroundColor:'#CCCCCC'}}
+                            className="pull-right" 
+                            type="submit"
+                            disabled='true'>보내기</button> :
+
+                        <button 
+                            onClick={this.onClickSubmit.bind(this)} 
+                            className="pull-right" 
+                            type="submit">보내기</button>
+
+                    }
+                    <ul className="list-unstyled list-inline media-detail pull-left">
+                        <li><a href="#"><i className="fas fa-paperclip"></i></a></li>
+                        <li style={{ verticalAlign: 'text-bottom' }}><a href="#"><b>@</b></a></li>
+                        <li><a href="#"><i className="far fa-smile-beam"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            </>
         )
     };
 }
