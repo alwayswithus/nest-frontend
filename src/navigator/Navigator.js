@@ -45,7 +45,8 @@ export default class Navigator extends React.Component {
                             <div className="nav-item button">
                                 <span data-tooltip-text="Notification">
                                     <Link to="/nest/notification" className="link">
-                                        <i className="far fa-bell icon"></i>
+                                        <a className="badge badge-danger" style={{ backgroundColor: "red", position: "relative", zIndex: "99", left: "22px", top: "-13px"}}>0</a>
+                                        <i className="far fa-bell icon" style={{position: "relative", left: "-9px"}}></i>
                                     </Link>
                                 </span>
                             </div>
