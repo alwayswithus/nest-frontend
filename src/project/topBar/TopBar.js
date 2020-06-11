@@ -42,7 +42,7 @@ class TopBar extends Component {
               </div>
               <div className="col-sm-3">
                 <ul className="nav navbar-nav navbar-right">
-                  <i className="fas fa-cog fa-2x fa-spin gearIcon"></i>
+                  <i className="fas fa-cog fa-2x gearIcon"></i>
                 </ul>
               </div>
             </div>

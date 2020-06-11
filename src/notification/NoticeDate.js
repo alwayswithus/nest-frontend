@@ -18,9 +18,10 @@ class NoticeDate extends React.Component {
         return (
             <div className="NoticeDate">
                 {this.props.notices && this.props.notices.map(notice =>
+                
                     moment(notice.noticeDate).locale('en').format('YYYY-MMM-DD') === date ?
                         <div key={notice.noticeNo} className={`notice-body-contents-today ${notice.messageCheck === 'N' ? "newMessage": ""}`} >
-                            
+                            {console.log(notice)}
                             <div className="notice-body-contents-avatar-image">
                                 <img src={`../${notice.userPhoto}`} className="notice-avatar-image" alt="userimg"/>
                             </div>
@@ -29,7 +30,7 @@ class NoticeDate extends React.Component {
                             </div>
                             <div className="notice-body-contents-avatar-activities">
                                 <div className="notice-body-contents-acive">
-                                    <span>{notice.noticeMessage}</span>
+                                    <span>{(notice.noticeType === "projectJoin") || (notice.noticeType === "taskJoin") || (notice.noticeType === "commentLike") ? sessionStorage.getItem("authUserName")+notice.noticeMessage : notice.noticeMessage}</span>
                                 </div>
                                 
                                 <div className="notice-body-contents-path">
