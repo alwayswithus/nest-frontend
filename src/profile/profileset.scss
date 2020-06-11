@@ -8,6 +8,14 @@
         border-radius: 3px;
         background-color: #E3E3E3;
     }
+    #collapse1{
+        div{
+            form{
+                #doneText{ color: #007800; }
+                #errorText{ color: #ff0000; }
+            }
+        }
+    }
     #collapse5{
         .bodyA{
             text-align: center;

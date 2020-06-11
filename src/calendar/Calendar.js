@@ -6,6 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from 'react-bootstrap/Button';
+import ReactTooltip from 'react-tooltip';
+import { Link } from 'react-router-dom'
 import ProjectList from './ProjectList';
 import TaskList from './TaskList';
 import Navigator from '../navigator/Navigator';
@@ -349,41 +351,63 @@ class myCalendar extends Component {
 
   onTaskAdd() {
     let newEvent = {
-      taskState: "do",
-      projectNo: 5,
-      color: "black",
-      tasklistNo: 20,
-      userNo: window.sessionStorage.getItem("authUserNo"),
-      start: this.state.eventStart,
-      id: 102,
-      end: this.state.eventStart,
+      taskNo: null,
+      taskStart: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
+      taskEnd: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
       taskPoint: null,
-      title: "123123213213213213213213213"
+      taskLabel: "#DFDFDF",
+      taskState: "do",
+      taskContents: this.state.newTaskContents,
+      taskOrder: null,
+      projectNo: this.state.projectNo,
+      taskListNo: this.state.tasklistNo,
+      taskWriter: window.sessionStorage.getItem("authUserNo"),
+      taskRegdate: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
     }
 
-    let events = [
-      ...this.state.events,
-      newEvent
-    ]
-
-    let taskState = this.state.taskState;
-    taskState.push({ id: newEvent.id, state: newEvent.taskState })
-    let taskNumber = this.state.taskNumber;
-    taskNumber.push(newEvent.id);
-
-    let taskPoint = this.state.taskPoint;
-    taskPoint.push({ id: newEvent.id, point: newEvent.taskPoint, isChecked: false })
-    let taskPointNumber = this.state.taskPointNumber;
-    taskPointNumber.push(newEvent.id);
-
-    this.setState({
-      taskState: taskState,
-      taskNumber: taskNumber,
-      taskPoint: taskPoint,
-      taskPointNumber: taskPointNumber,
-      events: events,
-      privateTask: false
+    fetch(`${API_URL}/api/calendar/taskadd`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(newEvent)
     })
+    .then(response => response.json())
+    .then(json => {
+      let responseNewEvent = {
+          color: "#DFDFDF",
+          end: this.state.eventStart,
+          id: json.data.taskNo,
+          projectNo: json.data.projectNo,
+          start: this.state.eventStart,
+          taskPoint: null,
+          taskState: "do",
+          tasklistNo: json.data.taskListNo,
+          title: json.data.taskContents,
+        }
+
+      let events = [
+        ...this.state.events,
+        responseNewEvent
+      ]
+  
+      let taskState = this.state.taskState;
+      taskState.push({ id: responseNewEvent.id, state: newEvent.taskState })
+      let taskNumber = this.state.taskNumber;
+      taskNumber.push(responseNewEvent.id);
+  
+      let taskPoint = this.state.taskPoint;
+      taskPoint.push({ id: responseNewEvent.id, point: newEvent.taskPoint, isChecked: false })
+      let taskPointNumber = this.state.taskPointNumber;
+      taskPointNumber.push(responseNewEvent.id);
+  
+      this.setState({
+        taskState: taskState,
+        taskNumber: taskNumber,
+        taskPoint: taskPoint,
+        taskPointNumber: taskPointNumber,
+        events: events,
+        privateTask: false
+      })
+    }) 
   }
 
   onPrivateTaskClose() {
@@ -456,10 +480,8 @@ class myCalendar extends Component {
   }
 
   render() {
-    console.log(this.state.tasklistNo)
-    console.log(this.state.projectNo)
     return (
-      <div id="Calendar" style={{ backgroundImage: `url(${this.state.url})` }}>
+      <div id="Calendar">
         {/* 사이드바 */}
         <div className="sidebar">
           <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
@@ -506,9 +528,12 @@ class myCalendar extends Component {
                             {this.state.projects && this.state.projects.map(project =>
                               <div key={project.projectNo}>
                                 <input type="checkbox" checked={project.isChecked} onChange={this.onCheckProject.bind(this)} value={project.projectNo} />
-                                <p style={{ display: "inline-block", marginBottom: "0px", marginLeft: "5px" }}>
-                                  {project.projectTitle}
-                                </p>
+                                <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
+                                  <p data-tip={`${project.projectTitle} 바로가기`} data-place="right" style={{ display: "inline-block", color: "black", marginBottom: "0px", marginLeft: "5px" }}>
+                                    {project.projectTitle}
+                                  </p>
+                                </Link>
+                                <ReactTooltip />
                               </div>
                             )}
                           </div> : ""}
@@ -555,6 +580,9 @@ class myCalendar extends Component {
                 </tr>
               </table>
             </div>
+            <div>
+            
+            </div>
             <div className="calendar-body-contents-calendar">
               <Calendar
                 selectable
@@ -592,7 +620,7 @@ class myCalendar extends Component {
                     {this.state.pathChange === "" ? "위치 선택" : this.state.pathChange}
                   </div>
                   {this.state.pathSelect ? 
-                  <div className="container card-member" style={{position: "absolute", top: "38px", left: "70px", height: "253px"}}>
+                  <div className="container card-member" style={{position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px"}}>
                     <div className="card">
                       <div className="card-header">
                         <h6 style={{ display: "inline-block", fontSize: "14px", marginTop: "15px", marginRight: "199px", fontWeight: "bold", color: "black" }}>위치 선택</h6>

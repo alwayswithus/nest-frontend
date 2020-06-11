@@ -28,7 +28,7 @@ export default class TaskList extends Component {
     render() {
         return (
             <div className="TaskList">
-                <div className="container card-member" style={{position: "absolute", top: "38px", left: "70px", height: "253px" }}>
+                <div className="container card-member" style={{position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px" }}>
                     <div className="card">
                         <div className="card-header">
                             <i onClick={this.callbackTaskListClose.bind(this)} className="fas fa-chevron-left"></i>

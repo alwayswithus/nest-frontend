@@ -29,7 +29,7 @@ export default class ProjectList extends Component {
     render() {
         return (
             <div className="ProjectList">
-                <div className="container card-member" style={{position: "absolute", top: "38px", left: "70px", height: "253px" }}>
+                <div className="container card-member" style={{position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px" }}>
                     <div className="card">
                         <div className="card-header">
                             <i onClick={this.callbackProjectListClose.bind(this)} className="fas fa-chevron-left"></i>
