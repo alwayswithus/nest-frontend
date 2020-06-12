@@ -1529,9 +1529,10 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                   onDragEnd={this.onDragEnd}
                   onDragStart={this.onDragStart}
                 >
+                  {this.state.taskList&&this.state.taskList&&
                   <KanbanBoard
                     authUserRole={this.state.authUserRole}
-                    tasks={this.state.taskList}
+                    taskList={this.state.taskList}
                     projectNo={this.props.match.params.projectNo}
                     taskCallbacks={{
                       add: this.callbackAddTask.bind(this), // task 추가
@@ -1544,6 +1545,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                       modalStateFalse:this.modalStateFalse.bind(this)
                     }}
                   />
+                }
                 </DragDropContext>
               </div>
             </div>
