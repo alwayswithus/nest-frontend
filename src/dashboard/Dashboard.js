@@ -20,13 +20,7 @@ export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
-    const {history} = this.props;
-    // 세션 체크...
-    if (!sessionStorage.getItem("authUserNo")) {
-      history.push("/nest/");
-      return;
-    }
-
+    
     this.state = {
       projects: null,                                               // projects data
       users: null,                                                  // user data
@@ -57,6 +51,13 @@ export default class Dashboard extends React.Component {
       memberKeyword: "",                                             // member search
 
       modalState: false,
+    }
+
+    const {history} = this.props;
+    // 세션 체크...
+    if (!sessionStorage.getItem("authUserNo")) {
+      history.push("/nest/");
+      return;
     }
   }
 

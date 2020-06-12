@@ -66,7 +66,8 @@ class myCalendar extends Component {
       projectNo: "",
       projectTitle: "",
       tasklistNo: "",
-      tasklistName: ""
+      tasklistName: "",
+      taskUniquePoint: []
     }
   }
 
@@ -480,6 +481,7 @@ class myCalendar extends Component {
   }
 
   render() {
+    console.log(this.state.taskUniquePoint);
     return (
       <div id="Calendar">
         {/* 사이드바 */}
@@ -560,13 +562,23 @@ class myCalendar extends Component {
                         </div>
                         {this.state.showImportant ?
                           <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
-                            <input type="checkbox" checked={this.state.isPointFive} value="5" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 5 <br />
-                            <input type="checkbox" checked={this.state.isPointFour} value="4" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 4 <br />
-                            <input type="checkbox" checked={this.state.isPointThree} value="3" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 3 <br />
-                            <input type="checkbox" checked={this.state.isPointTwo} value="2" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 2 <br />
-                            <input type="checkbox" checked={this.state.isPointOne} value="1" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 1 <br />
-                            <input type="checkbox" checked={this.state.isPointZero} value="0" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 0 <br />
-                            <input type="checkbox" checked={this.state.isPointNull} value="null" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 평가되지 않음 <br />
+                            {this.state.taskUniquePoint.map(task => {
+                              switch(task) {
+                                case 5 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointFive} value="5" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 5 <br /></span>)
+                                case 4 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointFour} value="4" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 4 <br /></span>)
+                                case 3 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointThree} value="3" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 3 <br /></span>)
+                                case 2 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointTwo} value="2" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 2 <br /></span>)
+                                case 1 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointOne} value="1" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 1 <br /></span>)
+                                case 0 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointZero} value="0" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 0 <br /></span>)
+                                case -1 :
+                                  return (<span><input type="checkbox" checked={this.state.isPointNull} value="null" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 평가되지 않음 <br /></span>)                                
+                              }})}
                           </div> : ""}
                       </div>
                     </div>
@@ -730,6 +742,7 @@ class myCalendar extends Component {
         let taskNumber = [];
         let taskPoint = [];
         let taskPointNumber = [];
+        let taskUniquePoint = [];
 
         response.data.data.allTask.map(task => {
           task["start"] = new Date(task.start);
@@ -743,12 +756,26 @@ class myCalendar extends Component {
           taskPointNumber.push(task.id)
         })
 
+        let set = []
+
+        taskPoint.forEach(task => {
+          if(task.point === null) {
+            set.push({point: -1})
+          }
+          else {
+            set.push({point: task.point})
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set=> set.point)));
+        
         this.setState({
           events: response.data.data.allTask,
           taskState: taskState,
           taskNumber: taskNumber,
           taskPoint: taskPoint,
-          taskPointNumber: taskPointNumber
+          taskPointNumber: taskPointNumber,
+          taskUniquePoint: setProcess.sort().reverse()
         })
       })
     ApiService.fetchDashboard()
