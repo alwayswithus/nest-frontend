@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import './profileset.scss';
 import DeleteModal from './DeleteModal';
+import { Link } from "react-router-dom"
 import { displayName } from 'react-quill';
 
 const API_URL = "http://localhost:8080/nest";
@@ -29,6 +30,7 @@ class SettingList extends Component {
     }
 
     render(){
+        /* 비밀번호 변경 관련 */
         const passwordFormSubmit = e =>{
             e.preventDefault();
             if(this.state.currentPass === "") {
@@ -137,13 +139,22 @@ class SettingList extends Component {
                 })
             }
         }
+        /////////////////////
+
+        /* 알림설정 관련*/
+
+        const notifySubmit = e => {
+            e.preventDefault();
+        }
+
+        ////////////////////
 
         return (
             <div className="panel-group" id="accordion">
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h4 className="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">비밀번호</a>
+                            <Link data-toggle="collapse" data-parent="#accordion" to="#collapse1">비밀번호</Link>
                         </h4>
                     </div>
                     <div id="collapse1" class="panel-collapse collapse in">
@@ -154,6 +165,7 @@ class SettingList extends Component {
                                     <input 
                                         name="currentPass"
                                         type="password"
+                                        autocomplete="current-password"
                                         onChange={currentPassSet}
                                         value={this.state.currentPass}/>
                                 </div>
@@ -162,6 +174,7 @@ class SettingList extends Component {
                                     <input 
                                         name="newPass"
                                         type="password"
+                                        autocomplete="new-password"
                                         onChange={newPassSet}
                                         value={this.state.newPass}/>
                                 </div>
@@ -170,6 +183,7 @@ class SettingList extends Component {
                                     <input 
                                         name="confirmPass"
                                         type="password"
+                                        autocomplete="new-password"
                                         onChange={confirmPassSet}
                                         value={this.state.confirmPass}/>
                                 </div>
@@ -182,10 +196,10 @@ class SettingList extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="panel panel-default">
+                {/* <div className="panel panel-default">
                     <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"> 시간 설정 </a>
+                        <Link data-toggle="collapse" data-parent="#accordion" href="#collapse2"> 시간 설정 </Link>
                     </h4>
                     </div>
                     <div id="collapse2" class="panel-collapse collapse">
@@ -198,7 +212,7 @@ class SettingList extends Component {
                 <div className="panel panel-default">
                     <div className="panel-heading">
                     <h4 className="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"> 언어(Language) </a>
+                        <Link data-toggle="collapse" data-parent="#accordion" href="#collapse3"> 언어(Language) </Link>
                     </h4>
                     </div>
                     <div id="collapse3" class="panel-collapse collapse">
@@ -207,16 +221,16 @@ class SettingList extends Component {
                         <input id='submit' type="submit" value="언어업데이트"/> 
                     </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="panel panel-default">
                     <div className="panel-heading">
                     <h4 className="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">알림 설정</a>
+                        <Link data-toggle="collapse" data-parent="#accordion" to="#collapse4">알림 설정</Link>
                     </h4>
                     </div>
                     <div id="collapse4" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <form className="notify-form">
+                        <form className="notify-form" onSubmit={notifySubmit}>
                             <ul>
                                 <li><input type="checkbox" name='Nest'/> Nest 전체 알림</li>
                                 <li><input type="checkbox" name='Slack'/> Slack 알림</li>
@@ -232,7 +246,7 @@ class SettingList extends Component {
                 <div class="panel panel-default">
                     <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">계정 삭제 </a>
+                        <Link data-toggle="collapse" data-parent="#accordion" to="#collapse5">계정 삭제 </Link>
                     </h4>
                     </div>
                     <div id="collapse5" class="panel-collapse collapse">

@@ -183,7 +183,7 @@ class Profile extends Component {
                 <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
                 <div style={{ textAlign: 'center'}}>
                     <div className="Profile">
-                        <ProfileNav />
+                    <ProfileNav />
                         <div className="profileLayout">
                             <div className="profileImg">
                                 <div className="userPhoto" style={{ backgroundImage: `url(${this.state.photo})` }}></div>

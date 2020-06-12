@@ -19,7 +19,7 @@ class FileList extends Component{
                 <table>
                     <tbody>
                         {this.props.taskItem.commentList.map(file => 
-                            file.fileNo == null ? null :
+                            file.fileNo === null ? null :
                             <FileComponent
                                 key={file.fileNo}
                                 taskListNo={this.props.taskListNo}

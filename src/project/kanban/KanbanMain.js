@@ -1001,7 +1001,7 @@ class KanbanMain extends Component {
       taskNo, 
       this.props.match.params.projectNo)
     let newComment = []
-    if(file == null){
+    if(file === null){
       newComment = {
         commentNo: null,
         commentRegdate: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
@@ -1048,7 +1048,7 @@ class KanbanMain extends Component {
         })
 
         const commentIndex = newTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === json.data.commentNo);
-        if(file == null){
+        if(file === null){
           newTaskList= update(newTaskList, {
             [taskListIndex]:{
               tasks:{
@@ -1097,7 +1097,7 @@ class KanbanMain extends Component {
     const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
     const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === fileNo);
 
-    if(fileNo == null){
+    if(fileNo === null){
       fileNo = 0;
     }
     fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
@@ -1115,7 +1115,7 @@ class KanbanMain extends Component {
           },
         },
       });
-      if(fileIndex != -1){
+      if(fileIndex !== -1){
         newTaskList = update(newTaskList, {
           [taskListIndex]: {
             tasks: {
@@ -1159,7 +1159,7 @@ class KanbanMain extends Component {
     this.setState({
       taskList: newTaskList,
     });
-    const fileIndex = newTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex(file => file.fileNo == formData.fileNo)
+    const fileIndex = newTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex(file => file.fileNo === formData.fileNo)
     const file = newTaskList[taskListIndex].tasks[taskIndex].fileList[fileIndex]
     this.callbackAddComment(
       file,
@@ -1183,9 +1183,9 @@ class KanbanMain extends Component {
     const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
     const taskItem = this.state.taskList[taskListIndex].tasks[taskIndex]
-    const memberIndex= taskItem.memberList.findIndex(member => member.userNo == userNo)
+    const memberIndex= taskItem.memberList.findIndex(member => member.userNo === userNo)
     
-    const projectMemberIndex = projectMembers.findIndex(projectMember => projectMember.userNo == userNo);
+    const projectMemberIndex = projectMembers.findIndex(projectMember => projectMember.userNo === userNo);
     
     let member = {
         userNo: userNo,
@@ -1203,7 +1203,7 @@ class KanbanMain extends Component {
       userName: projectMembers[projectMemberIndex].userName,
       userNumber: null
     }
-    if(memberIndex == -1) {
+    if(memberIndex === -1) {
         fetch(`${API_URL}/api/task/member/add`, {
             method:'post', 
             headers:API_HEADERS,

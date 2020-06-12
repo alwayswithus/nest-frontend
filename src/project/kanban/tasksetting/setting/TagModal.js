@@ -29,7 +29,7 @@ class TagModal extends Component {
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox(event, tagNo, tagName) {
 
-        if (event.target.className == 'far fa-square') {
+        if (event.target.className === 'far fa-square') {
             this.props.taskCallbacks.addtag(
                 tagNo,
                 tagName,
@@ -116,7 +116,7 @@ class TagModal extends Component {
                                         .filter((element) => element.tagName.indexOf(this.state.keyword) !== -1)
                                         .map(tag =>
                                             <li key={tag.tagNo} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                                                {this.props.taskTagNo && this.props.taskTagNo.indexOf(tag.tagNo) != -1 ?
+                                                {this.props.taskTagNo && this.props.taskTagNo.indexOf(tag.tagNo) !== -1 ?
                                                     <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="fas fa-check-square"></i> : <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="far fa-square"></i>
                                                 }
                                                 <div className="tag">{tag.tagName}</div>
@@ -151,7 +151,7 @@ class TagModal extends Component {
                                             .filter((element) => element.tagName.indexOf(this.state.keyword) !== -1)
                                             .map(tag =>
                                                 <li key={tag.tagNo} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                                                    {this.props.taskTagNo && this.props.taskTagNo.indexOf(tag.tagNo) != -1 ?
+                                                    {this.props.taskTagNo && this.props.taskTagNo.indexOf(tag.tagNo) !== -1 ?
                                                         <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="fas fa-check-square"></i> : <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="far fa-square"></i>
                                                     }
                                                     <div className="tag">{tag.tagName}</div>

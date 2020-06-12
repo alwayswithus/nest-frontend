@@ -200,22 +200,22 @@ class myCalendar extends Component {
     let taskPoint = this.state.taskPoint
     let taskPointNumber = this.state.taskPointNumber
 
-    if (event.target.value == "5") {
+    if (event.target.value === "5") {
       isPointFive = event.target.checked
     }
-    else if (event.target.value == "4") {
+    else if (event.target.value === "4") {
       isPointFour = event.target.checked
     }
-    else if (event.target.value == "3") {
+    else if (event.target.value === "3") {
       isPointThree = event.target.checked
     }
-    else if (event.target.value == "2") {
+    else if (event.target.value === "2") {
       isPointTwo = event.target.checked
     }
-    else if (event.target.value == "1") {
+    else if (event.target.value === "1") {
       isPointOne = event.target.checked
     }
-    else if (event.target.value == "0") {
+    else if (event.target.value === "0") {
       isPointZero = event.target.checked
     }
     else if (event.target.value + "" === "null") {
@@ -223,7 +223,7 @@ class myCalendar extends Component {
     }
 
     taskPoint.forEach(task => {
-      if (task.point + "" == event.target.value) {
+      if (task.point + "" === event.target.value) {
         task.isChecked = event.target.checked
         if (task.isChecked === true) {
           if (taskPointNumber.includes(task.id)) {
@@ -264,7 +264,7 @@ class myCalendar extends Component {
     let projectNumber = this.state.projectNumber;
 
     projects.forEach(project => {
-      if (project.projectNo == event.target.value) {
+      if (project.projectNo === event.target.value) {
         project.isChecked = event.target.checked
         if (project.isChecked === true) {
           if (projectNumber.includes(project.projectNo)) {
@@ -603,7 +603,7 @@ class myCalendar extends Component {
                 events={this.state.events.filter(event =>
                   this.state.radioGroup["allTask"] === true ?
                     (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
-                    (this.state.userNumber == event.userNo ? (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
+                    (this.state.userNumber === event.userNo ? (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
                 )}
                 startAccessor="start"
                 endAccessor="end"
