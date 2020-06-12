@@ -30,6 +30,12 @@ class Setting extends Component {
             closeModifyTag:false // 태그 수정하기 모달 상태변수
         }
     }
+
+    //태그 수정하기
+    callbackUpdateTags(tagName, tagColor){
+        console.log("!!!")
+    }
+
     onOpenCalendar() {
         this.setState({
             open:!this.state.open
@@ -72,8 +78,6 @@ class Setting extends Component {
         this.props.taskCallbacks.updateTaskTag(taskItem)
         
     }
-
-    
 
     // 날짜 정보 callback
     onClickConfirm(from,to,taskListIndex,taskIndex){
@@ -129,6 +133,7 @@ class Setting extends Component {
 
     }
 
+    // 태그삭제하기
     callbackDeleteTags(tagNo){
         console.log("!!!!" + tagNo)
 
@@ -149,6 +154,7 @@ class Setting extends Component {
         })
     }
 
+    //업무 멤버 + 버튼 클릭
     onClickTaskMember(){
         this.props.taskCallbacks.taskMemberState();
     }
@@ -292,6 +298,7 @@ class Setting extends Component {
                                             taskTagNo = {this.props.taskTagNo}
                                             taskCallbacks={this.props.taskCallbacks}
                                             settingTagCallbakcs={{
+                                                update: this.callbackUpdateTags.bind(this),
                                                 add:this.callbackAddTags.bind(this),
                                                 delete: this.callbackDeleteTags.bind(this)
                                             }} />
