@@ -883,40 +883,40 @@ class KanbanMain extends Component {
     ].commentList.findIndex((comment) => comment.commentNo === commentNo);
     
     const commentLike = this.state.taskList[taskListIndex].tasks[taskIndex].commentList[commentIndex].commentLike
-
+    
     let commentData = {
-      commentContents: null,
       commentLike:commentLike,
       userNo:sessionStorage.getItem("authUserNo")
     }
 
-    fetch(`${API_URL}/api/comment/${commentNo}`, {
+    fetch(`${API_URL}/api/comment/like/${commentNo}`, {
       method:'post',
       headers:API_HEADERS,
       body: JSON.stringify(commentData)
     })
-    // .then(response => response.json())
-    // .then((json) => {
-    //   let newTaskList = update(this.state.taskList, {
-    //     [taskListIndex]: {
-    //       tasks: {
-    //         [taskIndex]: {
-    //           commentList: {
-    //             [commentIndex]: {
-    //               commentLike: {
-    //                 $set:json.data+1,
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //     },
-    //   });
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json.data)
+      let newTaskList = update(this.state.taskList, {
+        [taskListIndex]: {
+          tasks: {
+            [taskIndex]: {
+              commentList: {
+                [commentIndex]: {
+                  commentLike: {
+                    $set:json.data,
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
   
-    //   this.setState({
-    //     taskList: newTaskList,
-    //   });
-    // })
+      this.setState({
+        taskList: newTaskList,
+      });
+    })
 
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"), 
@@ -951,14 +951,14 @@ class KanbanMain extends Component {
       commentContents: commentContents,
       commentLike:null
     }
-    fetch(`${API_URL}/api/comment/${commentNo}`, {
+    fetch(`${API_URL}/api/comment/contents/${commentNo}`, {
       method:'post',
       headers:API_HEADERS,
       body:JSON.stringify(commentData)
     })
     .then(response => response.json())
     .then((json) => {
-      // console.log(json.data)
+      console.log(json.data)
       let newTaskList = update(this.state.taskList, {
         [taskListIndex]: {
           tasks: {
@@ -1002,7 +1002,7 @@ class KanbanMain extends Component {
     if(file == null){
       newComment = {
         commentNo: null,
-        commentRegdate: moment(Date.now()).format('YYYY-MM-DD hh:mm:ss'),
+        commentRegdate: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
         commentContents: commentContents,
         commentLike: 0,
         userNo: sessionStorage.getItem("authUserNo"),
@@ -1014,7 +1014,7 @@ class KanbanMain extends Component {
     } else {
       newComment = {
         commentNo: null,
-        commentRegdate: moment(Date.now()).format('YYYY-MM-DD hh:mm:ss'),
+        commentRegdate: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
         commentContents: commentContents,
         commentLike: 0,
         userNo: sessionStorage.getItem("authUserNo"),

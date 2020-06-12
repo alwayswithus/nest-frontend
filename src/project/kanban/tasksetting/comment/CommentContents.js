@@ -60,6 +60,7 @@ class commentContents extends Component {
     }
     render(){
         const today = new Date();
+        
         return (
             <Fragment>
                 <div key = {this.props.comment.commentNo} style={{height:'20px'}}/>
@@ -77,7 +78,7 @@ class commentContents extends Component {
                                 ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).hours()} 시간 전` 
                                 : moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).minutes() !== 0 
                                     ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).minutes()} 분 전` 
-                                    : `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(this.props.comment.commentRegdate, 'YYYY-MM-DD h:mm'))).seconds()} 초 전`
+                                    : `몇 초 전`
                         }
                     </span>
                         {this.props.authUserRole === 3 ? null :
