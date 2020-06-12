@@ -26,6 +26,7 @@ class Comment extends Component {
                 <div className="Comment">
                     {/* 코멘트 내용 */}
                     <CommentList
+                        clientRef2={this.props.clientRef2}
                         authUserRole={this.props.authUserRole}
                         taskListNo={this.props.match.params.taskListNo}
                         taskItem={taskItem}

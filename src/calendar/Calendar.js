@@ -742,8 +742,7 @@ class myCalendar extends Component {
         let taskNumber = [];
         let taskPoint = [];
         let taskPointNumber = [];
-        let taskUniquePoint = [];
-
+        
         response.data.data.allTask.map(task => {
           task["start"] = new Date(task.start);
           task["end"] = new Date(task.end + 1);
