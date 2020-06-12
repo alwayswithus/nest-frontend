@@ -30,13 +30,6 @@ class Comment extends Component {
                         taskListNo={this.props.match.params.taskListNo}
                         taskItem={taskItem}
                         taskCallbacks={this.props.taskCallbacks} />
-
-                    {/* 코멘트 입력창 */}
-                    {/* <CommentInput
-                        authUserRole={this.props.authUserRole}
-                        taskCallbacks={this.props.taskCallbacks}
-                        taskItem={taskItem}
-                        taskListNo={this.props.match.params.taskListNo} /> */}
                 </div>
             </div>
         );

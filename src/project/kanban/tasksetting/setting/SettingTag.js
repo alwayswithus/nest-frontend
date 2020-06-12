@@ -1,8 +1,16 @@
 import React, { Component, Fragment } from 'react'
 import './SettingTag.scss';
+import { GithubPicker } from 'react-color';
 
 class SettingTag extends Component {
 
+    constructor(){
+        super(...arguments)
+        this.state = {
+            tagKeyword:'',
+            tagColor:'',
+        }
+    }
     //checkbox를 클릭했을 때 tag를 추가하기.
     onCheckBox() {
         this.props.taskCallbacks.addDeletetag(
@@ -12,43 +20,71 @@ class SettingTag extends Component {
             this.props.tagParams.taskNo);
     }
 
+    // 태그 이름 수정
+    onChangeTag(event){
+        this.props.onChangeTag(event.target.value)
+    }
+
+    onKeyPressEnter(event){
+        if(event.key === "Enter"){
+            event.preventDefault();
+            this.props.settingTagCallbakcs.add(event.target.value);
+            event.target.value='';
+            this.props.onClicknewTagModal();
+        }
+    }
+
     //tag 삭제
     onClickTagModify() {
         this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
+    }
+
+    // 색 수정
+    handleChange(color) {
+        this.props.handleChange(color.hex)
+    }
+
+    onClickModify(){
+        console.log("!!!")
     }
 
     render() {
         return (
             <Fragment>
                 {/* 태그편집 */}
-                {/* <div style={{ display: 'block' }}>
+                {this.props.closeModifyTag ? <div className="setting-tag" style={{ display: 'block' }}>
                     <div style={{ position: 'relative', marginLeft: '20%', right: '198px' }}></div>
                     <div className="container card-member" id="tagModal" style={{ position: 'absolute', left: '0', top: '0', display: 'block' }}>
                         <div className="card-header">
-                            <h6 className='back' onClick={this.props.onClicknewTagModal}>
-                                <i className="fas fa-chevron-left"></i>
+                            <h6 className='back' >
+                                <i onClick={this.props.onClickModifyTagModal} className="fas fa-chevron-left"></i>
                             </h6>
-                            <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}> 태그 추가</h6>
+                            <h6 style={{ display: "inline-block", fontSize: "14px", fontWeight: "bold" }}> 태그 수정하기</h6>
                             <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                         </div>
                         <div className="card-body">
                             <input
                                 type="text"
-                                onKeyPress={this.onKeyPressEnter.bind(this)}
+                                value={this.props.tagName}
+                                onChange={this.onChangeTag.bind(this)}
                                 className="form-control find-member"
-                                placeholder="태그 추가"
+                                placeholder={this.props.tagName}
                             />
                         </div>
                         <div className="tagColorPicker">
-                            <CirclePicker />
+                            <GithubPicker
+                                color={this.props.tagColor}
+                                onChange={ this.handleChange.bind(this) }
+                                width='214px'
+                            />
+                        </div>
+                        <div className="setting-tag-button">
+                            <div onClick={this.onClickModify.bind(this)} className="setting-tag-modify">수정하기</div>
+                            <div className="setting-tag-delete">삭제하기</div>
                         </div>
                     </div>
-                </div> */}
-                <li onClick={this.onCheckBox.bind(this)} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                    {/* {this.props.taskTagNo&&this.props.taskTagNo.indexOf(this.props.tagParams.tagNo) != -1 ? console.log('true') : console.log('false')} */}
-                    <div className="tag">{this.props.tagParams.tagName}</div>
-                    <div onClick={this.onClickTagModify.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
-                </li>
+                </div> : null }
+                
             </Fragment>
         )
     }

@@ -27,6 +27,7 @@ class Setting extends Component {
             closeValue:false, // 태그 모달
             closeTag: false, // 새태그만들기 모달
             projectMembers:null, // 프로젝트멤버
+            closeModifyTag:false // 태그 수정하기 모달 상태변수
         }
     }
     onOpenCalendar() {
@@ -89,6 +90,14 @@ class Setting extends Component {
     onClicknewTagModal(){
         this.setState({
             closeTag:!this.state.closeTag
+        })
+        this.props.taskCallbacks.tagModalStateUpdate();
+    }
+
+     //태그 수정하기 click
+     onClickModifyTagModal(){
+        this.setState({
+            closeModifyTag:!this.state.closeModifyTag
         })
         this.props.taskCallbacks.tagModalStateUpdate();
     }
@@ -272,8 +281,9 @@ class Setting extends Component {
                                        <TagModal
                                             tagModal={this.props.tagModal} // 태그 모달 띄우는 상태변수
                                             closeTag = {this.state.closeTag} // 새 태그 만들기 모달 띄우는 상태 변수
+                                            closeModifyTag = {this.state.closeModifyTag} // 태그 수정하기 모달 띄우는 상태변수
                                             onClicknewTagModal = {this.onClicknewTagModal.bind(this)} // 새 태그 만들기 모달 띄우는 함수
-                                            key={this.props.task.taskNo} 
+                                            onClickModifyTagModal = {this.onClickModifyTagModal.bind(this)} // 태그 수정하기 모달 띄우는 함수
                                             taskListNo = {this.props.match.params.taskListNo}
                                             taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}

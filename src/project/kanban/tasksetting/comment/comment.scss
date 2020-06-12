@@ -97,6 +97,25 @@
                 ul li {
                     color: black;
                     cursor: pointer;
+                    .fa-thumbs-up, .fa-pen, .fa-trash-alt{
+                      &:hover{
+                        margin-left: 2px;
+                        color:#27B6BA;
+                        transform: scale(1.2);
+                      }
+                    }
+                    .count{
+                      width: 20px;
+                      height: 20px;
+                      text-align: center;
+                      padding-top: 2px;
+                      border-radius: 50%;
+                      background-color: #27B6BA;
+                      color: white;
+                      &:hover{
+                        transform: scale(1.2);
+                      }
+                    }
                     [data-tooltip-text]:hover {
                         position: relative;
                     }

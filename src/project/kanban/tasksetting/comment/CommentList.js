@@ -76,6 +76,7 @@ class CommentList extends Component {
                     )}
                 </div>
             </div>
+            {/* 코멘트 input */}
             <div className="Comment-input">
                 <form>
                     <div className="InputForm">
