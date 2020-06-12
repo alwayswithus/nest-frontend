@@ -1,3 +1,42 @@
+.setting-tag{
+    .tagColorPicker{
+        padding-top: 5px;
+        padding-left: 21px;
+    }
+
+    .setting-tag-button{
+        text-align: center;
+        .setting-tag-modify{
+            display: inline-block;
+            margin-right: 28px;
+            margin-top: 14px;
+            margin-bottom: 14px;
+            padding-top: 8px;
+            height: 35px;
+            width: 70px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bolder;
+            background-color: #27B6BA;
+            cursor: pointer;
+        }
+    
+        .setting-tag-delete{
+            display: inline-block;
+            margin-top: 14px;
+            margin-bottom: 14px;
+            padding-top: 8px;
+            height: 35px;
+            width: 70px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bolder;
+            background-color: #FF4040;
+            cursor: pointer;
+        }
+    }
+
+}
 .SettingTag{
     float:left;
     vertical-align: middle;
@@ -6,9 +45,6 @@
     float: left;
     margin: 2%;
     cursor: pointer;
-    // .fa-square, .fa-check-square{
-    //     cursor: pointer;
-    // }
     .tagCheck{
         height: 10px;
         margin-left: 5%;

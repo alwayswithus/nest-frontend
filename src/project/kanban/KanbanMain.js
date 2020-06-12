@@ -13,6 +13,7 @@ import Comment from "../kanban/tasksetting/comment/Comment";
 import File from "../kanban/tasksetting/file/File";
 import moment, { now }  from 'moment';
 import ApiNotification from '../../notification/ApiNotification'
+import SockJsClient from "react-stomp";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -32,6 +33,7 @@ class KanbanMain extends Component {
       point: null, // 업무 중요도 상태변수
       tagModal:false, // 태그 모달 상태변수
     };
+    this.clientRef= React.createRef()
   }
 
   // Drag and Drop
@@ -1025,7 +1027,6 @@ class KanbanMain extends Component {
       };
     }
 
-    console.log(sessionStorage.getItem("authUserPhoto"))
     fetch(`${API_URL}/api/comment`, {
       method:'post',
       headers:API_HEADERS,
@@ -1079,9 +1080,11 @@ class KanbanMain extends Component {
             }
           })
         }
-            this.setState({
-              taskList:newTaskList
-          })
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
+        // this.receiveComment(newTaskList)
+        // this.setState({
+        //   taskList:newTaskList
+        // })
     })
 
 
@@ -1227,7 +1230,7 @@ class KanbanMain extends Component {
         ApiNotification.fetchInsertNotice(
           sessionStorage.getItem("authUserNo"), 
           sessionStorage.getItem("authUserName"),
-          newMember.userNo, 
+          [newMember.userNo], 
           "taskJoin", 
           taskNo, 
           this.props.match.params.projectNo)
@@ -1426,12 +1429,38 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
       headers:API_HEADERS,
       body:color
     })
-  
   }
-  render() {
 
+  receiveComment(newTaskList) {
+    let newData = update(this.state.taskList, {
+      0 : {
+        tasks :{
+          0 : {
+            commentList : 
+              {$push: [newTaskList]} 
+          }
+        }
+      }
+    })
+    
+    this.setState({
+      taskList: newData
+    })
+
+   
+  }
+
+  render() {
     return (
       <>
+        <SockJsClient
+                url="http://localhost:8080/nest/socket"
+                topics={["/topic/all"]}
+                onMessage={this.receiveComment.bind(this)}
+                ref={(client) => {
+                  this.clientRef = client
+                }}
+             />
         {/* taskSetting 띄우는 route */}
         <Switch>
           <Route
@@ -1476,6 +1505,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                 authUserRole={this.state.authUserRole}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
+                clientRef2={this.clientRef.current}
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
@@ -1529,9 +1559,10 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                   onDragEnd={this.onDragEnd}
                   onDragStart={this.onDragStart}
                 >
+                  {this.state.taskList&&this.state.taskList&&
                   <KanbanBoard
                     authUserRole={this.state.authUserRole}
-                    tasks={this.state.taskList}
+                    taskList={this.state.taskList}
                     projectNo={this.props.match.params.projectNo}
                     taskCallbacks={{
                       add: this.callbackAddTask.bind(this), // task 추가
@@ -1544,6 +1575,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                       modalStateFalse:this.modalStateFalse.bind(this)
                     }}
                   />
+                }
                 </DragDropContext>
               </div>
             </div>

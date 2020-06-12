@@ -257,39 +257,48 @@ class TaskList extends Component {
                     className="tasks"
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    // isDraggingOver={snapshot.isDraggingOver}
                   >
                     {/* task 목록 */}
-                    {this.props.taskList.tasks
-                      .filter(
-                        (task) =>
-                          task.taskContents.indexOf(
-                            this.props.searchKeyword
-                          ) !== -1
-                      )
-                      .map((task, index) =>
-                        task.taskState === "done" ? null : (
-                          <Task
-                            authUserRole={this.props.authUserRole}
-                            projectNo={this.props.projectNo}
-                            key={task.taskNo}
-                            taskListNo={this.props.taskList.taskListNo}
-                            task={task}
-                            index={index}
-                            taskCallbacks={this.props.taskCallbacks}
-                          />
-                        )
-                      )}
+                    {this.props.selectPicker === "task"
+                      ? this.props.taskList.tasks
+                          .filter(
+                            (task) =>
+                              task.taskContents.indexOf(
+                                this.props.searchKeyword
+                              ) !== -1
+                          )
+                          .map((task, index) =>
+                            task.taskState === "done" ? null : (
+                              <Task
+                                authUserRole={this.props.authUserRole}
+                                projectNo={this.props.projectNo}
+                                key={task.taskNo}
+                                taskListNo={this.props.taskList.taskListNo}
+                                task={task}
+                                index={index}
+                                taskCallbacks={this.props.taskCallbacks}
+                              />
+                            )
+                          )
+                      : this.props.taskList.tasks.map((task, index) =>
+                          task.taskState === "done" ? null : (
+                            <Task
+                              authUserRole={this.props.authUserRole}
+                              projectNo={this.props.projectNo}
+                              key={task.taskNo}
+                              taskListNo={this.props.taskList.taskListNo}
+                              task={task}
+                              index={index}
+                              taskCallbacks={this.props.taskCallbacks}
+                            />
+                          )
+                        )}
                     {provided.placeholder}
                   </div>
                 )}
               </Droppable>
 
-              <div
-                className="completeTasks"
-                ref={provided.innerRef}
-                // {...provided.droppableProps}
-              >
+              <div className="completeTasks" ref={provided.innerRef}>
                 {this.props.tasks.map((task) =>
                   task.taskState === "done" ? (completeTaskState = true) : null
                 )}
@@ -302,27 +311,45 @@ class TaskList extends Component {
                   </div>
                 ) : null}
 
-                {this.state.showComplete ? (
+                {this.props.selectPicker === "task" ? (
+                  this.state.showComplete ? (
+                    <div className="completeTask">
+                      {this.props.taskList.tasks
+                        .filter(
+                          (task) =>
+                            task.taskContents.indexOf(
+                              this.props.searchKeyword
+                            ) !== -1
+                        )
+                        .map((task, index) =>
+                          task.taskState === "done" ? (
+                            <Task
+                              key={task.taskNo}
+                              taskListNo={this.props.taskList.taskListNo}
+                              task={task}
+                              index={index}
+                              taskCallbacks={this.props.taskCallbacks}
+                              complete={true}
+                            />
+                          ) : null
+                        )}
+                      {provided.placeholder}
+                    </div>
+                  ) : null
+                ) : this.state.showComplete ? (
                   <div className="completeTask">
-                    {this.props.taskList.tasks
-                      .filter(
-                        (task) =>
-                          task.taskContents.indexOf(
-                            this.props.searchKeyword
-                          ) !== -1
-                      )
-                      .map((task, index) =>
-                        task.taskState === "done" ? (
-                          <Task
-                            key={task.taskNo}
-                            taskListNo={this.props.taskList.taskListNo}
-                            task={task}
-                            index={index}
-                            taskCallbacks={this.props.taskCallbacks}
-                            complete={true}
-                          />
-                        ) : null
-                      )}
+                    {this.props.taskList.tasks.map((task, index) =>
+                      task.taskState === "done" ? (
+                        <Task
+                          key={task.taskNo}
+                          taskListNo={this.props.taskList.taskListNo}
+                          task={task}
+                          index={index}
+                          taskCallbacks={this.props.taskCallbacks}
+                          complete={true}
+                        />
+                      ) : null
+                    )}
                     {provided.placeholder}
                   </div>
                 ) : null}

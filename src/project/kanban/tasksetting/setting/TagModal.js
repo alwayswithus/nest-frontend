@@ -8,7 +8,9 @@ class TagModal extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-            keyword: ''
+            keyword: '',
+            tagName: '',
+            tagColor:'',
         }
     }
     // 새태그 만들기 클릭
@@ -41,9 +43,28 @@ class TagModal extends Component {
         }
     }
 
-    //tag 삭제
-    onClickTagModify() {
-        this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
+    //tag 수정하기
+    onClickTagModify(tagName,tagColor) {
+        this.setState({
+            tagName:tagName,
+            tagColor:tagColor
+        })
+        this.props.onClickModifyTagModal();
+        // this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
+    }
+
+    //색 수정하는 함수
+    handleChange(color){
+        this.setState({
+            tagColor:color
+        })
+    }
+
+    //tag 이름 수정함수
+    onChangeTag(tagName){
+        this.setState({
+            tagName:tagName
+        })
     }
 
     render() {
@@ -53,7 +74,6 @@ class TagModal extends Component {
                 <NewTagModal
                     closeTag={this.props.closeTag}
                     onClicknewTagModal={this.props.onClicknewTagModal}
-                    key={this.props.taskNo}
                     taskListNo={this.props.taskListNo}
                     taskNo={this.props.taskNo}
                     taskItem={this.props.taskItem}
@@ -61,6 +81,19 @@ class TagModal extends Component {
                     taskCallbacks={this.props.taskCallbacks}
                     settingTagCallbakcs={this.props.settingTagCallbakcs} />
 
+                {/* 태그 수정하기 */}
+                <SettingTag 
+                    closeModifyTag={this.props.closeModifyTag} // 태그 수정하기 모달 상태변수
+                    onClickModifyTagModal={this.props.onClickModifyTagModal} // 태그 수정하기 모달 띄우는 함수
+                    taskListNo={this.props.taskListNo}
+                    taskNo={this.props.taskNo}
+                    taskItem={this.props.taskItem}
+                    tagName={this.state.tagName}
+                    tagColor={this.state.tagColor}
+                    taskCallbacks={this.props.taskCallbacks}
+                    handleChange={this.handleChange.bind(this)} // 태그 색상 수정
+                    onChangeTag = {this.onChangeTag.bind(this)} // 태그 이름 수정
+                />
                 {/* 태그 검색하기 */}
                 {this.props.tagModal ? <div className="container card-member" id="tagModal" style={{ position: 'absolute', left: '0', top: '0', display: 'block' }}>
                     <div className="card">
@@ -87,7 +120,7 @@ class TagModal extends Component {
                                                     <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="fas fa-check-square"></i> : <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="far fa-square"></i>
                                                 }
                                                 <div className="tag">{tag.tagName}</div>
-                                                <div onClick={this.onClickTagModify.bind(this, tag.tagNo)} className="modify"><i className="fas fa-pencil-alt"></i></div>
+                                                <div onClick={this.onClickTagModify.bind(this, tag.tagName,tag.tagColor)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                                             </li>
                                         )}
                                 </ul>

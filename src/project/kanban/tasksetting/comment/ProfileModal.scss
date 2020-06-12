@@ -1,0 +1,137 @@
+.profile-modal-none{
+    display: none;
+}
+.profile-modal{
+    position: relative;
+    display: block;
+    .card-profile {
+        padding: 14px;
+        position: absolute;
+        width: 300px;
+        height: 190px;
+        background-color: #FFFFFF;
+        box-shadow: 0 3px 10px rgba(0,0,0,.5);
+        margin-top: 23px;
+        margin-left: 42px;
+        z-index: 1;
+        .card-body{
+            .user-img{
+                display: inline-block;
+                width: 77px;
+                border-radius: 4px;
+                height: 52px;
+                background-size: cover;
+                background-position: center;
+            }
+            .user-info{
+                list-style: none;
+                display: inline-block;
+                padding-left: 10px;
+                
+                .user-info-name{
+                    font-weight: 540;
+                    padding-bottom: 8px;
+                    font-size: 1.75rem;
+                }
+                .user-info-email{
+                    color:#9B9FA6;
+                }
+            }
+
+            .user-info-detail{
+                list-style: none;
+                li{
+                    padding-bottom: 15px;
+                }
+                .user-info-detail-title{
+                    span{
+                        padding:2px;
+                    }
+                    .fa-id-badge{
+                        color:#9B9FA6;
+                        margin-left: 10px;
+                        padding-right: 6px;
+                        transform: scale(1.3);
+                    }
+                }
+
+                .user-info-detail-number{
+                    .fa-phone-square-alt{
+                        color:#9B9FA6;
+                        margin-left: 10px;
+                        padding-right: 6px;
+                        transform: scale(1.3);
+                    }
+                }
+
+                .user-info-detail-dept{
+                    .fa-building{
+                        color:#9B9FA6;
+                        margin-left: 10px;
+                        padding-right: 6px;
+                        transform: scale(1.3);
+                    }
+                }
+            }
+        }
+        
+        .invite-card-member-list {
+            height: 203px;
+            overflow: scroll;
+            overflow-x: hidden;
+    
+            .invite-card-member {
+                padding-top: 5px;
+                border:none;                
+                margin: 2% 0 0 0;
+                padding:1%;
+                width:auto;
+                cursor: pointer;
+    
+                img{
+                    width:35px;
+                    height: 35px;
+                    margin-right: 10px;
+                }
+                span{
+                    padding-top: 1%;  
+                }
+                    
+                .fa-check {
+                    float: right;
+                    padding-top: 11px;
+                    padding-right: 7px;
+                    color: #8798A8;
+                }
+            }
+            .invite-card-member:hover {
+                background-color: #E3E3E3;
+            }
+            .invite-member{
+                cursor: default;
+                padding-top: 5px;
+                .icon-exclamation{
+                    display: inline-block;
+                    vertical-align: text-bottom;
+                    padding-bottom: 9px;
+                    .fa-exclamation-circle {
+                        color: red;
+                        height: 20px;
+                        padding-top: 5px;
+                        border:none;              
+                        margin: 2% 0 0 0;
+                        padding:1%;
+                        width:auto;
+                    }
+                }
+                .warning{
+                    display: inline-block;
+                    font-size: 1.25rem;
+                    font-weight: bold;
+                    padding-top: 1%;  
+                    width:210px
+                }
+            }
+        }
+    }
+}

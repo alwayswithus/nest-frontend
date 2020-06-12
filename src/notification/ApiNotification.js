@@ -23,8 +23,6 @@ class ApiNotification {
       projectNo: projectNo,
     };
 
-    console.log(noticeData);
-
     fetch(`${API_URL}/api/notification/insertNotice`, {
       method: "post",
       headers: API_HEADERS,
