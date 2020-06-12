@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from "react";
 import './comment.scss';
-import moment from 'moment';
 import CommentContents from './CommentContents'
 import Editor from "./Editor";
 import ReactQuill from 'react-quill';
-import PropTypes from 'prop-types';
+
+import SockJsClient from "react-stomp";
+
 class CommentList extends Component {
 
     constructor() {
@@ -12,6 +13,7 @@ class CommentList extends Component {
         this.state = {
             editorHtml: '', 
             theme: 'snow',
+            commentList:[],
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -32,12 +34,14 @@ class CommentList extends Component {
 
     //보내기 버튼을 눌렀을 때 코멘트 생성
     onClickSubmit() {
+
         this.props.taskCallbacks.addComment(
             null,
             this.props.taskListNo,
             this.props.taskItem.taskNo,
             this.state.editorHtml,
         )
+
         this.setState({
             editorHtml: ''
         })
@@ -52,6 +56,7 @@ class CommentList extends Component {
 
     componentDidMount(){
         window.jQuery(document.getElementsByClassName("media")).scrollTop(1000000000000000000000);
+    
     }
     componentDidUpdate(){
         window.jQuery(document.getElementsByClassName("media")).scrollTop(1000000000000000000000);

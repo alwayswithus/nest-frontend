@@ -24,15 +24,17 @@ class CommentInput extends Component {
             this.state.editorHtml
         )
 
+
         this.setState({
             editorHtml: ''
         })
+
+        
     }
 
     handleChange (html) {
         this.setState({ editorHtml: html });
     }
-
     render() {
         return (
             <div className="Comment-input">
