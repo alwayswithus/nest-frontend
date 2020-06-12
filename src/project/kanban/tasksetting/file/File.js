@@ -153,7 +153,7 @@ class File extends Component {
                                     <div className="input-group-btn"></div>
                                 </div>
                             </form>
-                            {this.props.authUserRole == 3 ?
+                            {this.props.authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
                                 <input

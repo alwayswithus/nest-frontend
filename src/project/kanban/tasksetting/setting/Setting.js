@@ -344,7 +344,7 @@ class Setting extends Component {
                                                                 taskCallbacks={this.props.taskCallbacks} 
                                                                 checklist={checklist} 
                                                                 key={checklist.checklistNo}/>
-                                                        {this.props.authUserRole == 3 ? null : 
+                                                        {this.props.authUserRole === 3 ? null : 
                                                             <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
                                                         }
                                                         

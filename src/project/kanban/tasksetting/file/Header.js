@@ -19,7 +19,7 @@ class Header extends Component {
     }
 
     onKeyPressEnter(event){
-        if(event.key == 'Enter'){
+        if(event.key === 'Enter'){
             this.setState({
                 input: !this.state.input
             })

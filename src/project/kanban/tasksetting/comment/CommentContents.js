@@ -88,13 +88,13 @@ class commentContents extends Component {
                                         <i onClick = {this.onClickThumsUp.bind(this, this.props.comment.commentNo)} className="far fa-thumbs-up thumsup"/>
                                     </span>
                                 </li>
-                                <>{this.props.comment.fileNo == null && this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
+                                <>{this.props.comment.fileNo === null && this.props.comment.userNo === sessionStorage.getItem("authUserNo") ? 
                                     <li>
                                         <span data-tooltip-text="수정하기">
                                             <i onClick= {this.onClickModifyText.bind(this)} className="fas fa-pen" />
                                         </span>
                                     </li> : null} </>
-                                <>{this.props.comment.userNo == sessionStorage.getItem("authUserNo") ? 
+                                <>{this.props.comment.userNo === sessionStorage.getItem("authUserNo") ? 
                                     <li>
                                         <span data-tooltip-text="삭제하기">
                                             <i onClick = {this.onClickDeleteContents.bind(this)} className="far fa-trash-alt" />
@@ -102,7 +102,7 @@ class commentContents extends Component {
                                     </li> : null}</>
                                 </ul>
                         }
-                        {this.props.comment.fileNo == null ? null : 
+                        {this.props.comment.fileNo === null ? null : 
                             <img style={{display:'block', width:'150px', padding: '2% 3% 0% 3%'}} src={`${API_URL}${this.props.comment.filePath}`} alt={this.props.comment.originName} ></img>}
                         {this.state.change ? 
                             <p style={{ border: '4px solid rgb(39, 182, 186)',

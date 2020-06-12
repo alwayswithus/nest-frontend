@@ -45,7 +45,7 @@ class SettingTag extends Component {
                     </div>
                 </div> */}
                 <li onClick={this.onCheckBox.bind(this)} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
-                    {/* {this.props.taskTagNo&&this.props.taskTagNo.indexOf(this.props.tagParams.tagNo) != -1 ? console.log('true') : console.log('false')} */}
+                    {/* {this.props.taskTagNo&&this.props.taskTagNo.indexOf(this.props.tagParams.tagNo) !== -1 ? console.log('true') : console.log('false')} */}
                     <div className="tag">{this.props.tagParams.tagName}</div>
                     <div onClick={this.onClickTagModify.bind(this)} className="modify"><i className="fas fa-pencil-alt"></i></div>
                 </li>
