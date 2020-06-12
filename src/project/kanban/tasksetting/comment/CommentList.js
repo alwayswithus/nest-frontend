@@ -51,7 +51,7 @@ class CommentList extends Component {
     }
 
     componentDidMount(){
-        window.jQuery(document.getElementsByClassName("media")).scrollTop(10000000000000000000000);
+        window.jQuery(document.getElementsByClassName("media")).scrollTop(1000000000000000000000);
     }
     componentDidUpdate(){
         window.jQuery(document.getElementsByClassName("media")).scrollTop(1000000000000000000000);
