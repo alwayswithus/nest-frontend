@@ -4,11 +4,22 @@ import TaskMembers from './TaskMembers';
 
 class TaskMember extends Component {
 
+    constructor(){
+        super(...arguments)
+        this.state = {
+            keyword:''
+        }
+    }
     // CallBack Open Invite Member Function
     callbackOpenInviteMember() {
         this.props.callbackOpenInviteMember.open(true)
     }
 
+    onChangeMemberSearch(event){
+        this.setState({
+            keyword:event.target.value
+        })
+    }
     render() {
         return (
             <>
@@ -22,9 +33,11 @@ class TaskMember extends Component {
                             <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                         </div>
                         <div className="card-body">
-                            <input type="text" className="form-control find-member" placeholder="이름 혹은 이메일로 찾기" />
+                            <input type="text" className="form-control find-member" value= {this.state.keyword} onChange={this.onChangeMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
-                                {this.props.projectMembers && this.props.projectMembers.map(projectMember =>
+                                {this.props.projectMembers && this.props.projectMembers
+                                .filter(projectMember => projectMember.userName.indexOf(this.state.keyword) !== -1 || projectMember.userEmail.indexOf(this.state.keyword) !== -1)
+                                .map(projectMember =>
                                     <TaskMembers 
                                         taskItem={this.props.taskItem}
                                         taskListNo={this.props.taskListNo}
@@ -34,9 +47,13 @@ class TaskMember extends Component {
                                         projectMembers={this.props.projectMembers} 
                                         taskCallbacks = {this.props.taskCallbacks} />)
                                 }
-                                <div className="invite-member" onClick={this.callbackOpenInviteMember.bind(this)}>
-                                    <i className="fas fa-user-plus fa-2x"></i>
-                                    <span>멤버 초대하기</span>
+                                <div className="invite-member">
+                                    <div className="icon-exclamation"><i className="fas fa-exclamation-circle"></i></div>
+                                    <div className="warning">
+                                        <span>
+                                            멤버 초대를 원하시면 <i className="fas fa-cog"></i> 프로젝트 설정에서 추가해주세요
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

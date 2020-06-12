@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 // import './comment.scss';
 import moment from 'moment';
 import ReactQuill from 'react-quill';
+import ProfileModal from './ProfileModal';
 
 const API_URL = "http://localhost:8080/nest";
 
@@ -13,6 +14,7 @@ class commentContents extends Component {
         this.state = {
             change:false,
             keyword: this.props.comment.commentContents,
+            modal: false
         }
     }
 
@@ -58,15 +60,27 @@ class commentContents extends Component {
             this.props.taskCallbacks.deleteComment(this.props.comment.fileNo, this.props.taskListNo, this.props.taskNo, this.props.comment.commentNo)
         }
     }
+
+    //이미지 클릭했을 때
+    onClickUserImg(){
+        this.setState({
+            modal:!this.state.modal
+        })
+    }
     render(){
         const today = new Date();
-        
         return (
             <Fragment>
                 <div key = {this.props.comment.commentNo} style={{height:'20px'}}/>
                 <a className="pull-left" href="#">
-                    <div className="img-circle" style={{backgroundImage:`url(${this.props.comment.userPhoto})`}} ></div>
+                    <div onClick = {this.onClickUserImg.bind(this,this.state.open)} className="img-circle" style={{backgroundImage:`url(${this.props.comment.userPhoto})`}} ></div>
                 </a>
+                <div className = {this.state.modal ? "profile-modal" : "profile-modal-none"}>
+                    <ProfileModal 
+                        onClickUserImg={this.onClickUserImg.bind(this,this.state.open)}
+                        comment ={this.props.comment}
+                    />
+                </div>
                 <div className="media-body">
                     <span className="media-heading"><b>{this.props.comment.userName}</b></span>
                     {/* 날짜 계산하기 */}
@@ -124,7 +138,7 @@ class commentContents extends Component {
                                 />
                         }
                     <ul className="list-unstyled list-inline media-detail pull-left">
-                        {this.props.comment.commentLike === 0 ? null : <li><i className="fa fa-thumbs-up"></i>&nbsp;{this.props.comment.commentLike}</li> }
+                        {this.props.comment.commentLike === 0 ? null : <li><i onClick = {this.onClickThumsUp.bind(this, this.props.comment.commentNo)} className="fa fa-thumbs-up count"></i>&nbsp;{this.props.comment.commentLike}</li> }
                     </ul>
                 </div>
             </Fragment>

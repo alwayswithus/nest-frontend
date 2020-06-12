@@ -1227,7 +1227,7 @@ class KanbanMain extends Component {
         ApiNotification.fetchInsertNotice(
           sessionStorage.getItem("authUserNo"), 
           sessionStorage.getItem("authUserName"),
-          newMember.userNo, 
+          [newMember.userNo], 
           "taskJoin", 
           taskNo, 
           this.props.match.params.projectNo)
