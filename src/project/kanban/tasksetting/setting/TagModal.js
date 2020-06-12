@@ -91,6 +91,7 @@ class TagModal extends Component {
                     tagName={this.state.tagName}
                     tagColor={this.state.tagColor}
                     taskCallbacks={this.props.taskCallbacks}
+                    settingTagCallbakcs={this.props.settingTagCallbakcs}
                     handleChange={this.handleChange.bind(this)} // 태그 색상 수정
                     onChangeTag = {this.onChangeTag.bind(this)} // 태그 이름 수정
                 />
