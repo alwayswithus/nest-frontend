@@ -44,7 +44,7 @@
     width: 250px;
     float: left;
     margin: 2%;
-    cursor: pointer;
+    cursor: default;
     .tagCheck{
         height: 10px;
         margin-left: 5%;
@@ -56,7 +56,6 @@
         height: 25px;
         display: inline-block;
         width:auto;
-        background-color: #808080;
         border-radius: 10px;
         color:white;
         padding:1%;

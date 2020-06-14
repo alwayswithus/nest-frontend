@@ -2,15 +2,26 @@ import React, { Component, Fragment } from 'react'
 import './TagModal.scss';
 import { GithubPicker } from 'react-color';
 
-class TagModal extends Component {
-
+class NewTagModal extends Component {
+    constructor(){
+        super(...arguments)
+        this.state = {
+            tagColor:''
+        }
+    }
     onKeyPressEnter(event){
         if(event.key === "Enter"){
             event.preventDefault();
-            this.props.settingTagCallbakcs.add(event.target.value);
+            this.props.settingTagCallbakcs.add(event.target.value, this.state.tagColor);
             event.target.value='';
             this.props.onClicknewTagModal();
         }
+    }
+
+    handleChange = (color) => {
+        this.setState({
+            tagColor: color.hex
+        })
     }
 
     render() {
@@ -38,6 +49,8 @@ class TagModal extends Component {
                             <div className="tagColorPicker">
                                 <GithubPicker 
                                     width='214px'
+                                    color={this.state.tagColor}
+                                    onChange={ this.handleChange }
                                 />
                             </div>
                         </div>
@@ -49,4 +62,4 @@ class TagModal extends Component {
     }
 }
 
-export default TagModal;
+export default NewTagModal;

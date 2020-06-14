@@ -11,6 +11,7 @@ class TagModal extends Component {
             keyword: '',
             tagName: '',
             tagColor:'',
+            tagNo:'',
         }
     }
     // 새태그 만들기 클릭
@@ -27,14 +28,14 @@ class TagModal extends Component {
     }
 
     //checkbox를 클릭했을 때 tag를 추가하기.
-    onCheckBox(event, tagNo, tagName) {
-
+    onCheckBox(event, tagNo, tagName,tagColor) {
         if (event.target.className === 'far fa-square') {
             this.props.taskCallbacks.addtag(
                 tagNo,
                 tagName,
                 this.props.taskListNo,
-                this.props.taskNo);
+                this.props.taskNo,
+                tagColor);
         } else {
             this.props.taskCallbacks.deletetag(
                 tagNo,
@@ -44,13 +45,13 @@ class TagModal extends Component {
     }
 
     //tag 수정하기
-    onClickTagModify(tagName,tagColor) {
+    onClickTagModify(tagName,tagColor, tagNo) {
         this.setState({
             tagName:tagName,
-            tagColor:tagColor
+            tagColor:tagColor,
+            tagNo:tagNo
         })
         this.props.onClickModifyTagModal();
-        // this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
     }
 
     //색 수정하는 함수
@@ -87,9 +88,10 @@ class TagModal extends Component {
                     onClickModifyTagModal={this.props.onClickModifyTagModal} // 태그 수정하기 모달 띄우는 함수
                     taskListNo={this.props.taskListNo}
                     taskNo={this.props.taskNo}
-                    taskItem={this.props.taskItem}
                     tagName={this.state.tagName}
                     tagColor={this.state.tagColor}
+                    tagNo={this.state.tagNo}
+                    taskTagNo={this.props.taskTagNo}
                     taskCallbacks={this.props.taskCallbacks}
                     settingTagCallbakcs={this.props.settingTagCallbakcs}
                     handleChange={this.handleChange.bind(this)} // 태그 색상 수정
@@ -118,10 +120,12 @@ class TagModal extends Component {
                                         .map(tag =>
                                             <li key={tag.tagNo} className="SettingTag" style={{ margin: '5% 0% 0% 0%' }}>
                                                 {this.props.taskTagNo && this.props.taskTagNo.indexOf(tag.tagNo) !== -1 ?
-                                                    <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="fas fa-check-square"></i> : <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName)} className="far fa-square"></i>
+                                                    <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName, tag.tagColor)} className="fas fa-check-square"></i> : <i onClick={(e) => this.onCheckBox(e, tag.tagNo, tag.tagName,tag.tagColor)} className="far fa-square"></i>
                                                 }
-                                                <div className="tag">{tag.tagName}</div>
-                                                <div onClick={this.onClickTagModify.bind(this, tag.tagName,tag.tagColor)} className="modify"><i className="fas fa-pencil-alt"></i></div>
+                                                <div className="tag" style={{backgroundColor:`${tag.tagColor}`}}>{tag.tagName}</div>
+                                                <div onClick={this.onClickTagModify.bind(this, tag.tagName,tag.tagColor, tag.tagNo)} className="modify">
+                                                    <i className="fas fa-pencil-alt"></i>
+                                                </div>
                                             </li>
                                         )}
                                 </ul>

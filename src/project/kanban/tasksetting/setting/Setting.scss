@@ -158,6 +158,15 @@
 
       .TagList {
         width: 300px;
+        .tagDelete{
+          padding-left: 6%;
+          font-size: 1.75rem;
+          vertical-align: bottom;
+          &:hover{
+            color:black;
+            cursor: pointer;
+          }
+        }
       }
     }
   }

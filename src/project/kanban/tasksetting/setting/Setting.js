@@ -32,8 +32,36 @@ class Setting extends Component {
     }
 
     //태그 수정하기
-    callbackUpdateTags(tagName, tagColor){
-        console.log("!!!")
+    callbackUpdateTags(tagName, tagColor, tagNo){
+        console.log("callbackUpdateTags + " + tagNo)
+        let newTag = {
+            tagName: tagName,
+            tagColor: tagColor,
+            tagNo: tagNo
+        }
+
+        const tagIndex = this.state.tags.findIndex(tag => tag.tagNo === tagNo);
+       
+        fetch(`${API_URL}/api/tasksetting/tag/update`,{
+            method:'post',
+            headers:API_HEADERS,
+            body:JSON.stringify(newTag)
+        })
+        .then(response => response.json())
+        .then(json => {
+            let newTagData = update(this.state.tags,{
+                [tagIndex] : {
+                    tagName:{$set:tagName},
+                    tagColor:{$set:tagColor}
+                }
+            })
+            this.setState({
+                tags:newTagData
+            })
+            this.props.taskCallbacks.updateTag(tagName, tagColor, tagNo)
+        })
+
+        this.onClickModifyTagModal()
     }
 
     onOpenCalendar() {
@@ -107,13 +135,20 @@ class Setting extends Component {
     }
 
     //새 태그 만들기
-    callbackAddTags(tagName){
-        console.log("Setting : " + tagName)
-        
-        let newTag = {
-            tagNo : null,
-            tagName : tagName,
-            tagColor: '#FFE0E0'
+    callbackAddTags(tagName, tagColor){
+        let newTag = []
+        if(tagColor === ''){
+            newTag = {
+                tagNo : null,
+                tagName : tagName,
+                tagColor: '#7D7D7D'
+            }
+        } else{
+            newTag = {
+                tagNo : null,
+                tagName : tagName,
+                tagColor: tagColor
+            }
         }
 
         fetch(`${API_URL}/api/taglist/add`, {
@@ -135,9 +170,11 @@ class Setting extends Component {
 
     // 태그삭제하기
     callbackDeleteTags(tagNo){
-        console.log("!!!!" + tagNo)
 
         const tagIndex = this.state.tags.findIndex(tag => tag.tagNo === tagNo);
+        
+        
+        console.log("Setting + " + tagIndex)
         fetch(`${API_URL}/api/taglist/delete`, {
             method:'delete',
             headers:API_HEADERS,
@@ -151,7 +188,9 @@ class Setting extends Component {
             this.setState({
                 tags:newTags
             })
+            this.props.taskCallbacks.deleteAlltag(tagNo)
         })
+        this.onClickModifyTagModal()
     }
 
     //업무 멤버 + 버튼 클릭
@@ -173,6 +212,15 @@ class Setting extends Component {
         alert('체크리스트 항목을 삭제하시겠습니끼?')
         this.props.taskCallbacks.deleteCheckList(checklistNo , this.props.match.params.taskListNo, this.props.match.params.taskNo);
     }
+
+    //tag x 버튼 클릭
+    onClickTagDelete(tagNo){
+        this.props.taskCallbacks.deletetag(
+            tagNo,
+            this.props.match.params.taskListNo,
+            this.props.match.params.taskNo)
+    }
+
 
     render() {
         if(!this.props.task){
@@ -309,7 +357,10 @@ class Setting extends Component {
                                 <div style={{ display: 'inline-block' }} className = "TagList">
                                     {taskItem.tagList.map(tag => 
                                         <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
-                                            <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>{tag.tagName}</span>
+                                            <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
+                                                {tag.tagName}
+                                                <span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>
+                                            </span>
                                         </div>
                                     )}
                                 </div>
