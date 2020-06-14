@@ -26,7 +26,6 @@ export default class Dashboard extends React.Component {
       users: null,                                                  // user data
       userProject: [],                                              // authUser projectNo and roleNo
 
-      url: window.sessionStorage.getItem("authUserBg"),             // background image url
       project: [],                                                  // project
       members: [],                                                  // members in project
       message: null,
@@ -755,9 +754,6 @@ export default class Dashboard extends React.Component {
     const projectIndex = this.state.projects.findIndex(project =>
       project.projectNo === projectNo)
 
-    // console.log(this.state.projects)
-    console.log(from, to, projectIndex)
-
     let newProject = update(this.state.projects, {
       [projectIndex]: {
         projectStart: {
@@ -824,7 +820,7 @@ export default class Dashboard extends React.Component {
                 projectForeverDelete: this.callbackProjectForeverDelete.bind(this)
               }} />
           </div>
-          <div className="mainArea" style={{ backgroundImage: `url(${this.state.url})` }}>
+          <div className="mainArea" >
             <div className="col-sm-24 project-list" onClick={this.onShowDetails.bind(this)}>
               {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
               <h3>내가 속한 프로젝트 ({this.state.projects && this.state.projects.length})</h3>

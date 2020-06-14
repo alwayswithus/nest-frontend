@@ -21,7 +21,6 @@ export default class File extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
-            url: sessionStorage.getItem("authUserBg"),
             pageSize: 10,
             currentPage: 1,
             projectFiles: [],
@@ -159,7 +158,7 @@ export default class File extends React.Component {
         const files = paginate(this.state.projectFiles, this.state.currentPage, this.state.pageSize); // 페이지 별로 아이템이 속한 배열을 얻어옴
 
         return (
-            <div className="File" style={{ backgroundImage: `url(${this.state.url})` }}>
+            <div className="File">
                 <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 <TopBar projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname} />
                 <div className="file-resource-table">

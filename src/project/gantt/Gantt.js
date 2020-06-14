@@ -94,7 +94,6 @@ class Gantt extends React.Component {
         super(props);
 
         this.state = {
-            url: sessionStorage.getItem("authUserBg"),
             data: [],
             links: [], 
             selectedItem: null ,
@@ -151,7 +150,7 @@ class Gantt extends React.Component {
 
     render() {
         return (
-            <div className="Gantt" style={{ backgroundImage: `url(${this.state.url})` }}>
+            <div className="Gantt">
                 {/* 네비게이션바 */}
                 <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 {/*상단바*/}

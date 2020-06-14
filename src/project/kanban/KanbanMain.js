@@ -14,6 +14,8 @@ import File from "../kanban/tasksetting/file/File";
 import moment, { now }  from 'moment';
 import ApiNotification from '../../notification/ApiNotification'
 import SockJsClient from "react-stomp";
+import ProjectSetting from '../../dashboard/projectsetting/ProjectSetting';
+import '../../dashboard/projectsetting/projectset.scss';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -26,16 +28,44 @@ class KanbanMain extends Component {
       taskList: null,
       authUserRole:null,
       projectTitle:null,
-      // url: window.sessionStorage.getItem("authUserBg"),
       taskTagNo:[], //task tag의 no만 모아둔 배열
       modalState:false,
       taskMemberState: false, //task memer modal 상태변수
       point: null, // 업무 중요도 상태변수
       tagModal:false, // 태그 모달 상태변수
+
+      projects: null,                                               // projects data
+      users: null,                                                  // user data
+      userProject: [],                                              // authUser projectNo and roleNo
+
+      project: [],                                                  // project
+      members: [],                                                  // members in project
+      message: null,
+
+      details: true,                                                // arrow 
+      addProjectUserButton: false,                                  // add project user button
+      inviteMember: false,                                          // invite member open & close
+      inviteMemberEmail: "",
+      inviteMemberName: "",
+      setOn: true,                                                  // project setting open & close button
+      isMemberEmailValid: false,                                    // member email valid
+      isProjectTitleValid: false,                                   // project title valid
+      isNotEmptyValid: false,
+
+      position: "top-right",
+      alerts: [],
+      timeout: 2000,
+      newMessage: "초대 메일이 성공적으로 발송되었습니다.",
+
+      projectWriter: "",                                             // project writer
+      projectKeyword: "",                                            // project search
+      memberKeyword: "",                                             // member search
     };
     this.clientRef= React.createRef()
   }
 
+  // onDragStart = (result) => {
+  // }
   // Drag and Drop
   onDragEnd = (result) => {
     const { destination, source, type } = result;
@@ -476,7 +506,7 @@ class KanbanMain extends Component {
           body: JSON.stringify(newTaskList[TaskListIndex].tasks),
         });
 
-        console.log(newTaskList);
+        // console.log(newTaskList);
 
         this.setState({
           taskList: newTaskList,
@@ -494,25 +524,109 @@ class KanbanMain extends Component {
       (task) => task.taskNo === taskId
     );
 
-    let newTaskList = update(this.state.taskList, {
-      [TaskListIndex]: {
-        tasks: {
-          [TaskIndex]: {
-            taskState: { $set: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === 'done' ? 'do' : 'done' },
+    if(this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "do"){
+
+      let doneIndex = [];
+
+      this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'done' ?  doneIndex.push(index) : null)
+      if(doneIndex[0] === undefined){
+        doneIndex.push(this.state.taskList[TaskListIndex].tasks.length)
+      }
+
+      let newTaskList = update(this.state.taskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [TaskIndex]: {
+              taskState: { $set: 'done' },
+            },
           },
         },
-      },
-    });
+      });
 
-    fetch(`${API_URL}/api/task/state`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(newTaskList[TaskListIndex].tasks[TaskIndex]),
-    })
+      newTaskList[TaskListIndex].tasks.splice(doneIndex[0], 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+      
+      newTaskList[TaskListIndex].tasks.splice(TaskIndex, 1); 
 
-    this.setState({
-      taskList: newTaskList,
-    });
+      let tasksLength = newTaskList[TaskListIndex].tasks.length
+      
+      newTaskList[TaskListIndex].tasks.map((task, index) => 
+      {
+        newTaskList = update(newTaskList, {
+            [TaskListIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: tasksLength },
+                },
+              },
+            },
+          })
+          tasksLength = tasksLength -1 
+        }
+
+      )
+
+      fetch(`${API_URL}/api/task/state`, {
+        method: "post",
+        headers: API_HEADERS,
+        body: JSON.stringify(newTaskList[TaskListIndex].tasks),
+      })
+
+      this.setState({
+        taskList: newTaskList,
+      });
+    }else{
+      let doIndex = 0;
+      let test = 0;
+
+      this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'do' ?  doIndex = index: test = test+1)
+
+      let newTaskList = update(this.state.taskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [TaskIndex]: {
+              taskState: { $set: 'do'},
+            },  
+          },
+        },
+      });
+
+      if(test ===  newTaskList[TaskListIndex].tasks.length){
+        newTaskList[TaskListIndex].tasks.splice(doIndex, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+      }else{
+        newTaskList[TaskListIndex].tasks.splice(doIndex+1, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+      }
+      
+      newTaskList[TaskListIndex].tasks.splice(TaskIndex+1, 1);  
+      
+      let tasksLength = newTaskList[TaskListIndex].tasks.length
+      
+      newTaskList[TaskListIndex].tasks.map((task, index) => 
+      {
+          newTaskList = update(newTaskList, {
+            [TaskListIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: tasksLength },
+                },
+              },
+            },
+          })
+          tasksLength = tasksLength -1 
+        }
+        )
+        
+        fetch(`${API_URL}/api/task/state`, {
+          method: "post",
+          headers: API_HEADERS,
+          body: JSON.stringify(newTaskList[TaskListIndex].tasks),
+        })
+
+        console.log(newTaskList[TaskListIndex].tasks)
+        
+      this.setState({
+        taskList: newTaskList,
+      });
+    }
   }
 
   // task list 추가
@@ -1450,6 +1564,435 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
    
   }
 
+  // Project Setting button Click Function
+  onProjectSetting(projectNo) {
+
+    if(this.state.setOn){
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo+"" === projectNo);
+      let userProject = {
+        projectNo: projectNo,
+        userNo: window.sessionStorage.getItem("authUserNo")
+      }
+  
+      fetch(`${API_URL}/api/userproject`, {
+        method: 'post',
+        headers: API_HEADERS,
+        body: JSON.stringify(userProject)
+      })
+        .then(response => response.json())
+        .then(json => {
+          this.setState({
+            userProject: json.data,
+            setOn: !this.state.setOn,
+            project: this.state.projects[projectIndex]
+          })
+        })  
+    }else{
+      this.setState({
+        setOn: !this.state.setOn,
+      })
+    }
+
+  }
+
+  callbackCloseProjectSetting(setOn) {
+    this.setState({
+      setOn: setOn
+    })
+  }
+
+   // CallBack Change Title Function
+   callbackProjectTitleChange(projectNo, title) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let project = {
+      projectNo: projectNo,
+      projectTitle: title
+    }
+
+    fetch(`${API_URL}/api/projectsetting/title`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+      .then(response => response.json())
+      .then(json => {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectTitle: { $set: json.data.projectTitle }
+          }
+        })
+
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      })
+  }
+
+  // CallBack Chnage Desc Function
+  callbackProjectDescChange(projectNo, desc) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let project = {
+      projectNo: projectNo,
+      projectDesc: desc
+    }
+
+    fetch(`${API_URL}/api/projectsetting/desc`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+      .then(response => response.json())
+      .then(json => {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectDesc: { $set: json.data.projectDesc }
+          }
+        })
+
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      })
+    }
+
+  // CallBack Change State Function
+  callbackChangeState(projectNo, state) {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+    let project = {
+      projectNo: projectNo,
+      projectState: state
+    }
+
+    fetch(`${API_URL}/api/projectsetting/state`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(project)
+    })
+      .then(response => response.json())
+      .then(json => {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectState: { $set: json.data.projectState }
+          }
+        })
+
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      })
+  }
+
+  callbackProjectDateUpdate(from, to, projectNo) {
+    if (from === 'Invalid date') {
+      from = undefined;
+    }
+    if (to === 'Invalid date') {
+      to = undefined;
+    }
+
+
+    const projectIndex = this.state.projects.findIndex(project =>
+      project.projectNo === projectNo)
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        projectStart: {
+          $set: from
+        },
+        projectEnd: {
+          $set: to
+        }
+      }
+    })
+
+    this.setState({
+      projects: newProject,
+      project: newProject[projectIndex]
+    })
+
+    fetch(`${API_URL}/api/projectsetting/calendar`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(newProject[projectIndex])
+    })
+
+  }
+
+// CallBack Add Delete Member Function
+callbackAddDeleteMember(userNo, userName, userPhoto, projectNo) {
+  const memberIndex = this.state.project.members.findIndex(member =>
+    member.userNo === userNo)
+
+  const projectIndex = this.state.projects.findIndex(project =>
+    project.projectNo === projectNo)
+
+  let member = {
+    userNo: userNo,
+    userName: userName,
+    userPhoto: userPhoto,
+    projectNo: projectNo,
+    roleNo: 3
+  }
+
+  let newProject;
+
+  if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
+
+    fetch(`${API_URL}/api/user/delete/`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(member)
+    })
+
+    newProject = update(this.state.projects, {
+      [projectIndex]: {
+        members: {
+          $splice: [[memberIndex, 1]]
+        }
+      }
+    })
+  }
+  else {
+
+    fetch(`${API_URL}/api/user/add/`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(member)
+    })
+
+    newProject = update(this.state.projects, {
+      [projectIndex]: {
+        members: {
+          $push: [member]
+        }
+      }
+    })
+  }
+  this.setState({
+    projects: newProject,
+    project: newProject[projectIndex]
+  })
+}
+
+ // CallBack Delete Member Function
+ callbackDeleteMember(memberNo, projectNo) {
+
+  let userProject = {
+    projectNo: projectNo,
+    userNo: memberNo
+  }
+
+  const projectIndex = this.state.projects.findIndex(project =>
+    project.projectNo === projectNo)
+
+  const memberIndex = this.state.project.members.findIndex(
+    (member) => member.userNo === memberNo
+  );
+
+  let deleteMemberProject = update(this.state.projects, {
+    [projectIndex]: {
+      members: {
+        $splice: [[memberIndex, 1]]
+      }
+    }
+  })
+
+  fetch(`${API_URL}/api/user/delete`, {
+    method: 'post',
+    headers: API_HEADERS,
+    body: JSON.stringify(userProject)
+  })
+
+  this.setState({
+    projects: deleteMemberProject,
+    project: deleteMemberProject[projectIndex]
+  })
+}
+  
+ // CallBack Invite Member Function
+ callbackInviteMember(projectNo, memberEmail, memberName) {
+  const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+  let member = {
+    userNo: this.state.users.length + 1,
+    userName: memberName !== "" ? memberName : memberEmail,
+    userEmail: memberEmail,
+    userPhoto: "/nest/assets/images/arrowloding.jpg",
+    projectNo: projectNo,
+    roleNo: 3
+  }
+
+  const newAlert = {
+    id: (new Date()).getTime(),
+    type: "success",
+    message: this.state.newMessage
+  };
+
+  fetch(`${API_URL}/api/settinguser/invite`, {
+    method: 'post',
+    headers: API_HEADERS,
+    body: JSON.stringify(member)
+  })
+    .then(response => response.json())
+    .then(json => {
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          members: {
+            $push: [json.data]
+          }
+        }
+      })
+
+      let users = update(this.state.users, {
+        $push: [json.data]
+      })
+
+      this.setState({
+        users: users,
+        projects: newProject,
+        project: newProject[projectIndex],
+        alerts: [...this.state.alerts, newAlert]
+      })
+    })
+}
+
+ // CallBack Member Role Change Function
+ callbackRoleChange(projectNo, userNo, roleNo) {
+  const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+
+  const memberIndex = this.state.project.members.findIndex(member =>
+    member.userNo === userNo)
+
+  let userProject = {
+    projectNo: projectNo,
+    userNo: userNo,
+    roleNo: roleNo
+  }
+
+  fetch(`${API_URL}/api/userproject/rolechange`, {
+    method: 'post',
+    headers: API_HEADERS,
+    body: JSON.stringify(userProject)
+  })
+    .then(response => response.json())
+    .then(json => {
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          members: {
+            [memberIndex]: {
+              roleNo: { $set: json.data.roleNo }
+            }
+          }
+        }
+      })
+
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
+    })
+}
+
+// CallBack Project Delete Function
+callbackProjectDelete(projectNo, userNo) {
+
+  const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+
+  const memberIndex = this.state.project.members.findIndex(
+    (member) => member.userNo === userNo
+  );
+
+  let project = {
+    projectNo: projectNo,
+    userNo: userNo,
+    sessionUserNo: window.sessionStorage.getItem("authUserNo")
+  }
+
+  fetch(`${API_URL}/api/dashboard/delete`, {
+    method: 'post',
+    headers: API_HEADERS,
+    body: JSON.stringify(project)
+  })
+  .then(response => response.json())
+  .then(json => {
+      let deleteProject = update(this.state.projects, {
+        [projectIndex]: {
+        members: {
+          [memberIndex]: {
+            roleNo: {$set : 1}
+          }
+        }
+      }
+    })
+
+    deleteProject = update(this.state.projects, {
+      $splice: [[projectIndex, 1]]
+    })
+
+    this.setState({
+      projects: deleteProject
+    })
+  })
+}
+
+ // CallBack Not Transfer Role Project Delete Function
+ callbackProjectNotTransferDelete(projectNo) {
+  const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+
+  let project = {
+    projectNo: projectNo,
+    sessionUserNo: window.sessionStorage.getItem("authUserNo")
+  }
+
+  fetch(`${API_URL}/api/dashboard/notTransferDelete`, {
+    method: 'post',
+    headers: API_HEADERS,
+    body: JSON.stringify(project)
+  })
+  .then(response => response.json())
+  .then(json => {
+    let deleteProject = update(this.state.projects, {
+      $splice: [[projectIndex, 1]]
+    })
+
+    this.setState({
+      projects: deleteProject
+    })
+  })
+}
+
+// CallBack Project Forever Delete Function
+callbackProjectForeverDelete(projectNo) {
+  const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+
+  let project = {
+    projectNo: projectNo
+  }
+
+  fetch(`${API_URL}/api/dashboard/foreverdelete`, {
+    method: 'post',
+    headers: API_HEADERS,
+    body: JSON.stringify(project)
+  })
+  .then(response => response.json())
+  .then(json => {
+    let deleteProject = update(this.state.projects, {
+      $splice: [[projectIndex, 1]]
+    })
+
+    this.setState({
+      projects: deleteProject
+    })
+  })
+}
+
+
   render() {
     return (
       <>
@@ -1534,33 +2077,62 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
             )}
           />
         </Switch>
+        <div className="kanban">
+        {/* 네비게이션바 */}
+        <div className="navibar">
+          <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
+        </div>
+        {/*상단바*/}
+        <TopBar 
+          projectNo={this.props.match.params.projectNo}
+          activePath={this.props.location.pathname}
+          projectTitle={this.state.projectTitle}
+          callbackPorjectSetting = {{
+            onProjectSetting : this.onProjectSetting.bind(this) // 프로젝트 세팅 열기
+          }}
+            />
+        
+        <div id="projectSetArea" style={{ display: this.state.setOn ? 'none' :'block' }}>
+            <ProjectSetting
+              modalState={this.state.modalState}
+              users={this.state.users}
+              project={this.state.project}
+              userProject={this.state.userProject}
+              callbackProjectSetting={{
+                close: this.callbackCloseProjectSetting.bind(this),
+                addDeleteMember: this.callbackAddDeleteMember.bind(this),
+                deleteMember: this.callbackDeleteMember.bind(this),
+                changeState: this.callbackChangeState.bind(this),
+                changeTitle: this.callbackProjectTitleChange.bind(this),
+                changeDesc: this.callbackProjectDescChange.bind(this),
+                inviteMember: this.callbackInviteMember.bind(this),
+                changeRole: this.callbackRoleChange.bind(this),
+                modalStateUpdate: this.modalStateUpdate.bind(this),
+                updateProjectDate: this.callbackProjectDateUpdate.bind(this), // 업무 날짜 수정
+                projectDelete: this.callbackProjectDelete.bind(this),
+                projectNotTransferDelete: this.callbackProjectNotTransferDelete.bind(this),
+                projectForeverDelete: this.callbackProjectForeverDelete.bind(this)
+              }} />
+          </div>
         <ScrollContainer
           className="scroll-container"
           hideScrollbars={false}
-          ignoreElements=".navibar, .topBar, .input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
-          // style={{ backgroundImage: `url(${this.state.url})` }}
+          ignoreElements=".input-group, .taskPanel, .addTaskListBtn, .taskListInsertForm, .completeArea, .task, .project-setting-dialog"
         >
           <div className="container-fluid kanbanMain">
             <div className="row content ">
-              {/* 네비게이션바 */}
-              <div className="navibar">
-                <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
-              </div>
-              {/*상단바*/}
-              <TopBar 
-                projectNo={this.props.match.params.projectNo}
-                activePath={this.props.location.pathname}
-                projectTitle={this.state.projectTitle} />
+              
                 
               {/* 메인 영역 */}
               <div className="mainArea">
                 {/*칸반보드*/}
                 <DragDropContext
                   onDragEnd={this.onDragEnd}
-                  onDragStart={this.onDragStart}
+                  // onDragStart={this.onDragStart}
                 >
                   {this.state.taskList&&this.state.taskList&&
                   <KanbanBoard
+                    setOn = {this.state.setOn}
                     authUserRole={this.state.authUserRole}
                     taskList={this.state.taskList}
                     projectNo={this.props.match.params.projectNo}
@@ -1581,6 +2153,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
             </div>
           </div>
         </ScrollContainer>
+        </div>
       </>
     );
   }
@@ -1595,6 +2168,18 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
         });
       }
     );
+    ApiService.fetchDashboard()
+    .then(response => {
+      this.setState({
+        projects: response.data.data.allProject
+      })
+    });
+  ApiService.fetchUser()
+    .then(response => {
+      this.setState({
+        users: response.data.data.allUser
+      })
+    });
   }
 }
 

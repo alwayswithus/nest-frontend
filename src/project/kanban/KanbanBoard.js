@@ -287,6 +287,7 @@ class KanbanBoard extends Component {
                       type="button"
                       className="btn btn-default addTaskListBtn"
                       onClick={this.taskListStateBtn.bind(this)}
+                      style={{display: this.props.setOn ?"block":"none"}}
                     >
                       + 업무 목록 추가
                     </button>

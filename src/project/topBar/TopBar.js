@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom'
 
 class TopBar extends Component {
 
+  onProjectSetting(){
+    this.props.callbackPorjectSetting.onProjectSetting(this.props.projectNo)
   
+  }
+
   render() {
     let activePath = this.props.activePath.split('/')[4];
     
@@ -41,8 +45,8 @@ class TopBar extends Component {
                 </div>
               </div>
               <div className="col-sm-3">
-                <ul className="nav navbar-nav navbar-right">
-                  <i className="fas fa-cog fa-2x gearIcon"></i>
+                <ul className="nav navbar-nav navbar-right" >
+                  <i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i>
                 </ul>
               </div>
             </div>
