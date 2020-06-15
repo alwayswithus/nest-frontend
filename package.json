@@ -34,7 +34,8 @@
     "react-stomp": "^5.0.0",
     "react-tabbordion": "^1.0.5",
     "react-tooltip": "^4.2.6",
-    "react-viewer": "^3.2.1"
+    "react-viewer": "^3.2.1",
+    "reactstrap": "^8.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

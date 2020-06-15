@@ -264,7 +264,7 @@ class myCalendar extends Component {
     let projectNumber = this.state.projectNumber;
 
     projects.forEach(project => {
-      if (project.projectNo === event.target.value) {
+      if (project.projectNo == event.target.value) {
         project.isChecked = event.target.checked
         if (project.isChecked === true) {
           if (projectNumber.includes(project.projectNo)) {
@@ -481,7 +481,6 @@ class myCalendar extends Component {
   }
 
   render() {
-    console.log(this.state.taskUniquePoint);
     return (
       <div id="Calendar">
         {/* 사이드바 */}
@@ -510,7 +509,7 @@ class myCalendar extends Component {
                   </div>
                 </tr>
                 <tr>
-                  <div style={{ width: "100%" }}>
+                  <div style={{ width: "100%" }}>    
                     <div className="show-project-list">
                       <div>
                         <div onClick={this.onShowProjectList.bind(this)}>
@@ -529,7 +528,7 @@ class myCalendar extends Component {
                           <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
                             {this.state.projects && this.state.projects.map(project =>
                               <div key={project.projectNo}>
-                                <input type="checkbox" checked={project.isChecked} onChange={this.onCheckProject.bind(this)} value={project.projectNo} />
+                                <span><input type="checkbox" checked={project.isChecked} onChange={this.onCheckProject.bind(this)} value={project.projectNo} /></span>
                                 <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
                                   <p data-tip={`${project.projectTitle} 바로가기`} data-place="right" style={{ display: "inline-block", color: "black", marginBottom: "0px", marginLeft: "5px" }}>
                                     {project.projectTitle}

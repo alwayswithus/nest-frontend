@@ -247,7 +247,7 @@ class ProjectSetting extends Component {
                         <hr />
                         <div className="project-description-header">
                             <div className="project-introduce"><b>설명</b></div>
-                            {this.props.userProject.roleNo === 1 ?
+                            {this.props.userProject.roleNo == 1 ?
                                 <i className="far fa-edit Icon" onClick={this.onProjectDescCheck.bind(this)}></i> : ""}
                         </div>
                         {this.state.projectDescCheck ?
