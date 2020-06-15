@@ -23,7 +23,7 @@ class TaskList extends Component {
       taskContents: "",
       showComplete: false,
       beforTaskListName: "",
-      completeTaskState: true,
+      // completeTaskState: true,
     };
   }
 
@@ -126,6 +126,7 @@ class TaskList extends Component {
     });
     this.showTaskInsertArea();
   }
+
   render() {
     let completeTaskState = false;
     return (
@@ -150,6 +151,7 @@ class TaskList extends Component {
                     {/* task list 이름 수정 state*/}
                     {this.state.showEditNameInput ? (
                       <input
+                        style={{ fontSize: "17px" }}
                         className="newTaskListName"
                         type="text"
                         onChange={this.onInputChanged.bind(this)}
@@ -158,8 +160,10 @@ class TaskList extends Component {
                         autoFocus
                       />
                     ) : (
-                      <div>
-                        {this.state.keyword} &nbsp;
+                      <div style={{ display: "flex" }}>
+                        <div style={{ fontSize: "17px" }}>
+                          {this.state.keyword} &nbsp;
+                        </div>
                         {this.state.taskInsertState ? (
                           ""
                         ) : (
@@ -333,7 +337,6 @@ class TaskList extends Component {
                             />
                           ) : null
                         )}
-                      {provided.placeholder}
                     </div>
                   ) : null
                 ) : this.state.showComplete ? (
@@ -350,7 +353,6 @@ class TaskList extends Component {
                         />
                       ) : null
                     )}
-                    {provided.placeholder}
                   </div>
                 ) : null}
               </div>

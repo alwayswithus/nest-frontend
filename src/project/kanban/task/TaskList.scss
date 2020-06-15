@@ -2,15 +2,18 @@
   margin: 10px;
   width: 300px;
 
-  .panel {
-    margin-bottom: 3px;
+
+  .taskPanel{
+    margin-bottom: 0px;
   }
   .panel-primary {
     border-color: #f0d7d2;
+    border-radius: 3px 3px 0px 0px;
   }
   .panel-heading {
     background-color: #f0d7d2;
     border-color: #f0d7d2;
+    padding: 10px 15px 0px 15px;
     .taskList-head {
       display: flex;
       .reset {
@@ -28,7 +31,8 @@
         color: #4f5558;
         font-weight: bold;
         i {
-          display: none;
+          display: inline;
+          line-height :22px;
         }
         &:hover i {
           display: inline;
@@ -83,12 +87,28 @@
     height: 95%;
     .tasks {
       min-height: 1px;
+      padding: 1px 10px 10px 10px;
+      background: #f0d7d2;
+
+      .task{
+       
+        margin-top: 10px;
+        .panel {
+          box-shadow: 1px 1px 5px 1px grey;
+          margin-bottom: 0px;
+        }
+      }
     }
     .completeTasks{
+      // padding: 0px 5px 5px 5px;
+      background: #f0d7d2;
+      border-radius: 0px 0px 3px 3px;
+      padding: 1px 10px 10px 10px;
       .completeArea {
         text-align: center;
         background-color: #b4b8ba;
         border-radius: 3px;
+        // margin-bottom: 10px;
         cursor: pointer;
         color: white;
         &:hover {
@@ -96,6 +116,30 @@
           color: white;
         }
       }
+      .completeTask{
+        .panel{
+          margin-top: 10px;
+          margin-bottom: 0px;
+          box-shadow: 1px 1px 5px 1px grey;
+
+
+
+
+        }
+      }
     }
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #b4b8ba;
+    border-radius: 10px !important;
+    background-clip: padding-box;
+    border: 1px solid transparent !important;
+  }
+  ::-webkit-scrollbar-track {
+    background-color:  #f0d7d2 !important;
+    box-shadow: 0px 0px 0px 0px white !important;
   }
 }

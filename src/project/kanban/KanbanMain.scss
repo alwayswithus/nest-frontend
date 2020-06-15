@@ -1,14 +1,31 @@
 .App {
   height: 100%;
-  .scroll-container {
-    height: calc(100%);
-    margin-left: 62px;
-    .kanbanMain {
-      height: 100%;
-      .content {
+  .kanban {
+    height: 100%;
+    .topBar {
+      margin-left: 62px;
+    }
+    #projectSetArea {
+      #projectHeader {
+        top: 52px;
+      }
+      .ProjectSet {
+        position: fixed;
+        top: 172px;
+        height: calc(100% - 172px);
+      }
+    }
+
+    .scroll-container {
+      height: calc(100%);
+      margin-left: 62px;
+      .kanbanMain {
         height: 100%;
-        .mainArea {
+        .content {
           height: 100%;
+          .mainArea {
+            height: 100%;
+          }
         }
       }
     }

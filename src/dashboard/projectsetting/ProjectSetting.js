@@ -182,7 +182,6 @@ class ProjectSetting extends Component {
             inviteMemberButton: false
         })
     }
-
     // Project Desc Input Show and Hide Function
     onProjectDescCheck() {
         this.setState({
@@ -234,13 +233,15 @@ class ProjectSetting extends Component {
     }
 
     render() {
-        // console.log(this.props.project)
         return (
-            <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }}>
+            <div style={{ height: '100%', position: 'relative', marginLeft: "65.7%" }} id="projectHeader">
                 {/* 프로젝트 헤더 */}
-                <ProjectHeader userProject={this.props.userProject} project={this.props.project}
+                <ProjectHeader 
+                    userProject={this.props.userProject} 
+                    project={this.props.project}
                     callbackSettingListAllClose={{ close: this.callbackSettingListAllClose.bind(this) }}
-                    callbackProjectSetting={this.props.callbackProjectSetting} />
+                    callbackProjectSetting={this.props.callbackProjectSetting} 
+                />
                 {/* 프로젝트 리스트 */}
                 <div className="ProjectSet">
                     <div className="project-description">
@@ -314,7 +315,9 @@ class ProjectSetting extends Component {
                                         <Button onClick={this.onUserListOpen.bind(this)} variant="" disabled={this.props.userProject.roleNo && this.props.userProject.roleNo !== 1}><i className="fas fa-plus fa-1x"></i></Button>
                                     <div>
                                         {this.state.userListOpen ?
-                                            <ProjectMemberAdd project={this.props.project} users={this.props.users}
+                                            <ProjectMemberAdd 
+                                                project={this.props.project} 
+                                                users={this.props.users}
                                                 callbackCloseUserList={{ close: this.callbackCloseUserList.bind(this) }}
                                                 callbackOpenInviteMember={{ open: this.callbackOpenInviteMember.bind(this) }}
                                                 callbackProjectSetting={this.props.callbackProjectSetting} /> : ""}
