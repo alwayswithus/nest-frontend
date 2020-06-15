@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactTooltip from "react-tooltip";
+
 import './projectList.scss';
 
 export default class ProjectList extends Component {
@@ -27,6 +29,7 @@ export default class ProjectList extends Component {
     }
 
     render() {
+        console.log(this.props.projects)
         return (
             <div className="ProjectList">
                 <div className="container card-member" style={{position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px" }}>
@@ -39,12 +42,18 @@ export default class ProjectList extends Component {
                         <div className="card-body">
                             <input type="text" className="form-control find-member" placeholder="프로젝트 검색" />
                             <div className="invite-card-member-list" style={{overflow: "auto"}}>
-                                {this.props.projects && this.props.projects.map(project =>
+                                {this.props.projects && this.props.projects.map(project => 
+                                    project.roleNo === 1 ?
                                     <div className="project-name" key={project.projectNo} onClick={this.onSelectProject.bind(this, project.projectNo, project.projectTitle)}>
                                         {project.projectTitle}
                                         {project.projectNo === this.state.projectNumber ? <i className="fas fa-check"></i> : ""}
-                                    </div> 
+                                    </div> :
+                                    <div className="project-name" key={project.projectNo }data-tip={`${project.projectTitle}에 새 업무를 추가할 권한이 없습니다`} data-place="right">
+                                        {project.projectTitle}
+                                        {project.projectNo === this.state.projectNumber ? <i className="fas fa-check"></i> : ""}
+                                    </div>
                                 )}
+                                <ReactTooltip />
                             </div>
                         </div>
                     </div>

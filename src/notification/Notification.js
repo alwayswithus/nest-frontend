@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import Pagination from 'react-bootstrap/Pagination'
 import ApiService from "../ApiService";
 import update from "react-addons-update";
 

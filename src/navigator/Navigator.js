@@ -2,6 +2,7 @@ import React from 'react';
 import './navigator.scss';
 
 import { Link } from 'react-router-dom';
+import Popover from 'react-bootstrap/Popover'
 
 export default class Navigator extends React.Component {
 
@@ -44,11 +45,18 @@ export default class Navigator extends React.Component {
                             {/*<!-- Notification link -->*/}
                             <div className="nav-item button">
                                 <span data-tooltip-text="Notification">
-                                    <Link to="/nest/notification" className="link">
+                                    {/* <Link to="/nest/notification" className="link"> */}
                                         <a className="badge badge-danger" style={{ backgroundColor: "red", position: "relative", zIndex: "99", left: "22px", top: "-13px"}}>0</a>
                                         <i className="far fa-bell icon" style={{position: "relative", left: "-9px"}}></i>
-                                    </Link>
+                                    {/* </Link> */}
                                 </span>
+                                <Popover id="popover-basic">
+                                    <Popover.Title as="h3">Popover right</Popover.Title>
+                                    <Popover.Content>
+                                    And here's some <strong>amazing</strong> content. It's very engaging.
+                                    right?
+                                    </Popover.Content>
+                                </Popover>
                             </div>
 
                             {/*<!-- Calendar link -->*/}
