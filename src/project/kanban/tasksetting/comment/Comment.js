@@ -17,8 +17,8 @@ class Comment extends Component {
         return (
             <div className="TaskSetComment">
                 <Header
-                    name='김우경'
-                    date='2020.05.06'
+                    name={taskItem.userName}
+                    date={taskItem.taskRegdate}
                     taskItem={taskItem}
                     taskCallbacks={this.props.taskCallbacks}
                     params={this.props.match.params}

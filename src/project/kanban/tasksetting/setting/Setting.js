@@ -230,7 +230,7 @@ class Setting extends Component {
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
-
+        
         return (
             <>
             <div className = "taskSetting-setting">
@@ -239,8 +239,8 @@ class Setting extends Component {
                     <div style={{ float: 'right' }}>
                         <Header 
                             onClickTag = {this.onClickTag.bind(this)}
-                            name='김우경' 
-                            date='2020.05.06'
+                            name={taskItem.userName} 
+                            date={taskItem.taskRegdate}
                             taskCallbacks={this.props.taskCallbacks}
                             taskItem = {taskItem}
                             projectNo={this.props.projectNo}

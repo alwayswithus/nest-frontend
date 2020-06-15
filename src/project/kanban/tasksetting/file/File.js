@@ -141,6 +141,8 @@ class File extends Component {
                 />
                 <Header
                     taskItem={taskItem}
+                    name={taskItem.userName}
+                    date={taskItem.taskRegdate}
                     taskCallbacks={this.props.taskCallbacks}
                     params={this.props.match.params}
                     projectNo={this.props.projectNo} />

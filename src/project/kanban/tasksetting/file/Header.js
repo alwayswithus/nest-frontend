@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './header.scss';
 import Navigation from '../TaskSetNav';
 import {Link} from 'react-router-dom';
+import moment from 'moment';
 
 class Header extends Component {
     constructor(){
@@ -54,7 +55,7 @@ class Header extends Component {
                         <i className="far fa-edit Icon"></i>
                     </h2>
                 } 
-                <span>작성자 : {this.props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {this.props.date}</span>
+                <span>작성자 : {this.props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {moment(this.props.date).format("YYYY.MM.DD")}</span>
             </div>
             <Navigation params = {this.props.params} projectNo={this.props.projectNo} />
         </div>
