@@ -11,14 +11,6 @@ class SettingTag extends Component {
             tagColor:'',
         }
     }
-    //checkbox를 클릭했을 때 tag를 추가하기.
-    onCheckBox() {
-        this.props.taskCallbacks.addDeletetag(
-            this.props.tagParams.tagNo,
-            this.props.tagParams.tagName,
-            this.props.tagParams.taskListNo,
-            this.props.tagParams.taskNo);
-    }
 
     // 태그 이름 수정
     onChangeTag(event){
@@ -34,20 +26,22 @@ class SettingTag extends Component {
         }
     }
 
-    //tag 삭제
-    onClickTagModify() {
-        this.props.settingTagCallbakcs.delete(this.props.tagParams.tagNo)
-    }
-
     // 색 수정
     handleChange(color) {
         this.props.handleChange(color.hex)
     }
 
+    //수정하기 클릭
     onClickModify(){
-        console.log("!!!")
+        this.props.settingTagCallbakcs.update(this.props.tagName, this.props.tagColor, this.props.tagNo)
     }
 
+    //삭제하기 클릭
+    onClickDelete(){
+        this.props.settingTagCallbakcs.delete(this.props.tagNo)
+        // if(window.confirm("모든 업무에서 해당 태그가 삭제됩니다. 그래도 삭제하시겠습니까?")){
+        // }
+    }
     render() {
         return (
             <Fragment>
@@ -80,7 +74,7 @@ class SettingTag extends Component {
                         </div>
                         <div className="setting-tag-button">
                             <div onClick={this.onClickModify.bind(this)} className="setting-tag-modify">수정하기</div>
-                            <div className="setting-tag-delete">삭제하기</div>
+                            <div onClick={this.onClickDelete.bind(this)} className="setting-tag-delete">삭제하기</div>
                         </div>
                     </div>
                 </div> : null }

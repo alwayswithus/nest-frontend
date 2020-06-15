@@ -156,14 +156,19 @@ class File extends Component {
                             {this.props.authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
+                                <>
+                                <label htmlFor="fileUpload" className="fileUplaod-label">
+                                    <div className="fileUpload"> 파일첨부</div>
+                                </label>
                                 <input
+                                    id="fileUpload"
                                     onChange={this.onChangeFileUpload.bind(this)}
                                     type='file'
-                                    className="fileUpload"
-                                    name="file" />
+                                    style={{display:'none'}} />
+                                    </>
                             }
                         </div>
-                        <hr />
+                        <hr style={{marginTop: '11%'}} />
                         <table>
                             <thead>
                                 <tr>

@@ -19,6 +19,7 @@ const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
+
 class KanbanMain extends Component {
   constructor() {
     super(...arguments);
@@ -640,7 +641,7 @@ class KanbanMain extends Component {
   }
 
   //task에 tag 추가하기
-  callbackAddTag(tagNo, tagName, taskListNo, taskNo) {
+  callbackAddTag(tagNo, tagName, taskListNo, taskNo, tagColor) {
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -651,7 +652,7 @@ class KanbanMain extends Component {
     let newTag = {
       tagNo: tagNo,
       tagName: tagName,
-      tagColor: "RGB(255, 160, 160)",
+      tagColor: tagColor,
       taskNo:taskNo
     };
     fetch(`${API_URL}/api/tag/add`, {
@@ -681,7 +682,7 @@ class KanbanMain extends Component {
                 tagList: {
                   [tagIndex]:{
                     tagName:{$set: tagName},
-                    tagColor:{$set: "RGB(255, 160, 160)"}
+                    tagColor:{$set: tagColor}
                   }
                 },
               },
@@ -731,6 +732,70 @@ class KanbanMain extends Component {
   })
 }
 
+  //모든 task 에서 해당 tag 삭제하기
+  callbackDeleteAllTag(tagNo){
+    let Indexs = []
+    this.state.taskList.map((taskList, taskListIndex) => 
+      taskList.tasks.map((task,taskIndex) => 
+        task.tagList.map((tag, tagIndex) => 
+          tag.tagNo === tagNo ? 
+          Indexs.push({taskListIndex, taskIndex, tagIndex}) : null
+        )
+      )
+    )
+
+    console.log(Indexs)
+
+    Indexs.map(index => 
+      this.setState({
+        taskList: update(this.state.taskList,{
+          [index.taskListIndex]:{
+            tasks:{
+              [index.taskIndex]:{
+                tagList:{
+                  $splice:[[index.tagIndex,1]],
+                }
+              }
+            }
+          }
+        })
+      }),
+    )
+
+  }
+  //task tag 수정하기
+  callbackUpdateTag(tagName, tagColor, tagNo){
+    let Indexs = []
+
+    this.state.taskList.map( (taskList,taskListIndex) => 
+    taskList.tasks.map((task,taskIndex) => 
+      task.tagList.map((tag,tagIndex) => tag.tagNo === tagNo ? 
+      Indexs.push({taskListIndex, taskIndex, tagIndex})
+       : null
+    )))
+
+    Indexs.map(index => 
+      this.setState({
+        taskList : update(this.state.taskList,{
+          [index.taskListIndex]:{
+            tasks:{
+              [index.taskIndex]:{
+                tagList:{
+                  [index.tagIndex]:{
+                    tagName:{$set:tagName},
+                    tagColor:{$set:tagColor}
+                  }
+                }
+              }
+            }
+          }
+        })
+      })
+    )
+    Indexs.map(index => 
+      console.log(this.state.taskList[index.taskListIndex].tasks[index.taskIndex].tagList[index.tagIndex])
+    )
+  }
   //task checkList check 업데이트
   callbackCheckListStateUpdate(
     taskListNo,
@@ -1432,10 +1497,18 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
   }
 
   receiveComment(newTaskList) {
+    const {location} = this.props;
+
+    const taskListNo = location.pathname.split('/')[5];
+    const taskNo = location.pathname.split("/")[7];
+
+    const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
     let newData = update(this.state.taskList, {
-      0 : {
+      [taskListIndex] : {
         tasks :{
-          0 : {
+          [taskIndex] : {
             commentList : 
               {$push: [newTaskList]} 
           }
@@ -1481,9 +1554,10 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                   checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
                   addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
                   deleteCheckList: this.callbackDeleteCheckList.bind(this), //업무에 checklist 삭제하기
-                  addDeletetag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  updateTag:this.callbackUpdateTag.bind(this), //업무 태그 수정하기
                   deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
-                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기
+                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기,
+                  deleteAlltag: this.callbackDeleteAllTag.bind(this), // 모든 업무에서 해당 tag삭제하기
                   updateTaskTag: this.onSetStateTaskTagNo.bind(this),
                   updateTaskDate:this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
                   modalStateUpdate:this.modalStateUpdate.bind(this),
