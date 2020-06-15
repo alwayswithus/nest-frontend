@@ -7,10 +7,49 @@
     }
     
     .transfer{
-        img {
-            width:40px;
-            border-radius: 50px;
-            margin:2%
+        .fa-quote-left, .fa-quote-right{
+            transform: scale(0.5);
+        }
+
+        .project-title{
+            display: inline-block;
+            background-color: #DFDFDF;
+            margin-right: 2%;
+            color:#515151;
+            padding: 1%;
+            border-radius: 3px;
+            font-weight: bolder;
+            font-size: 1.25rem;
+            cursor: default;
+        }
+
+        .project-title-transfer{
+            display: inline-block;
+            background-color: #DFDFDF;
+            margin-right: 2%;
+            color:#515151;
+            padding: 1%;
+            border-radius: 3px;
+            font-weight: bolder;
+            font-size: 1.25rem;
+            cursor: pointer;
+            &:hover{
+                background-color: #C7C7C7;
+            }
+        }
+        .role-project-title{
+            display: inline-block;
+            font-size: 1.25rem;
+            margin-right: 2%;
+            font-weight: bolder;
+            color:black;
+            margin-top:2%;
+        }
+
+        .warning-text{
+            display: inline;
+            padding: 1%;
+            line-height: 31px;
         }
     }
 }

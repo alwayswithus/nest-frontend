@@ -69,7 +69,6 @@ class commentContents extends Component {
     }
     render() {
         const today = new Date();
-        console.log(this.props.comment.userNo+"" === sessionStorage.getItem("authUserNo"))
         return (
             <Fragment>
                 <div key={this.props.comment.commentNo} style={{ height: '20px' }} />

@@ -302,7 +302,7 @@ class KanbanMain extends Component {
       taskContents: taskContents,
       projectNo: projectNo,
       taskNo: null,
-      taskWriter: sessionStorage.getItem("authUserNo")
+      taskWriter: sessionStorage.getItem("authUserNo"),
     };
 
     fetch(`${API_URL}/api/task/insert`, {
@@ -326,7 +326,8 @@ class KanbanMain extends Component {
           taskPoint: json.data.taskPoint,
           taskLabel: json.data.taskLabel,
           fileList: [],
-          taskWriter:json.data.taskWriter
+          taskWriter:json.data.taskWriter,
+          userName:sessionStorage.getItem("authUserName")
         };
 
         let newTaskList = this.state.taskList;
@@ -1612,7 +1613,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
 
   receiveComment(newTaskList) {
     const {location} = this.props;
-
+    
     const taskListNo = location.pathname.split('/')[5];
     const taskNo = location.pathname.split("/")[7];
 

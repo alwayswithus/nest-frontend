@@ -3,6 +3,8 @@ import './profileset.scss';
 import DeleteModal from './DeleteModal';
 import { Link } from "react-router-dom"
 import { displayName } from 'react-quill';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -146,7 +148,6 @@ class SettingList extends Component {
         const notifySubmit = e => {
             e.preventDefault();
         }
-
         ////////////////////
 
         return (
@@ -157,7 +158,7 @@ class SettingList extends Component {
                             <Link data-toggle="collapse" data-parent="#accordion" to="#collapse1">비밀번호</Link>
                         </h4>
                     </div>
-                    <div id="collapse1" class="panel-collapse collapse in">
+                    <div id="collapse1" className="panel-collapse collapse in">
                         <div className="panel-body">
                             <form className="passwordForm" onSubmit={passwordFormSubmit}>
                                 <div className="Current-pass">
@@ -165,7 +166,7 @@ class SettingList extends Component {
                                     <input 
                                         name="currentPass"
                                         type="password"
-                                        autocomplete="current-password"
+                                        autoComplete="current-password"
                                         onChange={currentPassSet}
                                         value={this.state.currentPass}/>
                                 </div>
@@ -174,7 +175,7 @@ class SettingList extends Component {
                                     <input 
                                         name="newPass"
                                         type="password"
-                                        autocomplete="new-password"
+                                        autoComplete="new-password"
                                         onChange={newPassSet}
                                         value={this.state.newPass}/>
                                 </div>
@@ -183,7 +184,7 @@ class SettingList extends Component {
                                     <input 
                                         name="confirmPass"
                                         type="password"
-                                        autocomplete="new-password"
+                                        autoComplete="new-password"
                                         onChange={confirmPassSet}
                                         value={this.state.confirmPass}/>
                                 </div>
@@ -228,8 +229,8 @@ class SettingList extends Component {
                         <Link data-toggle="collapse" data-parent="#accordion" to="#collapse4">알림 설정</Link>
                     </h4>
                     </div>
-                    <div id="collapse4" class="panel-collapse collapse">
-                    <div class="panel-body">
+                    <div id="collapse4" className="panel-collapse collapse">
+                    <div className="panel-body">
                         <form className="notify-form" onSubmit={notifySubmit}>
                             <ul>
                                 <li><input type="checkbox" name='Nest'/> Nest 전체 알림</li>
@@ -243,22 +244,29 @@ class SettingList extends Component {
                     </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                    <h4 class="panel-title">
+                <div className="panel panel-default">
+                    <div className="panel-heading">
+                    <h4 className="panel-title">
                         <Link data-toggle="collapse" data-parent="#accordion" to="#collapse5">계정 삭제 </Link>
                     </h4>
                     </div>
-                    <div id="collapse5" class="panel-collapse collapse">
-                    <div class="panel-body">
+                    <div id="collapse5" className="panel-collapse collapse">
+                    <div className="panel-body">
                         <div className="bodyText">
                         한 번 삭제된 계정은 다시 복구할 수 없습니다. 계정이 삭제되면, 현재 계정에서 생성된 모든 데이터에 더이상 엑세스할 수 없습니다. 
-                        삭제 후, 다시 이용하고자 한다면, 새로 가입해주셔야합니다.
+                        삭제 후, 다시 이용하고자 한다면 새로 가입해주셔야합니다.
                         </div>
-                        <div className="bodyA">
-                            <button className = "delete" onClick = {this.onModalOpen.bind(this)}><b>계정 삭제하기</b></button>
-                            {this.state.open ? <DeleteModal /> : "" }
-                        </div>
+                                <div className="account-delete">
+                                    <button className = "delete" onClick = {this.onModalOpen.bind(this)}><b>계정 삭제하기</b></button>
+                                    {this.state.open ? 
+                                         <Dialog open={this.state.open} onClose={this.onModalOpen.bind(this)}>
+                                            <DialogActions style={{ display: "grid" }}>
+                                                <DeleteModal 
+                                                    onClose={this.onModalOpen.bind(this)}
+                                                /> 
+                                            </DialogActions>    
+                                        </Dialog>: "" }
+                                </div>
                     </div>
                     </div>
                 </div>
