@@ -15,8 +15,8 @@ class TaskList extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      title: this.props.taskList.taskListName,
-      keyword: this.props.taskList.taskListName,
+      title: "",
+      keyword: "",
       showEditNameInput: false,
       viewTaskInsertArea: false,
       taskInsertState: false,
@@ -35,28 +35,21 @@ class TaskList extends Component {
   // Task List 이름 수정(input 태그) 및 UI 변경
   editNameInputState() {
     if (this.state.showEditNameInput) {
-      this.editTaskListName();
+      const newTaskList = update(this.props.taskList, {
+        taskListName: { $set: this.state.keyword },
+      });
+      
+      this.props.taskCallbacks.editTaskListName(newTaskList)
+  
+      this.setState({
+        keyword:this.props.taskList.taskListName,
+      });
     }
 
     this.setState({
       showEditNameInput: !this.state.showEditNameInput,
       beforTaskListName: this.state.keyword,
-    });
-  }
-
-  editTaskListName() {
-    const newTaskList = update(this.props.taskList, {
-      taskListName: { $set: this.state.keyword },
-    });
-
-    fetch(`${API_URL}/api/taskList/editName`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(newTaskList),
-    });
-
-    this.setState({
-      taskList: newTaskList,
+      keyword:this.props.taskList.taskListName,
     });
   }
 
@@ -162,7 +155,7 @@ class TaskList extends Component {
                     ) : (
                       <div style={{ display: "flex" }}>
                         <div style={{ fontSize: "17px" }}>
-                          {this.state.keyword} &nbsp;
+                          {this.props.taskList.taskListName} &nbsp;
                         </div>
                         {this.state.taskInsertState ? (
                           ""

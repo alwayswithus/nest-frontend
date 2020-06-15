@@ -29,7 +29,6 @@ export default class ProjectList extends Component {
     }
 
     render() {
-        console.log(this.props.projects)
         return (
             <div className="ProjectList">
                 <div className="container card-member" style={{position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px" }}>
