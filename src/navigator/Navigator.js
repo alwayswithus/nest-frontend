@@ -2,14 +2,15 @@ import React from 'react';
 import './navigator.scss';
 
 import { Link } from 'react-router-dom';
-import Popover from 'react-bootstrap/Popover'
+import Button from 'react-bootstrap/Button'
 
 export default class Navigator extends React.Component {
 
     constructor() {
         super(...arguments);
         this.state = {
-            backgroundId: ""
+            backgroundId: "",
+            popoverOpen: false,
         }
     }
 
@@ -31,6 +32,14 @@ export default class Navigator extends React.Component {
         window.jQuery(".modal-backdrop").remove();
     }
 
+    onPopoverOpen() {
+        console.log("qweqwe")
+
+        this.setState({
+            popoverOpen: !this.state.popoverOpen
+        })
+    }
+
     render() {
         return (
             <div className='Navigator'>
@@ -43,22 +52,69 @@ export default class Navigator extends React.Component {
                             </div>
 
                             {/*<!-- Notification link -->*/}
-                            <div className="nav-item button">
-                                <span data-tooltip-text="Notification">
-                                    {/* <Link to="/nest/notification" className="link"> */}
-                                        <a className="badge badge-danger" style={{ backgroundColor: "red", position: "relative", zIndex: "99", left: "22px", top: "-13px"}}>0</a>
-                                        <i className="far fa-bell icon" style={{position: "relative", left: "-9px"}}></i>
-                                    {/* </Link> */}
+                            <div className="nav-item button" onClick={this.onPopoverOpen.bind(this)}>
+                                <span data-tooltip-text="Notification">                       
+                                    <a className="badge badge-danger" style={{ backgroundColor: "red", position: "relative", zIndex: "99", left: "22px", top: "-13px"}}>0</a>
+                                    <i className="far fa-bell icon" style={{position: "relative", left: "-9px"}}></i>    
                                 </span>
-                                <Popover id="popover-basic">
-                                    <Popover.Title as="h3">Popover right</Popover.Title>
-                                    <Popover.Content>
-                                    And here's some <strong>amazing</strong> content. It's very engaging.
-                                    right?
-                                    </Popover.Content>
-                                </Popover>
                             </div>
-
+                            {this.state.popoverOpen ? 
+                            <div className="popover__wrapper">
+                                <div className="popover__arrow">
+                                </div>
+                                <div className="popover__content">
+                                    <div className="notification-contents-list">
+                                        <div className="notice-one-contents">
+                                            <div className="notice-contents-avatar-image">
+                                                <img src="../assets/images/ko.jpg" className="notice-avatar-image"/>
+                                            </div>
+                                            <div className="notice-avatar-contents">
+                                                <div className="notice-avatar-part">
+                                                    최인효님이 코멘트를 작성하였습니다.
+                                                </div>
+                                                <div className="notice-avatar-contents-date">
+                                                    3일 전
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="notice-one-contents">
+                                            <div className="notice-contents-avatar-image">
+                                                <img src="../assets/images/ko.jpg" className="notice-avatar-image"/>
+                                            </div>
+                                            <div className="notice-avatar-contents">
+                                                <div className="notice-avatar-part">
+                                                    최인효님이 코멘트를 작성하였습니다.
+                                                </div>
+                                                <div className="notice-avatar-contents-date">
+                                                    3일 전
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="notice-one-contents">
+                                            <div className="notice-contents-avatar-image">
+                                                <img src="../assets/images/ko.jpg" className="notice-avatar-image"/>
+                                            </div>
+                                            <div className="notice-avatar-contents">
+                                                <div className="notice-avatar-part">
+                                                    최인효님이 코멘트를 작성하였습니다.
+                                                </div>
+                                                <div className="notice-avatar-contents-date">
+                                                    3일 전
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <Link to="/nest/notification" className="link">
+                                            <Button style={{outline: "none", width: "100%", borderColor: "#27B6BA", backgroundColor: "#27B6BA", borderTopLeftRadius: "0px", borderTopRightRadius: "0px", borderBottomLeftRadius: "10px", borderBottomRightRadius: "10px"}}>
+                                                모두 보기
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div> : ""}
+                            
                             {/*<!-- Calendar link -->*/}
                             <div className="nav-item button">
                                 <Link to="/nest/calendar" className="link">
@@ -76,8 +132,6 @@ export default class Navigator extends React.Component {
                                     </Link>
                                 </span>
                             </div >
-
-                            
 
                             {/*<!-- nest -->*/}
                         </div>

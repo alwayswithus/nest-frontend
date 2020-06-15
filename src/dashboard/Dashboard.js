@@ -16,6 +16,7 @@ const API_HEADERS = {
   'Content-Type': 'application/json'
 }
 
+
 export default class Dashboard extends React.Component {
 
   constructor() {
