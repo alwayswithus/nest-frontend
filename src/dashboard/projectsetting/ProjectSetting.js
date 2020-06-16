@@ -372,7 +372,15 @@ class ProjectSetting extends Component {
                                     {this.props.project.members && this.props.project.members.map(member =>
                                         <div className="dropdown" key={member.userNo}>
 
-                                            {this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
+                                            {sessionStorage.getItem("authUserNo") == member.userNo ? 
+                                            <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown" disabled>
+                                                <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                                <span>{member.userName}</span>
+                                                <span className="delete-member">
+                                                    <i className="fas fa-times"></i>
+                                                </span>
+                                            </button> :
+                                            this.props.userProject.roleNo && this.props.userProject.roleNo === 1 ?
                                                 <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown">
                                                     <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
                                                     <span>{member.userName}</span>
