@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './ProfileProjectMember.scss';
 import ApiService from '../ApiService';
+import TransferMember from './TransferMember';
 
 class ProfileProjectMember extends Component {
 
@@ -30,9 +31,8 @@ class ProfileProjectMember extends Component {
     }
 
     render() {
-        console.log(this.props.projectNo)
         return (
-            <div className="ProjectMemberAdd">
+            <div className="ProfileProjectMember">
                 {/* Add Project Member select */}
                 <div className="container card-member">
                     <div className="card">
@@ -44,15 +44,34 @@ class ProfileProjectMember extends Component {
                         <div className="card-body">
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
-                                {/* {this.props.users && this.props.users
-                                    .filter(user => user.userName.indexOf(this.state.memberKeyword) !== -1 ||
-                                    user.userEmail.indexOf(this.state.memberKeyword) !== -1)
-                                    .map(user =>
-                                        <ProjectSettingUser key={user.userNo} user={user} project={this.props.project} callbackProjectSetting={this.props.callbackProjectSetting} />)}
-                                <div className="invite-member" onClick={this.callbackOpenInviteMember.bind(this)}>
-                                    <i className="fas fa-user-plus fa-2x"></i>
-                                    <span>멤버 초대하기</span>
-                                </div> */}
+                                {this.state.projectMembers && this.state.projectMembers.map(member => 
+                                    sessionStorage.getItem("authUserNo") == member.userNo ? 
+                                        <>
+                                        <div className="invite-card-member" key={member.userNo}
+                                            id={member.userNo}>
+                                        <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
+                                        <span>{member.userName}</span>
+                                         </div>
+                                         <div class="dropdown">
+                                         <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                                             {member.roleNo == 1 ? "전체엑세스" : member.roleNo == 2 ? "제한엑세스" : "통제엑세스"}
+                                         <span class="caret"></span></button>
+                                         <ul class="dropdown-menu">
+                                             <li><a href="#">전체엑세스</a></li>
+                                             <li><a href="#">제한엑세스</a></li>
+                                             <li><a href="#">통제엑세스</a></li>
+                                         </ul>
+                                     </div></>: 
+                                        null
+                            
+                                )}
+                                 {this.state.projectMembers && this.state.projectMembers.map(member => 
+                                    <TransferMember 
+                                    key={member.userNo}
+                                    member={member}
+                                />
+                                )}
+            
                             </div>
                         </div>
                     </div>

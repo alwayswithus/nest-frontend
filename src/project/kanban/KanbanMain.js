@@ -1602,9 +1602,13 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
 
   receiveKanban(socketData) {
 
-    console.log(socketData)
+    console.log(socketData.socketType)
+    console.log(socketData.socketType == 'comment')
+    console.log(socketData.socketType === 'comment')
+    console.log(socketData.socketType == "comment")
+    console.log(socketData.socketType === "comment")
 
-    if(socketData.socketType === 'comment'){
+    if(socketData.socketType == 'comment'){
 
       const {location} = this.props;
       const taskListNo = location.pathname.split('/')[5];
@@ -1627,7 +1631,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
       this.setState({
         taskList: newData
       })
-    }else if(socketData.socketType === 'taskListName'){
+    }else if(socketData.socketType == 'taskListName'){
 
       const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
   
@@ -2097,7 +2101,7 @@ editTaskListName(newTaskList){
     return (
       <>
         <SockJsClient
-                url="http://localhost:8080/nest/socket"
+                url="http://192.168.1.223:8080/nest/socket"
                 topics={["/topic/all"]}
                 onMessage={this.receiveKanban.bind(this)}
                 ref={(client) => {
