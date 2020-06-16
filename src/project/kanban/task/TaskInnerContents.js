@@ -89,7 +89,7 @@ class TaskInnerContents extends Component {
               {taskItem.taskPoint >= 4 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
               {taskItem.taskPoint >= 5 ? fullIcon : taskItem.taskPoint !== null ? emptyIcon :null}
             </div>
-            {this.props.authUserRole ===1 ? 
+            {this.props.authUserRole === 1 ? 
             <div className="setting">
               <div className="btn-group">
                 <button
@@ -120,23 +120,25 @@ class TaskInnerContents extends Component {
               {taskItem.taskState === "done" ? (
                 // 완료된 task
                 <>
-                  <input
+                {this.props.authUserRole === 1? <input
                     type="checkbox"
                     className="doneCheck"
                     defaultChecked
                     onClick={this.doneTask.bind(this)}
                   ></input>
+                   : null}
                   &nbsp;
                   <del>{taskItem.taskContents}</del>
                 </>
               ) : (
                 // 미완료된 task
                 <>
-                  <input
+                  {this.props.authUserRole === 1? <input
                     type="checkbox"
                     className="doneCheck"
                     onClick={this.doneTask.bind(this)}
                   ></input>
+                   : null}
                   &nbsp;
                   <label>{taskItem.taskContents}</label>
                 </>
