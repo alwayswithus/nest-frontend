@@ -194,11 +194,12 @@ export default class Navigator extends React.Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <Link to="/nest/">
+                                <form action="/nest/logout" method="POST">
                                     <div className="text-center mt-4 user-logout">
-                                        <button className="btn btn-cyan mt-1" onClick={this.sessionClear.bind(this)} >Logout <i className="fas fa-sign-in ml-1"></i></button>
+                                        <input type="submit" className="btn btn-cyan mt-1" onClick={this.sessionClear.bind(this)} value="Logout" method="POST"/>
+                                        {/*<i className="fas fa-sign-in ml-1"></i>*/}
                                     </div>
-                                </Link>
+                                </form>
                             </div>
                         </div>
                     </div>
