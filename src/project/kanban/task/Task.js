@@ -87,7 +87,7 @@ class Task extends Component {
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
               >
-                {this.props.firstTrueIndex === this.props.index &&
+                {/* {this.props.firstTrueIndex === this.props.index &&
                 taskItem.taskState === "done" ? (
                   <div
                     className="completeArea"
@@ -95,7 +95,7 @@ class Task extends Component {
                   >
                     완료된 업무
                   </div>
-                ) : null}
+                ) : null} */}
 
                 {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
                 <TaskInnerContents
