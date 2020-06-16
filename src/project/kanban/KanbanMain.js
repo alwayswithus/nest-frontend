@@ -65,6 +65,9 @@ class KanbanMain extends Component {
     this.clientRef= React.createRef()
   }
 
+  
+
+
   // onDragStart = (result) => {
   // }
   // Drag and Drop
@@ -651,17 +654,15 @@ class KanbanMain extends Component {
             taskListOrder: json.data.taskListOrder,
             projectNo: json.data.projectNo,
             tasks: [],
+            socketType:"taskListInsert"
           },
+          
         });
-
-        let pushTaskList = update(this.state.taskList, {
-          $push: [newTaskList],
-        });
-
-        this.setState({
-          taskList: pushTaskList,
-        });
+        
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
       });
+
+     
   }
 
   // task list 삭제
@@ -699,6 +700,8 @@ class KanbanMain extends Component {
         newTaskList = update(newTaskList, {
           $splice: [[TaskListIndex, 1]],
         });
+
+        
 
         this.setState({
           taskList: newTaskList,
@@ -1600,54 +1603,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
   }
 
 
-  receiveKanban(socketData) {
-
-    console.log(socketData)
-
-    if(socketData.socketType === 'comment'){
-
-      const {location} = this.props;
-      const taskListNo = location.pathname.split('/')[5];
-      const taskNo = location.pathname.split("/")[7];
   
-      const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-      const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
-  
-      let newData = update(this.state.taskList, {
-        [taskListIndex] : {
-          tasks :{
-            [taskIndex] : {
-              commentList : 
-                {$push: [socketData]} 
-            }
-          }
-        }
-      })
-      
-      this.setState({
-        taskList: newData
-      })
-    }else if(socketData.socketType === 'taskListName'){
-
-      const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
-  
-      let newData = update(this.state.taskList, {
-        [taskListIndex] : {
-          taskListName :{
-            $set:socketData.taskListName
-          }
-        }
-      })
-      // console.log(newData)
-      
-      this.setState({
-        taskList: newData
-      })
-    }else{
-      console.log("!!!else!!!")
-    }
-  }
-
   // Project Setting button Click Function
   onProjectSetting(projectNo) {
 
@@ -2090,6 +2046,71 @@ editTaskListName(newTaskList){
   })
 
   this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
+}
+receiveKanban(socketData) {
+
+  console.log(socketData)
+
+  if(socketData.socketType === 'comment'){
+
+    const {location} = this.props;
+    const taskListNo = location.pathname.split('/')[5];
+    const taskNo = location.pathname.split("/")[7];
+
+    const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    let newData = update(this.state.taskList, {
+      [taskListIndex] : {
+        tasks :{
+          [taskIndex] : {
+            commentList : 
+              {$push: [socketData]} 
+          }
+        }
+      }
+    })
+    
+    this.setState({
+      taskList: newData
+    })
+  }else if(socketData.socketType === 'taskListName'){
+
+    const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
+
+    let newData = update(this.state.taskList, {
+      [taskListIndex] : {
+        taskListName :{
+          $set:socketData.taskListName
+        }
+      }
+    })
+    // console.log(newData)
+    
+    this.setState({
+      taskList: newData
+    })
+  }else if(socketData.socketType === 'taskListInsert'){
+    let newTaskList = update(this.state.taskList, {
+          $push:[socketData]
+    })
+    console.log(newTaskList)
+ 
+    this.setState({
+      taskList: newTaskList,
+    });
+  }else if(socketData.socketType === 'taskListDelete'){
+    let newTaskList = update(this.state.taskList, {
+          $push:[socketData]
+    })
+    console.log(newTaskList)
+ 
+    this.setState({
+      taskList: newTaskList,
+    });
+  }else{
+    console.log("!!!else!!!")
+  }
 }
 
 
