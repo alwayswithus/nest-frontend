@@ -9,6 +9,7 @@ import ProjectSetting from './projectsetting/ProjectSetting';
 import update from 'react-addons-update';
 import User from './User';
 import { Link } from 'react-router-dom'
+import * as ReactBootStrap from 'react-bootstrap';
 import ApiService from '../ApiService';
 
 const API_URL = "http://localhost:8080/nest";
@@ -51,6 +52,7 @@ export default class Dashboard extends React.Component {
       memberKeyword: "",                                             // member search
 
       modalState: false,
+      loading: false
     }
 
     const {history} = this.props;
@@ -300,7 +302,11 @@ export default class Dashboard extends React.Component {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(member)
-    })
+    }, setTimeout(() => {
+      this.setState({
+        loading: true
+      })
+    }))
       .then(response => response.json())
       .then(json => {
         let newProject = update(this.state.projects, {
@@ -319,7 +325,8 @@ export default class Dashboard extends React.Component {
           users: users,
           projects: newProject,
           project: newProject[projectIndex],
-          alerts: [...this.state.alerts, newAlert]
+          alerts: [...this.state.alerts, newAlert],
+          loading: false
         })
       })
   }
@@ -607,9 +614,14 @@ export default class Dashboard extends React.Component {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(member)
-    })
+    }, setTimeout(() => {
+      this.setState({
+        loading: true
+      })
+    }))
       .then(response => response.json())
       .then(json => {
+
         let members = update(this.state.members, {
           $push: [json.data]
         })
@@ -622,7 +634,8 @@ export default class Dashboard extends React.Component {
           inviteMemberName: "",
           members: members,
           users: users,
-          alerts: [...this.state.alerts, newAlert]
+          alerts: [...this.state.alerts, newAlert],
+          loading: false
         })
       })
   }
@@ -805,6 +818,7 @@ export default class Dashboard extends React.Component {
               users={this.state.users}
               project={this.state.project}
               userProject={this.state.userProject}
+              loading={this.state.loading}
               callbackProjectSetting={{
                 close: this.callbackCloseProjectSetting.bind(this),
                 addDeleteMember: this.callbackAddDeleteMember.bind(this),
@@ -1047,14 +1061,23 @@ export default class Dashboard extends React.Component {
                                   </div>
                                   <div className="card-footer">
                                     <hr />
-                                    {this.state.isMemberEmailValid ? <input type="button" id="add-member-invite"
+                                    {this.state.isMemberEmailValid ? 
+
+                                    this.state.loading ? 
+                                    <div style={{textAlign: "center"}}><img style={{height: "25px"}} src="../assets/images/ajax-loader.gif" /></div> :
+                                    <span>
+                                      <input type="button" id="add-member-invite"
                                       className="btn btn-outline-primary btn-rounded"
                                       onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                      value="멤버 초대하기" /> :
+                                      value="멤버 초대하기"/>
+                                    </span>
+                                      :
+                                    <span>
                                       <input type="button" id="add-member-invite"
-                                        className="btn btn-outline-primary btn-rounded"
-                                        onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                        value="멤버 초대하기" disabled />}
+                                      className="btn btn-outline-primary btn-rounded"
+                                      onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                      value="멤버 초대하기" disabled />
+                                    </span>}
                                   </div>
                                 </div>
                               </div> : ""}
