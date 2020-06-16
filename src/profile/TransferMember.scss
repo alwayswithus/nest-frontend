@@ -1,18 +1,10 @@
-.invite-card-member {
+.invite-card-member-active{
     padding-top: 5px;
     border:none;                
     margin: 2% 0 0 0;
     padding:1%;
     width:auto;
-    cursor: pointer;
-    .dropdown{
-        float: right;
-        margin-top: 2%;
-        .dropdown-toggle{
-            color: white;
-            background-color: #AD7CEF;
-        }
-    }
+    background-color: #DFDFDF;
     .img-circle{
         width:35px;
         height: 35px;
@@ -21,10 +13,24 @@
     span{
         padding-top: 1%;  
     }
-    .fa-check {
-        float: right;
-        padding-top: 10px;
-        padding-right: 10px;
-        color: #8798A8;
+}
+.invite-card-member {
+    padding-top: 5px;
+    border:none;                
+    margin: 2% 0 0 0;
+    padding:1%;
+    width:auto;
+    cursor: pointer;
+
+    &:hover{
+        background-color: #DFDFDF;
+    }
+    .img-circle{
+        width:35px;
+        height: 35px;
+        margin-right: 10px;
+    }
+    span{
+        padding-top: 1%;  
     }
 }

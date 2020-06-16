@@ -70,14 +70,15 @@ class CommentList extends Component {
                 <div className="media">
                     {/* comment */}
                     {this.props.taskItem.commentList.map(comment =>
-                        <CommentContents 
-                            authUserRole={this.props.authUserRole}
-                            key={comment.commentNo}
-                            comment = {comment}
-                            taskListNo = {this.props.taskListNo}
-                            taskNo = {this.props.taskItem.taskNo}
-                            taskCallbacks = {this.props.taskCallbacks}
-                        />
+                        comment.fileState === 'T' || comment.commentState === 'T' ?
+                            <CommentContents 
+                                authUserRole={this.props.authUserRole}
+                                key={comment.commentNo}
+                                comment = {comment}
+                                taskListNo = {this.props.taskListNo}
+                                taskNo = {this.props.taskItem.taskNo}
+                                taskCallbacks = {this.props.taskCallbacks}
+                            /> : null
                     )}
                 </div>
             </div>

@@ -220,6 +220,11 @@ class Setting extends Component {
             this.props.match.params.taskListNo,
             this.props.match.params.taskNo)
     }
+
+    receiveKanban(){
+        
+    }
+
     render() {
         if(!this.props.task){
             return <></>;

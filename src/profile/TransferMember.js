@@ -3,31 +3,33 @@ import './TransferMember.scss'
 
 export default class TransferMember extends React.Component {
 
+    constructor(){
+        super(...arguments)
+        this.state = {
+            userRole:'',
+            active:false
+        }
+    }
     callbackAddDeleteMember(userNo, userName, userPhoto) {
         this.props.callbackProjectSetting.addDeleteMember(userNo, userName, userPhoto, this.props.project.projectNo);
     }
 
+    onClickRole(userPhoto, userName){
+        console.log("!!!")
+        this.props.onClose();
+        this.props.onUpdateTransferImg(userPhoto, userName);
+        // this.props.deleteModalCallbacks.userRoleUpdate(
+        //     this.props.member.projectNo, 
+        //     this.props.member.userNo,
+        //     1)
+    }
+
     render() {
         return (
-            <div className="invite-card-member" key={this.props.member.userNo}
-                id={this.props.member.userNo}
-            >
+            <div className="invite-card-member"  key={this.props.member.userNo}
+                id={this.props.member.userNo} onClick={this.onClickRole.bind(this, this.props.member.userPhoto,this.props.member.userName)}>
                 <img src={this.props.member.userPhoto} className="img-circle" alt={this.props.member.userPhoto} />
-                {sessionStorage.getItem("authUserNo") != this.props.member.userNo ? 
-                    
-                    <span>{this.props.member.userName}</span> : null
-                }
-                
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                        {this.props.member.roleNo == 1 ? "전체엑세스" : this.props.member.roleNo == 2 ? "제한엑세스" : "통제엑세스"}
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">전체엑세스</a></li>
-                        <li><a href="#">제한엑세스</a></li>
-                        <li><a href="#">통제엑세스</a></li>
-                    </ul>
-                </div>
+                <span>{this.props.member.userName}</span>
             </div>
         )
     }
