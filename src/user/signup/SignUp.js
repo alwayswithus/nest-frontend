@@ -4,11 +4,14 @@ import Input from "@material-ui/core/Input";
 import { Button, InputLabel } from "@material-ui/core";
 import ApiService from '../../ApiService';
 
+import ReactLoading from 'react-loading';
+
 import "./signup.scss"
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const setEmailText = e => {
     setMessageText("")
@@ -38,8 +41,9 @@ const SignUp = () => {
     if(messageText!=="확인됨."){
       e.preventDefault();
       return;
+    }else{
+      setLoading(true);
     }
-
   };
 
   return (
@@ -59,15 +63,22 @@ const SignUp = () => {
                     onChange={setEmailText}
                     value={email}
                   />
-            <br/><br/>
-
+            <br/>
+            <br/>
             <p id={(messageText==="확인됨.") ? "doneText":"errorText"}> {messageText} <br/></p>
 
             {
               (messageText==="확인됨.") ?
-                  <Input className="SignUpItems" id="SignUpSubmit" type="submit" value="가입하기"/>
+                (
+                  (loading)? 
+                    <div style={{margin:"auto", height:"40px", width:"40px"}}>
+                      <ReactLoading type={'spinningBubbles'} color={'#000000'} height={40} width={40} />
+                    </div>
+                      :
+                    <Input className="SignUpItems" id="SignUpSubmit" type="submit" value="가입하기"/>
+                )
                 :
-                  <Button className="SignUpItems" id="Btn" onClick={mailCheck}>이메일 중복확인</Button>
+                <Button className="SignUpItems" id="Btn" onClick={mailCheck}>이메일 중복확인</Button>
             }
 
 				  </form>

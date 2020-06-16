@@ -45,7 +45,7 @@ class ProfileProjectMember extends Component {
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.state.projectMembers && this.state.projectMembers.map(member => 
-                                    sessionStorage.getItem("authUserNo") == member.userNo ? 
+                                    sessionStorage.getItem("authUserNo") === member.userNo ? 
                                         <>
                                         <div className="invite-card-member" key={member.userNo}
                                             id={member.userNo}>
@@ -54,7 +54,7 @@ class ProfileProjectMember extends Component {
                                          </div>
                                          <div class="dropdown">
                                          <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                             {member.roleNo == 1 ? "전체엑세스" : member.roleNo == 2 ? "제한엑세스" : "통제엑세스"}
+                                             {member.roleNo === 1 ? "전체엑세스" : member.roleNo === 2 ? "제한엑세스" : "통제엑세스"}
                                          <span class="caret"></span></button>
                                          <ul class="dropdown-menu">
                                              <li><a href="#">전체엑세스</a></li>

@@ -13,14 +13,14 @@ export default class TransferMember extends React.Component {
                 id={this.props.member.userNo}
             >
                 <img src={this.props.member.userPhoto} className="img-circle" alt={this.props.member.userPhoto} />
-                {sessionStorage.getItem("authUserNo") != this.props.member.userNo ? 
+                {sessionStorage.getItem("authUserNo") !== this.props.member.userNo ? 
                     
                     <span>{this.props.member.userName}</span> : null
                 }
                 
                 <div class="dropdown">
                     <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                        {this.props.member.roleNo == 1 ? "전체엑세스" : this.props.member.roleNo == 2 ? "제한엑세스" : "통제엑세스"}
+                        {this.props.member.roleNo === 1 ? "전체엑세스" : this.props.member.roleNo === 2 ? "제한엑세스" : "통제엑세스"}
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li><a href="#">전체엑세스</a></li>
