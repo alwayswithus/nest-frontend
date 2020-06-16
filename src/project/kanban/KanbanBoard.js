@@ -81,10 +81,8 @@ class KanbanBoard extends Component {
         .then((json) => {
           let tagTaskNo = [];
           tagTaskNo = json.data.map((task) => task.task_no + "");
-          // console.log(">>",tagTaskNo)
 
           const newTaskList = this.props.taskList;
-          // console.log("1 : ",newTaskList);
           let copy = newTaskList.slice(0, newTaskList.length);
           copy &&
             copy.map(
@@ -95,7 +93,6 @@ class KanbanBoard extends Component {
                   },
                 }))
             );
-          // console.log("2 : ", copy);
 
           let tagTask = [];
           newTaskList &&
@@ -107,7 +104,6 @@ class KanbanBoard extends Component {
                   )
                 ))
             );
-          // console.log(tagTask);
 
           newTaskList.map((tasklist, index) => {
             tagTask.splice(0, tasklist.tasks.length).map((task) =>
@@ -134,13 +130,13 @@ class KanbanBoard extends Component {
   }
 
   selectpicker(e) {
-    // console.log(e.target.value);
     this.setState({
       selectPicker: e.target.value,
     });
   }
 
   render() {
+   
     return (
       <>
         <div className="kanbanBoard">
@@ -194,6 +190,7 @@ class KanbanBoard extends Component {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
+                  
                   {this.state.selectPicker === "task"
                     ? this.props.taskList &&
                       this.props.taskList.map((taskList, index) => {

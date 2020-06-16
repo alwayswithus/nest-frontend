@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertList } from "react-bs-notifier";
 import moment from 'moment';
+import SockJsClient from "react-stomp";
 
 import Navigator from '../navigator/Navigator';
 import DashboardTopbar from './dashboardtopbar/DashboardTopbar';
@@ -8,9 +9,9 @@ import './dashboard.scss';
 import ProjectSetting from './projectsetting/ProjectSetting';
 import update from 'react-addons-update';
 import User from './User';
-import { Link } from 'react-router-dom'
-import * as ReactBootStrap from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
+import ApiNotification from '../notification/ApiNotification';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -27,7 +28,6 @@ export default class Dashboard extends React.Component {
       projects: null,                                               // projects data
       users: null,                                                  // user data
       userProject: [],                                              // authUser projectNo and roleNo
-
       project: [],                                                  // project
       members: [],                                                  // members in project
       message: null,
@@ -90,7 +90,6 @@ export default class Dashboard extends React.Component {
     let newProject;
 
     if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
-
       fetch(`${API_URL}/api/user/delete/`, {
         method: 'post',
         headers: API_HEADERS,
@@ -104,9 +103,16 @@ export default class Dashboard extends React.Component {
           }
         }
       })
+
+      let socketData = {
+        projectNo: projectNo,
+        userNo: userNo,
+        socketType: "userDelete"
+      }
+
+      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
     }
     else {
-
       fetch(`${API_URL}/api/user/add/`, {
         method: 'post',
         headers: API_HEADERS,
@@ -120,11 +126,19 @@ export default class Dashboard extends React.Component {
           }
         }
       })
+      
+
+
+      let socketData = {
+        projectNo: projectNo,
+        member: member,
+        socketType: "userAdd",
+        newProject: newProject[projectIndex]
+      }
+
+      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+
     }
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
-    })
   }
 
   // Join And Exit Member in Project Function
@@ -208,16 +222,14 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectState: { $set: json.data.projectState }
-          }
-        })
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        let socketData = {
+          projectNo: projectNo,
+          projectState: json.data.projectState,
+          socketType: "stateChange"
+        }
+
+        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData))
       })
   }
 
@@ -281,6 +293,7 @@ export default class Dashboard extends React.Component {
 
   // CallBack Invite Member Function
   callbackInviteMember(projectNo, memberEmail, memberName) {
+
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
     let member = {
@@ -309,24 +322,18 @@ export default class Dashboard extends React.Component {
     }))
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            members: {
-              $push: [json.data]
-            }
-          }
-        })
 
-        let users = update(this.state.users, {
-          $push: [json.data]
-        })
+        let socketData = {
+          projectNo: projectNo,
+          data: json.data,
+          alerts: [...this.state.alerts, newAlert],
+          socketType: "inviteUser",
+        }
+
+        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
 
         this.setState({
-          users: users,
-          projects: newProject,
-          project: newProject[projectIndex],
-          alerts: [...this.state.alerts, newAlert],
-          loading: false
+          alerts: [...this.state.alerts, newAlert]
         })
       })
   }
@@ -477,16 +484,13 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectState: { $set: json.data.projectState }
-          }
-        })
+        let socketData = {
+          projectNo: projectNo,
+          projectState: json.data.projectState,
+          socketType: "stateChange"
+        }
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData))
       })
   }
 
@@ -757,13 +761,22 @@ export default class Dashboard extends React.Component {
   }
 
   callbackProjectDateUpdate(from, to, projectNo) {
+
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.project.members,
+      "projectDateChange",
+      null,
+      projectNo
+    )
+  
     if (from === 'Invalid date') {
       from = undefined;
     }
     if (to === 'Invalid date') {
       to = undefined;
     }
-
 
     const projectIndex = this.state.projects.findIndex(project =>
       project.projectNo === projectNo)
@@ -779,10 +792,12 @@ export default class Dashboard extends React.Component {
       }
     })
 
-    this.setState({
-      projects: newProject,
-      project: newProject[projectIndex]
-    })
+    let socketData = {
+      from: from,
+      to: to,
+      projectNo: projectNo,
+      socketType: "dateChange"
+    }
 
     fetch(`${API_URL}/api/projectsetting/calendar`, {
       method: 'post',
@@ -790,11 +805,137 @@ export default class Dashboard extends React.Component {
       body: JSON.stringify(newProject[projectIndex])
     })
 
+    this.clientRef.sendMessage("/app/all", JSON.stringify(socketData))
   }
+
+  receiveDashBoard(socketData) {
+    if(socketData.socketType === "stateChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectState: { $set: socketData.projectState}
+        }
+      })
+
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
+    }
+    else if(socketData.socketType === "dateChange") {
+      const projectIndex = this.state.projects.findIndex(project =>
+        project.projectNo === socketData.projectNo)
+
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          projectStart: {
+            $set: socketData.from
+          },
+          projectEnd: {
+            $set: socketData.to
+          }
+        }
+      })
+
+      this.setState({
+        projects: newProject,
+        project: newProject[projectIndex]
+      })
+    }
+    else if(socketData.socketType === "inviteUser") {
+
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+
+      let newProject = update(this.state.projects, {
+        [projectIndex]: {
+          members: {
+            $push: [socketData.data]
+          }
+        }
+      })
+
+      let users = update(this.state.users, {
+        $push: [socketData.data]
+      })
+
+      this.setState({
+        users: users,
+        projects: newProject,
+        project: newProject[projectIndex],
+        loading: false
+      })
+    }
+    else if(socketData.socketType === "userDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+      const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo);
+
+      if(this.state.project.length === 0) {
+        let newProject = update(this.state.projects, {
+          $splice: [[projectIndex, 1]]
+        })
+        this.setState({
+          projects: newProject
+        })
+      }
+
+      if(this.state.project.length !== 0) {
+        
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            members: {
+              $splice: [[memberIndex, 1]]
+            }
+          }
+        })
+        
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      }
+    }
+
+    else if(socketData.socketType === "userAdd") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+      if(projectIndex == -1) {       
+        let newProject = update(this.state.projects, {
+          $push: [socketData.newProject]
+        })
+
+        this.setState({
+          projects: newProject
+        })
+      }
+      else {
+        let newProject = update(this.state.projects, {
+          [projectIndex] : {
+            members: {
+              $push: [socketData.member]
+            }
+          }
+        })
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      }
+    }
+  }
+
 
   render() {
     return (
       <div className="Dashboard">
+        <SockJsClient
+                url="http://localhost:8080/nest/socket"
+                topics={["/topic/all"]}
+                onMessage={this.receiveDashBoard.bind(this)}
+                ref={(client) => {
+                  this.clientRef = client
+                }}
+             />
+        
         <AlertList
           position={this.state.position}
           alerts={this.state.alerts}

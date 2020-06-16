@@ -21,9 +21,9 @@ class TaskList extends Component {
       viewTaskInsertArea: false,
       taskInsertState: false,
       taskContents: "",
-      showComplete: false,
+      showComplete: true,
       beforTaskListName: "",
-      // completeTaskState: true,
+      completeTaskState: true,
     };
   }
 
@@ -120,144 +120,112 @@ class TaskList extends Component {
     this.showTaskInsertArea();
   }
 
+
+  // test(){
+  //   this.setState({
+  //     completeTaskState:false
+  //   })
+  // }
   render() {
-    let completeTaskState = false;
+    // let completeTaskState = false;
+
+    let a = false;
+    let firstDoneIndex = 0;
+    this.props.tasks && this.props.tasks.map((task,index) => {
+      if(task.taskState === 'do' && a == false){
+        firstDoneIndex = index;
+      }else{
+        a = true;
+      }
+    })
+    console.log(firstDoneIndex)
+
+
     return (
-      <Draggable
-        draggableId={this.props.taskList.taskListNo}
-        index={this.props.index}
-        isDragDisabled={this.props.authUserRole !== 1}
-      >
+      <Draggable draggableId={this.props.taskList.taskListNo} index={this.props.index} isDragDisabled={this.props.authUserRole !== 1} >
         {(provided) => (
-          <div
-            className="taskCategory"
-            {...provided.draggableProps}
-            ref={provided.innerRef}
-          >
-            <div
-              className="panel panel-primary taskPanel"
-              {...provided.dragHandleProps}
-            >
+          <div className="taskCategory" {...provided.draggableProps} ref={provided.innerRef} >
+            <div className="panel panel-primary taskPanel" {...provided.dragHandleProps} >
               <div className="panel-heading">
                 <div className="taskList-head">
                   <div className="head-title">
                     {/* task list 이름 수정 state*/}
-                    {this.state.showEditNameInput ? (
-                      <input
-                        style={{ fontSize: "17px" }}
-                        className="newTaskListName"
-                        type="text"
-                        onChange={this.onInputChanged.bind(this)}
-                        value={this.state.keyword}
-                        onKeyPress={this.onInputKeyPress.bind(this)}
-                        autoFocus
-                      />
-                    ) : (
-                      <div style={{ display: "flex" }}>
-                        <div style={{ fontSize: "17px" }}>
-                          {this.props.taskList.taskListName} &nbsp;
+                    {this.state.showEditNameInput 
+                      ? <input style={{ fontSize: "17px" }} className="newTaskListName" type="text" onChange={this.onInputChanged.bind(this)} value={this.state.keyword} onKeyPress={this.onInputKeyPress.bind(this)} autoFocus/>
+                      : <div style={{ display: "flex" }}>
+                          <div style={{ fontSize: "17px" }}>
+                            {this.props.taskList.taskListName} &nbsp;
+                          </div>
+                          {this.state.taskInsertState 
+                            ? ""
+                            : <>
+                                {this.props.authUserRole === 1 
+                                  ? <i className="far fa-edit Icon" onClick={this.editNameInputState.bind(this)} />
+                                  : null}
+                              </>
+                          }
                         </div>
-                        {this.state.taskInsertState ? (
-                          ""
-                        ) : (
-                          <>
-                            {this.props.authUserRole === 1 ? (
-                              <i
-                                className="far fa-edit Icon"
-                                onClick={this.editNameInputState.bind(this)}
-                              />
-                            ) : null}
-                          </>
-                        )}
-                      </div>
-                    )}
+                    }
                   </div>
+                  
                   {/* task list 이름 수정 시 버튼 유무*/}
-                  {this.state.showEditNameInput ? (
-                    <>
-                      <i
-                        className="fas fa-undo Icon reset"
-                        data-tip="취소"
-                        onClick={this.unEditTaskListName.bind(this)}
-                      ></i>
-                      <ReactTooltip />
-                    </>
-                  ) : (
-                    <>
-                      {this.state.taskInsertState ? (
-                        ""
-                      ) : (
-                        <>
-                          {this.props.authUserRole === 1 ? (
-                            <>
-                              <div className="head-insertBtn">
-                                <i
-                                  className="fas fa-plus Icon"
-                                  onClick={this.showTaskInsertArea.bind(this)}
-                                ></i>
-                              </div>
-                              <div className="head-deleteBtn">
-                                <i
-                                  className="far fa-trash-alt Icon"
-                                  onClick={this.deleteTaskList.bind(this)}
-                                ></i>
-                              </div>
+                  {this.state.showEditNameInput 
+                    ? <>
+                        <i className="fas fa-undo Icon reset" data-tip="취소" onClick={this.unEditTaskListName.bind(this)}></i>
+                        <ReactTooltip />
+                      </>
+                    : <>
+                        {this.state.taskInsertState 
+                          ? "" 
+                          : <>
+                              {this.props.authUserRole === 1 
+                                ? <>
+                                    <div className="head-insertBtn">
+                                      <i className="fas fa-plus Icon" onClick={this.showTaskInsertArea.bind(this)} ></i>
+                                    </div>
+                                    <div className="head-deleteBtn">
+                                      <i className="far fa-trash-alt Icon" onClick={this.deleteTaskList.bind(this)} ></i>
+                                    </div>
+                                  </>
+                                : null}
                             </>
-                          ) : null}
-                        </>
-                      )}
-                    </>
-                  )}
+                        }
+                      </>
+                  }
                 </div>
               </div>
+
               {/* task 추가 시 입력 창 state*/}
-              {this.state.taskInsertState ? (
-                <div className="taskInsertArea">
-                  <div className="taskInsertForm">
-                    <textarea
-                      className="textArea"
-                      cols="35"
-                      rows="2"
-                      onChange={this.onTextAreaChanged.bind(this)}
-                      value={this.state.taskContents}
-                      autoFocus
-                    ></textarea>
+              {this.state.taskInsertState 
+                ? 
+                  <div className="taskInsertArea">
+                    <div className="taskInsertForm">
+                      <textarea className="textArea" cols="35" rows="2" onChange={this.onTextAreaChanged.bind(this)} value={this.state.taskContents} autoFocus></textarea>
+                    </div>
+                    <div className="taskInsertBtn">
+                      <button type="button" className="btn cancel" onClick={this.showTaskInsertArea.bind(this)} >
+                        취소
+                      </button>
+                      <button type="button" className="btn comfirm" onClick={this.addTask.bind(this)} >
+                        만들기
+                      </button>
+                    </div>
                   </div>
-                  <div className="taskInsertBtn">
-                    <button
-                      type="button"
-                      className="btn cancel"
-                      onClick={this.showTaskInsertArea.bind(this)}
-                    >
-                      취소
-                    </button>
-                    <button
-                      type="button"
-                      className="btn comfirm"
-                      onClick={this.addTask.bind(this)}
-                    >
-                      만들기
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
+                : ""
+              }
             </div>
             <div className="taskArea">
-              <Droppable
-                droppableId={this.props.taskList.taskListNo}
-                type="task"
-              >
+              <div className="test" style={{    overflow: "auto",
+                                // height: "95%",
+                                overflowX: "hidden"}}>
+              <Droppable droppableId={this.props.taskList.taskListNo} type="task" >
                 {(provided, snapshot) => (
-                  <div
-                    className="tasks"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
+                  <>
+                  <div className="tasks" ref={provided.innerRef} {...provided.droppableProps} >
                     {/* task 목록 */}
-                    {this.props.selectPicker === "task"
-                      ? this.props.taskList.tasks
+                    {/* {this.props.selectPicker === "task" */}
+                      {/* ?  */}
+                      {this.props.taskList.tasks
                           .filter(
                             (task) =>
                               task.taskContents.indexOf(
@@ -265,7 +233,14 @@ class TaskList extends Component {
                               ) !== -1
                           )
                           .map((task, index) =>
-                            task.taskState === "done" ? null : (
+                            <>
+                            
+                              {/* {task.taskState === "done" ? null : ( */}
+                              <div 
+                                // onMouseDown = {this.test.bind(this)}
+                                // onMouseup = {this.test.bind(this)}
+                               >
+
                               <Task
                                 authUserRole={this.props.authUserRole}
                                 projectNo={this.props.projectNo}
@@ -274,11 +249,31 @@ class TaskList extends Component {
                                 task={task}
                                 index={index}
                                 taskCallbacks={this.props.taskCallbacks}
-                              />
-                            )
-                          )
-                      : this.props.taskList.tasks.map((task, index) =>
-                          task.taskState === "done" ? null : (
+                                complete={task.taskState === 'done' ? true : false}
+                                
+                                />
+                                </div>
+                              {/* {this.state.completeTaskState === true ? firstDoneIndex === index ? <div
+                                className="completeArea"
+                              >
+                                완료된 업무
+                              </div> :null : null} */}
+                            {/* )} 
+                               {task.taskState === "done" ?  <Task
+                                authUserRole={this.props.authUserRole}
+                                 projectNo={this.props.projectNo}
+                                 key={task.taskNo}
+                                 taskListNo={this.props.taskList.taskListNo}
+                                 task={task}
+                                 index={index}
+                                 taskCallbacks={this.props.taskCallbacks}
+                                 complete={task.taskState === 'done' ? true : false}
+                               /> : null}*/}
+                            </>
+                          )}
+                      {/* : 
+                      this.props.taskList.tasks.map((task, index) =>
+                          // task.taskState === "done" ? null : (
                             <Task
                               authUserRole={this.props.authUserRole}
                               projectNo={this.props.projectNo}
@@ -287,16 +282,20 @@ class TaskList extends Component {
                               task={task}
                               index={index}
                               taskCallbacks={this.props.taskCallbacks}
+                              complete={task.taskState === 'done' ? true : false}
                             />
-                          )
-                        )}
+                          // )
+                        ) */}
+                        {/* } */}
                     {provided.placeholder}
                   </div>
+                  
+                </>
                 )}
               </Droppable>
 
-              <div className="completeTasks" ref={provided.innerRef}>
-                {this.props.tasks.map((task) =>
+              {/* <div className="completeTasks"> */}
+                {/* {this.props.tasks.map((task) =>
                   task.taskState === "done" ? (completeTaskState = true) : null
                 )}
                 {completeTaskState ? (
@@ -306,9 +305,9 @@ class TaskList extends Component {
                   >
                     완료된 업무
                   </div>
-                ) : null}
+                ) : null} */}
 
-                {this.props.selectPicker === "task" ? (
+                {/* {this.props.selectPicker === "task" ? (
                   this.state.showComplete ? (
                     <div className="completeTask">
                       {this.props.taskList.tasks
@@ -321,6 +320,8 @@ class TaskList extends Component {
                         .map((task, index) =>
                           task.taskState === "done" ? (
                             <Task
+                              authUserRole={this.props.authUserRole}
+                              projectNo={this.props.projectNo}
                               key={task.taskNo}
                               taskListNo={this.props.taskList.taskListNo}
                               task={task}
@@ -337,6 +338,8 @@ class TaskList extends Component {
                     {this.props.taskList.tasks.map((task, index) =>
                       task.taskState === "done" ? (
                         <Task
+                          authUserRole={this.props.authUserRole}
+                          projectNo={this.props.projectNo}
                           key={task.taskNo}
                           taskListNo={this.props.taskList.taskListNo}
                           task={task}
@@ -347,9 +350,17 @@ class TaskList extends Component {
                       ) : null
                     )}
                   </div>
-                ) : null}
-              </div>
+                ) : null} */}
+              {/* </div> */}
             </div>
+            <div
+                  className="completeArea"
+                  style={{backgroundColor:"red"}}
+                >
+                  완료된 업무
+                </div>
+            </div>
+
           </div>
         )}
       </Draggable>

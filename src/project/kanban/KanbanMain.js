@@ -65,11 +65,9 @@ class KanbanMain extends Component {
     this.clientRef= React.createRef()
   }
 
-  
-
-
   // onDragStart = (result) => {
   // }
+
   // Drag and Drop
   onDragEnd = (result) => {
     const { destination, source, type } = result;
@@ -89,203 +87,24 @@ class KanbanMain extends Component {
 
     // list 재정렬
     if (type === "column") {
-      let newTaskList = Array.from(this.state.taskList);
-      newTaskList.splice(source.index, 1);
-      newTaskList.splice(
-        destination.index,
-        0,
-        this.state.taskList[source.index]
-      );
 
-      const endTaskList = this.state.taskList[destination.index];
-
-      newTaskList.map((taskList, index) => {
-        if (source.index <= index && destination.index > index) {
-          newTaskList = update(newTaskList, {
-            [index]: {
-              taskListOrder: { $set: taskList.taskListOrder - 1 },
-            },
-          });
-        }
-        if (source.index >= index && destination.index < index) {
-          newTaskList = update(newTaskList, {
-            [index]: {
-              taskListOrder: { $set: taskList.taskListOrder + 1 },
-            },
-          });
-        }
-      });
-      newTaskList = update(newTaskList, {
-        [destination.index]: {
-          taskListOrder: { $set: endTaskList.taskListOrder },
-        },
-      });
-
-      fetch(`${API_URL}/api/taskList/reOrder`, {
-        method: "post",
-        headers: API_HEADERS,
-        body: JSON.stringify(newTaskList),
-      });
-
-      this.setState({
-        taskList: newTaskList,
-      });
+      const socketData = {
+        result : result,
+        socketType:"taskListDnD",
+        userNo : sessionStorage.getItem("authUserNo")
+      }
+      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
 
       return;
     }
 
-    // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
-    let startIndex = 0;
-    let finishIndex = 0;
-    this.state.taskList.map((taskList, index) =>
-      taskList.taskListNo === source.droppableId ? (startIndex = index) : null
-    );
-    this.state.taskList.map((taskList, index) =>
-      taskList.taskListNo === destination.droppableId
-        ? (finishIndex = index)
-        : null
-    );
-
-    // 위의 인덱스를 가지고 출발list, 도착list를 생성
-    const start = this.state.taskList[startIndex];
-    const finish = this.state.taskList[finishIndex];
-
-    /* 같은 목록에서의 Task 이동 */
-    if (start === finish) {
-      // tasks 가공
-      const newTasks = Array.from(start.tasks);
-      newTasks.splice(source.index, 1);
-      newTasks.splice(
-        destination.index,
-        0,
-        this.state.taskList[startIndex].tasks[source.index]
-      );
-
-      let newTaskList = update(this.state.taskList, {
-        [startIndex]: {
-          tasks: {
-            $set: newTasks,
-          },
-        },
-      });
-
-      newTasks.map((task, index) => {
-        if (source.index <= index && destination.index > index) {
-          newTaskList = update(newTaskList, {
-            [startIndex]: {
-              tasks: {
-                [index]: {
-                  taskOrder: { $set: task.taskOrder + 1 },
-                },
-              },
-            },
-          });
-        }
-        if (source.index >= index && destination.index < index) {
-          newTaskList = update(newTaskList, {
-            [startIndex]: {
-              tasks: {
-                [index]: {
-                  taskOrder: { $set: task.taskOrder - 1 },
-                },
-              },
-            },
-          });
-        }
-      });
-      newTaskList = update(newTaskList, {
-        [finishIndex]: {
-          tasks: {
-            [destination.index]: {
-              taskOrder: { $set: finish.tasks[destination.index].taskOrder },
-            },
-          },
-        },
-      });
-
-      fetch(`${API_URL}/api/task/reOrder/sameList`, {
-        method: "post",
-        headers: API_HEADERS,
-        body: JSON.stringify(newTaskList[startIndex].tasks),
-      });
-
-      this.setState({
-        taskList: newTaskList,
-      });
-      return;
+    // task 재정렬
+    const socketData = {
+      result : result,
+      socketType:"taskDnD"
     }
-
-    /* 한 목록에서 다른 목록으로 이동 */
-
-    // 출발 tasks 가공
-    const startTasks = Array.from(start.tasks);
-    startTasks.splice(source.index, 1);
-
-    // 도착 tasks 가공
-    const finishTasks = Array.from(finish.tasks);
-    finishTasks.splice(
-      destination.index,
-      0,
-      this.state.taskList[startIndex].tasks[source.index]
-    );
-
-    let newTaskList = update(this.state.taskList, {
-      [startIndex]: {
-        tasks: {
-          $set: startTasks,
-        },
-      },
-      [finishIndex]: {
-        tasks: {
-          $set: finishTasks,
-        },
-      },
-    });
-
-    newTaskList[startIndex].tasks.map((task, index) => {
-      newTaskList = update(newTaskList, {
-        [startIndex]: {
-          tasks: {
-            [index]: {
-              taskOrder: {
-                $set: newTaskList[startIndex].tasks.length - index,
-              },
-            },
-          },
-        },
-      });
-    });
-
-    newTaskList[finishIndex].tasks.map((task, index) => {
-      newTaskList = update(newTaskList, {
-        [finishIndex]: {
-          tasks: {
-            [index]: {
-              taskOrder: {
-                $set: newTaskList[finishIndex].tasks.length - index,
-              },
-            },
-          },
-        },
-      });
-    });
-    const reOrder = {
-      startTaskListNo: newTaskList[startIndex].taskListNo,
-      endTaskListNo: newTaskList[finishIndex].taskListNo,
-      startTasks: newTaskList[startIndex].tasks,
-      endTasks: newTaskList[finishIndex].tasks,
-      reOrderTask: this.state.taskList[startIndex].tasks[source.index].taskNo,
-    };
-
-    fetch(`${API_URL}/api/task/reOrder/otherList`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(reOrder),
-    });
-
-    this.setState({
-      taskList: newTaskList,
-    });
+    this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+    
   };
 
   // task 추가
@@ -327,308 +146,51 @@ class KanbanMain extends Component {
           taskLabel: json.data.taskLabel,
           fileList: [],
           taskWriter:json.data.taskWriter,
-          userName:sessionStorage.getItem("authUserName")
+          userName:sessionStorage.getItem("authUserName"),
+          socketType:"taskInsert",
+          taskListIndex:TaskListIndex
+        
         };
 
-        let newTaskList = this.state.taskList;
-        newTaskList[TaskListIndex].tasks.splice(0, 0, newTask);
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTask));
 
-        this.setState({
-          taskList: newTaskList,
-        });
+       
+
+
+        
       });
   }
   // task 삭제
   callbackDeleteTask(taskListNo, taskId) {
-    const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-
-    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskId
-    );
-
-    let newTaskList = update(this.state.taskList, {
-      [TaskListIndex]: {
-        tasks: {
-          $splice: [[TaskIndex, 1]],
-        },
-      },
-    });
-
-    const taskListLength = newTaskList[TaskListIndex].tasks.length;
-    newTaskList[TaskListIndex].tasks.map((task, index) => {
-      newTaskList = update(newTaskList, {
-        [TaskListIndex]: {
-          tasks: {
-            [index]: {
-              taskOrder: { $set: taskListLength - index },
-            },
-          },
-        },
-      });
-    });
 
     const deleteTask = {
-      startTasks: newTaskList[TaskListIndex].tasks,
-      reOrderTask: taskId,
-    };
+      taskListNo:taskListNo,
+      taskId:taskId,
+      socketType:"taskDelete"
+    }
+    this.clientRef.sendMessage("/app/all", JSON.stringify(deleteTask));
 
-    fetch(`${API_URL}/api/task/delete`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(deleteTask),
-    });
-
-    this.setState({
-      taskList: newTaskList,
-    });
   }
 
   // task 복사
   callbackCopyTask(taskListNo, taskId) {
-    const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-
-    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskId
-    );
-    const task = this.state.taskList[TaskListIndex].tasks[TaskIndex];
-
-    let copyTask = {
-      tagList: task.tagList,
-      memberList: task.memberList,
-      originalTaskNo: task.taskNo,
-      taskNo: null,
-      checkList: task.checkList,
-      taskWriter:sessionStorage.getItem("authUserNo"),
-    };
-
-    fetch(`${API_URL}/api/task/copy/insert`, {
-      method: "post",
-      headers: API_HEADERS,
-      body: JSON.stringify(copyTask),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        let newTasks = this.state.taskList[TaskListIndex].tasks;
-        newTasks.splice(TaskIndex + 1, 0, {});
-        newTasks = update(newTasks, {
-          [TaskIndex + 1]: {
-            $set: {
-              commentList: [],
-              taskStart: task.taskStart,
-              taskEnd: task.taskEnd,
-              taskOrder: null,
-              tagList: task.tagList,
-              taskState: task.taskState,
-              memberList: task.memberList,
-              taskContents: `${task.taskContents}_copy`,
-              taskNo: json.data.taskNo + "",
-              checkList: task.checkList,
-              taskPoint: task.taskPoint,
-              taskLabel: task.taskLabel,
-              fileList: [],
-              
-
-            },
-          },
-        });
-
-        let newTaskList = update(this.state.taskList, {
-          [TaskListIndex]: {
-            tasks: {
-              $set: newTasks,
-            },
-          },
-        });
-
-        const taskListLength = newTaskList[TaskListIndex].tasks.length;
-        newTaskList[TaskListIndex].tasks.map((task, index) => {
-          newTaskList = update(newTaskList, {
-            [TaskListIndex]: {
-              tasks: {
-                [index]: {
-                  taskOrder: { $set: taskListLength - index },
-                },
-              },
-            },
-          });
-        });
-
-        if (newTaskList[TaskListIndex].tasks[TaskIndex].tagList.length !== 0) {
-          newTaskList[TaskListIndex].tasks[TaskIndex].tagList.map(
-            (tag, index) => {
-              newTaskList = update(newTaskList, {
-                [TaskListIndex]: {
-                  tasks: {
-                    [TaskIndex]: {
-                      tagList: {
-                        [index]: {
-                          taskNo: {
-                            $set: json.data.taskNo,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              });
-            }
-          );
-        }
-        if (
-          newTaskList[TaskListIndex].tasks[TaskIndex].checkList.length !== 0
-        ) {
-          newTaskList[TaskListIndex].tasks[TaskIndex].checkList.map(
-            (checkList, index) => {
-              newTaskList = update(newTaskList, {
-                [TaskListIndex]: {
-                  tasks: {
-                    [TaskIndex]: {
-                      checkList: {
-                        [index]: {
-                          taskNo: {
-                            $set: json.data.taskNo,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              });
-            }
-          );
-        }
-
-        fetch(`${API_URL}/api/task/reOrder/sameList`, {
-          method: "post",
-          headers: API_HEADERS,
-          body: JSON.stringify(newTaskList[TaskListIndex].tasks),
-        });
-
-        // console.log(newTaskList);
-
-        this.setState({
-          taskList: newTaskList,
-        });
-      });
+    const taskCopy = {
+      taskListNo:taskListNo,
+      taskId:taskId ,
+      socketType:"taskCopy"
+    }
+    this.clientRef.sendMessage("/app/all", JSON.stringify(taskCopy));
   }
 
   // task 완료 체크
   callbackDoneTask(taskListNo, taskId) {
-    const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-
-    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskId
-    );
-
-    if(this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "do"){
-
-      let doneIndex = [];
-
-      this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'done' ?  doneIndex.push(index) : null)
-      if(doneIndex[0] === undefined){
-        doneIndex.push(this.state.taskList[TaskListIndex].tasks.length)
-      }
-
-      let newTaskList = update(this.state.taskList, {
-        [TaskListIndex]: {
-          tasks: {
-            [TaskIndex]: {
-              taskState: { $set: 'done' },
-            },
-          },
-        },
-      });
-
-      newTaskList[TaskListIndex].tasks.splice(doneIndex[0], 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
-      
-      newTaskList[TaskListIndex].tasks.splice(TaskIndex, 1); 
-
-      let tasksLength = newTaskList[TaskListIndex].tasks.length
-      
-      newTaskList[TaskListIndex].tasks.map((task, index) => 
-      {
-        newTaskList = update(newTaskList, {
-            [TaskListIndex]: {
-              tasks: {
-                [index]: {
-                  taskOrder: { $set: tasksLength },
-                },
-              },
-            },
-          })
-          tasksLength = tasksLength -1 
-        }
-
-      )
-
-      fetch(`${API_URL}/api/task/state`, {
-        method: "post",
-        headers: API_HEADERS,
-        body: JSON.stringify(newTaskList[TaskListIndex].tasks),
-      })
-
-      this.setState({
-        taskList: newTaskList,
-      });
-    }else{
-      let doIndex = 0;
-      let test = 0;
-
-      this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'do' ?  doIndex = index: test = test+1)
-
-      let newTaskList = update(this.state.taskList, {
-        [TaskListIndex]: {
-          tasks: {
-            [TaskIndex]: {
-              taskState: { $set: 'do'},
-            },  
-          },
-        },
-      });
-
-      if(test ===  newTaskList[TaskListIndex].tasks.length){
-        newTaskList[TaskListIndex].tasks.splice(doIndex, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
-      }else{
-        newTaskList[TaskListIndex].tasks.splice(doIndex+1, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
-      }
-      
-      newTaskList[TaskListIndex].tasks.splice(TaskIndex+1, 1);  
-      
-      let tasksLength = newTaskList[TaskListIndex].tasks.length
-      
-      newTaskList[TaskListIndex].tasks.map((task, index) => 
-      {
-          newTaskList = update(newTaskList, {
-            [TaskListIndex]: {
-              tasks: {
-                [index]: {
-                  taskOrder: { $set: tasksLength },
-                },
-              },
-            },
-          })
-          tasksLength = tasksLength -1 
-        }
-        )
-        
-        fetch(`${API_URL}/api/task/state`, {
-          method: "post",
-          headers: API_HEADERS,
-          body: JSON.stringify(newTaskList[TaskListIndex].tasks),
-        })
-
-        console.log(newTaskList[TaskListIndex].tasks)
-        
-      this.setState({
-        taskList: newTaskList,
-      });
+    const taskCheck = {
+      taskListNo:taskListNo,
+      taskId:taskId,
+      socketType:"taskCheck"
     }
+
+    this.clientRef.sendMessage("/app/all", JSON.stringify(taskCheck));
   }
 
   // task list 추가
@@ -684,28 +246,13 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        const deleteTaskListOrderNo = json.data.taskListOrder;
-        let newTaskList = this.state.taskList;
-
-        this.state.taskList.map((taskList, index) => {
-          if (taskList.taskListOrder > deleteTaskListOrderNo) {
-            newTaskList = update(newTaskList, {
-              [index]: {
-                taskListOrder: { $set: taskList.taskListOrder - 1 },
-              },
-            });
-          }
-        });
-
-        newTaskList = update(newTaskList, {
-          $splice: [[TaskListIndex, 1]],
-        });
-
-        
-
-        this.setState({
-          taskList: newTaskList,
-        });
+        const newData = {
+          TaskListIndex: TaskListIndex,
+          taskListOrder : json.data.taskListOrder,
+          socketType:"taskListDelete"
+        }
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newData));
+       
       });
   }
 
@@ -891,8 +438,6 @@ class KanbanMain extends Component {
       checklistState: checklistState === "done" ? "do" : "done",
       taskNo: taskNo,
     };
-
-    // console.log("check")
 
     fetch(`${API_URL}/api/tasksetting/checklist/update`, {
       method: "post",
@@ -1955,9 +1500,8 @@ editTaskListName(newTaskList){
 
   this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
 }
-receiveKanban(socketData) {
 
-  console.log(socketData)
+receiveKanban(socketData) {
 
   if(socketData.socketType === 'comment'){
 
@@ -1993,7 +1537,6 @@ receiveKanban(socketData) {
         }
       }
     })
-    // console.log(newData)
     
     this.setState({
       taskList: newData
@@ -2008,14 +1551,524 @@ receiveKanban(socketData) {
       taskList: newTaskList,
     });
   }else if(socketData.socketType === 'taskListDelete'){
-    let newTaskList = update(this.state.taskList, {
-          $push:[socketData]
-    })
-    console.log(newTaskList)
- 
+
+    const deleteTaskListOrderNo = socketData.taskListOrder;
+    let newTaskList = this.state.taskList;
+
+    this.state.taskList.map((taskList, index) => {
+      if (taskList.taskListOrder > deleteTaskListOrderNo) {
+        newTaskList = update(newTaskList, {
+          [index]: {
+            taskListOrder: { $set: taskList.taskListOrder - 1 },
+          },
+        });
+      }
+    });
+
+    newTaskList = update(newTaskList, {
+      $splice: [[socketData.TaskListIndex, 1]],
+    });
+
     this.setState({
       taskList: newTaskList,
     });
+    
+  }else if(socketData.socketType === 'taskListDnD'){
+    const { destination, source, type } = socketData.result;
+
+    console.log(socketData.userNo)
+    console.log(sessionStorage.getItem("authUserNo"));
+
+    let newTaskList = Array.from(this.state.taskList);
+      newTaskList.splice(source.index, 1);
+      newTaskList.splice(
+        destination.index,
+        0,
+        this.state.taskList[source.index]
+      );
+
+      const endTaskList = this.state.taskList[destination.index];
+
+      newTaskList.map((taskList, index) => {
+        if (source.index <= index && destination.index > index) {
+          newTaskList = update(newTaskList, {
+            [index]: {
+              taskListOrder: { $set: taskList.taskListOrder - 1 },
+            },
+          });
+        }
+        if (source.index >= index && destination.index < index) {
+          newTaskList = update(newTaskList, {
+            [index]: {
+              taskListOrder: { $set: taskList.taskListOrder + 1 },
+            },
+          });
+        }
+      });
+      newTaskList = update(newTaskList, {
+        [destination.index]: {
+          taskListOrder: { $set: endTaskList.taskListOrder },
+        },
+      });
+      this.setState({
+        taskList: newTaskList,
+      });
+      fetch(`${API_URL}/api/taskList/reOrder`, {
+        method: "post",
+        headers: API_HEADERS,
+        body: JSON.stringify(newTaskList),
+      });    
+  }else if(socketData.socketType === 'taskInsert'){
+    let newTaskList = this.state.taskList;
+    newTaskList[socketData.taskListIndex].tasks.splice(0, 0, socketData);
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }else if(socketData.socketType === 'taskDelete'){
+    const TaskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo === socketData.taskListNo
+    );
+
+    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.taskNo === socketData.taskId
+    );
+
+    
+
+    let newTaskList = update(this.state.taskList, {
+      [TaskListIndex]: {
+        tasks: {
+          $splice: [[TaskIndex, 1]],
+        },
+      },
+    });
+
+    const taskListLength = newTaskList[TaskListIndex].tasks.length;
+
+    newTaskList[TaskListIndex].tasks.map((task, index) => {
+      newTaskList = update(newTaskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [index]: {
+              taskOrder: { $set: taskListLength - index },
+            },
+          },
+        },
+      });
+    });
+
+    const deleteTask = {
+      startTasks: newTaskList[TaskListIndex].tasks,
+      reOrderTask: socketData.taskId,
+      
+    };
+
+    fetch(`${API_URL}/api/task/delete`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(deleteTask),
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+  }else if(socketData.socketType === 'taskCopy'){
+    const TaskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo === socketData.taskListNo
+    );
+
+    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.taskNo === socketData.taskId
+    );
+    const task = this.state.taskList[TaskListIndex].tasks[TaskIndex];
+
+    let copyTask = {
+      tagList: task.tagList,
+      memberList: task.memberList,
+      originalTaskNo: task.taskNo,
+      taskNo: null,
+      checkList: task.checkList,
+      taskWriter:sessionStorage.getItem("authUserNo"),
+    };
+
+    fetch(`${API_URL}/api/task/copy/insert`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(copyTask),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let newTasks = this.state.taskList[TaskListIndex].tasks;
+        newTasks.splice(TaskIndex + 1, 0, {});
+        newTasks = update(newTasks, {
+          [TaskIndex + 1]: {
+            $set: {
+              commentList: [],
+              taskStart: task.taskStart,
+              taskEnd: task.taskEnd,
+              taskOrder: null,
+              tagList: task.tagList,
+              taskState: task.taskState,
+              memberList: task.memberList,
+              taskContents: `${task.taskContents}_copy`,
+              taskNo: json.data.taskNo + "",
+              checkList: task.checkList,
+              taskPoint: task.taskPoint,
+              taskLabel: task.taskLabel,
+              fileList: [],
+              
+
+            },
+          },
+        });
+
+        let newTaskList = update(this.state.taskList, {
+          [TaskListIndex]: {
+            tasks: {
+              $set: newTasks,
+            },
+          },
+        });
+
+        const taskListLength = newTaskList[TaskListIndex].tasks.length;
+        newTaskList[TaskListIndex].tasks.map((task, index) => {
+          newTaskList = update(newTaskList, {
+            [TaskListIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: taskListLength - index },
+                },
+              },
+            },
+          });
+        });
+
+        if (newTaskList[TaskListIndex].tasks[TaskIndex].tagList.length !== 0) {
+          newTaskList[TaskListIndex].tasks[TaskIndex].tagList.map(
+            (tag, index) => {
+              newTaskList = update(newTaskList, {
+                [TaskListIndex]: {
+                  tasks: {
+                    [TaskIndex]: {
+                      tagList: {
+                        [index]: {
+                          taskNo: {
+                            $set: json.data.taskNo,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+            }
+          );
+        }
+        if (
+          newTaskList[TaskListIndex].tasks[TaskIndex].checkList.length !== 0
+        ) {
+          newTaskList[TaskListIndex].tasks[TaskIndex].checkList.map(
+            (checkList, index) => {
+              newTaskList = update(newTaskList, {
+                [TaskListIndex]: {
+                  tasks: {
+                    [TaskIndex]: {
+                      checkList: {
+                        [index]: {
+                          taskNo: {
+                            $set: json.data.taskNo,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+            }
+          );
+        }
+
+        fetch(`${API_URL}/api/task/reOrder/sameList`, {
+          method: "post",
+          headers: API_HEADERS,
+          body: JSON.stringify(newTaskList[TaskListIndex].tasks),
+        });
+
+        // console.log(newTaskList);
+
+        this.setState({
+          taskList: newTaskList,
+        });
+      });
+  }else if(socketData.socketType === 'taskCheck'){
+    const TaskListIndex = this.state.taskList.findIndex(
+      (taskList) => taskList.taskListNo === socketData.taskListNo
+    );
+
+    const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.taskNo === socketData.taskId
+    );
+
+    if(this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "do"){
+
+      let doneIndex = [];
+
+      this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'done' ?  doneIndex.push(index) : null)
+      if(doneIndex[0] === undefined){
+        doneIndex.push(this.state.taskList[TaskListIndex].tasks.length)
+      }
+
+      let newTaskList = update(this.state.taskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [TaskIndex]: {
+              taskState: { $set: 'done' },
+            },
+          },
+        },
+      });
+
+      newTaskList[TaskListIndex].tasks.splice(doneIndex[0], 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+      
+      newTaskList[TaskListIndex].tasks.splice(TaskIndex, 1); 
+
+      let tasksLength = newTaskList[TaskListIndex].tasks.length
+      
+      newTaskList[TaskListIndex].tasks.map((task, index) => 
+      {
+        newTaskList = update(newTaskList, {
+            [TaskListIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: tasksLength },
+                },
+              },
+            },
+          })
+          tasksLength = tasksLength -1 
+        }
+
+      )
+
+      fetch(`${API_URL}/api/task/state`, {
+        method: "post",
+        headers: API_HEADERS,
+        body: JSON.stringify(newTaskList[TaskListIndex].tasks),
+      })
+
+      this.setState({
+        taskList: newTaskList,
+      });
+    }else{
+      let doIndex = 0;
+      let test = 0;
+
+      this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'do' ?  doIndex = index: test = test+1)
+
+      let newTaskList = update(this.state.taskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [TaskIndex]: {
+              taskState: { $set: 'do'},
+            },  
+          },
+        },
+      });
+
+      if(test ===  newTaskList[TaskListIndex].tasks.length){
+        newTaskList[TaskListIndex].tasks.splice(doIndex, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+      }else{
+        newTaskList[TaskListIndex].tasks.splice(doIndex+1, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+      }
+      
+      newTaskList[TaskListIndex].tasks.splice(TaskIndex+1, 1);  
+      
+      let tasksLength = newTaskList[TaskListIndex].tasks.length
+      
+      newTaskList[TaskListIndex].tasks.map((task, index) => 
+      {
+          newTaskList = update(newTaskList, {
+            [TaskListIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: tasksLength },
+                },
+              },
+            },
+          })
+          tasksLength = tasksLength -1 
+        }
+        )
+        
+        fetch(`${API_URL}/api/task/state`, {
+          method: "post",
+          headers: API_HEADERS,
+          body: JSON.stringify(newTaskList[TaskListIndex].tasks),
+        })
+
+        console.log(newTaskList[TaskListIndex].tasks)
+        
+      this.setState({
+        taskList: newTaskList,
+      });
+    }
+  }else if(socketData.socketType === 'taskDnD'){
+    const {destination, source, type} = socketData.result
+
+    // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
+    let startIndex = 0;
+    let finishIndex = 0;
+    this.state.taskList.map((taskList, index) =>
+      taskList.taskListNo === source.droppableId ? (startIndex = index) : null
+    );
+    this.state.taskList.map((taskList, index) =>
+      taskList.taskListNo === destination.droppableId
+        ? (finishIndex = index)
+        : null
+    );
+
+    // 위의 인덱스를 가지고 출발list, 도착list를 생성
+    const start = this.state.taskList[startIndex];
+    const finish = this.state.taskList[finishIndex];
+
+    /* 같은 목록에서의 Task 이동 */
+    if (start === finish) {
+      // tasks 가공
+      const newTasks = Array.from(start.tasks);
+      newTasks.splice(source.index, 1);
+      newTasks.splice(
+        destination.index,
+        0,
+        this.state.taskList[startIndex].tasks[source.index]
+      );
+
+      let newTaskList = update(this.state.taskList, {
+        [startIndex]: {
+          tasks: {
+            $set: newTasks,
+          },
+        },
+      });
+
+      newTasks.map((task, index) => {
+        if (source.index <= index && destination.index > index) {
+          newTaskList = update(newTaskList, {
+            [startIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: task.taskOrder + 1 },
+                },
+              },
+            },
+          });
+        }
+        if (source.index >= index && destination.index < index) {
+          newTaskList = update(newTaskList, {
+            [startIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: { $set: task.taskOrder - 1 },
+                },
+              },
+            },
+          });
+        }
+      });
+      newTaskList = update(newTaskList, {
+        [finishIndex]: {
+          tasks: {
+            [destination.index]: {
+              taskOrder: { $set: finish.tasks[destination.index].taskOrder },
+            },
+          },
+        },
+      });
+
+      fetch(`${API_URL}/api/task/reOrder/sameList`, {
+        method: "post",
+        headers: API_HEADERS,
+        body: JSON.stringify(newTaskList[startIndex].tasks),
+      });
+
+      this.setState({
+        taskList: newTaskList,
+      });
+      return;
+    }
+
+    /* 한 목록에서 다른 목록으로 이동 */
+
+    // 출발 tasks 가공
+    const startTasks = Array.from(start.tasks);
+    startTasks.splice(source.index, 1);
+
+    // 도착 tasks 가공
+    const finishTasks = Array.from(finish.tasks);
+    finishTasks.splice(
+      destination.index,
+      0,
+      this.state.taskList[startIndex].tasks[source.index]
+    );
+
+    let newTaskList = update(this.state.taskList, {
+      [startIndex]: {
+        tasks: {
+          $set: startTasks,
+        },
+      },
+      [finishIndex]: {
+        tasks: {
+          $set: finishTasks,
+        },
+      },
+    });
+
+    newTaskList[startIndex].tasks.map((task, index) => {
+      newTaskList = update(newTaskList, {
+        [startIndex]: {
+          tasks: {
+            [index]: {
+              taskOrder: {
+                $set: newTaskList[startIndex].tasks.length - index,
+              },
+            },
+          },
+        },
+      });
+    });
+
+    newTaskList[finishIndex].tasks.map((task, index) => {
+      newTaskList = update(newTaskList, {
+        [finishIndex]: {
+          tasks: {
+            [index]: {
+              taskOrder: {
+                $set: newTaskList[finishIndex].tasks.length - index,
+              },
+            },
+          },
+        },
+      });
+    });
+    const reOrder = {
+      startTaskListNo: newTaskList[startIndex].taskListNo,
+      endTaskListNo: newTaskList[finishIndex].taskListNo,
+      startTasks: newTaskList[startIndex].tasks,
+      endTasks: newTaskList[finishIndex].tasks,
+      reOrderTask: this.state.taskList[startIndex].tasks[source.index].taskNo,
+    };
+
+    fetch(`${API_URL}/api/task/reOrder/otherList`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(reOrder),
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+
   } else if(socketData.socketType === 'dateUpdate'){
         if(socketData.from === 'Invalid date'){
           socketData.from = undefined;
@@ -2262,9 +2315,8 @@ receiveKanban(socketData) {
     this.setState({
         taskList:newTaskList
       })
-  }
-  else{
-    console.log("!!!else!!!")
+  }else{
+    alert("뭔가 이상합니다. 소켓을 확인하세요!")
   }
 }
 

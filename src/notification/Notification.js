@@ -51,6 +51,7 @@ class Notification extends React.Component {
         this.state.notices.map(notice => 
             notice.messageCheck === 'N' ? (count +=1) : null
         )
+        console.log(this.state.notices)
         return (
             <div className="Notification" >
                 {/* 사이드바 */}
