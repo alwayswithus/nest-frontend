@@ -4,12 +4,15 @@ import Input from "@material-ui/core/Input";
 import { Button, InputLabel } from "@material-ui/core";
 import ApiService from '../../ApiService';
 
+import ReactLoading from 'react-loading';
+
 import "./pwFind.scss"
 
 const PwFind = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const setEmailText = e => {
     setEmail(e.target.value);
@@ -44,6 +47,8 @@ const PwFind = () => {
   const pwFind = e => {
     if(messageText!=="확인됨."){
       e.preventDefault();
+    }else{
+      setLoading(true);
     }
   };
   
@@ -77,11 +82,19 @@ const PwFind = () => {
             <br/>
             <br/>
             <p id={(messageText==="확인됨.") ? "doneText":"errorText"}> {messageText} <br/></p>
+
             {
               (messageText==="확인됨.") ?
-                  <Input className="pwFindItems" id="pwFindSubmit" type="submit" value="인증 메일 발송"/>
+                (
+                  (loading)? 
+                    <div style={{margin:"auto", height:"40px", width:"40px"}}>
+                      <ReactLoading type={'spinningBubbles'} color={'#000000'} height={40} width={40} />
+                    </div>
+                      :
+                    <Input className="pwFindItems" id="pwFindSubmit" type="submit" value="인증 메일 발송"/>
+                )
                 :
-                  <Button className="pwFindItems" id="Btn" onClick={mailCheck}>이메일 유효성 검사</Button>
+                <Button className="pwFindItems" id="Btn" onClick={mailCheck}>이메일 유효성 검사</Button>     
             }
 
 				  </form>
