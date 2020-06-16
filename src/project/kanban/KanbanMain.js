@@ -1602,8 +1602,6 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
     })
   }
 
-
-  
   // Project Setting button Click Function
   onProjectSetting(projectNo) {
 
@@ -2118,7 +2116,7 @@ receiveKanban(socketData) {
     return (
       <>
         <SockJsClient
-                url="http://localhost:8080/nest/socket"
+                url="http://192.168.1.223:8080/nest/socket"
                 topics={["/topic/all"]}
                 onMessage={this.receiveKanban.bind(this)}
                 ref={(client) => {
