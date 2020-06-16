@@ -48,8 +48,20 @@
                 margin:10% 0 5% 5%;
                 list-style: none;
                 .Member-list{
-                    width:300px;
-                    
+                    width:400px;
+                    .dropdown{
+                        position: relative;
+                        display: inline-block;
+                        margin-right: 20px;
+                        margin-bottom: 10px;
+                    }
+                    .dropdown .open{
+                        .dropdown-menu{
+                            display: block;
+                            width:207px;
+                            font-size: 1.25rem;
+                        }
+                    }
                     .Member{
                         border:none;
                         border-radius: 5px;
