@@ -47,7 +47,7 @@ export default class TransferText extends React.Component {
 
     render() {
         return (
-            <div className="TransferText">
+            <div className="TransferText02">
                 <div className="transfer">
                     <img className="img-authUser" src={window.sessionStorage.getItem("authUserPhoto")}
                         data-tip={window.sessionStorage.getItem("authUserName")}

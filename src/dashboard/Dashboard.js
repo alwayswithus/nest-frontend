@@ -23,7 +23,7 @@ export default class Dashboard extends React.Component {
 
   constructor() {
     super(...arguments);
-    
+
     this.state = {
       projects: null,                                               // projects data
       users: null,                                                  // user data
@@ -55,7 +55,7 @@ export default class Dashboard extends React.Component {
       loading: false
     }
 
-    const {history} = this.props;
+    const { history } = this.props;
     // 세션 체크...
     if (!sessionStorage.getItem("authUserNo")) {
       history.push("/nest/");
@@ -106,11 +106,12 @@ export default class Dashboard extends React.Component {
 
       let socketData = {
         projectNo: projectNo,
-        userNo: userNo,
-        socketType: "userDelete"
+        member,
+        socketType: "userDelete",
+        newProject: newProject[projectIndex]
       }
 
-      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+      this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
     }
     else {
       fetch(`${API_URL}/api/user/add/`, {
@@ -126,8 +127,6 @@ export default class Dashboard extends React.Component {
           }
         }
       })
-      
-
 
       let socketData = {
         projectNo: projectNo,
@@ -136,7 +135,7 @@ export default class Dashboard extends React.Component {
         newProject: newProject[projectIndex]
       }
 
-      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+      this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
 
     }
   }
@@ -152,7 +151,6 @@ export default class Dashboard extends React.Component {
       userPhoto: userPhoto,
       roleNo: 3
     }
-
     let members;
 
     if (this.state.members[memberIndex] && this.state.members[memberIndex].userNo === userNo) {
@@ -186,24 +184,19 @@ export default class Dashboard extends React.Component {
       (member) => member.userNo === memberNo
     );
 
-    let deleteMemberProject = update(this.state.projects, {
-      [projectIndex]: {
-        members: {
-          $splice: [[memberIndex, 1]]
-        }
-      }
-    })
-
     fetch(`${API_URL}/api/user/delete`, {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(userProject)
     })
 
-    this.setState({
-      projects: deleteMemberProject,
-      project: deleteMemberProject[projectIndex]
-    })
+    let socketData = {
+      projectNo: projectNo,
+      userNo: memberNo,
+      socketType: "memberDelete"
+    }
+
+    this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
   }
 
   // CallBack Change State Function
@@ -229,14 +222,13 @@ export default class Dashboard extends React.Component {
           socketType: "stateChange"
         }
 
-        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
   // CallBack Change Title Function
   callbackProjectTitleChange(projectNo, title) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
-
+    
     let project = {
       projectNo: projectNo,
       projectTitle: title
@@ -249,23 +241,20 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectTitle: { $set: json.data.projectTitle }
-          }
-        })
+        
+        let socketData = {
+          projectNo: projectNo,
+          projectTitle: json.data.projectTitle,
+          socketType: "titleChange"
+        }
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
   // CallBack Chnage Desc Function
   callbackProjectDescChange(projectNo, desc) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
-
+    
     let project = {
       projectNo: projectNo,
       projectDesc: desc
@@ -278,16 +267,14 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectDesc: { $set: json.data.projectDesc }
-          }
-        })
+        
+        let socketData = {
+          projectNo: projectNo,
+          projectDesc: json.data.projectDesc,
+          socketType: "descChange"
+        }
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
@@ -330,7 +317,7 @@ export default class Dashboard extends React.Component {
           socketType: "inviteUser",
         }
 
-        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
 
         this.setState({
           alerts: [...this.state.alerts, newAlert]
@@ -358,32 +345,19 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            members: {
-              [memberIndex]: {
-                roleNo: { $set: json.data.roleNo }
-              }
-            }
-          }
-        })
+        let socketData = {
+          projectNo: projectNo,
+          userNo: userNo,
+          roleNo: json.data.roleNo,
+          socketType: "roleChange"
+        }
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
   // CallBack Project Delete Function
   callbackProjectDelete(projectNo, userNo) {
-
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
-
-    const memberIndex = this.state.project.members.findIndex(
-      (member) => member.userNo === userNo
-    );
-
     let project = {
       projectNo: projectNo,
       userNo: userNo,
@@ -395,31 +369,21 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(project)
     })
-    .then(response => response.json())
-    .then(json => {
-        let deleteProject = update(this.state.projects, {
-          [projectIndex]: {
-          members: {
-            [memberIndex]: {
-              roleNo: {$set : 1}
-            }
-          }
+      .then(response => response.json())
+      .then(json => {
+        let socketData = {
+          projectNo: projectNo,
+          userNo: userNo,
+          sessionUserNo: window.sessionStorage.getItem("authUserNo"),
+          socketType: "projectDelete"
         }
-      })
 
-      deleteProject = update(this.state.projects, {
-        $splice: [[projectIndex, 1]]
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
-
-      this.setState({
-        projects: deleteProject
-      })
-    })
   }
 
   // CallBack Not Transfer Role Project Delete Function
   callbackProjectNotTransferDelete(projectNo) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
 
     let project = {
       projectNo: projectNo,
@@ -431,21 +395,21 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(project)
     })
-    .then(response => response.json())
-    .then(json => {
-      let deleteProject = update(this.state.projects, {
-        $splice: [[projectIndex, 1]]
+      .then(response => response.json())
+      .then(json => {
+
+        let socketData = {
+          projectNo: projectNo,
+          userNo: sessionStorage.getItem("authUserNo"),
+          socketType: "projectNotTransferDelete"
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
-  
-      this.setState({
-        projects: deleteProject
-      })
-    })
   }
 
   // CallBack Project Forever Delete Function
   callbackProjectForeverDelete(projectNo) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
 
     let project = {
       projectNo: projectNo
@@ -456,16 +420,15 @@ export default class Dashboard extends React.Component {
       headers: API_HEADERS,
       body: JSON.stringify(project)
     })
-    .then(response => response.json())
-    .then(json => {
-      let deleteProject = update(this.state.projects, {
-        $splice: [[projectIndex, 1]]
+      .then(response => response.json())
+      .then(json => {
+        let socketData = {
+          projectNo: projectNo,
+          socketType: "foreverDelete"
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
-  
-      this.setState({
-        projects: deleteProject
-      })
-    })
   }
 
   // State Change Function
@@ -490,7 +453,7 @@ export default class Dashboard extends React.Component {
           socketType: "stateChange"
         }
 
-        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
@@ -532,7 +495,15 @@ export default class Dashboard extends React.Component {
     let regDate = moment(new Date()).format('YYYY-MM-DD');
     let projectWriter = window.sessionStorage.getItem("authUserNo");
     let projectWriterName = window.sessionStorage.getItem("authUserName");
-    let members = this.state.members;
+    let members = [
+      ...this.state.members,
+        {
+          roleNo: 1,
+          userName: sessionStorage.getItem("authUserName"),
+          userNo: sessionStorage.getItem("authUserNo"),
+          userPhoto: sessionStorage.getItem("authUserPhoto")
+        }
+    ];
 
     let project = {
       projectNo: null,
@@ -555,13 +526,12 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProjects = update(this.state.projects, {
-          $push: [json.data]
-        });
+        let socketData = {
+          newProject: json.data,
+          socketType: "projectAdd"
+        }
 
-        this.setState({
-          projects: newProjects
-        })
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
 
     document.getElementById('add-project').style.display = 'none'
@@ -770,7 +740,7 @@ export default class Dashboard extends React.Component {
       null,
       projectNo
     )
-  
+
     if (from === 'Invalid date') {
       from = undefined;
     }
@@ -805,121 +775,382 @@ export default class Dashboard extends React.Component {
       body: JSON.stringify(newProject[projectIndex])
     })
 
-    this.clientRef.sendMessage("/app/all", JSON.stringify(socketData))
+    this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
   }
 
   receiveDashBoard(socketData) {
-    if(socketData.socketType === "stateChange") {
+    if (socketData.socketType === "stateChange") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
 
-      let newProject = update(this.state.projects, {
-        [projectIndex]: {
-          projectState: { $set: socketData.projectState}
-        }
-      })
-
-      this.setState({
-        projects: newProject,
-        project: newProject[projectIndex]
-      })
-    }
-    else if(socketData.socketType === "dateChange") {
-      const projectIndex = this.state.projects.findIndex(project =>
-        project.projectNo === socketData.projectNo)
-
-      let newProject = update(this.state.projects, {
-        [projectIndex]: {
-          projectStart: {
-            $set: socketData.from
-          },
-          projectEnd: {
-            $set: socketData.to
-          }
-        }
-      })
-
-      this.setState({
-        projects: newProject,
-        project: newProject[projectIndex]
-      })
-    }
-    else if(socketData.socketType === "inviteUser") {
-
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
-
-      let newProject = update(this.state.projects, {
-        [projectIndex]: {
-          members: {
-            $push: [socketData.data]
-          }
-        }
-      })
-
-      let users = update(this.state.users, {
-        $push: [socketData.data]
-      })
-
-      this.setState({
-        users: users,
-        projects: newProject,
-        project: newProject[projectIndex],
-        loading: false
-      })
-    }
-    else if(socketData.socketType === "userDelete") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
-      const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo);
-
-      if(this.state.project.length === 0) {
-        let newProject = update(this.state.projects, {
-          $splice: [[projectIndex, 1]]
-        })
-        this.setState({
-          projects: newProject
-        })
-      }
-
-      if(this.state.project.length !== 0) {
-        
+      if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
           [projectIndex]: {
-            members: {
-              $splice: [[memberIndex, 1]]
-            }
+            projectState: { $set: socketData.projectState }
           }
         })
-        
+  
         this.setState({
           projects: newProject,
           project: newProject[projectIndex]
         })
       }
     }
+    else if (socketData.socketType === "dateChange") {
+      const projectIndex = this.state.projects.findIndex(project =>
+        project.projectNo === socketData.projectNo)
 
-    else if(socketData.socketType === "userAdd") {
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectStart: {
+              $set: socketData.from
+            },
+            projectEnd: {
+              $set: socketData.to
+            }
+          }
+        })
+  
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      }
+    }
+    else if (socketData.socketType === "inviteUser") {
+
       const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
-      if(projectIndex == -1) {       
+
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            members: {
+              $push: [socketData.data]
+            }
+          }
+        })
+  
+        let users = update(this.state.users, {
+          $push: [socketData.data]
+        })
+  
+        this.setState({
+          users: users,
+          projects: newProject,
+          project: newProject[projectIndex],
+          loading: false
+        })
+      }
+    }
+    else if (socketData.socketType === "userDelete") {
+      if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        
+        if(projectIndex !== -1) {
+          let newProject = update(this.state.projects, {
+            $splice: [[projectIndex, 1]]
+          })
+  
+          this.setState({
+            projects: newProject
+          })
+  
+          document.getElementById('projectSet').style.display = 'none'
+        }
+      }
+      else {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+      
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.member.userNo);
+        
+          let newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $splice: [[memberIndex, 1]]
+              }
+            }
+          })
+  
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex]
+          })
+        }
+      }
+    }
+
+    else if (socketData.socketType === "userAdd") {
+      if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
         let newProject = update(this.state.projects, {
           $push: [socketData.newProject]
         })
-
         this.setState({
           projects: newProject
         })
       }
       else {
-        let newProject = update(this.state.projects, {
-          [projectIndex] : {
-            members: {
-              $push: [socketData.member]
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+        
+        if(projectIndex !== -1) {
+          let newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $push: [socketData.member]
+              }
             }
+          })
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex]
+          })
+        } 
+      }
+    }
+
+    else if (socketData.socketType === "memberDelete") {
+
+      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+
+        if(projectIndex !== -1) {
+          let newProject = update(this.state.projects, {
+            $splice: [[projectIndex, 1]]
+          })
+  
+          this.setState({
+            projects: newProject
+          })
+  
+          document.getElementById('projectSet').style.display = 'none'
+        }  
+      }
+      else {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+         
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+        
+          let deleteMemberProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $splice: [[memberIndex, 1]]
+              }
+            }
+          })
+  
+          this.setState({
+            projects: deleteMemberProject,
+            project: deleteMemberProject[projectIndex]
+          })
+        }
+      }
+    }
+    else if (socketData.socketType === "roleChange") {
+
+      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+
+          let newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                [memberIndex]: {
+                  roleNo: { $set: socketData.roleNo }
+                }
+              }
+            }
+          })
+  
+          let userProject = {
+            projectNo: newProject[projectIndex].projectNo,
+            userNo: socketData.userNo,
+            roleNo: socketData.roleNo
+          }
+  
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex],
+            userProject: userProject
+          })
+        }
+      }
+      else {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+
+          let newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                [memberIndex]: {
+                  roleNo: { $set: socketData.roleNo }
+                }
+              }
+            }
+          })
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex],
+          })
+        }
+      }
+    }
+
+    else if (socketData.socketType === "projectDelete") {
+      if (sessionStorage.getItem("authUserNo") === socketData.sessionUserNo) {
+        
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+
+        if(projectIndex !== -1) {
+          let deleteProject = update(this.state.projects, {
+            $splice: [[projectIndex, 1]]
+          })
+  
+          this.setState({
+            projects: deleteProject
+          })
+        }  
+      }
+      else {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.project.members.findIndex(member => member.userNo === socketData.userNo);
+          const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.sessionUserNo)
+
+          let deleteProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                [memberIndex]: {
+                  roleNo: { $set: 1 }
+                }
+              }
+            }
+          })
+  
+          deleteProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $splice: [[sessionMemberIndex, 1]]
+              }
+            }
+          })
+  
+          let userProject = {
+            projectNo: socketData.projectNo,
+            userNo: socketData.userNo,
+            roleNo: deleteProject[projectIndex].members[memberIndex].roleNo
+          }
+  
+          this.setState({
+            projects: deleteProject,
+            project: deleteProject[projectIndex],
+            userProject: userProject
+          })
+        }
+      }
+    }
+
+    else if (socketData.socketType === "projectNotTransferDelete") {
+      if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+        let deleteProject = update(this.state.projects, {
+          $splice: [[projectIndex, 1]]
+        })
+
+        this.setState({
+          projects: deleteProject
+        })
+      }
+      else {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+        
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo)
+
+          let deleteProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $splice: [[memberIndex, 1]]
+              }
+            }
+          })
+  
+          this.setState({
+            projects: deleteProject,
+            project: deleteProject[projectIndex]
+          })
+        }
+      }
+    }
+
+    else if(socketData.socketType === "foreverDelete") {
+
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+
+      if(projectIndex !== -1) {
+        let deleteProject = update(this.state.projects, {
+          $splice: [[projectIndex, 1]]
+        })
+  
+        this.setState({
+          projects: deleteProject
+        }) 
+  
+        document.getElementById('projectSet').style.display = 'none'
+      }
+    }
+
+    else if(socketData.socketType === "projectAdd") {
+      console.log(socketData.newProject.members);
+      const memberIndex = socketData.newProject.members.findIndex(member => member.userNo == sessionStorage.getItem("authUserNo"))
+      if(memberIndex !== -1) {
+        let newProjects = update(this.state.projects, {
+          $push: [socketData.newProject]
+        });
+  
+        this.setState({
+          projects: newProjects
+        })
+      }
+    }
+
+    else if(socketData.socketType === "titleChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectTitle: { $set: socketData.projectTitle }
           }
         })
+  
         this.setState({
           projects: newProject,
           project: newProject[projectIndex]
         })
       }
+    }
+
+    else if(socketData.socketType === "descChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectDesc: { $set: socketData.projectDesc }
+          }
+        })
+
+        this.setState({
+          projects: newProject,
+          project: newProject[projectIndex]
+        })
+      } 
     }
   }
 
@@ -928,14 +1159,14 @@ export default class Dashboard extends React.Component {
     return (
       <div className="Dashboard">
         <SockJsClient
-                url="http://localhost:8080/nest/socket"
-                topics={["/topic/all"]}
-                onMessage={this.receiveDashBoard.bind(this)}
-                ref={(client) => {
-                  this.clientRef = client
-                }}
-             />
-        
+          url="http://localhost:8080/nest/socket"
+          topics={["/topic/dashboard/all"]}
+          onMessage={this.receiveDashBoard.bind(this)}
+          ref={(client) => {
+            this.clientRef = client
+          }}
+        />
+
         <AlertList
           position={this.state.position}
           alerts={this.state.alerts}
@@ -1084,10 +1315,10 @@ export default class Dashboard extends React.Component {
                               project.projectState === "계획됨" ?
                                 <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100"
                                   aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
-                                project.projectState === "상태없음" ? 
-                                <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100"
-                                aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
-                                ""}
+                                project.projectState === "상태없음" ?
+                                  <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100"
+                                    aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
+                                  ""}
                         </div>
                       </div>
                     </Link>
@@ -1202,27 +1433,26 @@ export default class Dashboard extends React.Component {
                                   </div>
                                   <div className="card-footer">
                                     <hr />
-                                    {this.state.isMemberEmailValid ? 
+                                    {this.state.isMemberEmailValid ?
 
-                                    this.state.loading ? 
-                                    <div style={{textAlign: "center"}}><img style={{height: "25px"}} src="../assets/images/ajax-loader.gif" /></div> :
-                                    <span>
-                                      <input type="button" id="add-member-invite"
-                                      className="btn btn-outline-primary btn-rounded"
-                                      onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                      value="멤버 초대하기"/>
-                                    </span>
+                                      this.state.loading ?
+                                        <div style={{ textAlign: "center" }}><img style={{ height: "25px" }} src="../assets/images/ajax-loader.gif" /></div> :
+                                        <span>
+                                          <input type="button" id="add-member-invite"
+                                            className="btn btn-outline-primary btn-rounded"
+                                            onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                            value="멤버 초대하기" />
+                                        </span>
                                       :
-                                    <span>
-                                      <input type="button" id="add-member-invite"
-                                      className="btn btn-outline-primary btn-rounded"
-                                      onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
-                                      value="멤버 초대하기" disabled />
-                                    </span>}
+                                      <span>
+                                        <input type="button" id="add-member-invite"
+                                          className="btn btn-outline-primary btn-rounded"
+                                          onClick={this.onInviteMemberButton.bind(this, this.state.inviteMemberEmail, this.state.inviteMemberName)}
+                                          value="멤버 초대하기" disabled />
+                                      </span>}
                                   </div>
                                 </div>
                               </div> : ""}
-
                           </div>
                         </div>
 
