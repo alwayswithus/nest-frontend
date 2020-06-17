@@ -30,12 +30,12 @@ class TaskInnerContents extends Component {
   }
 
   // task 완료 체크 박스
-  doneTask(event) {
+  doneTask(event) { 
     this.props.taskCallbacks.doneTask(
       this.props.taskListNo,
       this.props.task.taskNo,
-      this.props.task.taskState,
-      this.props.index
+      // this.props.task.taskState,
+      // this.props.index
       // this.props.firstTrueIndex
     );
     this.noneClick(event);
@@ -120,25 +120,28 @@ class TaskInnerContents extends Component {
               {taskItem.taskState === "done" ? (
                 // 완료된 task
                 <>
-                {this.props.authUserRole === 1? <input
+                {this.props.authUserRole === 1
+                  ? <input
                     type="checkbox"
                     className="doneCheck"
-                    defaultChecked
+                    checked={true}
                     onClick={this.doneTask.bind(this)}
                   ></input>
-                   : null}
+                  : null}
                   &nbsp;
                   <del>{taskItem.taskContents}</del>
                 </>
               ) : (
                 // 미완료된 task
                 <>
-                  {this.props.authUserRole === 1? <input
+                  {this.props.authUserRole === 1
+                    ? <input
                     type="checkbox"
                     className="doneCheck"
+                    checked={false}
                     onClick={this.doneTask.bind(this)}
                   ></input>
-                   : null}
+                    : null}   
                   &nbsp;
                   <label>{taskItem.taskContents}</label>
                 </>
