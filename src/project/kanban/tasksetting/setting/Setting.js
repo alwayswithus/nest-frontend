@@ -13,7 +13,7 @@ import TaskMember from './TaskMember';
 import moment, { now }  from 'moment';
 
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     'Content-Type' : 'application/json'
 }

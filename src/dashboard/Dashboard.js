@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
