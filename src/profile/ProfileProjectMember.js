@@ -44,6 +44,7 @@ class ProfileProjectMember extends Component {
                         <div className="card-body">
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
+                                {projectMembers && projectMembers.map(member => 
                                     <TransferMember 
                                         onUpdateTransferImg={this.props.onUpdateTransferImg}
                                         onClose={this.props.onClose}
