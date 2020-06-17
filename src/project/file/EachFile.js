@@ -80,7 +80,7 @@ class EachFile extends Component {
                                     width: '50%',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis'}}>
-                            {this.props.projectFile.tasklistName} > {this.props.projectFile.taskContents}
+                            {this.props.projectFile.tasklistName} &gt; {this.props.projectFile.taskContents}
                         </div>
                         <ReactTooltip />
                     </Link>

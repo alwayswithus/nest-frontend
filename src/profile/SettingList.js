@@ -256,18 +256,18 @@ class SettingList extends Component {
                         한 번 삭제된 계정은 다시 복구할 수 없습니다. 계정이 삭제되면, 현재 계정에서 생성된 모든 데이터에 더이상 엑세스할 수 없습니다. 
                         삭제 후, 다시 이용하고자 한다면 새로 가입해주셔야합니다.
                         </div>
-                                <div className="account-delete">
-                                    <button className = "delete" onClick = {this.onModalOpen.bind(this)}><b>계정 삭제하기</b></button>
-                                    {this.state.open ? 
-                                         <Dialog open={this.state.open} onClose={this.onModalOpen.bind(this)}>
-                                            <DialogActions style={{ display: "grid" }}>
-                                                <DeleteModal 
-                                                    onClose={this.onModalOpen.bind(this)}
-                                                /> 
-                                            </DialogActions>    
-                                        </Dialog>: "" }
-                                </div>
-                    </div>
+                            <div className="account-delete">
+                                <button className = "delete" onClick = {this.onModalOpen.bind(this)}><b>계정 삭제하기</b></button>
+                                {this.state.open ? 
+                                    <Dialog open={this.state.open} onClose={this.onModalOpen.bind(this)}>
+                                        <DialogActions style={{ display: "grid" }}>
+                                            <DeleteModal 
+                                                onClose={this.onModalOpen.bind(this)}
+                                            /> 
+                                        </DialogActions>    
+                                    </Dialog>: "" }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

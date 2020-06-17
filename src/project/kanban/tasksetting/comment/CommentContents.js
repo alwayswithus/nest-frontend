@@ -69,6 +69,7 @@ class commentContents extends Component {
     }
     render() {
         const today = new Date();
+        console.log(this.props.comment.originName)
         return (
             <Fragment>
                 <div key={this.props.comment.commentNo} style={{ height: '20px' }} />
@@ -117,7 +118,19 @@ class commentContents extends Component {
                         </ul>
                     }
                     {this.props.comment.fileNo === null ? null :
-                        <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src={`${API_URL}${this.props.comment.filePath}`} alt={this.props.comment.originName} ></img>}
+                        this.props.comment.originName.split('.')[1] === 'csv' || this.props.comment.originName.split('.')[1] === 'xlxs' ?
+                            <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src='/assets/images/excel.png' alt={this.props.comment.originName} ></img> :
+                                <>{this.props.comment.originName.split('.')[1] === 'txt' ?
+                                    <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }}
+                                        src='/assets/images/txt.png'
+                                        alt={this.props.comment.originName}></img> :
+                                <>{this.props.comment.originName.split('.')[1] === 'png' || this.props.comment.originName.split('.')[1] === 'jpg' ?
+                                <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src={`${API_URL}${this.props.comment.filePath}`} alt={this.props.comment.originName} ></img>
+                                :<img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src='/assets/images/attach.png' alt={this.props.comment.originName}></img>
+                            }</>
+                        }</>
+                    }
+                        
                     {this.state.change ?
                         <p style={{
                             border: '4px solid rgb(39, 182, 186)',

@@ -1,44 +1,33 @@
 import React, {Component} from 'react'
 import './TransferText.scss';
 import ProfileProjectMember from './ProfileProjectMember';
-class TransferText extends Component {
-    
-    constructor(){
-        super(...arguments)
-        this.state = {
-            open:false,
-            projectNo:''
-        }
-    }
+import TransferAccount from './TransferAccount';
 
-    onClickProjectTitle(projectNo) {
-        this.setState({
-            open:!this.state.open,
-            projectNo:projectNo
-        })
-    }
+class TransferText extends Component {
 
 
     render(){
+        console.log(this.props.projects)
         return(
             <div className="TransferText">
-                <span style={{fontSize:'0.5rem'}}>다음은 소유권 이전이 필요합니다. 결제 상태는 그대로 유지됩니다.</span>
-                <hr style={{border:'1px solid #DFDFDF',marginTop: '9px'}}/>
                 <div className="transfer">
                     <div>
-                        {this.props.userProject&&this.props.userProject.map(project => 
-                         project.roleNo == '1' ? 
-                            <div key={project.projectNo} className="project-title-transfer" onClick={this.onClickProjectTitle.bind(this, project.projectNo)}>{project.projectTitle}</div>
-                            : <div className="project-title">{project.projectTitle}</div>
+                        {this.props.projects&&this.props.projects.map(project => 
+                         project.roleNo != '1' ? 
+                         <div className="project-title">{project.projectTitle}</div>
+                            : null
                         )}
-                        {this.state.open ? 
-                        <ProfileProjectMember 
-                            projectNo={this.state.projectNo}
-                            onClose={this.onClickProjectTitle.bind(this)}
-                        /> : null}
+                    </div>
+                    <div>
+                        {this.props.projects&&this.props.projects.map(project => 
+                            <TransferAccount 
+                                deleteModalCallbacks={this.props.deleteModalCallbacks}
+                                project = {project}
+                            />
+                        )}
                     </div>
                     <i className="fas fa-quote-left"></i>
-                    {this.props.userProject.map(project => 
+                    {this.props.projects.map(project => 
                         project.roleNo == '1' ? 
                             <div key={project.projectNo} className="role-project-title">{project.projectTitle}, </div> : null
                     )}

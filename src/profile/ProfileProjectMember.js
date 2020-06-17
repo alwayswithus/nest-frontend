@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './ProfileProjectMember.scss';
-import ApiService from '../ApiService';
 import TransferMember from './TransferMember';
 
 class ProfileProjectMember extends Component {
@@ -9,7 +8,7 @@ class ProfileProjectMember extends Component {
         super(...arguments)
         this.state = {
             memberKeyword: "",
-            projectMembers:[]
+            userRole:''
         }
     }
 
@@ -31,6 +30,7 @@ class ProfileProjectMember extends Component {
     }
 
     render() {
+        const projectMembers = this.props.project.members
         return (
             <div className="ProfileProjectMember">
                 {/* Add Project Member select */}
@@ -44,32 +44,13 @@ class ProfileProjectMember extends Component {
                         <div className="card-body">
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
-                                {this.state.projectMembers && this.state.projectMembers.map(member => 
-                                    sessionStorage.getItem("authUserNo") === member.userNo ? 
-                                        <>
-                                        <div className="invite-card-member" key={member.userNo}
-                                            id={member.userNo}>
-                                        <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
-                                        <span>{member.userName}</span>
-                                         </div>
-                                         <div class="dropdown">
-                                         <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                             {member.roleNo === 1 ? "전체엑세스" : member.roleNo === 2 ? "제한엑세스" : "통제엑세스"}
-                                         <span class="caret"></span></button>
-                                         <ul class="dropdown-menu">
-                                             <li><a href="#">전체엑세스</a></li>
-                                             <li><a href="#">제한엑세스</a></li>
-                                             <li><a href="#">통제엑세스</a></li>
-                                         </ul>
-                                     </div></>: 
-                                        null
-                            
-                                )}
-                                 {this.state.projectMembers && this.state.projectMembers.map(member => 
                                     <TransferMember 
-                                    key={member.userNo}
-                                    member={member}
-                                />
+                                        onUpdateTransferImg={this.props.onUpdateTransferImg}
+                                        onClose={this.props.onClose}
+                                        key={member.userNo}
+                                        member={member}
+                                        deleteModalCallbacks={this.props.deleteModalCallbacks}
+                                    />
                                 )}
             
                             </div>
@@ -77,15 +58,6 @@ class ProfileProjectMember extends Component {
                     </div>
                 </div>
             </div>
-        )
-    }
-
-    componentDidMount(){
-        ApiService.fetchProjectMember(this.props.projectNo)
-        .then(response=>
-            this.setState({
-                projectMembers:response.data.data
-            })
         )
     }
 }
