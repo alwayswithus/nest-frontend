@@ -147,8 +147,17 @@ class ProjectSetting extends Component {
 
     // Project Esc Function
     handleClose() {
-        const bool = this.props.project.members.some(member => member.roleNo === 1)
-        if (bool) {
+        let members = []
+        this.props.project.members.map(member => {
+            if(member.userNo == sessionStorage.getItem("authUserNo")) {
+
+            }
+            else {
+                members.push(member.roleNo);
+            }
+        })
+        const bool = members.indexOf(1);
+        if (bool !== -1) {
             this.setState({
                 isExistRoleOne: false,
                 Exist: false,
@@ -158,7 +167,7 @@ class ProjectSetting extends Component {
             this.props.callbackProjectSetting.projectNotTransferDelete(this.props.project.projectNo);
             this.props.callbackProjectSetting.close(true);
         }
-        else {
+        else if(bool === -1) {
             this.setState({
                 isExistRoleOne: true,
                 roleTransferCloseButton: false
