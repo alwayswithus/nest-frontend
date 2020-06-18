@@ -1746,6 +1746,8 @@ callbackProjectForeverDelete(projectNo) {
 }
 
 editTaskListName(newTaskList){
+  const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === newTaskList.taskListNo);
+  console.log(this.state.taskList[taskListIndex])
   
   fetch(`${API_URL}/api/taskList/editName`, {
     method: "post",
@@ -2560,7 +2562,7 @@ receiveKanban(socketData) {
       <>
         <SockJsClient
                 url={`${API_URL}/socket`}
-                topics={["/topic/all"]}
+                topics={[`/topic/all/${sessionStorage.getItem("authUserNo")}`]}
                 onMessage={this.receiveKanban.bind(this)}
                 ref={(client) => {
                   this.clientRef = client
