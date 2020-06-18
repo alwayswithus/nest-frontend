@@ -1,7 +1,8 @@
-import React ,{useState} from "react";
+import React, { useState } from "react";
 import { Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-import KanbanMain from "./project/kanban/KanbanMain";
+
+import Main from "./Main";
 
 import Login from "./user/login/Login";
 import SignUp from "./user/signup/SignUp";
@@ -22,8 +23,9 @@ import Dashboard from "./dashboard/Dashboard";
 import Profile from "./profile/Profile";
 import Notification from "./notification/Notification";
 import ProfileSetting from "./profile/ProfileSetting";
-import ProjectSetting from "./dashboard/projectsetting/ProjectSetting";
+// import ProjectSetting from "./dashboard/projectsetting/ProjectSetting";
 
+import KanbanMain from "./project/kanban/KanbanMain";
 import Calendar from "./calendar/Calendar";
 
 import "./App.scss";
@@ -34,118 +36,120 @@ const API_HEADERS = {
 };
 
 function App() {
- 
+
   const [url, setUrl] = useState(window.sessionStorage.getItem("authUserBg"));
 
   const callbackChangeBackground = (url) => {
-      setUrl(url)
+    setUrl(url)
 
-      let authUser = {
-        userNo: window.sessionStorage.getItem("authUserNo"),
-        userBg: url,
-      };
-  
-      fetch(`${API_URL}/api/user/backgroundChange`, {
-        method: "post",
-        headers: API_HEADERS,
-        body: JSON.stringify(authUser),
-      });
+    let authUser = {
+      userNo: window.sessionStorage.getItem("authUserNo"),
+      userBg: url,
+    };
 
-      sessionStorage.setItem("authUserBg", url)
-      
+    fetch(`${API_URL}/api/user/backgroundChange`, {
+      method: "post",
+      headers: API_HEADERS,
+      body: JSON.stringify(authUser),
+    });
+
+    sessionStorage.setItem("authUserBg", url)
+
   }
 
   return (
     <BrowserRouter>
-    
-    {/* 오류 페이지 */}
-    <Route path="/nest/errors" exact component={Errors}/>
 
-    {/* 메인 */}
-    <Route  path="/nest" exact component={Login} />
+      <div className="App" 
+            style={{ backgroundImage: `url(${url})` }}>
 
-    {/* 회원 */}
-    <Route path="/nest/signup" exact component={SignUp} />
-    <Route path="/nest/signupdone" exact component={SignUpDone} />
+        {/* 오류 페이지 */}
+        <Route path="/nest/errors" exact component={Errors} />
 
-    <Route path="/nest/pwfind" exact component={PwFind} />
-    <Route path="/nest/pwfinddone" exact component={PwFindDone} />
-    
-    <Route path="/nest/sendmail/:mode" component={SendMail} />
-    <Route path="/nest/signup/emailConfirm/:keys" component={SignUpEmail} />
-    <Route path="/nest/pwfind/emailConfirm/:keys" component={PwFindEmail} />
+        {/* 메인 */}
+        <Route path="/" exact component={Main} />
+        <Route path="/nest" exact component={Main} />
 
-      <div className="App" style={{ backgroundImage: `url(${url})` }}>
+        {/* 로그인 */}
+        <Route path="/nest/login" exact component={Login} />
+
+        {/* 회원 */}
+        <Route path="/nest/signup" exact component={SignUp} />
+        <Route path="/nest/signupdone" exact component={SignUpDone} />
+
+        <Route path="/nest/pwfind" exact component={PwFind} />
+        <Route path="/nest/pwfinddone" exact component={PwFindDone} />
+
+        <Route path="/nest/sendmail/:mode" component={SendMail} />
+        <Route path="/nest/signup/emailConfirm/:keys" component={SignUpEmail} />
+        <Route path="/nest/pwfind/emailConfirm/:keys" component={PwFindEmail} />
 
         {/* 프로필설정 */}
-        <Route 
-          path="/nest/profile" 
-          exact 
-          render={(match) => 
-            <Profile {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+        <Route
+          path="/nest/profile"
+          exact
+          render={(match) =>
+            <Profile {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
-        <Route 
+        <Route
           path="/nest/profileset"
-          exact 
-          render={(match) => 
-            <ProfileSetting {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          exact
+          render={(match) =>
+            <ProfileSetting {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
 
         {/* 알림설정 */}
         <Route path="/nest/notification"
-          exact 
-          render={(match) => 
-            <Notification {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          exact
+          render={(match) =>
+            <Notification {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
 
         {/*칸반보드 */}
-        <Route 
+        <Route
           path="/nest/dashboard/:projectNo/kanbanboard"
-          render={(match) => 
-            <KanbanMain {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          render={(match) =>
+            <KanbanMain {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
 
         {/* 대시보드 */}
         <Route path="/nest/dashboard"
-          exact 
-          render={(match) => 
-            <Dashboard {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          exact
+          render={(match) =>
+            <Dashboard {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
-        
+
         {/* 간트차트 */}
-        <Route 
+        <Route
           path="/nest/dashboard/:projectNo/timeline"
-          render={(match) => 
-            <Gantt {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+          render={(match) =>
+            <Gantt {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
 
         {/* 파일 */}
-        <Route 
-          path="/nest/dashboard/:projectNo/file" 
-          exact 
-          render={(match) => 
-            <File {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+        <Route
+          path="/nest/dashboard/:projectNo/file"
+          exact
+          render={(match) =>
+            <File {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
-
-        {/* 프로젝트 세팅
-        <Route path="/nest/projectset" exact component={ProjectSetting} /> */}
 
         {/* 캘린더 */}
-        <Route 
-          path="/nest/calendar" 
-          exact 
-          render={(match) => 
-            <Calendar {...match} callbackChangeBackground={{change: callbackChangeBackground}}/> 
+        <Route
+          path="/nest/calendar"
+          exact
+          render={(match) =>
+            <Calendar {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
         />
-      
+
       </div>
     </BrowserRouter>
   );
