@@ -28,7 +28,8 @@ export default class File extends React.Component {
             count: null,
             visible: false,
             loading: false,
-            rotatable: false
+            rotatable: false,
+            history:[]
         }
     }
 
@@ -152,17 +153,16 @@ export default class File extends React.Component {
 
     render() {
 
-        if (this.state.count === 0)
-            return <p>There are no movies in the database.</p>
+        // if (this.state.count === 0)
+        //     return <p>There are no movies in the database.</p>
 
         const files = paginate(this.state.projectFiles, this.state.currentPage, this.state.pageSize); // 페이지 별로 아이템이 속한 배열을 얻어옴
-
         return (
             <div className="File">
                 <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
-                <TopBar projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname} />
+                <TopBar history={this.state.history} projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname} />
                 <div className="file-resource-table">
-                    <Table>
+                    {this.state.count === 0 ? null : <><Table>
                         <thead>
                             <tr style={{ backgroundColor: "#E3E3E3" }}>
                                 <th style={{ paddingLeft: "17px" }}>이름</th>
@@ -194,8 +194,10 @@ export default class File extends React.Component {
                             nextPage: this.callbackNextPage.bind(this),
                             lastPage: this.callbackLastPage.bind(this)
                         }}
-                    />
+                    /></>
+                }
                 </div>
+                    
             </div>
         )
     }
@@ -207,5 +209,12 @@ export default class File extends React.Component {
                     count: Object.values(response.data.data).length
                 })
             })
+        ApiService.fetchHistory(this.props.match.params.projectNo)
+        .then(response => 
+            this.setState({
+            history:response.data.data
+            })
+        )
     }
+        
 }

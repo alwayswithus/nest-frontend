@@ -25,6 +25,7 @@ class Comment extends Component {
         return (
             <div className="TaskSetComment">
                 <Header
+                    authUserRole={this.props.authUserRole}
                     name={taskItem.userName}
                     date={taskItem.taskRegdate}
                     taskItem={taskItem}

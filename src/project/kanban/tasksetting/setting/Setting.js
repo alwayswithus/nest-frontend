@@ -253,6 +253,7 @@ class Setting extends Component {
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
                         <Header 
+                            authUserRole={this.props.authUserRole}
                             name={taskItem.userName} 
                             date={taskItem.taskRegdate}
                             taskCallbacks={this.props.taskCallbacks}
@@ -374,7 +375,8 @@ class Setting extends Component {
                                         <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
                                                 {tag.tagName}
-                                                <span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo, taskListNo)}>&times;</span>
+
+                                                {this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
                                             </span>
                                         </div>
                                     )}
