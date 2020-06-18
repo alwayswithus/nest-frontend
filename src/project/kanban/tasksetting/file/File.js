@@ -140,6 +140,7 @@ class File extends Component {
                     onDismiss={this.onAlertDismissed.bind(this)}
                 />
                 <Header
+                    authUserRole={this.props.authUserRole}
                     taskItem={taskItem}
                     name={taskItem.userName}
                     date={taskItem.taskRegdate}

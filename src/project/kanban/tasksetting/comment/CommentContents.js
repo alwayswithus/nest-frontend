@@ -63,20 +63,27 @@ class commentContents extends Component {
 
     //이미지 클릭했을 때
     onClickUserImg() {
+        this.props.onClickUserImg();
         this.setState({
             modal: !this.state.modal
         })
     }
+
+    ProfileModalClose(){
+        this.setState({
+            modal:false
+        })
+    }
+
     render() {
         const today = new Date();
-        console.log(this.props.comment.originName)
         return (
             <Fragment>
                 <div key={this.props.comment.commentNo} style={{ height: '20px' }} />
                 <a className="pull-left" href="#">
                     <div onClick={this.onClickUserImg.bind(this, this.state.open)} className="img-circle" style={{ backgroundImage: `url(${this.props.comment.userPhoto})` }} ></div>
                 </a>
-                <div className={this.state.modal ? "profile-modal" : "profile-modal-none"}>
+                <div className={(this.state.modal&&this.props.modal) ? "profile-modal" : "profile-modal-none"}>
                     <ProfileModal
                         onClickUserImg={this.onClickUserImg.bind(this, this.state.open)}
                         comment={this.props.comment}

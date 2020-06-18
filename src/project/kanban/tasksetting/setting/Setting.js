@@ -233,7 +233,7 @@ class Setting extends Component {
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
-        
+
         return (
             <>
             <div className = "taskSetting-setting">
@@ -241,6 +241,7 @@ class Setting extends Component {
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
                         <Header 
+                            authUserRole={this.props.authUserRole}
                             onClickTag = {this.onClickTag.bind(this)}
                             name={taskItem.userName} 
                             date={taskItem.taskRegdate}
@@ -362,7 +363,7 @@ class Setting extends Component {
                                         <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
                                                 {tag.tagName}
-                                                <span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>
+                                                {this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
                                             </span>
                                         </div>
                                     )}

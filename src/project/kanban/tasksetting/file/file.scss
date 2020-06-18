@@ -18,11 +18,8 @@
         .FileMenu {
             align-items: center;
             margin-top: 2%;
-            .fileUplaod-label{
-                float: right;
-                padding-right: 5%;
-            }
             .disabled-submit-button {
+                float: right;
                 border: none;
                 padding: 5px 12px;
                 margin-top: 11px;
@@ -30,9 +27,16 @@
                 color: #fff;
                 font-size: 1em;
                 transition: all 0.4s;
-                cursor: pointer;
+                cursor: default;
+                margin-right: 5px;
+                outline: none;
                 border-radius: 3px;
             }
+            .fileUplaod-label{
+                float: right;
+                padding-right: 5%;
+            }
+
             .fileUpload {
                 border: none;
                 padding: 5px 12px;

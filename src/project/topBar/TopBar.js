@@ -16,8 +16,8 @@ class TopBar extends Component {
     const timeline = activePath.indexOf("timeline") !== -1
     const file = activePath.indexOf("file") !== -1
 
-    console.log(this.props.history.length == 0)
     // const log = this.props.activePath.indexOf("log") !== -1
+    console.log(this.props.history)
     return (
       <>
         <div className="topBar">
@@ -38,7 +38,7 @@ class TopBar extends Component {
                       <Link to={`/nest/dashboard/${this.props.projectNo}/timeline`}>타임라인</Link>
                     </li>
                     <li className={file === true ? "active" : null}>
-                      <Link to={`/nest/dashboard/${this.props.projectNo}/file`}>파일</Link>
+                      <Link to={{pathname:`/nest/dashboard/${this.props.projectNo}/file`, state:{history : this.props.history}}}>파일</Link>
                     </li>
                     <li>
                       <div className="popover__wrapper">

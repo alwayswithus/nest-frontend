@@ -55,7 +55,6 @@ class Editor extends Component {
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{'list': 'ordered'}, {'list': 'bullet'}, 
        {'indent': '-1'}, {'indent': '+1'}],
-      ['image']
     ],
     clipboard: {
       // toggle to add extra line breaks when pasting HTML:

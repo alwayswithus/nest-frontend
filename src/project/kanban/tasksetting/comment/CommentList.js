@@ -3,8 +3,7 @@ import './comment.scss';
 import CommentContents from './CommentContents'
 import Editor from "./Editor";
 import ReactQuill from 'react-quill';
-
-import SockJsClient from "react-stomp";
+import ProfileModal from './ProfileModal';
 
 class CommentList extends Component {
 
@@ -14,6 +13,7 @@ class CommentList extends Component {
             editorHtml: '', 
             theme: 'snow',
             commentList:[],
+            modal:false
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -31,6 +31,11 @@ class CommentList extends Component {
         })
     }
 
+    onClickUserImg(){
+        this.setState({
+            modal:!this.state.modal
+        })
+    }
 
     //보내기 버튼을 눌렀을 때 코멘트 생성
     onClickSubmit() {
@@ -63,6 +68,7 @@ class CommentList extends Component {
     }
 
     render(){
+        console.log(this.state.modal)
         return (
             <>
             <div className="CommentList">
@@ -72,6 +78,8 @@ class CommentList extends Component {
                     {this.props.taskItem.commentList.map(comment =>
                         comment.fileState === 'T' || comment.commentState === 'T' ?
                             <CommentContents 
+                                onClickUserImg={this.onClickUserImg.bind(this)}
+                                modal={this.state.modal}
                                 authUserRole={this.props.authUserRole}
                                 key={comment.commentNo}
                                 comment = {comment}
@@ -114,11 +122,6 @@ class CommentList extends Component {
                             type="submit">보내기</button>
 
                     }
-                    <ul className="list-unstyled list-inline media-detail pull-left">
-                        <li><a href="#"><i className="fas fa-paperclip"></i></a></li>
-                        <li style={{ verticalAlign: 'text-bottom' }}><a href="#"><b>@</b></a></li>
-                        <li><a href="#"><i className="far fa-smile-beam"></i></a></li>
-                    </ul>
                 </div>
             </div>
             </>
