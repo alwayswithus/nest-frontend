@@ -1,9 +1,17 @@
+@keyframes fadein {
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
 .taskCategory {
   margin: 10px;
   width: 300px;
+  animation: fadein 2s;
 
-
-  .taskPanel{
+  .taskPanel {
     margin-bottom: 0px;
   }
   .panel-primary {
@@ -16,8 +24,11 @@
     padding: 10px 15px 0px 15px;
     .taskList-head {
       display: flex;
-      .reset {
+      .edite {
         padding-top: 3px;
+      }
+      .fa-times{
+        padding-left: 15px;
       }
       .Icon {
         color: rgb(151, 151, 151);
@@ -32,7 +43,7 @@
         font-weight: bold;
         i {
           display: inline;
-          line-height :22px;
+          line-height: 22px;
         }
         &:hover i {
           display: inline;
@@ -82,52 +93,43 @@
     }
   }
   .taskArea {
-    // overflow: auto;
-    // overflow-x: hidden;
     height: 95%;
-    .tasks {
-      min-height: 1px;
-      padding: 1px 10px 10px 10px;
-      background: #f0d7d2;
-
-      .task{
-       
-        margin-top: 10px;
-        .panel {
-          box-shadow: 1px 1px 5px 1px grey;
-          margin-bottom: 0px;
-        }
-      }
-    }
-    .completeTasks{
-      // padding: 0px 5px 5px 5px;
-      background: #f0d7d2;
-      border-radius: 0px 0px 3px 3px;
-      padding: 1px 10px 10px 10px;
-      .completeArea {
-        text-align: center;
-        background-color: #b4b8ba;
-        border-radius: 3px;
-        // margin-bottom: 10px;
-        cursor: pointer;
-        color: white;
-        &:hover {
-          background-color: #7a7d7e;
-          color: white;
-        }
-      }
-      .completeTask{
-        .panel{
+    .test {
+      overflow: auto;
+      overflow-x: hidden;
+      max-height: 95%;
+      .tasks {
+        min-height: 1px;
+        padding: 1px 10px 10px 10px;
+        background: #f0d7d2;
+        .task {
           margin-top: 10px;
-          margin-bottom: 0px;
-          box-shadow: 1px 1px 5px 1px grey;
-
-
-
-
+          
+          .panel {
+            box-shadow: 1px 1px 5px 1px grey;
+            margin-bottom: 0px;
+            animation: fadein 2s;
+          }
         }
       }
     }
+    .completeTasks {  
+      padding: 3px 10px;
+      background:#d1d1d1;
+      display: flex;
+      justify-content: space-between;
+      border-radius: 0px 0px 3px 3px;
+      cursor: pointer;
+      color: white;
+      b{
+        text-shadow: 0px 0px 5px gray;
+      }
+      &:hover{
+        background: #b4b8ba; 
+        color: #5e5e5e; 
+      }
+    }
+   
   }
   ::-webkit-scrollbar {
     width: 10px;
@@ -139,7 +141,7 @@
     border: 1px solid transparent !important;
   }
   ::-webkit-scrollbar-track {
-    background-color:  #f0d7d2 !important;
+    background-color: #f0d7d2 !important;
     box-shadow: 0px 0px 0px 0px white !important;
   }
 }

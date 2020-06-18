@@ -11,7 +11,7 @@ class Task extends Component {
     this.state = {
       path: "",
       closeValue: false,
-      showComplete: false,
+      // showComplete: false,
       closeTag: false,
     };
   }
@@ -21,13 +21,13 @@ class Task extends Component {
   }
 
   // task 완료 체크 박스
-  doneTask(event) {
-    this.props.taskCallbacks.doneTask(
-      this.props.taskListNo,
-      this.props.task.taskNo
-    );
-    this.noneClick(event);
-  }
+  // doneTask(event) {
+  //   this.props.taskCallbacks.doneTask(
+  //     this.props.taskListNo,
+  //     this.props.task.taskNo
+  //   );
+  //   this.noneClick(event);
+  // }
 
   //모달 클릭 후 path 초기화.
   onModalOpen() {
@@ -50,12 +50,12 @@ class Task extends Component {
   }
 
   // 완료된 Task List 목록 상태
-  showCompleteTaskList() {
-    this.setState({
-      showComplete: !this.state.showComplete,
-    });
-    this.noneClick();
-  }
+  // showCompleteTaskList() {
+  //   this.setState({
+  //     showComplete: !this.state.showComplete,
+  //   });
+  //   this.noneClick();
+  // }
 
   //새태그 만들기에서 뒤로가기 눌렀을 때
   onClicknewTagModal() {

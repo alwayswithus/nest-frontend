@@ -40,9 +40,11 @@
         margin: 10px;
         width: 300px;
         padding: 12px 15px;
-        display: flex;
         background-color: #f0d7d2;
         border-radius: 3px;
+        .test{
+          display: flex;
+        }
 
         div {
           .textArea {

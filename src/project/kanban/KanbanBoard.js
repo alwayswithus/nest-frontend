@@ -66,61 +66,63 @@ class KanbanBoard extends Component {
 
   // 업무 검색
   searchKeyword(event) {
+    console.log(event.target.value)
     if (event.target.value !== "") {
-      const tagSearch = {
-        projectNo: this.props.projectNo,
-        keyword: event.target.value,
-      };
+      console.log(this.state.selectPicker)
+      // const tagSearch = {
+      //   projectNo: this.props.projectNo,
+      //   keyword: event.target.value,
+      // };
 
-      fetch(`${API_URL}/api/kanbanMain/searchTag`, {
-        method: "post",
-        headers: API_HEADERS,
-        body: JSON.stringify(tagSearch),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          let tagTaskNo = [];
-          tagTaskNo = json.data.map((task) => task.task_no + "");
+      // fetch(`${API_URL}/api/kanbanMain/searchTag`, {
+      //   method: "post",
+      //   headers: API_HEADERS,
+      //   body: JSON.stringify(tagSearch),
+      // })
+      //   .then((response) => response.json())
+      //   .then((json) => {
+      //     let tagTaskNo = [];
+      //     tagTaskNo = json.data.map((task) => task.task_no + "");
 
-          const newTaskList = this.props.taskList;
-          let copy = newTaskList.slice(0, newTaskList.length);
-          copy &&
-            copy.map(
-              (tasks, index) =>
-                (copy[index] = update(copy[index], {
-                  tasks: {
-                    $set: [],
-                  },
-                }))
-            );
+      //     const newTaskList = this.props.taskList;
+      //     let copy = newTaskList.slice(0, newTaskList.length);
+      //     copy &&
+      //       copy.map(
+      //         (tasks, index) =>
+      //           (copy[index] = update(copy[index], {
+      //             tasks: {
+      //               $set: [],
+      //             },
+      //           }))
+      //       );
 
-          let tagTask = [];
-          newTaskList &&
-            newTaskList.map(
-              (taskList) =>
-                (tagTask = tagTask.concat(
-                  taskList.tasks.map((task) =>
-                    tagTaskNo.indexOf(task.taskNo) !== -1 ? task : null
-                  )
-                ))
-            );
+      //     let tagTask = [];
+      //     newTaskList &&
+      //       newTaskList.map(
+      //         (taskList) =>
+      //           (tagTask = tagTask.concat(
+      //             taskList.tasks.map((task) =>
+      //               tagTaskNo.indexOf(task.taskNo) !== -1 ? task : null
+      //             )
+      //           ))
+      //       );
 
-          newTaskList.map((tasklist, index) => {
-            tagTask.splice(0, tasklist.tasks.length).map((task) =>
-              task !== null
-                ? (copy[index] = update(copy[index], {
-                    tasks: {
-                      $push: [task],
-                    },
-                  }))
-                : null
-            );
-          });
+      //     newTaskList.map((tasklist, index) => {
+      //       tagTask.splice(0, tasklist.tasks.length).map((task) =>
+      //         task !== null
+      //           ? (copy[index] = update(copy[index], {
+      //               tasks: {
+      //                 $push: [task],
+      //               },
+      //             }))
+      //           : null
+      //       );
+      //     });
           this.setState({
-            searchKeyword: tagSearch.keyword,
-            allTaskList: copy,
+            searchKeyword: event.target.value,
+            // allTaskList: copy,
           });
-        });
+      //   });
     } else {
       this.setState({
         searchKeyword: event.target.value,
@@ -190,7 +192,6 @@ class KanbanBoard extends Component {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  
                   {this.state.selectPicker === "task"
                     ? this.props.taskList &&
                       this.props.taskList.map((taskList, index) => {
@@ -210,39 +211,39 @@ class KanbanBoard extends Component {
                         );
                       })
                     : this.state.searchKeyword === ""
-                    ? this.props.taskList &&
-                      this.props.taskList.map((taskList, index) => {
-                        return (
-                          <TaskList
-                            authUserRole={this.props.authUserRole}
-                            searchKeyword={this.state.searchKeyword}
-                            selectPicker={this.state.selectPicker}
-                            key={taskList.taskListNo}
-                            listNo={taskList.taskListNo}
-                            taskList={taskList}
-                            tasks={taskList.tasks}
-                            index={index}
-                            taskCallbacks={this.props.taskCallbacks}
-                            projectNo={this.props.projectNo}
-                          />
-                        );
-                      })
-                    : this.state.allTaskList &&
-                      this.state.allTaskList.map((taskList, index) => {
-                        return (
-                          <TaskList
-                            authUserRole={this.props.authUserRole}
-                            searchKeyword={this.state.searchKeyword}
-                            selectPicker={this.state.selectPicker}
-                            key={taskList.taskListNo}
-                            listNo={taskList.taskListNo}
-                            taskList={taskList}
-                            tasks={taskList.tasks}
-                            index={index}
-                            taskCallbacks={this.props.taskCallbacks}
-                            projectNo={this.props.projectNo}
-                          />
-                        );
+                      ? this.props.taskList &&
+                        this.props.taskList.map((taskList, index) => {
+                          return (
+                            <TaskList
+                              authUserRole={this.props.authUserRole}
+                              searchKeyword={this.state.searchKeyword}
+                              selectPicker={this.state.selectPicker}
+                              key={taskList.taskListNo}
+                              listNo={taskList.taskListNo}
+                              taskList={taskList}
+                              tasks={taskList.tasks}
+                              index={index}
+                              taskCallbacks={this.props.taskCallbacks}
+                              projectNo={this.props.projectNo}
+                            />
+                          );
+                        })
+                      : this.state.allTaskList &&
+                        this.state.allTaskList.map((taskList, index) => {
+                          return (
+                            <TaskList
+                              authUserRole={this.props.authUserRole}
+                              searchKeyword={this.state.searchKeyword}
+                              selectPicker={this.state.selectPicker}
+                              key={taskList.taskListNo}
+                              listNo={taskList.taskListNo}
+                              taskList={taskList}
+                              tasks={taskList.tasks}
+                              index={index}
+                              taskCallbacks={this.props.taskCallbacks}
+                              projectNo={this.props.projectNo}
+                            />
+                          );
                       })}
                 </div>
               )}
@@ -251,7 +252,8 @@ class KanbanBoard extends Component {
             <div className="taskListAdd">
               {this.state.taskListInsertState ? (
                 <>
-                  <div className="taskListInsertForm">
+                  <div className="taskListInsertForm" style={{display: this.props.setOn ?"block":"none"}}>
+                    <div className="test">
                     <div>
                       <input
                         type="text"
@@ -265,15 +267,13 @@ class KanbanBoard extends Component {
                     <div className="taskListInsertBtn">
                       &nbsp;
                       <i
-                        className="fas fa-plus Icon"
+                        className="fas fa-check Icon"
                         onClick={this.addTaskList.bind(this)}
                       ></i>
-                      <i
-                        className="fas fa-undo Icon"
-                        onClick={this.taskListStateBtn.bind(this)}
-                        data-tip="취소"
-                      ></i>
+                      <i class="fas fa-times Icon" onClick={this.taskListStateBtn.bind(this)}
+                        data-tip="취소"></i>
                       <ReactTooltip />
+                    </div>
                     </div>
                   </div>
                 </>
