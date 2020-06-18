@@ -3,6 +3,7 @@ import './navigator.scss';
 
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
+import NavNotice from './NavNotice';
 
 export default class Navigator extends React.Component {
 
@@ -58,62 +59,7 @@ export default class Navigator extends React.Component {
                                     <i className="far fa-bell icon" style={{position: "relative", left: "-9px"}}></i>    
                                 </span>
                             </div>
-                            {this.state.popoverOpen ? 
-                            <div className="popover__wrapper">
-                                <div className="popover__arrow">
-                                </div>
-                                <div className="popover__content">
-                                    <div className="notification-contents-list">
-                                        <div className="notice-one-contents">
-                                            <div className="notice-contents-avatar-image">
-                                                <img src="../assets/images/ko.jpg" className="notice-avatar-image"/>
-                                            </div>
-                                            <div className="notice-avatar-contents">
-                                                <div className="notice-avatar-part">
-                                                    최인효님이 코멘트를 작성하였습니다.
-                                                </div>
-                                                <div className="notice-avatar-contents-date">
-                                                    3일 전
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="notice-one-contents">
-                                            <div className="notice-contents-avatar-image">
-                                                <img src="../assets/images/ko.jpg" className="notice-avatar-image"/>
-                                            </div>
-                                            <div className="notice-avatar-contents">
-                                                <div className="notice-avatar-part">
-                                                    최인효님이 코멘트를 작성하였습니다.
-                                                </div>
-                                                <div className="notice-avatar-contents-date">
-                                                    3일 전
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="notice-one-contents">
-                                            <div className="notice-contents-avatar-image">
-                                                <img src="../assets/images/ko.jpg" className="notice-avatar-image"/>
-                                            </div>
-                                            <div className="notice-avatar-contents">
-                                                <div className="notice-avatar-part">
-                                                    최인효님이 코멘트를 작성하였습니다.
-                                                </div>
-                                                <div className="notice-avatar-contents-date">
-                                                    3일 전
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <Link to="/nest/notification" className="link">
-                                            <Button style={{outline: "none", width: "100%", borderColor: "#27B6BA", backgroundColor: "#27B6BA", borderTopLeftRadius: "0px", borderTopRightRadius: "0px", borderBottomLeftRadius: "10px", borderBottomRightRadius: "10px"}}>
-                                                모두 보기
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div> : ""}
+                            {this.state.popoverOpen ? <NavNotice/> : ""}
                             
                             {/*<!-- Calendar link -->*/}
                             <div className="nav-item button">
