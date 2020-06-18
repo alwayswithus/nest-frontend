@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Viewer from 'react-viewer'
 import moment from 'moment';
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 
 class FileComponent extends Component {
 
