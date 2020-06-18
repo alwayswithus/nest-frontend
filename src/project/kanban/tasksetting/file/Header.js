@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component } from 'react';
+import ReactDOM from 'react-dom'
 import './header.scss';
 import Navigation from '../TaskSetNav';
 import {Link} from 'react-router-dom';
@@ -11,8 +12,10 @@ class Header extends Component {
             input : false,
             keyword:''
         }
+        this.fileInput = React.createRef();
     }
     onClickTaskContents(){
+
         this.setState({
             input:!this.state.input,
             keyword: this.props.taskItem.taskContents
@@ -33,6 +36,18 @@ class Header extends Component {
             keyword:event.target.value
         })
     }
+
+    onClickClose = () => {
+        this.setState({
+            input:false
+        })
+    }
+
+   componentDidMount(){
+       //비제어
+       document.addEventListener("click", this.onClickClose, true)
+   }
+
     render(){
     return (
         <div style={{display:'block'}} id= "taskSettingHeader" className="Header">
@@ -40,7 +55,7 @@ class Header extends Component {
                 style= {{color:'black'}}
                 to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} 
                 onClick={this.props.onClickTag}><i className="fas fa-times fa-1x"></i></Link>
-            <div className="Header-list">
+            <div className="Header-list" ref={this.fileInput}>
                 {/* 업무 내용 수정 */}
                 {this.state.input ? 
                     <h2>
@@ -48,9 +63,13 @@ class Header extends Component {
                             value={this.state.keyword} 
                             onKeyPress={this.onKeyPressEnter.bind(this)}
                             onChange={this.onChangeInput.bind(this)}
-                            className="Header-input"></input>
+                            className="Header-input"
+                            autoFocus></input>
                     </h2> : 
-                    <h2 onClick={this.onClickTaskContents.bind(this)}>
+                   this.props.authUserRole !== 3 ? <h2 onClick={this.onClickTaskContents.bind(this)}>
+                        <div className="header-list-div"><b>{this.props.taskItem.taskContents}</b></div>
+                        <i className="far fa-edit Icon"></i>
+                    </h2> : <h2>
                         <div className="header-list-div"><b>{this.props.taskItem.taskContents}</b></div>
                         <i className="far fa-edit Icon"></i>
                     </h2>

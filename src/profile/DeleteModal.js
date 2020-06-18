@@ -32,13 +32,14 @@ class Modal extends Component {
     }
 
     onDeleteAccount(){
-        console.log(this.state.allProjectUser)
+        
         if(this.state.transferOk){
             fetch(`${API_URL}/api/userproject/transferrole/${sessionStorage.getItem("authUserNo")}`, {
                 method: 'post',
                 headers: API_HEADERS,
                 body: JSON.stringify(this.state.allProjectUser)
             })
+            sessionStorage.clear();
         }
     }
 
