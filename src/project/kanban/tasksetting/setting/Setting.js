@@ -78,10 +78,13 @@ class Setting extends Component {
     }
     
     // 업무등록
-    onKeypress(event){
+    onKeypress(event, taskListNo){
+        // this.props.task.ma
+
+
         if(event.key === 'Enter'){
             event.preventDefault()
-            this.props.taskCallbacks.addCheckList(event.target.value, this.props.match.params.taskNo, this.props.match.params.taskListNo)
+            this.props.taskCallbacks.addCheckList(event.target.value, this.props.match.params.taskNo, taskListNo)
             this.setState({
                 checklist:''
             })
@@ -89,17 +92,18 @@ class Setting extends Component {
     }
 
     //click check box
-    clickCheckBox(checklistNo, checklistState){
+    clickCheckBox(checklistNo, checklistState,taskListNo){
         console.log("check!!+Setting")
-        this.props.taskCallbacks.checklistStateUpdate(this.props.match.params.taskListNo, this.props.match.params.taskNo, checklistNo, checklistState);
+        this.props.taskCallbacks.checklistStateUpdate(taskListNo, this.props.match.params.taskNo, checklistNo, checklistState);
     }
     
     //태그 + 버튼 클릭.(모달창 띄우기)
-    onClickTag(){
+    onClickTag(taskListNo){
+
         this.props.taskCallbacks.tagModalStateUpdate();
 
         const taskList = this.props.task;
-        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
+        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
 
@@ -199,25 +203,25 @@ class Setting extends Component {
     }
 
     // 업무 멤버 삭제
-    onDelteMember(userNo){
+    onDelteMember(userNo, taskListNo){
         this.props.taskCallbacks.addDeleteMember(
             userNo, 
             this.state.projectMembers, 
-            this.props.match.params.taskListNo,
+            taskListNo,
             this.props.match.params.taskNo)
     }
 
     //checklist delete
-    onClickDeleteChecklist(checklistNo){
+    onClickDeleteChecklist(checklistNo, taskListNo){
         alert('체크리스트 항목을 삭제하시겠습니끼?')
-        this.props.taskCallbacks.deleteCheckList(checklistNo , this.props.match.params.taskListNo, this.props.match.params.taskNo);
+        this.props.taskCallbacks.deleteCheckList(checklistNo , taskListNo, this.props.match.params.taskNo);
     }
 
     //tag x 버튼 클릭
-    onClickTagDelete(tagNo){
+    onClickTagDelete(tagNo, taskListNo){
         this.props.taskCallbacks.deletetag(
             tagNo,
-            this.props.match.params.taskListNo,
+            taskListNo,
             this.props.match.params.taskNo)
     }
 
@@ -229,11 +233,19 @@ class Setting extends Component {
         if(!this.props.task){
             return <></>;
         }
-        const taskList = this.props.task;
-        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
-        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
-        const taskItem = taskList[taskListIndex].tasks[taskIndex]
 
+        const taskList = this.props.task;
+
+        let Indexs = []
+        taskList.map( (taskList,taskListIndex) => 
+            taskList.tasks.map((task,taskIndex) => 
+                task.taskNo === this.props.match.params.taskNo
+                    ?Indexs.push({taskListIndex, taskIndex})
+                    :null
+        ))
+        const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
+        const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
+        
         return (
             <>
             <div className = "taskSetting-setting">
@@ -242,13 +254,13 @@ class Setting extends Component {
                     <div style={{ float: 'right' }}>
                         <Header 
                             authUserRole={this.props.authUserRole}
-                            onClickTag = {this.onClickTag.bind(this)}
                             name={taskItem.userName} 
                             date={taskItem.taskRegdate}
                             taskCallbacks={this.props.taskCallbacks}
                             taskItem = {taskItem}
                             projectNo={this.props.projectNo}
-                            params={this.props.match.params}/>
+                            params={this.props.match.params}
+                            taskListNo = {taskListNo}/>
                     </div>
 
                     {/* 업무속성 리스트 */}
@@ -284,8 +296,8 @@ class Setting extends Component {
                                         onClickConfirm={this.onClickConfirm.bind(this)}
                                         from = {taskItem.taskStart}
                                         to = {taskItem.taskEnd}
-                                        taskListIndex ={taskListIndex}
-                                        taskIndex={taskIndex}
+                                        taskListIndex ={Indexs[0].taskListIndex}
+                                        taskIndex={Indexs[0].taskIndex}
                                         taskCallbacks={this.props.taskCallbacks}
                                         /> 
                                         : null }
@@ -305,7 +317,7 @@ class Setting extends Component {
                                     {this.props.taskMemberState ? <TaskMember
                                         closeProjectMembers = {this.state.closeProjectMembers} // 프로젝트 멤버 모달 상태변수
                                         onClickTaskMember = {this.onClickTaskMember.bind(this)} // 프로젝트 멤버 모달 상태 변경 해주는 함수
-                                        taskListNo = {this.props.match.params.taskListNo}
+                                        taskListNo = {taskListNo}
                                         taskNo = {taskItem.taskNo}
                                         taskItem = {taskItem}
                                         taskCallbacks = {this.props.taskCallbacks}
@@ -318,7 +330,7 @@ class Setting extends Component {
                                         <div key={member.userNo} className="Member">
                                             <img src={member.userPhoto} className="img-circle" alt="Cinque Terre" />
                                             <span>{member.userName}</span>
-                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,)}>
+                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,taskListNo)}>
                                                 <i className="fas fa-times"></i>
                                             </span>
                                         </div>
@@ -332,7 +344,7 @@ class Setting extends Component {
 
                                 <div style={{ float:'left' }} className="link">
                                 {this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
-                                        <Button onClick ={this.onClickTag.bind(this)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
+                                        <Button onClick ={this.onClickTag.bind(this,taskListNo)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
                                     }
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
                                         {/* tag 검색창 */}
@@ -342,7 +354,7 @@ class Setting extends Component {
                                             closeModifyTag = {this.state.closeModifyTag} // 태그 수정하기 모달 띄우는 상태변수
                                             onClicknewTagModal = {this.onClicknewTagModal.bind(this)} // 새 태그 만들기 모달 띄우는 함수
                                             onClickModifyTagModal = {this.onClickModifyTagModal.bind(this)} // 태그 수정하기 모달 띄우는 함수
-                                            taskListNo = {this.props.match.params.taskListNo}
+                                            taskListNo = {taskListNo}
                                             taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}
                                             taskTagNo={this.state.taskTagNo} //task tagNo 배열.
@@ -363,6 +375,7 @@ class Setting extends Component {
                                         <div key={tag.tagNo} style={{ display: 'inline-block' }} className = "tag">
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
                                                 {tag.tagName}
+
                                                 {this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
                                             </span>
                                         </div>
@@ -378,6 +391,7 @@ class Setting extends Component {
                                     authUserRole={this.props.authUserRole}
                                     point={this.state.point}
                                     params={this.props.match.params}
+                                    taskListNo = {taskListNo}
                                     taskCallbacks = {this.props.taskCallbacks}
                                     taskItem={taskItem}
                                 />
@@ -390,7 +404,7 @@ class Setting extends Component {
                                     <ColorPicker 
                                         taskCallbacks={this.props.taskCallbacks} 
                                         taskItem = {taskItem}
-                                        taskListNo={this.props.match.params.taskListNo}
+                                        taskListNo={taskListNo}
                                         taskNo={this.props.match.params.taskNo}
                                     />
                                 </div>
@@ -405,19 +419,19 @@ class Setting extends Component {
                                                     type="checkbox" 
                                                     className="doneCheck" 
                                                     checked={checklist.checklistState === "done"} 
-                                                    onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState)} 
+                                                    onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState,taskListNo)} 
                                                     readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 
                                                             params={{
                                                                 authUserRole: this.props.authUserRole,
-                                                                taskListNo : this.props.match.params.taskListNo, 
+                                                                taskListNo : taskListNo, 
                                                                 taskNo : taskItem.taskNo}} 
                                                                 taskCallbacks={this.props.taskCallbacks} 
                                                                 checklist={checklist} 
                                                                 key={checklist.checklistNo}/>
                                                         {this.props.authUserRole === 3 ? null : 
-                                                            <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
+                                                            <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo,taskListNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
                                                         }
                                                         
                                                     </div>)}
@@ -434,7 +448,7 @@ class Setting extends Component {
                                                     style = {{marginLeft: '5%', cursor:'default'}} 
                                                     value = {this.state.checklist} 
                                                     placeholder='체크리스트 아이템 추가하기'
-                                                    onKeyPress={this.onKeypress.bind(this)} /> : 
+                                                    onKeyPress={(e) => this.onKeypress(e,taskListNo)} /> : 
                                                     
                                                     <input 
                                                         type="text"
@@ -442,7 +456,7 @@ class Setting extends Component {
                                                         style = {{marginLeft: '5%'}} 
                                                         value = {this.state.checklist} 
                                                         placeholder='체크리스트 아이템 추가하기'
-                                                        onKeyPress={this.onKeypress.bind(this)} /> }
+                                                        onKeyPress={(e) => this.onKeypress(e,taskListNo)} /> }
                                         </div>
                                     </div>
                                 </div>

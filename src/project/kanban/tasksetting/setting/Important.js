@@ -11,7 +11,7 @@ class Important extends Component {
   }
 
     onClickSelectPoint(event) {
-      this.props.taskCallbacks.updateTaskPoint(Number(event.target.id), this.props.params.taskListNo, this.props.params.taskNo)
+      this.props.taskCallbacks.updateTaskPoint(Number(event.target.id), this.props.taskListNo, this.props.params.taskNo)
     }
     render(){
       const fullIcon = <i style={{color: '#f6b6b4', transform: 'scale(0.7)'}} className="fas fa-circle"></i>;

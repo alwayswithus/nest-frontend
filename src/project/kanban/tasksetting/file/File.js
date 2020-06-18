@@ -25,7 +25,7 @@ class File extends Component {
     }
 
     // 파일 선택 했을 때.
-    onChangeFileUpload(event) {
+    onChangeFileUpload(event, taskListNo) {
        
         console.log("fileUpload")
         this.setState({
@@ -50,7 +50,7 @@ class File extends Component {
                 .then((json) => {
                     this.props.taskCallbacks.addFile(
                         json.data,
-                        this.props.match.params.taskListNo,
+                        taskListNo,
                         this.props.match.params.taskNo)
                 })
         }
@@ -68,7 +68,17 @@ class File extends Component {
     }
 
     handleDrop(files) {
-        // this.props.onDragDropFileUpload(files[0])
+
+        const taskList = this.props.task;
+        let Indexs = []
+        taskList.map( (taskList,taskListIndex) => 
+            taskList.tasks.map((task,taskIndex) => 
+                task.taskNo === this.props.match.params.taskNo
+                    ?Indexs.push({taskListIndex, taskIndex})
+                    :null
+        ))
+        const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
+
         this.setState({
             selectedFile: files[0]
         })
@@ -89,7 +99,7 @@ class File extends Component {
             .then((json) => {
                 this.props.taskCallbacks.addFile(
                     json.data,
-                    this.props.match.params.taskListNo,
+                    taskListNo,
                     this.props.match.params.taskNo)
             })
         } else {
@@ -120,15 +130,23 @@ class File extends Component {
         }
     }
 
+    
+
     render() {
         if (!this.props.task) {
             return <></>;
         }
 
         const taskList = this.props.task;
-        const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === this.props.match.params.taskListNo);
-        const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
-        const taskItem = taskList[taskListIndex].tasks[taskIndex]
+        let Indexs = []
+        taskList.map( (taskList,taskListIndex) => 
+            taskList.tasks.map((task,taskIndex) => 
+                task.taskNo === this.props.match.params.taskNo
+                    ?Indexs.push({taskListIndex, taskIndex})
+                    :null
+        ))
+        const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
+        const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
         return (
             <div className="SettingFile">
                 <AlertList
@@ -146,7 +164,8 @@ class File extends Component {
                     date={taskItem.taskRegdate}
                     taskCallbacks={this.props.taskCallbacks}
                     params={this.props.match.params}
-                    projectNo={this.props.projectNo} />
+                    projectNo={this.props.projectNo}
+                    taskListNo = {taskListNo} />
                 <div className="File">
                     <Dropzone handleDrop={this.handleDrop.bind(this)}>
                         <div className="FileMenu">
@@ -165,7 +184,7 @@ class File extends Component {
                                 </label>
                                 <input
                                     id="fileUpload"
-                                    onChange={this.onChangeFileUpload.bind(this)}
+                                    onChange={(e) => this.onChangeFileUpload.bind(e,taskListNo)}
                                     type='file'
                                     style={{display:'none'}} />
                                     </>
@@ -183,7 +202,7 @@ class File extends Component {
                         </table>
                         <hr style={{ paddingLeft: '10px' }} />
                         <FileList
-                            taskListNo={this.props.match.params.taskListNo}
+                            taskListNo={taskListNo}
                             taskNo={this.props.match.params.taskNo}
                             taskCallbacks={this.props.taskCallbacks}
                             taskItem={taskItem} />

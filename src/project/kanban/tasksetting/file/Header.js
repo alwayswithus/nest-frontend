@@ -27,7 +27,7 @@ class Header extends Component {
             this.setState({
                 input: !this.state.input
             })
-            this.props.taskCallbacks.updateTaskContents(this.state.keyword, this.props.params.taskListNo, this.props.params.taskNo)
+            this.props.taskCallbacks.updateTaskContents(this.state.keyword, this.props.taskListNo, this.props.params.taskNo)
         }
     }
 
@@ -54,8 +54,8 @@ class Header extends Component {
             <Link 
                 style= {{color:'black'}}
                 to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} 
-                onClick={this.props.onClickTag}><i className="fas fa-times fa-1x"></i></Link>
-            <div className="Header-list" ref={this.fileInput}>
+                ><i className="fas fa-times fa-1x"></i></Link>
+            <div className="Header-list">
                 {/* 업무 내용 수정 */}
                 {this.state.input ? 
                     <h2>
@@ -76,7 +76,7 @@ class Header extends Component {
                 } 
                 <span>작성자 : {this.props.name} • &nbsp;&nbsp;&nbsp; 작성일 : {moment(this.props.date).format("YYYY.MM.DD")}</span>
             </div>
-            <Navigation params = {this.props.params} projectNo={this.props.projectNo} />
+            <Navigation params = {this.props.params} projectNo={this.props.projectNo}/>
         </div>
     )
     }

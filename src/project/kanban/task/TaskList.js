@@ -281,34 +281,37 @@ class TaskList extends Component {
                           .map((task, index) => (
                             <>
                               <div>
-                                {this.state.showComplete 
-                                  ? 
-                                  <Task
-                                    authUserRole={this.props.authUserRole}
-                                    projectNo={this.props.projectNo}
-                                    key={task.taskNo}
-                                    taskListNo={this.props.taskList.taskListNo}
-                                    task={task}
-                                    index={index}
-                                    taskCallbacks={this.props.taskCallbacks}
-                                    complete={task.taskState === "done" ? true : false}
-                                  />
-                                  : 
-                                  task.taskState === "done" 
-                                    ? null 
-                                    :
-                                    <Task
-                                      authUserRole={this.props.authUserRole}
-                                      projectNo={this.props.projectNo}
-                                      key={task.taskNo}
-                                      taskListNo={this.props.taskList.taskListNo}
-                                      task={task}
-                                      index={index}
-                                      taskCallbacks={this.props.taskCallbacks}
-                                      complete={task.taskState === "done" ? true : false}
-                                    />
+                                {
+                                  task.taskState === "del" 
+                                  ? null 
+                                  :
+                                    this.state.showComplete 
+                                      ? 
+                                      <Task
+                                        authUserRole={this.props.authUserRole}
+                                        projectNo={this.props.projectNo}
+                                        key={task.taskNo}
+                                        taskListNo={this.props.taskList.taskListNo}
+                                        task={task}
+                                        index={index}
+                                        taskCallbacks={this.props.taskCallbacks}
+                                        complete={task.taskState === "done" ? true : false}
+                                      />
+                                      : 
+                                      task.taskState === "done"
+                                        ? null 
+                                        : 
+                                        <Task
+                                          authUserRole={this.props.authUserRole}
+                                          projectNo={this.props.projectNo}
+                                          key={task.taskNo}
+                                          taskListNo={this.props.taskList.taskListNo}
+                                          task={task}
+                                          index={index}
+                                          taskCallbacks={this.props.taskCallbacks}
+                                          complete={task.taskState === "done" ? true : false}
+                                        />
                                 }
-                                
                               </div>
                             </>
                           ))}

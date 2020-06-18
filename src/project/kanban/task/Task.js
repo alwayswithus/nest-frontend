@@ -76,28 +76,15 @@ class Task extends Component {
           {(provided, snapshot) => (
             <Link
               style={{ textDecoration: "none", color: "black" }}
-              to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.taskListNo}/task/${taskItem.taskNo}`}
+              to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${taskItem.taskNo}`}
               onClick={this.props.taskCallbacks.modalStateFalse}
             > 
               <div
-                className={
-                  taskItem.taskState === "done" ? "task completeTask" : " task"
-                }
+                className={taskItem.taskState === "done" ? "task completeTask" : "task"}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
               >
-                {/* {this.props.firstTrueIndex === this.props.index &&
-                taskItem.taskState === "done" ? (
-                  <div
-                    className="completeArea"
-                    onClick={this.showCompleteTaskList.bind(this)}
-                  >
-                    완료된 업무
-                  </div>
-                ) : null} */}
-
-                {/* {taskItem.checked === true && this.state.showComplete  ?  ( */}
                 <TaskInnerContents
                   authUserRole = {this.props.authUserRole}
                   key={taskItem.taskNo}
@@ -107,7 +94,6 @@ class Task extends Component {
                   taskCallbacks={this.props.taskCallbacks}
                   firstTrueIndex={this.props.firstTrueIndex}
                 />
-                {/* ) : null} */}
               </div>
             </Link>
           )}

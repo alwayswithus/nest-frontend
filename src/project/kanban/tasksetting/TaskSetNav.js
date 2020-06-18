@@ -21,39 +21,39 @@ class Navigation extends Component {
     }
     return (
       <div className="Navigation">
-        {this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/file' ?
+        {this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/file' ?
           (<ul className="nav nav-tabs">
             <li className="nav-item">
-              <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}`}>
+              <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}`}>
                 <p style={Styled} >속성 </p>
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to ={`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/comment`}>
+              <Link className="nav-link" to ={`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/comment`}>
                 <p style={Styled} >코멘트</p>
               </Link>
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/file`}>
+            <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
               <p style={StyledBottom} >파일 & 링크</p>
             </Link>
             </li>
           </ul>) :
 
-          (<>{this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/comment' ?
+          (<>{this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/comment' ?
             (<ul className="nav nav-tabs">
               <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}`}>
+              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}`}>
                 <p id='setting' className="nav-link" style={Styled} >속성 </p>
               </Link>
               </li>
               <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/comment`}>
+              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/comment`}>
                 <p id='comment' className="nav-link" style={StyledBottom} >코멘트</p>
               </Link>
               </li>
               <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/file`}>
+              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
                 <p id='file' className="nav-link" style={Styled} >파일 & 링크</p>
               </Link>
               </li>
@@ -61,17 +61,17 @@ class Navigation extends Component {
 
             (<ul className="nav nav-tabs">
               <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}`}>
+              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}`}>
                 <p id='setting' className="nav-link" style={StyledBottom} >속성 </p>
               </Link>
               </li>
               <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/comment`}>
+              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/comment`}>
                 <p id='comment' className="nav-link" style={Styled} >코멘트</p>
               </Link>
               </li>
               <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.params.taskListNo}/task/${this.props.params.taskNo}/file`}>
+              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
                 <p id='file' className="nav-link" style={Styled} >파일 & 링크</p>
               </Link>
               </li> </ul>)}</>)

@@ -1514,7 +1514,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
     )
 
   let newTaskList = update(this.state.taskList, {
-    [taskListIndex]:{
+    [taskListNo]:{
       tasks:{
         [taskIndex]:{
           taskContents:{
@@ -2000,9 +2000,11 @@ callbackProjectForeverDelete(projectNo) {
 }
 
 editTaskListName(newTaskList){
-  const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === newTaskList.taskListNo);
-  console.log(this.state.taskList[taskListIndex])
   
+  const projectIndex =this.state.projects.findIndex(project => project.projectNo+"" === newTaskList.projectNo+"");
+  let members = []
+  this.state.projects[projectIndex].members.map( member =>members.push(member.userNo))
+
   fetch(`${API_URL}/api/taskList/editName`, {
     method: "post",
     headers: API_HEADERS,
@@ -2011,7 +2013,9 @@ editTaskListName(newTaskList){
 
   // console.log(newTaskList)
   newTaskList = update(newTaskList, {
-    socketType:{$set:"taskListName"}
+    socketType:{$set:"taskListName"},
+    members:{$set:members}
+    
   })
 
   this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
@@ -2128,7 +2132,8 @@ receiveKanban(socketData) {
       );
   
       
-  
+      const taskListLength = this.state.taskList[TaskListIndex].tasks.length;
+      
       let newTaskList = update(this.state.taskList, {
         [TaskListIndex]: {
           tasks: {
@@ -2136,8 +2141,23 @@ receiveKanban(socketData) {
           },
         },
       });
+      newTaskList = update(newTaskList, {
+        [TaskListIndex]: {
+          tasks: {
+            $push: [this.state.taskList[TaskListIndex].tasks[TaskIndex]],
+          },
+        },
+      });
+      newTaskList = update(newTaskList, {
+        [TaskListIndex]: {
+          tasks: {
+            [taskListLength-1] : {
+              taskState:{$set:"del"}
+            }
+          },
+        },
+      });
   
-      const taskListLength = newTaskList[TaskListIndex].tasks.length;
   
       newTaskList[TaskListIndex].tasks.map((task, index) => {
         newTaskList = update(newTaskList, {
@@ -2595,7 +2615,6 @@ receiveKanban(socketData) {
         body:socketData.color
       })
     } else if(socketData.socketType === "taskTagAdd"){
-
       let newTagData = update(this.state.taskList, {
         [socketData.taskListIndex] : {
           tasks :{
@@ -2633,6 +2652,7 @@ receiveKanban(socketData) {
         taskList: newTaskList,
       });
     })
+   // } 
     } else if(socketData.socketType === "checkListAdd"){
 
       let newTaskList = update(this.state.taskList, {
@@ -2783,9 +2803,10 @@ receiveKanban(socketData) {
         {/* taskSetting 띄우는 route */}
         <Switch>
           <Route
-            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/"
+            path="/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/"
             exact
             render={(match) => (
+              <>
               <Setting
                 {...match}
                 authUserRole={this.state.authUserRole}
@@ -2815,10 +2836,11 @@ receiveKanban(socketData) {
                   updateTaskLabel: this.callbackUpdateTaskLabel.bind(this), // 업무 라벨 수정
                 }}
               />
+              </>
             )}
           />
           <Route
-            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/comment"
+            path="/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/comment"
             render={(match) => (
               <Comment
                 {...match}
@@ -2832,12 +2854,13 @@ receiveKanban(socketData) {
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                   deleteComment: this.callbackDeleteComment.bind(this), // 코멘트 삭제하기
                   updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
+                  tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
                 }}
               />)} 
           /> 
 
           <Route
-            path="/nest/dashboard/:projectNo/kanbanboard/:taskListNo/task/:taskNo/file"
+            path="/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/file"
             render={(match) => (
               <File
                 {...match}
@@ -2849,6 +2872,7 @@ receiveKanban(socketData) {
                   addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
                   deleteComment: this.callbackDeleteComment.bind(this), // 코멘트 삭제하기
                   updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
+                  tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
                 }}
               />
             )}
