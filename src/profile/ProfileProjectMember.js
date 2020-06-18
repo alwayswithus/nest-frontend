@@ -45,13 +45,14 @@ class ProfileProjectMember extends Component {
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {projectMembers && projectMembers.map(member => 
+                                    member.userNo != sessionStorage.getItem("authUserNo") ?
                                     <TransferMember 
                                         onUpdateTransferImg={this.props.onUpdateTransferImg}
                                         onClose={this.props.onClose}
                                         key={member.userNo}
                                         member={member}
                                         deleteModalCallbacks={this.props.deleteModalCallbacks}
-                                    />
+                                    /> : null
                                 )}
             
                             </div>

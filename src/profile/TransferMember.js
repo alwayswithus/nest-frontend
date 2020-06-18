@@ -14,10 +14,10 @@ export default class TransferMember extends React.Component {
         this.props.callbackProjectSetting.addDeleteMember(userNo, userName, userPhoto, this.props.project.projectNo);
     }
 
-    onClickRole(userPhoto, userName){
+    onClickRole(userNo, userPhoto, userName){
         console.log("!!!")
         this.props.onClose();
-        this.props.onUpdateTransferImg(userPhoto, userName);
+        this.props.onUpdateTransferImg(userNo,userPhoto, userName);
         // this.props.deleteModalCallbacks.userRoleUpdate(
         //     this.props.member.projectNo, 
         //     this.props.member.userNo,
@@ -27,7 +27,7 @@ export default class TransferMember extends React.Component {
     render() {
         return (
             <div className="invite-card-member"  key={this.props.member.userNo}
-                id={this.props.member.userNo} onClick={this.onClickRole.bind(this, this.props.member.userPhoto,this.props.member.userName)}>
+                id={this.props.member.userNo} onClick={this.onClickRole.bind(this, this.props.member.userNo, this.props.member.userPhoto,this.props.member.userName)}>
                 <img src={this.props.member.userPhoto} className="img-circle" alt={this.props.member.userPhoto} />
                 <span>{this.props.member.userName}</span>
             </div>

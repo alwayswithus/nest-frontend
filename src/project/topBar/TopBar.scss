@@ -9,6 +9,82 @@
     height: 0px;
     .topCenterIn {
       display: inline-block;
+      .popover__title {
+        font-size: 1.25rem;
+        text-decoration: none;
+        color: #777777;
+        margin:0;
+        padding:1%;
+        cursor: pointer;
+      }
+      
+      .popover__wrapper {
+        position: relative;
+        display: inline-block;
+        margin-top: 15.5px;
+        width: 76px;
+        height: 50px;
+
+      }
+      .popover__content {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        transform: translate(0, 10px);
+        background-color: #bfbfbf;
+        padding: 1.5rem;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        width: auto;
+      }
+      .popover__content:before {
+        position: absolute;
+        z-index: -1;
+        content: "";
+        right: calc(50% + 59px );
+        top: -8px;
+        border-style: solid;
+        border-width: 0 10px 10px 10px;
+        border-color: transparent transparent #F3F4F5 transparent;
+        transition-duration: 0.3s;
+        transition-property: transform;
+      }
+      .popover__wrapper:hover .popover__content {
+        height: 300px;
+        overflow: auto;
+
+        margin-top: 31px;
+        z-index: 10;
+        opacity: 1;
+        left: -95px;
+        background: #F3F4F5;
+        width: 400px;
+        visibility: visible;
+        transform: translate(0, -20px);
+        transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+      }
+      .popover__message {
+        text-align: left;
+        .fa-sad-tear{
+          margin-top: 99px;
+          margin-left: 180px;
+          color: #FAE100;
+          transform: scale(10)
+        }
+        .log-warning{
+          text-align: center;
+          margin-top: 75px;
+          margin-left: 21px;
+          font-weight: bolder;
+        }
+        .message{
+          padding:1%;
+          border-radius: 3px;
+          background-color: #E6E8EC;
+          width: 370px;
+          font-size: 1.1rem;
+          margin-bottom: 2px;
+        }
+      }
       .active {
         a {
           background-color: #f8f8f8;

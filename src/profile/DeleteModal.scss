@@ -43,6 +43,30 @@
         color: #999;
       }
     }
+      .delete-warning-message{
+        text-align: center;
+        font-weight: bolder;
+      }
+      .button-wrap-delete{
+        margin: 0;
+        margin-top: 8px;
+        button{
+          width: 100%;
+          padding: 12px 0;
+          border-radius: 0 0 4px 4px;
+          background-color: #FF4040;
+          font-size: 13pt;
+          color: white;
+          border: 0;
+          cursor: pointer;
+          &:hover{
+            background-color: #EE262E;
+          }
+          &:active{
+            background-color: #7e49c8;
+          }
+        }
+      }
 
     .button-wrap{
       margin: 0;
