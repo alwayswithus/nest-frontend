@@ -351,6 +351,34 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
+
+        const TaskListIndex = this.state.taskList.findIndex(
+          (taskList) => taskList.taskListNo === taskListNo
+        );
+    
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
+        
+        let membersNo = []
+        this.state.projects[projectIndex].members.map(member => {
+          membersNo.push(member.userNo);
+        })
+
+        let taskCount=1;
+        this.state.taskList.map(taskList => {
+          taskList.tasks.map(task => {
+            taskCount = taskCount+1
+          })
+        })
+
+        let completedTask=0;
+        this.state.taskList.map( taskList => {
+          taskList.tasks.map(task => {
+            if(task.taskState === "done"){
+              completedTask = completedTask +1
+            }
+          })
+        })
+    
         let newTask = {
           commentList: [],
           taskStart: json.data.taskStart,
@@ -369,16 +397,16 @@ class KanbanMain extends Component {
           userName:sessionStorage.getItem("authUserName"),
           socketType:"taskInsert",
           taskListIndex:TaskListIndex,
-          projectNo:projectNo
+          projectNo:projectNo,
+          taskCount:taskCount,
+          completedTask:completedTask,
+          membersNo:membersNo
         
         };
 
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTask));
-
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
        
-
-
-        
       });
   }
   // task 삭제
@@ -388,14 +416,52 @@ class KanbanMain extends Component {
       (taskList) => taskList.taskListNo === taskListNo
     );
 
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
+    
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
+
+    let taskCount = -1;
+    this.state.taskList.map(taskList => {
+      taskList.tasks.map(task => {
+        taskCount = taskCount + 1;
+      })
+    })
+
+    this.state.taskList.map(taskList => {
+      taskList.tasks.map(task => {
+        console.log(task.taskState)
+      })
+    })
+
+    console.log(taskCount)
+    
+    let completedTask=0;
+    this.state.taskList.map( taskList => {
+      taskList.tasks.map(task => {
+        if(task.taskState === "done"){
+          completedTask = completedTask +1
+        }
+      })
+    })
+
+
     const deleteTask = {
       taskListNo:taskListNo,
       taskId:taskId,
       socketType:"taskDelete",
       userNo : sessionStorage.getItem("authUserNo"),
-      projectNo:this.state.taskList[TaskListIndex].projectNo
+      projectNo:this.state.taskList[TaskListIndex].projectNo,
+      membersNo:membersNo,
+      taskCount:taskCount,
+      completedTask:completedTask
     }
+
+
     this.clientRef.sendMessage("/app/all", JSON.stringify(deleteTask));
+    this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(deleteTask));
 
   }
 
@@ -427,15 +493,46 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
+        const TaskListIndex = this.state.taskList.findIndex(
+          (taskList) => taskList.taskListNo === taskListNo
+        );
+    
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
+        
+        let membersNo = []
+        this.state.projects[projectIndex].members.map(member => {
+          membersNo.push(member.userNo);
+        })
+
+        let taskCount=1;
+        this.state.taskList.map(taskList => {
+          taskList.tasks.map(task => {
+            taskCount = taskCount+1
+          })
+        })
+
+        let completedTask=0;
+        this.state.taskList.map( taskList => {
+          taskList.tasks.map(task => {
+            if(task.taskState === "done"){
+              completedTask = completedTask +1
+            }
+          })
+        })
+
         const taskCopy = {
           taskListIndex:TaskListIndex,
           taskIndex:TaskIndex ,
           socketType:"taskCopy",
           userNo:sessionStorage.getItem("authUserNo"),
           taskNo:json.data.taskNo,
-          projectNo:this.state.taskList[TaskListIndex].projectNo
+          projectNo:this.state.taskList[TaskListIndex].projectNo,
+          membersNo:membersNo,
+          taskCount:taskCount,
+          completedTask:completedTask
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(taskCopy));
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCopy));
       })
     
   }
@@ -446,14 +543,50 @@ class KanbanMain extends Component {
       (taskList) => taskList.taskListNo === taskListNo
     );
 
+    const taskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(task => task.taskNo === taskId);
+
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
+    
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
+
+    let taskCount=0;
+    this.state.taskList.map(taskList => {
+      taskList.tasks.map(task => {
+        taskCount = taskCount+1
+      })
+    })
+
+    let completedTask=0;
+    this.state.taskList.map( taskList => {
+      taskList.tasks.map(task => {
+        if(task.taskState === "done"){
+          completedTask = completedTask +1
+        }
+      })
+    })
+
+    if(this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done"){
+      completedTask = completedTask-1
+    }else{
+      completedTask = completedTask+1
+    }
+
     const taskCheck = {
       taskListNo:taskListNo,
       taskId:taskId,
       socketType:"taskCheck",
-      projectNo:this.state.taskList[TaskListIndex].projectNo
+      projectNo:this.state.taskList[TaskListIndex].projectNo,
+      membersNo:membersNo,
+      completedTask:completedTask,
+      taskCount: taskCount
+
     }
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(taskCheck));
+    this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCheck));
   }
 
   // task list 추가
@@ -540,14 +673,44 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
+
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
+        
+        let membersNo = []
+        this.state.projects[projectIndex].members.map(member => {
+          membersNo.push(member.userNo);
+        })
+    
+        let taskCount=0;
+        this.state.taskList.map(taskList => {
+          taskList.tasks.map(task => {
+            taskCount = taskCount+1
+          })
+        })
+
+        taskCount = taskCount-this.state.taskList[TaskListIndex].tasks.length
+
+        let completedTask=0;
+        this.state.taskList.map( taskList => {
+          taskList.tasks.map(task => {
+            if(task.taskState === "done"){
+              completedTask = completedTask +1
+            }
+          })
+        })
+
         const newData = {
           TaskListIndex: TaskListIndex,
           taskListOrder : json.data.taskListOrder,
           socketType:"taskListDelete",
-          projectNo:taskListBody.projectNo
+          projectNo:taskListBody.projectNo,
+          membersNo:membersNo,
+          taskCount:taskCount,
+          completedTask:completedTask
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(newData));
-       
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newData));
+
       });
   }
 

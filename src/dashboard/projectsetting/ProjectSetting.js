@@ -97,8 +97,7 @@ class ProjectSetting extends Component {
             Exist: false,
             Delete: false
         })
-
-        this.props.callbackProjectSetting.projectDelete(projectNo, userNo, userName, userPhoto);
+        this.props.callbackProjectSetting.projectDelete(projectNo, userNo);
         this.props.callbackProjectSetting.close(true);
 
     }
@@ -469,6 +468,7 @@ class ProjectSetting extends Component {
                             </li>
 
                             {/* 프로젝트 나가기 */}
+                            {this.props.project.members && Object.keys(this.props.project.members).length === 1 ? "" :
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 나가기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link">
@@ -494,7 +494,7 @@ class ProjectSetting extends Component {
                                         </DialogActions>
                                     </Dialog> 
                                 </div>
-                            </li>
+                            </li>}
 
                             {/* 프로젝트 영구삭제 */}
                             <li>
