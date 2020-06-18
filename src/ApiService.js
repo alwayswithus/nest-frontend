@@ -62,6 +62,10 @@ class ApiService {
     fetchUserProjectByUserNo(userNo){
         return axios.get(`/nest/api/profile/account/${userNo}`)
     }
+
+    fetchHistory(projectNo){
+        return axios.get(`/nest/api/history/${projectNo}`)
+    }
 }
 
 export default new ApiService();

@@ -3,6 +3,7 @@ import './DeleteModal.scss';
 import TransferText from './TransferText'
 import ApiService from '../ApiService';
 import update from 'react-addons-update';
+import {Link} from 'react-router-dom';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -14,9 +15,14 @@ class Modal extends Component {
         super(...arguments)
         this.state = {
             projects : [],
-            delete:false
+            delete:false,
+            confirmArray: [],//프로젝트 번호 담는 배열
+            userNoArray:[], // 회원 담는 배열,
+            transferOk:false,
+            allProjectUser:[]
         }
     }
+
     onCloseModal(){
         this.props.onClose();
     }
@@ -25,33 +31,34 @@ class Modal extends Component {
         console.log("!!!")
     }
 
-    userRoleUpdate(projectNo, userNo, roleNo){
-        console.log(this.state.userProject)
+    onDeleteAccount(){
+        console.log(this.state.allProjectUser)
+        if(this.state.transferOk){
+            fetch(`${API_URL}/api/userproject/transferrole/${sessionStorage.getItem("authUserNo")}`, {
+                method: 'post',
+                headers: API_HEADERS,
+                body: JSON.stringify(this.state.allProjectUser)
+            })
+        }
+    }
+
+    userRoleUpdate(projectNo, userNo, roleNo, array){
+        let projectIndexArray =[];
+        let index = [];
+
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
 
-        let userProject = {
-        projectNo: projectNo,
-        userNo: userNo,
-        roleNo: roleNo
+        array.map(array => projectIndexArray.push(array.projectNo))
+
+        index.push(this.state.projects.map(project => projectIndexArray.indexOf(project.projectNo)))
+
+        if(index[0].indexOf(-1) == -1){
+            this.setState({
+                delete:true,
+                transferOk:true,
+                allProjectUser:{array}
+            })
         }
-
-        // fetch(`${API_URL}/api/userproject/rolechange`, {
-        // method: 'post',
-        // headers: API_HEADERS,
-        // body: JSON.stringify(userProject)
-        // })
-        // .then(response => response.json())
-        // .then(json => {
-        //     let newProject = update(this.state.projectMembers, {
-        //         [projectIndex]: {
-        //             roleNo:{$set:roleNo}
-        //         }
-        //     })
-
-        //     this.setState({
-        //         projectMembers: newProject,
-        //     })
-        // })
     }
     render(){
         return (
@@ -67,15 +74,25 @@ class Modal extends Component {
                                     onUpdateDeleteState:this.onUpdateDeleteState.bind(this),
                                     userRoleUpdate:this.userRoleUpdate.bind(this)
                                 }}
-                                
+                                delete={this.state.delete}
+                                userNoArray={this.state.userNoArray}
+                                confirmArray={this.state.confirmArray}
                                 projects={this.state.projects}
                             />
                         </p>
                     </div>
-                    {this.state.delete ? <div>계정삭제하기</div> : null}
-                    <div className="button-wrap">
+                    {this.state.delete ? 
+                    <>
+                        <div className="delete-warning-message">
+                            <span>아래 delete 버튼을 누르면 본 계정은 정말로 삭제됩니다. 삭제하시려면 아래 버튼을 눌러주세요</span>
+                        </div>
+                        <div className="button-wrap-delete">
+                            <Link to = "/nest/"><button onClick = {this.onDeleteAccount.bind(this)}> Delete </button></Link>
+                        </div></> : 
+                        <div className="button-wrap">
                         <button onClick = {this.onCloseModal.bind(this)}> Confirm </button>
                     </div>
+                    }
                 </div>
             </React.Fragment>
         )

@@ -15,6 +15,8 @@ class TopBar extends Component {
     const kanbanboard = activePath.indexOf("kanbanboard") !== -1
     const timeline = activePath.indexOf("timeline") !== -1
     const file = activePath.indexOf("file") !== -1
+
+    console.log(this.props.history.length == 0)
     // const log = this.props.activePath.indexOf("log") !== -1
     return (
       <>
@@ -39,7 +41,27 @@ class TopBar extends Component {
                       <Link to={`/nest/dashboard/${this.props.projectNo}/file`}>파일</Link>
                     </li>
                     <li>
-                      <Link to="#">활동로그</Link>
+                      <div className="popover__wrapper">
+                          <span className="popover__title">활동로그</span>
+                          {/* log lists */}
+                        <div className="popover__content">
+                          {/* log */}
+                          <p className="popover__message">
+                            {this.props.history.length == 0 ? 
+                            <>
+                              <i className="fas fa-sad-tear"></i>
+                              <div className="log-warning">활동기록이 없습니다.</div>
+                            </> :
+                           this.props.history.map(history => 
+                              <div className="message">
+                                <span><strong>{history.logContents.split("님이")[0]}</strong>님이&nbsp; 
+                                {history.logContents.split("님이")[1]}</span>
+                              </div>
+                                                         
+                            )}
+                          </p>
+                        </div>
+                      </div>
                     </li>
                   </ul>
                 </div>

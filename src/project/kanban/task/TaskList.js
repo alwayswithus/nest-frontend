@@ -138,7 +138,6 @@ class TaskList extends Component {
         a = true;
       }
     })
-    console.log(firstDoneIndex)
 
 
     return (

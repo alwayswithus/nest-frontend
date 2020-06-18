@@ -16,6 +16,7 @@ import ApiNotification from '../../notification/ApiNotification'
 import SockJsClient from "react-stomp";
 import ProjectSetting from '../../dashboard/projectsetting/ProjectSetting';
 import '../../dashboard/projectsetting/projectset.scss';
+import ApiHistory from "../topBar/ApiHistory";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -61,6 +62,9 @@ class KanbanMain extends Component {
       projectWriter: "",                                             // project writer
       projectKeyword: "",                                            // project search
       memberKeyword: "",                                             // member search
+
+      history:[], //히스토리배열
+      projectMembers:[] // 프로젝트 멤버
     };
     this.clientRef= React.createRef()
   }
@@ -1017,7 +1021,21 @@ callbackUpdateTaskPoint(point , taskListNo, taskNo){
 callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
   const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
   const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
-  console.log(taskNo)
+  
+  ApiHistory.fetchInsertHistory(
+    sessionStorage.getItem("authUserNo"), 
+    sessionStorage.getItem("authUserName"),
+    this.state.projectMembers, 
+    "taskContentsUpdate", 
+    taskContents, 
+    this.props.match.params.projectNo)
+    .then(response => response.json())
+    .then(json=>
+      this.setState({
+        history:json.data
+      }) 
+    )
+
   let newTaskList = update(this.state.taskList, {
     [taskListIndex]:{
       tasks:{
@@ -2413,6 +2431,7 @@ receiveKanban(socketData) {
         </div>
         {/*상단바*/}
         <TopBar 
+          history={this.state.history}
           projectNo={this.props.match.params.projectNo}
           activePath={this.props.location.pathname}
           projectTitle={this.state.projectTitle}
@@ -2504,13 +2523,27 @@ receiveKanban(socketData) {
         projects: response.data.data.allProject
       })
     });
-  ApiService.fetchUser()
-    .then(response => {
-      this.setState({
-        users: response.data.data.allUser
-      })
-    });
-  }
+    ApiService.fetchUser()
+      .then(response => {
+        this.setState({
+          users: response.data.data.allUser
+        })
+      });
+
+    ApiService.fetchHistory(this.props.match.params.projectNo)
+      .then(response => 
+        this.setState({
+          history:response.data.data
+        })
+      )
+
+    ApiService.fetchProjectMember(this.props.match.params.projectNo)
+      .then(response => 
+        this.setState({
+          projectMembers:response.data.data
+        })
+      )
+    }
 }
 
 export default KanbanMain;
