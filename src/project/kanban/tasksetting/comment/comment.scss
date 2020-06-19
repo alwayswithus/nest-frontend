@@ -1,16 +1,17 @@
 .TaskSetComment{
-    position: fixed;
-    margin-top: -50px;
+    position: absolute;
+    top: 51px;
+    /* margin-top: -50px; */
     right: 0;
     z-index: 999;
-    height: calc(100%);
+    max-height: calc(100%);
     .Comment{
-        box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
-        width:632px;
-        float:right;
-        margin:31px auto;
-        clear: both;
-        height: 100%;
+      box-shadow: 0 -1px 6px 1px rgba(0, 0, 0, 0.1);
+      width: 632px;
+      float: right;
+      margin: 31px 0px 0px 0px;
+      clear: both;
+      height: 100%;
         hr {
             border: 2px solid black;
             margin:0;
@@ -18,9 +19,9 @@
     }
     
     .Comment-input{
-        background-color: white;
-        width:632px;
-        height: 160px;
+      background-color: white;
+      width: 632px;
+      height: 197px;
         button{
             border:none;
             border-radius: 2px;
@@ -56,14 +57,17 @@
     }
     
     .CommentList{
-        background-color: #F3F4F5;
-        height: calc(100% - 375px);
+      background-color: #F3F4F5;
+      height: 536px;
         .media{
             padding:1%;
             overflow: auto;
             height: 100%;
             box-shadow: -60px -50px 50px -90px #000000, 60px 0px 50px -90px #000000;
             cursor: default;
+            .comment-body{
+              overflow: hidden;
+            }
             .img-circle{
                 width: 35px;
                 height: 35px;

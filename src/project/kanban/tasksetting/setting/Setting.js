@@ -245,11 +245,17 @@ class Setting extends Component {
         ))
         const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
-        
+    
         return (
             <>
+            
             <div className = "taskSetting-setting">
-                <div style={{ height: '100%', marginTop: '-49px', position: 'absolute', right: '0', zIndex: '999'}}>
+                
+                <div style={{ height: '100%', position: 'absolute', right: '0', zIndex: '999'}}>
+                {taskItem.taskState == "del" ? 
+                    <div className="task-delete"> 
+                        <div className ="task-delete-warning">삭제된 업무입니다.</div>
+                    </div> : null }
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
                         <Header 

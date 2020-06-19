@@ -120,7 +120,7 @@ class CommentList extends Component {
                     {this.props.taskItem.commentList.map((comment,index) =>
                         comment.fileState === 'T' || comment.commentState === 'T' ?
 
-                            <Fragment>
+                            <div className="comment-body">
                     <div key={comment.commentNo} style={{ height: '20px' }} />
                     <a className="pull-left" href="#">
                         <div onClick={(e) => this.onClickUserImg(e, index)} className="img-circle" style={{ backgroundImage: `url(${comment.userPhoto})` }} id={index}></div>
@@ -206,7 +206,7 @@ class CommentList extends Component {
                         {comment.commentLike === 0 ? null : <li><i onClick={this.onClickThumsUp.bind(this, comment.commentNo)} className="fa fa-thumbs-up count"></i>&nbsp;{comment.commentLike}</li>}
                     </ul>
                 </div>
-            </Fragment> : null
+            </div> : null
                     )}
                 </div>
             </div>
@@ -223,7 +223,7 @@ class CommentList extends Component {
                                 formats={Editor.formats}
                                 bounds={'.app'}
                                 // placeholder={this.props.placeholder}
-                                style={{ height: '80px' }}
+                                style={{ height: '118px' }}
                             />
                         </div>
                     </div>
