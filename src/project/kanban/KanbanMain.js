@@ -2938,13 +2938,7 @@ receiveKanban(socketData) {
         this.setState({
           taskList:newTaskList
         })
-      }
-    }
-//     return;
-//   }
-
-  
- else if(socketData.socketType === "labelUpdate"){
+      }  else if(socketData.socketType === "labelUpdate"){
         let newTaskList = update(this.state.taskList,{
           [socketData.taskListIndex]:{
             tasks:{
