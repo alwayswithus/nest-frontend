@@ -332,6 +332,8 @@ class KanbanMain extends Component {
       (taskList) => taskList.taskListNo === taskListNo
     );
     const task = {
+      taskStart: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
+      taskEnd: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
       taskOrder:
         this.state.taskList[TaskListIndex].tasks.length === 0
           ? 1
@@ -396,7 +398,7 @@ class KanbanMain extends Component {
           taskWriter:json.data.taskWriter,
           userName:sessionStorage.getItem("authUserName"),
           socketType:"taskInsert",
-          taskListIndex:TaskListIndex,
+          taskListNo:taskListNo,
           projectNo:projectNo,
           taskCount:taskCount,
           completedTask:completedTask,
@@ -2294,14 +2296,19 @@ receiveKanban(socketData) {
       
         
     }else if(socketData.socketType === 'taskInsert'){
-     
-        let newTaskList = this.state.taskList;
-      newTaskList[socketData.taskListIndex].tasks.splice(0, 0, socketData);
+      const TaskListIndex = this.state.taskList.findIndex(
+        (taskList) => taskList.taskListNo == socketData.taskListNo
+      );
       
+      let newTaskList = this.state.taskList;
+      console.log(newTaskList)
+      console.log(newTaskList[TaskListIndex])
+      newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
       this.setState({
         taskList: newTaskList,
       });
-    }else if(socketData.socketType === 'taskDelete'){
+    }
+    else if(socketData.socketType === 'taskDelete'){
     
       console.log(socketData)
       const TaskListIndex = this.state.taskList.findIndex(

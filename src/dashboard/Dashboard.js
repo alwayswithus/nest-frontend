@@ -120,10 +120,14 @@ export default class Dashboard extends React.Component {
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
     }
     else {
+      let memberArray = [
+        member
+      ]
+
       ApiNotification.fetchInsertNotice(
         sessionStorage.getItem("authUserNo"),
         sessionStorage.getItem("authUserName"),
-        this.state.project.members,
+        memberArray,
         "projectJoin",
         null,
         projectNo

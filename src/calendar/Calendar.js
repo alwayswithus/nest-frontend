@@ -10,6 +10,8 @@ import ReactTooltip from 'react-tooltip';
 import { Link } from 'react-router-dom'
 import ProjectList from './ProjectList';
 import TaskList from './TaskList';
+import SockJsClient from "react-stomp";
+
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
 import ApiService from '../ApiService';
@@ -351,6 +353,7 @@ class myCalendar extends Component {
   }
 
   onTaskAdd() {
+    
     let newEvent = {
       taskNo: null,
       taskStart: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
@@ -359,20 +362,23 @@ class myCalendar extends Component {
       taskLabel: "#DFDFDF",
       taskState: "do",
       taskContents: this.state.newTaskContents,
-      taskOrder: null,
+      taskOrder:null,
       projectNo: this.state.projectNo,
       taskListNo: this.state.tasklistNo,
       taskWriter: window.sessionStorage.getItem("authUserNo"),
       taskRegdate: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
     }
 
-    fetch(`${API_URL}/api/calendar/taskadd`, {
+    fetch(`${API_URL}/api/task/insert`, {
       method: 'post',
       headers: API_HEADERS,
       body: JSON.stringify(newEvent)
     })
     .then(response => response.json())
     .then(json => {
+      
+        console.log(json.data)
+
       let responseNewEvent = {
           color: "#DFDFDF",
           end: this.state.eventStart,
@@ -384,6 +390,53 @@ class myCalendar extends Component {
           tasklistNo: json.data.taskListNo,
           title: json.data.taskContents,
         }
+
+        let socketData = {
+          commentList: [],
+          taskStart: json.data.taskStart,
+          taskEnd: json.data.taskEnd,
+          taskOrder: json.data.taskOrder,
+          tagList: [],
+          taskState: "do",
+          memberList: [],
+          taskContents: json.data.taskContents,
+          taskNo: json.data.taskNo,
+          checkList: [],
+          taskPoint: json.data.taskPoint,
+          taskLabel: json.data.taskLabel,
+          fileList: [],
+          taskWriter:json.data.taskWriter,
+          userName: sessionStorage.getItem("authUserName"),
+          socketType: "taskInsert",
+          projectNo: json.data.projectNo,
+          taskListNo: json.data.taskListNo,
+          // taskListIndex:TaskListIndex,
+          // membersNo:membersNo
+
+        }
+        // let newTask = {
+        //   commentList: [],
+        //   taskStart: json.data.taskStart,
+        //   taskEnd: json.data.taskEnd,
+        //   taskOrder: json.data.taskOrder,
+        //   tagList: [],
+        //   taskState: "do",
+        //   memberList: [],
+        //   taskContents: json.data.taskContents,
+        //   taskNo: json.data.taskNo+"",
+        //   checkList: [],
+        //   taskPoint: json.data.taskPoint,
+        //   taskLabel: json.data.taskLabel,
+        //   fileList: [],
+        //   taskWriter:json.data.taskWriter,
+        //   userName:sessionStorage.getItem("authUserName"),
+        //   socketType:"taskInsert",
+        //   taskListIndex:TaskListIndex,
+        //   projectNo:projectNo,
+        //   taskCount:taskCount,
+        //   completedTask:completedTask,
+        //   membersNo:membersNo
+        // };
 
       let events = [
         ...this.state.events,
@@ -408,7 +461,11 @@ class myCalendar extends Component {
         events: events,
         privateTask: false
       })
+      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+      // this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
+      // this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
     }) 
+
   }
 
   onPrivateTaskClose() {
@@ -483,6 +540,15 @@ class myCalendar extends Component {
   render() {
     return (
       <div id="Calendar">
+         <SockJsClient
+                url={`${API_URL}/socket`}
+                topics={[`/topic/all`]}
+                onMessage={this.receiveCalendar}
+                ref={(client) => {
+                  this.clientRef = client
+                }}
+             />
+
         {/* 사이드바 */}
         <div className="sidebar">
           <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
