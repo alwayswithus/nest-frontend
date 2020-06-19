@@ -121,13 +121,19 @@ class TaskList extends Component {
   }
 
   render() {
-
     let doneCount = 0;
-    this.props.tasks.map((task) =>
+    this.props.tasks&&this.props.tasks.map((task) =>
       task.taskState === "done" ? (doneCount = doneCount + 1) : null
     );
 
+    let allCount = this.props.tasks.length;
+    this.props.tasks&&this.props.tasks.map(task=>
+      task.taskState === "del" ? (allCount = allCount - 1) : null
+    )
+
     return (
+      <>
+      {this.props.taskList.taskListState === "F" ? null :
       <Draggable
         draggableId={this.props.taskList.taskListNo}
         index={this.props.index}
@@ -360,7 +366,7 @@ class TaskList extends Component {
               </div>
               <div className="completeTasks" onClick={this.showCompleteTaskList.bind(this)} >
                 <div>
-                  <b>완료된 업무 {doneCount} / {this.props.tasks.length}</b>
+                  <b>완료된 업무 {doneCount} / {allCount}</b>
                 </div>
                 <div>
                   <b>{this.state.showComplete  ? "숨기기": "보이기"}</b>
@@ -370,6 +376,8 @@ class TaskList extends Component {
           </div>
         )}
       </Draggable>
+  }
+      </>
     );
   }
 }
