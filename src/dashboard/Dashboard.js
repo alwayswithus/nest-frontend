@@ -1504,7 +1504,11 @@ export default class Dashboard extends React.Component {
       } 
     }
     
-    else if(socketData.socketType === "taskInsert") {
+    else if(socketData.socketType === "taskInsert" ||
+    socketData.socketType === "taskDelete" ||
+    socketData.socketType === "taskCopy"|| 
+    socketData.socketType === "taskCheck" ||
+    socketData.socketType === "taskListDelete") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
 
       if(projectIndex !== -1) {
