@@ -541,7 +541,7 @@ class myCalendar extends Component {
         <SockJsClient
           url={`${API_URL}/socket`}
           topics={[`/topic/calendar/all/${sessionStorage.getItem("authUserNo")}`]}
-          onMessage={this.receiveCalendar.bind(this)}
+          onMessage={this.receiveCalendar}
           ref={(client) => {
             this.clientRef = client
           }}

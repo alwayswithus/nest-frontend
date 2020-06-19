@@ -35,6 +35,8 @@ class KanbanMain extends Component {
       taskMemberState: false, //task memer modal 상태변수
       point: null, // 업무 중요도 상태변수
       tagModal:false, // 태그 모달 상태변수
+      taskCount:0,
+      completedTask:0,
 
       projects: null,                                               // projects data
       users: null,                                                  // user data
@@ -156,7 +158,8 @@ class KanbanMain extends Component {
         result : result,
         socketType:"taskListDnD",
         userNo : sessionStorage.getItem("authUserNo"),
-        projectNo:this.props.location.pathname.split('/')[3]
+        projectNo:this.props.location.pathname.split('/')[3],
+        members:this.state.projectMembers,
       }
       
       this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
@@ -267,7 +270,8 @@ class KanbanMain extends Component {
         result : result,
         socketType:"taskDnD",
         userNo : sessionStorage.getItem("authUserNo"),
-        projectNo:newTaskList[startIndex].projectNo
+        projectNo:newTaskList[startIndex].projectNo,
+        members:this.state.projectMembers,
       }
       this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
       return;
@@ -415,23 +419,27 @@ class KanbanMain extends Component {
           membersNo.push(member.userNo);
         })
 
-        let taskCount=1;
+        // let taskCount=1;
 
-        this.state.taskList.map(taskList => {
-          taskList.tasks.map(task => {
-            if(task.taskState !== "del"){
-              taskCount = taskCount+1
-            }
-          })
-        })
+        // this.state.taskList.map(taskList => {
+        //   taskList.tasks.map(task => {
+        //     if(task.taskState !== "del"){
+        //       taskCount = taskCount+1
+        //     }
+        //   })
+        // })
 
-        let completedTask=0;
-        this.state.taskList.map( taskList => {
-          taskList.tasks.map(task => {
-            if(task.taskState === "done"){
-              completedTask = completedTask +1
-            }
-          })
+        // let completedTask=0;
+        // this.state.taskList.map( taskList => {
+        //   taskList.tasks.map(task => {
+        //     if(task.taskState === "done"){
+        //       completedTask = completedTask +1
+        //     }
+        //   })
+        // })
+        this.setState({
+          taskCount:this.state.taskCount+1,
+          completedTask:this.state.completedTask,
         })
     
         let newTask = {
@@ -453,8 +461,8 @@ class KanbanMain extends Component {
           socketType:"taskInsert",
           taskListNo:taskListNo,
           projectNo:projectNo,
-          taskCount:taskCount,
-          completedTask:completedTask,
+          taskCount:this.state.taskCount,
+          completedTask:this.state.completedTask,
           members:this.state.projectMembers
         };
 
@@ -492,24 +500,29 @@ class KanbanMain extends Component {
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
 
 
-    let taskCount = -1;
-    this.state.taskList.map(taskList => {
-      taskList.tasks.map(task => {
-        if(task.taskState !== "del"){
-          taskCount = taskCount + 1;
-        }
-      })
-    })
+    // let taskCount = this.state.taskList[TaskListIndex].tasks.length;
+    // console.log(this.state.taskList[TaskListIndex].tasks.length)
+    // this.state.taskList.map(taskList => {
+    //   taskList.tasks.map(task => {
+    //     if(task.taskState === "del"){
+    //       taskCount = taskCount - 1;
+    //     }
+    //   })
+    // })
 
-    let completedTask=0;
-    this.state.taskList.map( taskList => {
-      taskList.tasks.map(task => {
-        if(task.taskState === "done"){
-          completedTask = completedTask +1
-        }
-      })
-    })
+    // let completedTask=0;
+    // this.state.taskList.map( taskList => {
+    //   taskList.tasks.map(task => {
+    //     if(task.taskState === "done"){
+    //       completedTask = completedTask +1
+    //     }
+    //   })
+    // })
 
+    this.setState({
+      taskCount:this.state.taskCount-1,
+      completedTask:this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "done" ? this.state.completedTask - 1 :this.state.completedTask
+    })
 
     const deleteTask = {
       taskListNo:taskListNo,
@@ -518,8 +531,8 @@ class KanbanMain extends Component {
       userNo : sessionStorage.getItem("authUserNo"),
       projectNo:this.state.taskList[TaskListIndex].projectNo,
       members:this.state.projectMembers,
-      taskCount:taskCount,
-      completedTask:completedTask
+      taskCount:this.state.taskCount-1,
+      completedTask:this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "done" ? this.state.completedTask - 1 :this.state.completedTask
     }
 
     const taskName = this.state.taskList[TaskListIndex].tasks[TaskIndex].taskContents
@@ -574,22 +587,26 @@ class KanbanMain extends Component {
           (taskList) => taskList.taskListNo === taskListNo
         );
     
-        let taskCount=1;
-        this.state.taskList.map(taskList => {
-          taskList.tasks.map(task => {
-            if(task.taskState !== "del"){
-            taskCount = taskCount+1
-            }
-          })
-        })
+        // let taskCount=1;
+        // this.state.taskList.map(taskList => {
+        //   taskList.tasks.map(task => {
+        //     if(task.taskState !== "del"){
+        //     taskCount = taskCount+1
+        //     }
+        //   })
+        // })
 
-        let completedTask=0;
-        this.state.taskList.map( taskList => {
-          taskList.tasks.map(task => {
-            if(task.taskState === "done"){
-              completedTask = completedTask +1
-            }
-          })
+        // let completedTask=0;
+        // this.state.taskList.map( taskList => {
+        //   taskList.tasks.map(task => {
+        //     if(task.taskState === "done"){
+        //       completedTask = completedTask +1
+        //     }
+        //   })
+        // })
+        this.setState({
+          taskCount:this.state.taskCount +1,
+          completedTask:this.state.completedTask
         })
 
         const taskCopy = {
@@ -600,8 +617,8 @@ class KanbanMain extends Component {
           taskNo:json.data.taskNo,
           projectNo:this.state.taskList[TaskListIndex].projectNo,
           members:this.state.projectMembers,
-          taskCount:taskCount,
-          completedTask:completedTask
+          taskCount:this.state.taskCount,
+          completedTask:this.state.completedTask
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(taskCopy));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCopy));
@@ -617,29 +634,36 @@ class KanbanMain extends Component {
 
     const taskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(task => task.taskNo === taskId);
 
-    let taskCount=0;
-    this.state.taskList.map(taskList => {
-      taskList.tasks.map(task => {
-        if(task.taskState !== "del"){
-        taskCount = taskCount+1
-        }
-      })
-    })
+    // let taskCount=0;
+    // this.state.taskList.map(taskList => {
+    //   taskList.tasks.map(task => {
+    //     if(task.taskState !== "del"){
+    //     taskCount = taskCount+1
+    //     }
+    //   })
+    // })
 
-    let completedTask=0;
-    this.state.taskList.map( taskList => {
-      taskList.tasks.map(task => {
-        if(task.taskState === "done"){
-          completedTask = completedTask +1
-        }
-      })
-    })
+    // let completedTask=0;
+    // this.state.taskList.map( taskList => {
+    //   taskList.tasks.map(task => {
+    //     if(task.taskState === "done"){
+    //       completedTask = completedTask +1
+    //     }
+    //   })
+    // })
 
     if(this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done"){
-      completedTask = completedTask-1
+      this.setState({
+        taskCount:this.state.taskCount,
+        completedTask:this.state.completedTask-1
+      })
     }else{
-      completedTask = completedTask+1
+      this.setState({
+        taskCount:this.state.taskCount,
+        completedTask:this.state.completedTask+1
+      })
     }
+    
 
     const taskCheck = {
       taskListNo:taskListNo,
@@ -647,8 +671,8 @@ class KanbanMain extends Component {
       socketType:"taskCheck",
       projectNo:this.state.taskList[TaskListIndex].projectNo,
       members:this.state.projectMembers,
-      completedTask:completedTask,
-      taskCount: taskCount
+      taskCount:this.state.taskCount,
+      completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1
 
     }
     const taskName = this.state.taskList[TaskListIndex].tasks[taskIndex].taskContents
@@ -714,6 +738,7 @@ class KanbanMain extends Component {
           },
           
         });
+
         
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
       });
@@ -758,30 +783,38 @@ class KanbanMain extends Component {
       .then((response) => response.json())
       .then((json) => {
     
-        let taskCount=0;
-        this.state.taskList.map(taskList => {
-          taskList.tasks.map(task => {
-            if(task.taskState !== "del"){
-            taskCount = taskCount+1
-            }
-          })
-        })
+        // let taskCount=0;
+        // this.state.taskList.map(taskList => {
+        //   taskList.tasks.map(task => {
+        //     if(task.taskState !== "del"){
+        //     taskCount = taskCount+1
+        //     }
+        //   })
+        // })
 
-        taskCount = taskCount-this.state.taskList[TaskListIndex].tasks.length
+        // taskCount = taskCount-this.state.taskList[TaskListIndex].tasks.length
 
-        let completedTask=0;
-        this.state.taskList.map( taskList => {
-          taskList.tasks.map(task => {
-            if(task.taskState === "done"){
-              completedTask = completedTask +1
-            }
-          })
-        })
+        // let completedTask=0;
+        // this.state.taskList.map( taskList => {
+        //   taskList.tasks.map(task => {
+        //     if(task.taskState === "done"){
+        //       completedTask = completedTask +1
+        //     }
+        //   })
+        // })
 
+        let doneCount=0;
         this.state.taskList[TaskListIndex].tasks.map(task => {
           if(task.taskState === "done"){
-            completedTask = completedTask-1
+            doneCount = doneCount+1
           }
+        })
+
+        console.log(this.state.taskList[TaskListIndex].tasks.length)
+
+        this.setState({
+          taskCount:this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length,
+          completedTask:this.state.completedTask - doneCount
         })
 
         const newData = {
@@ -790,8 +823,8 @@ class KanbanMain extends Component {
           socketType:"taskListDelete",
           projectNo:taskListBody.projectNo,
           members:this.state.projectMembers,
-          taskCount:taskCount,
-          completedTask:completedTask,
+          taskCount:this.state.taskCount,
+          completedTask:this.state.completedTask
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(newData));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newData));
@@ -1082,7 +1115,6 @@ class KanbanMain extends Component {
     checklistNo,
     checklistContents
   ) {
-    console.log(taskListNo)
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
       );
@@ -1203,7 +1235,6 @@ class KanbanMain extends Component {
     })
     .then(response => response.json())
     .then((json) => {
-      console.log(json.data)
       let newTaskList = update(this.state.taskList, {
         [taskListIndex]: {
           tasks: {
@@ -1265,7 +1296,6 @@ class KanbanMain extends Component {
     })
     .then(response => response.json())
     .then((json) => {
-      console.log(json.data)
       let newTaskList = update(this.state.taskList, {
         [taskListIndex]: {
           tasks: {
@@ -1294,7 +1324,6 @@ class KanbanMain extends Component {
 
     const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
-    console.log(taskIndex)
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"), 
       sessionStorage.getItem("authUserName"),
@@ -2319,6 +2348,7 @@ receiveKanban(socketData) {
       })
     }else if(socketData.socketType === 'taskListInsert'){
      
+      
       let newTaskList = update(this.state.taskList, {
             $push:[socketData]
       })
@@ -2371,7 +2401,6 @@ receiveKanban(socketData) {
         return;
       }
         const { destination, source, type } = socketData.result;
-        console.log(sessionStorage.getItem("authUserNo"));
         
         let newTaskList = Array.from(this.state.taskList);
         newTaskList.splice(source.index, 1);
@@ -2415,8 +2444,6 @@ receiveKanban(socketData) {
       );
       
       let newTaskList = this.state.taskList;
-      console.log(newTaskList)
-      console.log(newTaskList[TaskListIndex])
       newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
       this.setState({
         taskList: newTaskList,
@@ -2900,7 +2927,6 @@ receiveKanban(socketData) {
 
     }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
       if(socketData.socketType === 'comment'){
-        console.log(socketData.taskIndex)
           let newData = update(this.state.taskList, {
             [socketData.taskListIndex] : {
               tasks :{
@@ -3039,7 +3065,6 @@ receiveKanban(socketData) {
           })
         })
       } else if(socketData.socketType === "taskMemberAdd"){
-        console.log(socketData)
         let newTaskList = update(this.state.taskList,{
           [socketData.taskListIndex]:{
             tasks:{
@@ -3118,7 +3143,6 @@ receiveKanban(socketData) {
       )
     )
 
-    console.log(Indexs)
 
     Indexs.map(index => 
       this.setState({
@@ -3140,6 +3164,7 @@ receiveKanban(socketData) {
 
 
   render() {
+
     return (
       <>
         <SockJsClient
@@ -3345,6 +3370,14 @@ receiveKanban(socketData) {
       .then(response => 
         this.setState({
           projectMembers:response.data.data
+        })
+      )
+
+      ApiService.fetchTasksCount(this.props.match.params.projectNo)
+      .then(response => 
+        this.setState({
+        taskCount:response.data.data.taskCount,
+        completedTask:response.data.data.completedTask
         })
       )
     }
