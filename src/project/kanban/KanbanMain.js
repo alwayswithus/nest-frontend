@@ -1067,6 +1067,7 @@ class KanbanMain extends Component {
         checklistState:checklistState,
         socketType:"taskCheckListUpdate",
         projectNo:this.state.taskList[TaskListIndex].projectNo,
+        members:this.state.projectMembers
 
       }
 
@@ -2300,7 +2301,6 @@ editTaskListName(newTaskList){
 }
 
 receiveKanban(socketData) {
-  console.log(socketData.projectNo)
   if(socketData.projectNo+"" === this.props.location.pathname.split('/')[3]){
     if(socketData.socketType === 'taskListName'){
     

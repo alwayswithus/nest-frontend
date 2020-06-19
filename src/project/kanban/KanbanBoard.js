@@ -69,34 +69,37 @@ class KanbanBoard extends Component {
     if (event.target.value !== "") { //안비어있으면 
 
             if(this.state.selectPicker === "tag"){
-              console.log(event.target.value)
-            
-            const tagSearch = {
-              projectNo: this.props.projectNo,
-              keyword: event.target.value,
-            };
-
-            fetch(`${API_URL}/api/kanbanMain/searchTag`, {
-              method: "post",
-              headers: API_HEADERS,
-              body: JSON.stringify(tagSearch),
-            })
+              this.setState({
+                searchKeyword: event.target.value,
+              });
+              
+              const tagSearch = {
+                projectNo: this.props.projectNo,
+                keyword: event.target.value,
+              };
+              
+              fetch(`${API_URL}/api/kanbanMain/searchTag`, {
+                method: "post",
+                headers: API_HEADERS,
+                body: JSON.stringify(tagSearch),
+              })
               .then((response) => response.json())
               .then((json) => {
                 let tagTaskNo = [];
                 tagTaskNo = json.data.map((task) => task.task_no + "");
-
+                
                 const newTaskList = this.props.taskList;
                 let copy = newTaskList.slice(0, newTaskList.length);
                 copy &&
-                  copy.map(
-                    (tasks, index) =>
-                      (copy[index] = update(copy[index], {
-                        tasks: {
-                          $set: [],
-                        },
-                      }))
+                copy.map(
+                  (tasks, index) =>
+                  (copy[index] = update(copy[index], {
+                    tasks: {
+                      $set: [],
+                    },
+                  }))
                   );
+               
 
                 let tagTask = [];
                 newTaskList &&
@@ -109,19 +112,21 @@ class KanbanBoard extends Component {
                       ))
                   );
 
+                
                 newTaskList.map((tasklist, index) => {
                   tagTask.splice(0, tasklist.tasks.length).map((task) =>
-                    task !== null
-                      ? (copy[index] = update(copy[index], {
+                  task !== null
+                      ?
+                      copy[index] = update(copy[index], {
                           tasks: {
                             $push: [task],
                           },
-                        }))
+                        })
                       : null
                   );
                 });
+
                 this.setState({
-                  searchKeyword: event.target.value,
                   allTaskList: copy,
                 });
               });
@@ -142,6 +147,7 @@ class KanbanBoard extends Component {
   selectpicker(e) {
     this.setState({
       selectPicker: e.target.value,
+      searchKeyword:""
     });
   }
 
