@@ -121,6 +121,19 @@ export default class Dashboard extends React.Component {
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
     }
     else {
+      let memberArray = [
+        member
+      ]
+
+      ApiNotification.fetchInsertNotice(
+        sessionStorage.getItem("authUserNo"),
+        sessionStorage.getItem("authUserName"),
+        memberArray,
+        "projectJoin",
+        null,
+        projectNo
+      )
+
       fetch(`${API_URL}/api/user/add/`, {
         method: 'post',
         headers: API_HEADERS,
@@ -1491,8 +1504,24 @@ export default class Dashboard extends React.Component {
         }
       } 
     }
-  }
+    
+    else if(socketData.socketType === "taskInsert") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
 
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            completedTask: { $set: socketData.completedTask },
+            taskCount: { $set: socketData.taskCount }
+          }
+        })
+        
+        this.setState({
+          projects: newProject
+        })
+      }
+    }
+  }
 
   render() {
     return (

@@ -380,6 +380,8 @@ class KanbanMain extends Component {
       (taskList) => taskList.taskListNo === taskListNo
     );
     const task = {
+      taskStart: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
+      taskEnd: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
       taskOrder:
         this.state.taskList[TaskListIndex].tasks.length === 0
           ? 1
@@ -403,6 +405,7 @@ class KanbanMain extends Component {
         const TaskListIndex = this.state.taskList.findIndex(
           (taskList) => taskList.taskListNo === taskListNo
         );
+
     
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
         
@@ -413,9 +416,12 @@ class KanbanMain extends Component {
         })
 
         let taskCount=1;
+
         this.state.taskList.map(taskList => {
           taskList.tasks.map(task => {
-            taskCount = taskCount+1
+            if(task.taskState !== "del"){
+              taskCount = taskCount+1
+            }
           })
         })
 
@@ -445,12 +451,11 @@ class KanbanMain extends Component {
           taskWriter:json.data.taskWriter,
           userName:sessionStorage.getItem("authUserName"),
           socketType:"taskInsert",
-          taskListIndex:TaskListIndex,
+          taskListNo:taskListNo,
           projectNo:projectNo,
           taskCount:taskCount,
           completedTask:completedTask,
-          membersNo:membersNo
-        
+          members:this.state.projectMembers
         };
 
         const taskName = json.data.taskContents
@@ -480,31 +485,22 @@ class KanbanMain extends Component {
       (taskList) => taskList.taskListNo === taskListNo
     );
 
+
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
       (task) => task.taskNo === taskId
     );
     const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
-    
-    let membersNo = []
-    this.state.projects[projectIndex].members.map(member => {
-      membersNo.push(member.userNo);
-    })
+
 
     let taskCount = -1;
     this.state.taskList.map(taskList => {
       taskList.tasks.map(task => {
-        taskCount = taskCount + 1;
+        if(task.taskState !== "del"){
+          taskCount = taskCount + 1;
+        }
       })
     })
 
-    this.state.taskList.map(taskList => {
-      taskList.tasks.map(task => {
-        console.log(task.taskState)
-      })
-    })
-
-    console.log(taskCount)
-    
     let completedTask=0;
     this.state.taskList.map( taskList => {
       taskList.tasks.map(task => {
@@ -521,7 +517,7 @@ class KanbanMain extends Component {
       socketType:"taskDelete",
       userNo : sessionStorage.getItem("authUserNo"),
       projectNo:this.state.taskList[TaskListIndex].projectNo,
-      membersNo:membersNo,
+      members:this.state.projectMembers,
       taskCount:taskCount,
       completedTask:completedTask
     }
@@ -578,17 +574,12 @@ class KanbanMain extends Component {
           (taskList) => taskList.taskListNo === taskListNo
         );
     
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
-        
-        let membersNo = []
-        this.state.projects[projectIndex].members.map(member => {
-          membersNo.push(member.userNo);
-        })
-
         let taskCount=1;
         this.state.taskList.map(taskList => {
           taskList.tasks.map(task => {
+            if(task.taskState !== "del"){
             taskCount = taskCount+1
+            }
           })
         })
 
@@ -608,7 +599,7 @@ class KanbanMain extends Component {
           userNo:sessionStorage.getItem("authUserNo"),
           taskNo:json.data.taskNo,
           projectNo:this.state.taskList[TaskListIndex].projectNo,
-          membersNo:membersNo,
+          members:this.state.projectMembers,
           taskCount:taskCount,
           completedTask:completedTask
         }
@@ -626,17 +617,12 @@ class KanbanMain extends Component {
 
     const taskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(task => task.taskNo === taskId);
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
-    
-    let membersNo = []
-    this.state.projects[projectIndex].members.map(member => {
-      membersNo.push(member.userNo);
-    })
-
     let taskCount=0;
     this.state.taskList.map(taskList => {
       taskList.tasks.map(task => {
+        if(task.taskState !== "del"){
         taskCount = taskCount+1
+        }
       })
     })
 
@@ -660,7 +646,7 @@ class KanbanMain extends Component {
       taskId:taskId,
       socketType:"taskCheck",
       projectNo:this.state.taskList[TaskListIndex].projectNo,
-      membersNo:membersNo,
+      members:this.state.projectMembers,
       completedTask:completedTask,
       taskCount: taskCount
 
@@ -723,7 +709,8 @@ class KanbanMain extends Component {
             taskListOrder: json.data.taskListOrder,
             projectNo: json.data.projectNo,
             tasks: [],
-            socketType:"taskListInsert"
+            socketType:"taskListInsert",
+            members:this.state.projectMembers,
           },
           
         });
@@ -770,18 +757,13 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
-        
-        let membersNo = []
-        this.state.projects[projectIndex].members.map(member => {
-          membersNo.push(member.userNo);
-        })
     
         let taskCount=0;
         this.state.taskList.map(taskList => {
           taskList.tasks.map(task => {
+            if(task.taskState !== "del"){
             taskCount = taskCount+1
+            }
           })
         })
 
@@ -796,14 +778,20 @@ class KanbanMain extends Component {
           })
         })
 
+        this.state.taskList[TaskListIndex].tasks.map(task => {
+          if(task.taskState === "done"){
+            completedTask = completedTask-1
+          }
+        })
+
         const newData = {
           TaskListIndex: TaskListIndex,
           taskListOrder : json.data.taskListOrder,
           socketType:"taskListDelete",
           projectNo:taskListBody.projectNo,
-          membersNo:membersNo,
+          members:this.state.projectMembers,
           taskCount:taskCount,
-          completedTask:completedTask
+          completedTask:completedTask,
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(newData));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newData));
@@ -1034,15 +1022,10 @@ class KanbanMain extends Component {
   }
   //task checkList check 업데이트
   callbackCheckListStateUpdate(taskListNo, taskNo, checklistNo, checklistState){
-    const taskListIndex = this.state.taskList.findIndex(
+
+    const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
-    const checklistIndex = this.state.taskList[taskListIndex].tasks[
-      taskIndex
-    ].checkList.findIndex((checklist) => checklist.checklistNo === checklistNo);
 
     const taskName=this.state.taskList[taskListIndex].tasks[taskIndex].taskContents
 
@@ -1073,25 +1056,18 @@ class KanbanMain extends Component {
     })
     .then(response => response.json())
     .then(json => {
-    let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            checkList: {
-              [checklistIndex]: {
-                checklistState: {
-                  $set: checklistState === "done" ? "do" : "done",
-                },
-              },
-            },
-          },
-        },
-      },
-    });
 
-    this.setState({
-      taskList: newTaskList,
-    });
+      const socketData = {
+        taskListNo:taskListNo,
+        taskNo:taskNo,
+        checklistNo:checklistNo,
+        checklistState:checklistState,
+        socketType:"taskCheckListUpdate",
+        projectNo:this.state.taskList[TaskListIndex].projectNo,
+
+      }
+
+    this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
   })
   }
 
@@ -2314,8 +2290,7 @@ editTaskListName(newTaskList){
   // console.log(newTaskList)
   newTaskList = update(newTaskList, {
     socketType:{$set:"taskListName"},
-    members:{$set:members}
-    
+    members:{$set:this.state.projectMembers}
   })
 
   this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
@@ -2349,23 +2324,41 @@ receiveKanban(socketData) {
       });
     }else if(socketData.socketType === 'taskListDelete'){
      
-      const deleteTaskListOrderNo = socketData.taskListOrder;
       let newTaskList = this.state.taskList;
   
-      this.state.taskList.map((taskList, index) => {
-        if (taskList.taskListOrder > deleteTaskListOrderNo) {
-          newTaskList = update(newTaskList, {
-            [index]: {
-              taskListOrder: { $set: taskList.taskListOrder - 1 },
-            },
-          });
-        }
-      });
-  
+      newTaskList = update (newTaskList,{
+        $push:[this.state.taskList[socketData.TaskListIndex]]
+      })
+
       newTaskList = update(newTaskList, {
         $splice: [[socketData.TaskListIndex, 1]],
       });
-  
+      
+      this.state.taskList.map((taskList, index) => {
+          newTaskList = update(newTaskList, {
+            [index]: {
+              taskListOrder: { $set: index+1 },
+            },
+          });
+      });
+
+      newTaskList[newTaskList.length-1].tasks.map((task,index) => {
+        newTaskList = update(newTaskList , {
+          [newTaskList.length-1]:{
+            tasks:{
+              [index]:{
+                taskState : {$set:"del"}
+              }
+            }
+          }
+        })
+      });
+
+      newTaskList = update(newTaskList, {
+        [newTaskList.length-1]:{
+          taskListState:{$set:"F"}
+        }
+      });
       this.setState({
         taskList: newTaskList,
       });
@@ -2414,10 +2407,14 @@ receiveKanban(socketData) {
       
         
     }else if(socketData.socketType === 'taskInsert'){
-     
-        let newTaskList = this.state.taskList;
-      newTaskList[socketData.taskListIndex].tasks.splice(0, 0, socketData);
+      const TaskListIndex = this.state.taskList.findIndex(
+        (taskList) => taskList.taskListNo == socketData.taskListNo
+      );
       
+      let newTaskList = this.state.taskList;
+      console.log(newTaskList)
+      console.log(newTaskList[TaskListIndex])
+      newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
       this.setState({
         taskList: newTaskList,
       });
@@ -2438,7 +2435,6 @@ receiveKanban(socketData) {
         )
     }else if(socketData.socketType === 'taskDelete'){
     
-      console.log(socketData)
       const TaskListIndex = this.state.taskList.findIndex(
         (taskList) => taskList.taskListNo === socketData.taskListNo
         );
@@ -2486,7 +2482,7 @@ receiveKanban(socketData) {
           },
         });
       });
-      
+
       this.setState({
         taskList: newTaskList,
       });
@@ -2866,6 +2862,39 @@ receiveKanban(socketData) {
       });
     }
   
+    } else if(socketData.socketType === 'taskCheckListUpdate'){
+
+      const taskListIndex = this.state.taskList.findIndex(
+        (taskList) => taskList.taskListNo === socketData.taskListNo
+      );
+      const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
+        (task) => task.taskNo === socketData.taskNo
+      );
+      const checklistIndex = this.state.taskList[taskListIndex].tasks[
+        taskIndex
+      ].checkList.findIndex((checklist) => checklist.checklistNo === socketData.checklistNo);
+
+
+    let newTaskList = update(this.state.taskList, {
+      [taskListIndex]: {
+        tasks: {
+          [taskIndex]: {
+            checkList: {
+              [checklistIndex]: {
+                checklistState: {
+                  $set: socketData.checklistState === "done" ? "do" : "done",
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    this.setState({
+      taskList: newTaskList,
+    });
+
     }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
       if(socketData.socketType === 'comment'){
         console.log(socketData.taskIndex)
@@ -2891,7 +2920,7 @@ receiveKanban(socketData) {
         if(socketData.to === 'Invalid date'){
           socketData.to = undefined;
         }
-  
+        
         let newTaskList = update(this.state.taskList, {
           [socketData.taskListIndex]: {
             tasks: {
@@ -2909,7 +2938,13 @@ receiveKanban(socketData) {
         this.setState({
           taskList:newTaskList
         })
-      } else if(socketData.socketType === "labelUpdate"){
+      }
+    }
+//     return;
+//   }
+
+  
+ else if(socketData.socketType === "labelUpdate"){
         let newTaskList = update(this.state.taskList,{
           [socketData.taskListIndex]:{
             tasks:{
