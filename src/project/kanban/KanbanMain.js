@@ -1026,8 +1026,11 @@ class KanbanMain extends Component {
     const TaskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
-
-    const taskName=this.state.taskList[taskListIndex].tasks[taskIndex].taskContents
+    const taskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
+      (task) => task.taskNo === taskNo
+    );
+    
+    const taskName=this.state.taskList[TaskListIndex].tasks[taskIndex].taskContents
 
     let newCheckList = {
       checklistNo: checklistNo,
