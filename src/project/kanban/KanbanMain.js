@@ -430,11 +430,11 @@ class KanbanMain extends Component {
       })
     })
 
-    this.state.taskList.map(taskList => {
-      taskList.tasks.map(task => {
-        console.log(task.taskState)
-      })
-    })
+    // this.state.taskList.map(taskList => {
+    //   taskList.tasks.map(task => {
+    //     console.log(task.taskState)
+    //   })
+    // })
 
     console.log(taskCount)
     
@@ -2211,23 +2211,41 @@ receiveKanban(socketData) {
       });
     }else if(socketData.socketType === 'taskListDelete'){
      
-      const deleteTaskListOrderNo = socketData.taskListOrder;
       let newTaskList = this.state.taskList;
   
-      this.state.taskList.map((taskList, index) => {
-        if (taskList.taskListOrder > deleteTaskListOrderNo) {
-          newTaskList = update(newTaskList, {
-            [index]: {
-              taskListOrder: { $set: taskList.taskListOrder - 1 },
-            },
-          });
-        }
-      });
-  
+      newTaskList = update (newTaskList,{
+        $push:[this.state.taskList[socketData.TaskListIndex]]
+      })
+
       newTaskList = update(newTaskList, {
         $splice: [[socketData.TaskListIndex, 1]],
       });
-  
+      
+      this.state.taskList.map((taskList, index) => {
+          newTaskList = update(newTaskList, {
+            [index]: {
+              taskListOrder: { $set: index+1 },
+            },
+          });
+      });
+
+      newTaskList[newTaskList.length-1].tasks.map((task,index) => {
+        newTaskList = update(newTaskList , {
+          [newTaskList.length-1]:{
+            tasks:{
+              [index]:{
+                taskState : {$set:"del"}
+              }
+            }
+          }
+        })
+      });
+
+      newTaskList = update(newTaskList, {
+        [newTaskList.length-1]:{
+          taskListState:{$set:"F"}
+        }
+      });
       this.setState({
         taskList: newTaskList,
       });
@@ -2953,6 +2971,7 @@ receiveKanban(socketData) {
 
 
   render() {
+    console.log(this.state.taskList)
     return (
       <>
         <SockJsClient
