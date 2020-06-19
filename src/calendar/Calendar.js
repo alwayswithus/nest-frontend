@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom'
 import ProjectList from './ProjectList';
 import TaskList from './TaskList';
 import SockJsClient from "react-stomp";
+import update from 'react-addons-update';
+
 
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
@@ -100,7 +102,7 @@ class myCalendar extends Component {
       tasklistName: taskListName
     })
   }
- 
+
   onShowProjectList() {
     this.setState({
       showProjectList: !this.state.showProjectList
@@ -353,6 +355,20 @@ class myCalendar extends Component {
   }
 
   onTaskAdd() {
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.projectNo);
+    let taskCount = this.state.projects[projectIndex].taskCount + 1;
+    let completedTask = this.state.projects[projectIndex].completedTask;
+
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
+
+    let newProject = update(this.state.projects, {
+      [projectIndex]: {
+        taskCount: { $set: taskCount }
+      }
+    })
     
     let newEvent = {
       taskNo: null,
@@ -362,11 +378,12 @@ class myCalendar extends Component {
       taskLabel: "#DFDFDF",
       taskState: "do",
       taskContents: this.state.newTaskContents,
-      taskOrder:null,
+      taskOrder: null,
       projectNo: this.state.projectNo,
       taskListNo: this.state.tasklistNo,
       taskWriter: window.sessionStorage.getItem("authUserNo"),
       taskRegdate: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
+      
     }
 
     fetch(`${API_URL}/api/task/insert`, {
@@ -374,12 +391,10 @@ class myCalendar extends Component {
       headers: API_HEADERS,
       body: JSON.stringify(newEvent)
     })
-    .then(response => response.json())
-    .then(json => {
-      
-        console.log(json.data)
+      .then(response => response.json())
+      .then(json => {
 
-      let responseNewEvent = {
+        let responseNewEvent = {
           color: "#DFDFDF",
           end: this.state.eventStart,
           id: json.data.taskNo,
@@ -405,66 +420,49 @@ class myCalendar extends Component {
           taskPoint: json.data.taskPoint,
           taskLabel: json.data.taskLabel,
           fileList: [],
-          taskWriter:json.data.taskWriter,
+          taskWriter: json.data.taskWriter,
           userName: sessionStorage.getItem("authUserName"),
           socketType: "taskInsert",
           projectNo: json.data.projectNo,
           taskListNo: json.data.taskListNo,
-          // taskListIndex:TaskListIndex,
-          // membersNo:membersNo
-
+          taskCount: taskCount,
+          completedTask: completedTask,
+          membersNo: membersNo
         }
-        // let newTask = {
-        //   commentList: [],
-        //   taskStart: json.data.taskStart,
-        //   taskEnd: json.data.taskEnd,
-        //   taskOrder: json.data.taskOrder,
-        //   tagList: [],
-        //   taskState: "do",
-        //   memberList: [],
-        //   taskContents: json.data.taskContents,
-        //   taskNo: json.data.taskNo+"",
-        //   checkList: [],
-        //   taskPoint: json.data.taskPoint,
-        //   taskLabel: json.data.taskLabel,
-        //   fileList: [],
-        //   taskWriter:json.data.taskWriter,
-        //   userName:sessionStorage.getItem("authUserName"),
-        //   socketType:"taskInsert",
-        //   taskListIndex:TaskListIndex,
-        //   projectNo:projectNo,
-        //   taskCount:taskCount,
-        //   completedTask:completedTask,
-        //   membersNo:membersNo
-        // };
 
-      let events = [
-        ...this.state.events,
-        responseNewEvent
-      ]
-  
-      let taskState = this.state.taskState;
-      taskState.push({ id: responseNewEvent.id, state: newEvent.taskState })
-      let taskNumber = this.state.taskNumber;
-      taskNumber.push(responseNewEvent.id);
-  
-      let taskPoint = this.state.taskPoint;
-      taskPoint.push({ id: responseNewEvent.id, point: newEvent.taskPoint, isChecked: false })
-      let taskPointNumber = this.state.taskPointNumber;
-      taskPointNumber.push(responseNewEvent.id);
-  
-      this.setState({
-        taskState: taskState,
-        taskNumber: taskNumber,
-        taskPoint: taskPoint,
-        taskPointNumber: taskPointNumber,
-        events: events,
-        privateTask: false
+        let events = [
+          ...this.state.events,
+          responseNewEvent
+        ]
+
+        let taskState = this.state.taskState;
+        taskState.push({ id: responseNewEvent.id, state: newEvent.taskState })
+        let taskNumber = this.state.taskNumber;
+        taskNumber.push(responseNewEvent.id);
+
+        let taskPoint = this.state.taskPoint;
+        taskPoint.push({ id: responseNewEvent.id, point: newEvent.taskPoint, isChecked: false })
+        let taskPointNumber = this.state.taskPointNumber;
+        taskPointNumber.push(responseNewEvent.id);
+
+        let eventSocketData = {
+          event: responseNewEvent,
+          membersNo: membersNo
+        }
+
+        this.setState({
+          projects: newProject,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          events: events,
+          privateTask: false
+        })
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(eventSocketData));
+        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       })
-      this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
-      // this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
-      // this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
-    }) 
 
   }
 
@@ -510,19 +508,19 @@ class myCalendar extends Component {
   }
 
   onTaskList() {
-    if(this.state.projectTitle !== "") {
-      
+    if (this.state.projectTitle !== "") {
+
       fetch(`${API_URL}/api/calendar/${this.state.projectNo}`, {
         method: 'post',
         headers: API_HEADERS,
       })
-      .then(response => response.json())
-      .then(json => {  
-        this.setState({
-          taskList: !this.state.taskList,
-          allTaskList: json.data.allTaskList
+        .then(response => response.json())
+        .then(json => {
+          this.setState({
+            taskList: !this.state.taskList,
+            allTaskList: json.data.allTaskList
+          })
         })
-      })
     }
   }
 
@@ -537,17 +535,30 @@ class myCalendar extends Component {
     })
   }
 
+  receiveCalendar(eventSocketData) {
+    console.log("Qweqwe")
+
+    let events = [
+      ...this.state.events,
+      eventSocketData.event
+    ]
+
+    this.setState({
+      events: events
+    })
+  }
+
   render() {
     return (
       <div id="Calendar">
-         <SockJsClient
-                url={`${API_URL}/socket`}
-                topics={[`/topic/all`]}
-                onMessage={this.receiveCalendar}
-                ref={(client) => {
-                  this.clientRef = client
-                }}
-             />
+        <SockJsClient
+          url={`${API_URL}/socket`}
+          topics={[`/topic/calendar/all/${sessionStorage.getItem("authUserNo")}`]}
+          onMessage={this.receiveCalendar.bind(this)}
+          ref={(client) => {
+            this.clientRef = client
+          }}
+        />
 
         {/* 사이드바 */}
         <div className="sidebar">
@@ -575,7 +586,7 @@ class myCalendar extends Component {
                   </div>
                 </tr>
                 <tr>
-                  <div style={{ width: "100%" }}>    
+                  <div style={{ width: "100%" }}>
                     <div className="show-project-list">
                       <div>
                         <div onClick={this.onShowProjectList.bind(this)}>
@@ -628,22 +639,23 @@ class myCalendar extends Component {
                         {this.state.showImportant ?
                           <div style={{ paddingLeft: "20px", fontWeight: "bold" }}>
                             {this.state.taskUniquePoint.map(task => {
-                              switch(task) {
-                                case 5 :
+                              switch (task) {
+                                case 5:
                                   return (<span><input type="checkbox" checked={this.state.isPointFive} value="5" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 5 <br /></span>)
-                                case 4 :
+                                case 4:
                                   return (<span><input type="checkbox" checked={this.state.isPointFour} value="4" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 4 <br /></span>)
-                                case 3 :
+                                case 3:
                                   return (<span><input type="checkbox" checked={this.state.isPointThree} value="3" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 3 <br /></span>)
-                                case 2 :
+                                case 2:
                                   return (<span><input type="checkbox" checked={this.state.isPointTwo} value="2" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 2 <br /></span>)
-                                case 1 :
+                                case 1:
                                   return (<span><input type="checkbox" checked={this.state.isPointOne} value="1" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 1 <br /></span>)
-                                case 0 :
+                                case 0:
                                   return (<span><input type="checkbox" checked={this.state.isPointZero} value="0" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 중요도 0 <br /></span>)
-                                case -1 :
-                                  return (<span><input type="checkbox" checked={this.state.isPointNull} value="null" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 평가되지 않음 <br /></span>)                                
-                              }})}
+                                case -1:
+                                  return (<span><input type="checkbox" checked={this.state.isPointNull} value="null" onChange={this.onCheckPoint.bind(this)} /> &nbsp; 평가되지 않음 <br /></span>)
+                              }
+                            })}
                           </div> : ""}
                       </div>
                     </div>
@@ -658,7 +670,7 @@ class myCalendar extends Component {
               </table>
             </div>
             <div>
-            
+
             </div>
             <div className="calendar-body-contents-calendar">
               <Calendar
@@ -696,61 +708,61 @@ class myCalendar extends Component {
                   <div className="task-location-select" onClick={this.onPathSelect.bind(this)}>
                     {this.state.pathChange === "" ? "위치 선택" : this.state.pathChange}
                   </div>
-                  {this.state.pathSelect ? 
-                  <div className="container card-member" style={{position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px"}}>
-                    <div className="card">
-                      <div className="card-header">
-                        <h6 style={{ display: "inline-block", fontSize: "14px", marginTop: "15px", marginRight: "199px", fontWeight: "bold", color: "black" }}>위치 선택</h6>
-                        <button type="button" onClick={this.onPathSelectClose.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
-                        <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
-                      </div>
-                      <div className="card-body">
-                        <div className="select-project" onClick={this.onProjectList.bind(this)} style={{ marginBottom: "10px", border: "1px solid #d4d6db" }}>
-                          <div style={{ padding: "10px", display: "inline-block" }}>
-                            <div style={{paddingBottom: "5px", color: "#696f7a", fontSize: "14px"}}>
-                              프로젝트
-                            </div>
-                            {this.state.projectTitle === "" ? 
-                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
-                              프로젝트를 선택해주세요
-                            </div> : 
-                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
-                              {this.state.projectTitle}
-                            </div>}
-                          </div>
-                          <div style={{color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right"}}>
-                            <i className="fas fa-chevron-right fa-1x"></i>
-                          </div>
+                  {this.state.pathSelect ?
+                    <div className="container card-member" style={{ position: "absolute", top: "38px", left: "25px", width: "385px", height: "253px" }}>
+                      <div className="card">
+                        <div className="card-header">
+                          <h6 style={{ display: "inline-block", fontSize: "14px", marginTop: "15px", marginRight: "199px", fontWeight: "bold", color: "black" }}>위치 선택</h6>
+                          <button type="button" onClick={this.onPathSelectClose.bind(this)} className="close" style={{ lineHeight: "35px" }}>&times;</button>
+                          <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                         </div>
-                        <div onClick={this.onTaskList.bind(this)} className="select-project" style={{ border: "1px solid #d4d6db" }}>
-                          <div style={{ padding: "10px", display: "inline-block" }}>
-                            <div style={{paddingBottom: "5px", color: "#696f7a", fontSize: "14px"}}>
-                              업무 리스트
+                        <div className="card-body">
+                          <div className="select-project" onClick={this.onProjectList.bind(this)} style={{ marginBottom: "10px", border: "1px solid #d4d6db" }}>
+                            <div style={{ padding: "10px", display: "inline-block" }}>
+                              <div style={{ paddingBottom: "5px", color: "#696f7a", fontSize: "14px" }}>
+                                프로젝트
                             </div>
-                            {this.state.projectTitle === "" ? 
-                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
-                              프로젝트를 먼저 선택해주세요
+                              {this.state.projectTitle === "" ?
+                                <div style={{ color: "#27B6BA", fontWeight: "bold" }}>
+                                  프로젝트를 선택해주세요
+                            </div> :
+                                <div style={{ color: "#27B6BA", fontWeight: "bold" }}>
+                                  {this.state.projectTitle}
+                                </div>}
+                            </div>
+                            <div style={{ color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right" }}>
+                              <i className="fas fa-chevron-right fa-1x"></i>
+                            </div>
+                          </div>
+                          <div onClick={this.onTaskList.bind(this)} className="select-project" style={{ border: "1px solid #d4d6db" }}>
+                            <div style={{ padding: "10px", display: "inline-block" }}>
+                              <div style={{ paddingBottom: "5px", color: "#696f7a", fontSize: "14px" }}>
+                                업무 리스트
+                            </div>
+                              {this.state.projectTitle === "" ?
+                                <div style={{ color: "#27B6BA", fontWeight: "bold" }}>
+                                  프로젝트를 먼저 선택해주세요
                             </div> : this.state.tasklistName === "" ?
-                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
-                              업무 리스트를 선택해주세요
-                            </div> : 
-                            <div style={{color: "#27B6BA", fontWeight: "bold"}}>
-                              {this.state.tasklistName}
-                            </div>}
+                                  <div style={{ color: "#27B6BA", fontWeight: "bold" }}>
+                                    업무 리스트를 선택해주세요
+                            </div> :
+                                  <div style={{ color: "#27B6BA", fontWeight: "bold" }}>
+                                    {this.state.tasklistName}
+                                  </div>}
+                            </div>
+                            <div style={{ color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right" }}>
+                              <i className="fas fa-chevron-right fa-1x"></i>
+                            </div>
                           </div>
-                          <div style={{color: "grey", paddingRight: "15px", paddingTop: "20px", display: "inline-block", float: "right"}}>
-                            <i className="fas fa-chevron-right fa-1x"></i>
+                          <div>
+                            {this.state.projectTitle !== "" ? (this.state.tasklistName !== "" ?
+                              <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} >위치 변경</Button> :
+                              <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} disabled>위치 변경</Button>) :
+                              <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} disabled>위치 변경</Button>}
                           </div>
-                        </div>
-                        <div>
-                          {this.state.projectTitle !== "" ? (this.state.tasklistName !== "" ?
-                            <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} >위치 변경</Button> : 
-                            <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} disabled>위치 변경</Button>) : 
-                            <Button onClick={this.onPathChange.bind(this)} style={{ outline: "none", borderColor: "#27B6BA", backgroundColor: "#27B6BA", width: "100%", marginTop: "10px" }} disabled>위치 변경</Button>}
                         </div>
                       </div>
-                    </div>
-                  </div> : ""}
+                    </div> : ""}
                 </div>
                 <div style={{ border: "1px solid #d4d6db", marginTop: "5px" }}>
                   <div>
@@ -769,30 +781,30 @@ class myCalendar extends Component {
                 </div>
               </DialogContent>
               <DialogActions style={{ display: "block", textAlign: "center" }}>
-                {this.state.pathChange !== "" ?  
-                (this.state.newTaskContents !== "" ? 
-                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }}>업무 작성</Button> : 
-                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }} disabled>업무 작성</Button>) : 
-                <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }} disabled>업무 작성</Button>}
+                {this.state.pathChange !== "" ?
+                  (this.state.newTaskContents !== "" ?
+                    <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }}>업무 작성</Button> :
+                    <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }} disabled>업무 작성</Button>) :
+                  <Button onClick={this.onTaskAdd.bind(this)} variant="outlined" style={{ outline: "none", backgroundColor: '#27B6BA', color: 'white', fontWeight: "bold" }} disabled>업무 작성</Button>}
               </DialogActions>
-              {this.state.projectList ? 
-              <div>
-                <ProjectList 
-                  projectList={{
-                    close: this.callbackProjectListClose.bind(this),
-                    projectNo: this.callbackProjectNo.bind(this)
-                  }}
-                  projects={this.state.projects} />
-              </div> : ""}
-              {this.state.taskList ? 
-              <div>
-                <TaskList 
-                  taskList={{
-                    close: this.callbackTaskListClose.bind(this),
-                    tasklistNo: this.callbackTaskListNo.bind(this)
-                  }} 
+              {this.state.projectList ?
+                <div>
+                  <ProjectList
+                    projectList={{
+                      close: this.callbackProjectListClose.bind(this),
+                      projectNo: this.callbackProjectNo.bind(this)
+                    }}
+                    projects={this.state.projects} />
+                </div> : ""}
+              {this.state.taskList ?
+                <div>
+                  <TaskList
+                    taskList={{
+                      close: this.callbackTaskListClose.bind(this),
+                      tasklistNo: this.callbackTaskListNo.bind(this)
+                    }}
                     allTaskList={this.state.allTaskList} />
-              </div> : ""}
+                </div> : ""}
             </Dialog>
           </div>
         </div>
@@ -807,7 +819,7 @@ class myCalendar extends Component {
         let taskNumber = [];
         let taskPoint = [];
         let taskPointNumber = [];
-        
+
         response.data.data.allTask.map(task => {
           task["start"] = new Date(task.start);
           task["end"] = new Date(task.end + 1);
@@ -823,16 +835,16 @@ class myCalendar extends Component {
         let set = []
 
         taskPoint.forEach(task => {
-          if(task.point === null) {
-            set.push({point: -1})
+          if (task.point === null) {
+            set.push({ point: -1 })
           }
           else {
-            set.push({point: task.point})
+            set.push({ point: task.point })
           }
         })
 
-        let setProcess = Array.from(new Set(Object(set).map(set=> set.point)));
-        
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+
         this.setState({
           events: response.data.data.allTask,
           taskState: taskState,
