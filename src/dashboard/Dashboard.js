@@ -120,6 +120,15 @@ export default class Dashboard extends React.Component {
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
     }
     else {
+      ApiNotification.fetchInsertNotice(
+        sessionStorage.getItem("authUserNo"),
+        sessionStorage.getItem("authUserName"),
+        this.state.project.members,
+        "projectJoin",
+        null,
+        projectNo
+      )
+
       fetch(`${API_URL}/api/user/add/`, {
         method: 'post',
         headers: API_HEADERS,
