@@ -1479,8 +1479,24 @@ export default class Dashboard extends React.Component {
         }
       } 
     }
-  }
+    
+    else if(socketData.socketType === "taskInsert") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
 
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            completedTask: { $set: socketData.completedTask },
+            taskCount: { $set: socketData.taskCount }
+          }
+        })
+        
+        this.setState({
+          projects: newProject
+        })
+      }
+    }
+  }
 
   render() {
     return (
