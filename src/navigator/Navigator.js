@@ -34,8 +34,6 @@ export default class Navigator extends React.Component {
     }
 
     onPopoverOpen() {
-        console.log("qweqwe")
-
         this.setState({
             popoverOpen: !this.state.popoverOpen
         })
