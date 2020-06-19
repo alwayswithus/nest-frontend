@@ -396,10 +396,10 @@ class myCalendar extends Component {
 
         let responseNewEvent = {
           color: "#DFDFDF",
-          end: this.state.eventStart,
+          end: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
           id: json.data.taskNo,
           projectNo: json.data.projectNo,
-          start: this.state.eventStart,
+          start: moment(this.state.eventStart).format('YYYY-MM-DD HH:mm'),
           taskPoint: null,
           taskState: "do",
           tasklistNo: json.data.taskListNo,
@@ -459,9 +459,9 @@ class myCalendar extends Component {
           events: events,
           privateTask: false
         })
-        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(eventSocketData));
-        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
-        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+      //   this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(eventSocketData));
+      //   this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+      //   this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       })
 
   }
@@ -532,19 +532,6 @@ class myCalendar extends Component {
     this.setState({
       pathSelect: false,
       pathChange: pathChange
-    })
-  }
-
-  receiveCalendar(eventSocketData) {
-    console.log("Qweqwe")
-
-    let events = [
-      ...this.state.events,
-      eventSocketData.event
-    ]
-
-    this.setState({
-      events: events
     })
   }
 
