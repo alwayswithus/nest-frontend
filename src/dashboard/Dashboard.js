@@ -12,7 +12,7 @@ import User from './User';
 import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
-
+import ApiHistory from '../project/topBar/ApiHistory'
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
@@ -73,6 +73,7 @@ export default class Dashboard extends React.Component {
 
   // CallBack Add Delete Member Function
   callbackAddDeleteMember(userNo, userName, userPhoto, projectNo) {
+    
     const memberIndex = this.state.project.members.findIndex(member =>
       member.userNo === userNo)
 
@@ -88,7 +89,7 @@ export default class Dashboard extends React.Component {
     }
 
     let newProject;
-
+    const memberName = this.state.project.members[memberIndex].userName
     if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
       fetch(`${API_URL}/api/user/delete/`, {
         method: 'post',
@@ -146,6 +147,14 @@ export default class Dashboard extends React.Component {
         newProject: newProject[projectIndex],
         membersNo: membersNo
       }
+
+      ApiHistory.fetchInsertHistory(
+        sessionStorage.getItem("authUserNo"),
+        sessionStorage.getItem("authUserName"),
+        this.state.project.members, 
+        "projectMemberJoin", 
+        memberName, 
+        projectNo)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
 
@@ -341,6 +350,14 @@ export default class Dashboard extends React.Component {
     this.state.projects[projectIndex].members.map(member => {
       membersNo.push(member.userNo);
     })
+
+    ApiHistory.fetchInsertHistory(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.project.members, 
+      "projectMemberInvite", 
+      memberName, 
+      projectNo)
 
     fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
@@ -832,6 +849,14 @@ export default class Dashboard extends React.Component {
       null,
       projectNo
     )
+    const projectTitle = this.state.project.projectTitle
+    ApiHistory.fetchInsertHistory(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.project.members, 
+      "projectDateUpdate", 
+      projectTitle, 
+      projectNo)
 
     if (from === 'Invalid date') {
       from = undefined;

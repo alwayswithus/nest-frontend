@@ -93,7 +93,7 @@ class Setting extends Component {
 
     //click check box
     clickCheckBox(checklistNo, checklistState,taskListNo){
-        console.log("check!!+Setting")
+        console.log(taskListNo)
         this.props.taskCallbacks.checklistStateUpdate(taskListNo, this.props.match.params.taskNo, checklistNo, checklistState);
     }
     
@@ -419,7 +419,7 @@ class Setting extends Component {
                                                     type="checkbox" 
                                                     className="doneCheck" 
                                                     checked={checklist.checklistState === "done"} 
-                                                    onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState,taskListNo)} 
+                                                    onClick={this.clickCheckBox.bind(this,checklist.checklistNo, checklist.checklistState, taskListNo)} 
                                                     readOnly></input>
                                                     <div style={{borderLeft:'3px solid #F8BCB6'}}/>
                                                         <CheckList 

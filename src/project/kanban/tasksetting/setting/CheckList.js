@@ -22,7 +22,7 @@ class CheckList extends Component {
             this.setState({
                 click:!this.state.click
             })
-            this.props.taskCallbacks.checklistContentsUpdate(this.props.taskListNo, this.props.params.taskNo, this.props.checklist.checklistNo, event.target.value)
+            this.props.taskCallbacks.checklistContentsUpdate(this.props.params.taskListNo, this.props.params.taskNo, this.props.checklist.checklistNo, event.target.value)
         }
     }
 
