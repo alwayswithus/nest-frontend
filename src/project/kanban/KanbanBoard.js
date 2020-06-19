@@ -66,64 +66,72 @@ class KanbanBoard extends Component {
 
   // 업무 검색
   searchKeyword(event) {
-    console.log(event.target.value)
-    if (event.target.value !== "") {
-      console.log(this.state.selectPicker)
-      // const tagSearch = {
-      //   projectNo: this.props.projectNo,
-      //   keyword: event.target.value,
-      // };
+    if (event.target.value !== "") { //안비어있으면 
 
-      // fetch(`${API_URL}/api/kanbanMain/searchTag`, {
-      //   method: "post",
-      //   headers: API_HEADERS,
-      //   body: JSON.stringify(tagSearch),
-      // })
-      //   .then((response) => response.json())
-      //   .then((json) => {
-      //     let tagTaskNo = [];
-      //     tagTaskNo = json.data.map((task) => task.task_no + "");
+            if(this.state.selectPicker === "tag"){
+              console.log(event.target.value)
+            
+            const tagSearch = {
+              projectNo: this.props.projectNo,
+              keyword: event.target.value,
+            };
 
-      //     const newTaskList = this.props.taskList;
-      //     let copy = newTaskList.slice(0, newTaskList.length);
-      //     copy &&
-      //       copy.map(
-      //         (tasks, index) =>
-      //           (copy[index] = update(copy[index], {
-      //             tasks: {
-      //               $set: [],
-      //             },
-      //           }))
-      //       );
+            fetch(`${API_URL}/api/kanbanMain/searchTag`, {
+              method: "post",
+              headers: API_HEADERS,
+              body: JSON.stringify(tagSearch),
+            })
+              .then((response) => response.json())
+              .then((json) => {
+                let tagTaskNo = [];
+                tagTaskNo = json.data.map((task) => task.task_no + "");
 
-      //     let tagTask = [];
-      //     newTaskList &&
-      //       newTaskList.map(
-      //         (taskList) =>
-      //           (tagTask = tagTask.concat(
-      //             taskList.tasks.map((task) =>
-      //               tagTaskNo.indexOf(task.taskNo) !== -1 ? task : null
-      //             )
-      //           ))
-      //       );
+                const newTaskList = this.props.taskList;
+                let copy = newTaskList.slice(0, newTaskList.length);
+                copy &&
+                  copy.map(
+                    (tasks, index) =>
+                      (copy[index] = update(copy[index], {
+                        tasks: {
+                          $set: [],
+                        },
+                      }))
+                  );
 
-      //     newTaskList.map((tasklist, index) => {
-      //       tagTask.splice(0, tasklist.tasks.length).map((task) =>
-      //         task !== null
-      //           ? (copy[index] = update(copy[index], {
-      //               tasks: {
-      //                 $push: [task],
-      //               },
-      //             }))
-      //           : null
-      //       );
-      //     });
-          this.setState({
-            searchKeyword: event.target.value,
-            // allTaskList: copy,
-          });
-      //   });
-    } else {
+                let tagTask = [];
+                newTaskList &&
+                  newTaskList.map(
+                    (taskList) =>
+                      (tagTask = tagTask.concat(
+                        taskList.tasks.map((task) =>
+                          tagTaskNo.indexOf(task.taskNo) !== -1 ? task : null
+                        )
+                      ))
+                  );
+
+                newTaskList.map((tasklist, index) => {
+                  tagTask.splice(0, tasklist.tasks.length).map((task) =>
+                    task !== null
+                      ? (copy[index] = update(copy[index], {
+                          tasks: {
+                            $push: [task],
+                          },
+                        }))
+                      : null
+                  );
+                });
+                this.setState({
+                  searchKeyword: event.target.value,
+                  allTaskList: copy,
+                });
+              });
+          }else{
+            this.setState({
+              searchKeyword: event.target.value,
+            });
+          }
+
+    } else { // 비어있으면
       this.setState({
         searchKeyword: event.target.value,
         allTaskList: this.props.taskList,

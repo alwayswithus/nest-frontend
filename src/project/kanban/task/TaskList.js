@@ -268,81 +268,53 @@ class TaskList extends Component {
                 >
                   {(provided, snapshot) => (
                     <>
-                      <div
-                        className="tasks"
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
+                      <div className="tasks" ref={provided.innerRef} {...provided.droppableProps}>
                         {/* task 목록 */}
-
-                        {this.props.selectPicker === "task" ?
-                        <>
-                        {this.props.taskList.tasks
-                          .filter(
-                            (task) =>
-                              task.taskContents.indexOf(
-                                this.props.searchKeyword
-                              ) !== -1
-                          )
-                          .map((task, index) => (
-                            <>
-                              <div>
-                                {
-                                  task.taskState === "del" 
-                                  ? null 
-                                  :
-                                    this.state.showComplete 
-                                      ? 
-                                      <Task
-                                        authUserRole={this.props.authUserRole}
-                                        projectNo={this.props.projectNo}
-                                        key={task.taskNo}
-                                        taskListNo={this.props.taskList.taskListNo}
-                                        task={task}
-                                        index={index}
-                                        taskCallbacks={this.props.taskCallbacks}
-                                        complete={task.taskState === "done" ? true : false}
-                                      />
-                                      : 
-                                      task.taskState === "done"
-                                        ? null 
-                                        : 
-                                        <Task
-                                          authUserRole={this.props.authUserRole}
-                                          projectNo={this.props.projectNo}
-                                          key={task.taskNo}
-                                          taskListNo={this.props.taskList.taskListNo}
-                                          task={task}
-                                          index={index}
-                                          taskCallbacks={this.props.taskCallbacks}
-                                          complete={task.taskState === "done" ? true : false}
-                                        />
-                                }
-                              </div>
-                            </>
-                          ))}
-                          </>
-                          : 
-                          <>
+                        {this.props.selectPicker === "task" 
+                          ? <>
                             {this.props.taskList.tasks
-                            .map((task, index) => (
-                              <div>
-                                {this.state.showComplete 
-                                  ? 
-                                  <Task
-                                    authUserRole={this.props.authUserRole}
-                                    projectNo={this.props.projectNo}
-                                    key={task.taskNo}
-                                    taskListNo={this.props.taskList.taskListNo}
-                                    task={task}
-                                    index={index}
-                                    taskCallbacks={this.props.taskCallbacks}
-                                    complete={task.taskState === "done" ? true : false}
-                                  />
-                                  : 
-                                  task.taskState === "done" 
-                                    ? null 
-                                    :
+                              .filter((task) =>
+                                  task.taskContents.indexOf(this.props.searchKeyword) !== -1)
+                              .map((task, index) => (
+                                <>
+                                  <div>
+                                    {task.taskState === "del" 
+                                      ? null 
+                                      : this.state.showComplete 
+                                          ? <Task
+                                              authUserRole={this.props.authUserRole}
+                                              projectNo={this.props.projectNo}
+                                              key={task.taskNo}
+                                              taskListNo={this.props.taskList.taskListNo}
+                                              task={task}
+                                              index={index}
+                                              taskCallbacks={this.props.taskCallbacks}
+                                              complete={task.taskState === "done" ? true : false}
+                                            />
+                                          : task.taskState === "done"
+                                              ? null 
+                                              : 
+                                              <Task
+                                                authUserRole={this.props.authUserRole}
+                                                projectNo={this.props.projectNo}
+                                                key={task.taskNo}
+                                                taskListNo={this.props.taskList.taskListNo}
+                                                task={task}
+                                                index={index}
+                                                taskCallbacks={this.props.taskCallbacks}
+                                                complete={task.taskState === "done" ? true : false}
+                                              />
+                                      }
+                                  </div>
+                                </>
+                              ))}
+                            </>
+                          : <>
+                              {this.props.taskList.tasks
+                              .map((task, index) => (
+                                <div>
+                                  {this.state.showComplete 
+                                    ? 
                                     <Task
                                       authUserRole={this.props.authUserRole}
                                       projectNo={this.props.projectNo}
@@ -353,10 +325,24 @@ class TaskList extends Component {
                                       taskCallbacks={this.props.taskCallbacks}
                                       complete={task.taskState === "done" ? true : false}
                                     />
-                                }
-                                
-                              </div>
-                          ))}
+                                    : 
+                                    task.taskState === "done" 
+                                      ? null 
+                                      :
+                                      <Task
+                                        authUserRole={this.props.authUserRole}
+                                        projectNo={this.props.projectNo}
+                                        key={task.taskNo}
+                                        taskListNo={this.props.taskList.taskListNo}
+                                        task={task}
+                                        index={index}
+                                        taskCallbacks={this.props.taskCallbacks}
+                                        complete={task.taskState === "done" ? true : false}
+                                      />
+                                  }
+                                  
+                                </div>
+                             ))}
                           </>}
                         {provided.placeholder}
                       </div>
