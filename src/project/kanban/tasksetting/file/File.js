@@ -27,7 +27,7 @@ class File extends Component {
     // 파일 선택 했을 때.
     onChangeFileUpload(event, taskListNo) {
        
-        console.log("fileUpload")
+        console.log("!!")
         this.setState({
             selectedFile: event.target.files[0],
         })
@@ -184,7 +184,7 @@ class File extends Component {
                                 </label>
                                 <input
                                     id="fileUpload"
-                                    onChange={(e) => this.onChangeFileUpload.bind(e,taskListNo)}
+                                    onChange={(e) => this.onChangeFileUpload(e,taskListNo)}
                                     type='file'
                                     style={{display:'none'}} />
                                     </>

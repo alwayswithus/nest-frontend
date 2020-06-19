@@ -4,11 +4,22 @@ import { Link } from 'react-router-dom'
 
 class TopBar extends Component {
 
+  constructor(){
+    super(...arguments)
+    this.state ={
+      historyOpen:false
+    }
+  }
   onProjectSetting(){
     this.props.callbackPorjectSetting.onProjectSetting(this.props.projectNo)
   
   }
 
+  onClickHistory(){
+    this.setState({
+      historyOpen:!this.state.historyOpen
+    })
+  }
   render() {
     let activePath = this.props.activePath.split('/')[4];
     
@@ -17,7 +28,7 @@ class TopBar extends Component {
     const file = activePath.indexOf("file") !== -1
 
     // const log = this.props.activePath.indexOf("log") !== -1
-    // console.log(this.props.history)
+
     return (
       <>
         <div className="topBar">
@@ -42,11 +53,12 @@ class TopBar extends Component {
                     </li>
                     <li>
                       <div className="popover__wrapper">
-                          <span className="popover__title">활동로그</span>
+                          <span className="popover__title" onClick={this.onClickHistory.bind(this)}>활동로그</span>
                           {/* log lists */}
+                          {this.state.historyOpen ? 
                         <div className="popover__content">
                           {/* log */}
-                          <p className="popover__message">
+                            <p className="popover__message">
                             {this.props.history.length == 0 ? 
                             <>
                               <i className="fas fa-sad-tear"></i>
@@ -58,9 +70,8 @@ class TopBar extends Component {
                                 {history.logContents.split("님이")[1]}</span>
                               </div>
                                                          
-                            )}
-                          </p>
-                        </div>
+                            )}</p></div> : null 
+                        }
                       </div>
                     </li>
                   </ul>

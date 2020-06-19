@@ -9,6 +9,7 @@ class ProfileModal extends Component {
         }
     }
     render(){
+        
         return(
             <div className="container card-profile">
                 <div className="card">
@@ -19,7 +20,7 @@ class ProfileModal extends Component {
                         <div className="user-img" style={{backgroundImage:`url(${this.props.comment.userPhoto})`}}></div>
                         <div className="user-info">
                             <li className = "user-info-name">{this.props.comment.userName}</li>
-                            <li className = "user-info-email">{this.props.comment.userEmail}</li>
+                            <li className = "user-info-email">{this.state.userProfile.userEmail}</li>
                         </div>
                         <hr style={{ marginTop: "5px", marginBottom: "10px", borderColor: "#E3E3E3" }} />
                         <div className="user-info-detail">
@@ -41,7 +42,7 @@ class ProfileModal extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
         )
     }
     componentDidMount(){

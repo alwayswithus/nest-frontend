@@ -38,6 +38,7 @@ class Comment extends Component {
                     <CommentList
                         authUserRole={this.props.authUserRole}
                         taskListNo={taskListNo}
+                        taskNo={this.props.match.params.taskNo}
                         taskItem={taskItem}
                         taskCallbacks={this.props.taskCallbacks} />
                 </div>
