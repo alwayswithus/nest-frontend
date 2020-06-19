@@ -366,7 +366,9 @@ class KanbanMain extends Component {
         let taskCount=1;
         this.state.taskList.map(taskList => {
           taskList.tasks.map(task => {
-            taskCount = taskCount+1
+            if(task.taskState !== "del"){
+              taskCount = taskCount+1
+            }
           })
         })
 
@@ -401,7 +403,6 @@ class KanbanMain extends Component {
           taskCount:taskCount,
           completedTask:completedTask,
           membersNo:membersNo
-        
         };
 
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTask));
@@ -426,18 +427,12 @@ class KanbanMain extends Component {
     let taskCount = -1;
     this.state.taskList.map(taskList => {
       taskList.tasks.map(task => {
-        taskCount = taskCount + 1;
+        if(task.taskState !== "del"){
+          taskCount = taskCount + 1;
+        }
       })
     })
 
-    // this.state.taskList.map(taskList => {
-    //   taskList.tasks.map(task => {
-    //     console.log(task.taskState)
-    //   })
-    // })
-
-    console.log(taskCount)
-    
     let completedTask=0;
     this.state.taskList.map( taskList => {
       taskList.tasks.map(task => {
@@ -507,7 +502,9 @@ class KanbanMain extends Component {
         let taskCount=1;
         this.state.taskList.map(taskList => {
           taskList.tasks.map(task => {
+            if(task.taskState !== "del"){
             taskCount = taskCount+1
+            }
           })
         })
 
@@ -555,7 +552,9 @@ class KanbanMain extends Component {
     let taskCount=0;
     this.state.taskList.map(taskList => {
       taskList.tasks.map(task => {
+        if(task.taskState !== "del"){
         taskCount = taskCount+1
+        }
       })
     })
 
@@ -684,7 +683,9 @@ class KanbanMain extends Component {
         let taskCount=0;
         this.state.taskList.map(taskList => {
           taskList.tasks.map(task => {
+            if(task.taskState !== "del"){
             taskCount = taskCount+1
+            }
           })
         })
 
@@ -697,6 +698,12 @@ class KanbanMain extends Component {
               completedTask = completedTask +1
             }
           })
+        })
+
+        this.state.taskList[TaskListIndex].tasks.map(task => {
+          if(task.taskState === "done"){
+            completedTask = completedTask-1
+          }
         })
 
         const newData = {
@@ -2303,7 +2310,6 @@ receiveKanban(socketData) {
       });
     }else if(socketData.socketType === 'taskDelete'){
     
-      console.log(socketData)
       const TaskListIndex = this.state.taskList.findIndex(
         (taskList) => taskList.taskListNo === socketData.taskListNo
         );
@@ -2351,7 +2357,7 @@ receiveKanban(socketData) {
           },
         });
       });
-      
+
       this.setState({
         taskList: newTaskList,
       });
