@@ -17,7 +17,7 @@ class TopBar extends Component {
     const file = activePath.indexOf("file") !== -1
 
     // const log = this.props.activePath.indexOf("log") !== -1
-    console.log(this.props.history)
+    // console.log(this.props.history)
     return (
       <>
         <div className="topBar">
