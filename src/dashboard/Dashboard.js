@@ -89,7 +89,6 @@ export default class Dashboard extends React.Component {
     }
 
     let newProject;
-    const memberName = this.state.project.members[memberIndex].userName
     if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
       fetch(`${API_URL}/api/user/delete/`, {
         method: 'post',
@@ -166,7 +165,7 @@ export default class Dashboard extends React.Component {
         sessionStorage.getItem("authUserName"),
         this.state.project.members, 
         "projectMemberJoin", 
-        memberName, 
+        userName, 
         projectNo)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
