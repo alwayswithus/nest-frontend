@@ -204,6 +204,7 @@ class Setting extends Component {
 
     // 업무 멤버 삭제
     onDelteMember(userNo, taskListNo){
+        console.log(taskListNo)
         this.props.taskCallbacks.addDeleteMember(
             userNo, 
             this.state.projectMembers, 
@@ -336,7 +337,7 @@ class Setting extends Component {
                                         <div key={member.userNo} className="Member">
                                             <img src={member.userPhoto} className="img-circle" alt="Cinque Terre" />
                                             <span>{member.userName}</span>
-                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,taskListNo)}>
+                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo,taskListNo)}>
                                                 <i className="fas fa-times"></i>
                                             </span>
                                         </div>
@@ -363,7 +364,6 @@ class Setting extends Component {
                                             taskListNo = {taskListNo}
                                             taskNo = {this.props.match.params.taskNo}
                                             taskItem = {taskItem}
-                                            taskTagNo={this.state.taskTagNo} //task tagNo 배열.
                                             tags = {this.state.tags}
                                             taskTagNo = {this.props.taskTagNo}
                                             taskCallbacks={this.props.taskCallbacks}
@@ -382,7 +382,7 @@ class Setting extends Component {
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
                                                 {tag.tagName}
 
-                                                {this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
+                                                {this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo,taskListNo)}>&times;</span>}
                                             </span>
                                         </div>
                                     )}
