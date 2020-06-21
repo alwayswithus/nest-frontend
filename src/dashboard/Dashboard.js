@@ -117,7 +117,14 @@ export default class Dashboard extends React.Component {
         membersNo: membersNo
       }
 
+      // let calendarSocketData = {
+      //   projectNo: projectNo,
+      //   members: [member],
+      //   socketType: "userDelete"
+      // }
+
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
     }
     else {
       let memberArray = [
@@ -169,7 +176,7 @@ export default class Dashboard extends React.Component {
         projectNo)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
-
+      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
     }
   }
 
@@ -1197,7 +1204,8 @@ export default class Dashboard extends React.Component {
                 [memberIndex]: {
                   roleNo: { $set: socketData.roleNo }
                 }
-              }
+              },
+              roleNo: { $set: socketData.roleNo }
             }
           })
   
@@ -1240,7 +1248,7 @@ export default class Dashboard extends React.Component {
                 [memberIndex]: {
                   roleNo: { $set: socketData.roleNo }
                 }
-              }
+              },
             }
           })
 
@@ -1519,6 +1527,21 @@ export default class Dashboard extends React.Component {
           }
         })
         
+        this.setState({
+          projects: newProject
+        })
+      }
+    }
+
+    else if(socketData.socketType === "calendarTaskAdd") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+
+      if(projectIndex != -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            taskCount: { $set: socketData.taskCount }
+          }
+        })
         this.setState({
           projects: newProject
         })

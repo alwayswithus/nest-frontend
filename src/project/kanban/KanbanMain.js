@@ -482,6 +482,7 @@ class KanbanMain extends Component {
           )
 
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTask));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(newTask))
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
        
       });
@@ -552,7 +553,7 @@ class KanbanMain extends Component {
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(deleteTask));
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(deleteTask));
-
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(deleteTask));
   }
 
   // task 복사
@@ -620,8 +621,25 @@ class KanbanMain extends Component {
           taskCount:this.state.taskCount,
           completedTask:this.state.completedTask
         }
+
+        const calendarSocketData = {
+          taskNo:json.data.taskNo,
+          projectNo:this.state.taskList[TaskListIndex].projectNo,
+          members:this.state.projectMembers,
+          taskCount:this.state.taskCount,
+          completedTask:this.state.completedTask,
+          socketType:"taskCopy",
+          taskState: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState,
+          taskLabel: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskLabel,
+          taskEnd: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskEnd,
+          taskStart: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskStart,
+          taskPoint: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskPoint,
+          tasklistNo: this.state.taskList[TaskListIndex].taskListNo           
+        }
+
         this.clientRef.sendMessage("/app/all", JSON.stringify(taskCopy));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCopy));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
       })
     
   }
@@ -652,19 +670,41 @@ class KanbanMain extends Component {
     //   })
     // })
 
+    let calendarSocketData;
     if(this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done"){
       this.setState({
         taskCount:this.state.taskCount,
         completedTask:this.state.completedTask-1
       })
+
+      calendarSocketData = {
+        taskListNo: taskListNo,
+        taskId: taskId,
+        socketType:"taskCheck",
+        projectNo:this.state.taskList[TaskListIndex].projectNo,
+        members:this.state.projectMembers,
+        taskCount:this.state.taskCount,
+        completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1,
+        taskState: "do" 
+      }
     }else{
       this.setState({
         taskCount:this.state.taskCount,
         completedTask:this.state.completedTask+1
       })
+
+      calendarSocketData = {
+        taskListNo: taskListNo,
+        taskId: taskId,
+        socketType:"taskCheck",
+        projectNo:this.state.taskList[TaskListIndex].projectNo,
+        members:this.state.projectMembers,
+        taskCount:this.state.taskCount,
+        completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1,
+        taskState: "done" 
+      }
     }
     
-
     const taskCheck = {
       taskListNo:taskListNo,
       taskId:taskId,
@@ -673,8 +713,8 @@ class KanbanMain extends Component {
       members:this.state.projectMembers,
       taskCount:this.state.taskCount,
       completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1
-
     }
+
     const taskName = this.state.taskList[TaskListIndex].tasks[taskIndex].taskContents
 
     ApiHistory.fetchInsertHistory(
@@ -694,6 +734,7 @@ class KanbanMain extends Component {
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(taskCheck));
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCheck));
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData))
   }
 
   // task list 추가
@@ -810,12 +851,19 @@ class KanbanMain extends Component {
           }
         })
 
-        console.log(this.state.taskList[TaskListIndex].tasks.length)
-
         this.setState({
           taskCount:this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length,
           completedTask:this.state.completedTask - doneCount
         })
+
+        const calendarSocketData = {
+          taskListNo: taskListBody.taskListNo,
+          projectNo: taskListBody.projectNo,
+          taskCount: this.state.taskCount,
+          completedTask: this.state.completedTask,
+          socketType:"taskListDelete",
+          members: this.state.projectMembers
+        }
 
         const newData = {
           TaskListIndex: TaskListIndex,
@@ -828,7 +876,7 @@ class KanbanMain extends Component {
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(newData));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newData));
-
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData))
       });
   }
 
@@ -2447,6 +2495,8 @@ receiveKanban(socketData) {
       newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
       this.setState({
         taskList: newTaskList,
+        taskCount: socketData.taskCount,
+        completedTask: socketData.completedTask
       });
 
       const taskName = socketData.taskContents
