@@ -1,23 +1,68 @@
-.point {
+.task-top{
   display: flex;
-  .fa-circle {
-    color: #f6b6b4;
+  justify-content: space-between;
+  .option{
+    display: flex;
+    justify-content: space-between;
+    width: 44px;
+    .fas{
+      border: 0px;
+      border-radius: 5px;
+      padding: 1px 2px 0px 2px;
+      text-align: center;
+      color: #969696;
+      &:hover{
+      color:#62c6d3;
+      }
+    }
+
   }
-  .circle1{
-    background-color: #f6b6b4;
-    width:10px;
-    height:10px;
-    border-radius: 50%;
-    margin-right:2px;
+  .point {
+    display: flex;
+    .fa-circle {
+      color: #62c6d3;
+    }
+    
+    .circle1{
+      background-color:#62c6d3;
+      width:10px;
+      height:10px;
+      border-radius: 50%;
+      margin-right:2px;
+    }
+    .circle2{
+      border: 1px solid #62c6d3;
+      width:10px;
+      height:10px;
+      border-radius: 50%;
+      margin-right:2px;
+    }
+    b{
+      color: #bdbdbd;
+    }
   }
-  .circle2{
-    border: 1px solid #f6b6b4;
-    width:10px;
-    height:10px;
-    border-radius: 50%;
-    margin-right:2px;
+
+  .setting{
+    text-align: right;
+    // &:hover .menu{
+    //   display: block;
+    // }
+    width: 20px;
+    height: 20px;
+    .menu{
+      position: relative;
+      display: none;
+      right: 80px;
+      background-color: white;
+      border: 1px solid gray;
+      list-style: none;
+      margin-bottom: 0px;
+      padding: 5px;
+      width: 100px;
+      text-align: center;
+    }
   }
-  .nonePoint{
-    color: #bdbdbd;
+  .settingMenu{
+
   }
 }

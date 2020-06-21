@@ -1,27 +1,30 @@
-@keyframes fadein {
-  from {
-      opacity:0;
-  }
-  to {
-      opacity:1;
-  }
-}
+// @keyframes fadein {
+//   from {
+//       opacity:0;
+//   }
+//   to {
+//       opacity:1;
+//   }
+// }
+
 .taskCategory {
   margin: 10px;
   width: 300px;
-  animation: fadein 2s;
-
+  // animation: fadein 2s;
   .taskPanel {
     margin-bottom: 0px;
+    border-color: #62c6d3 !important;
+    box-shadow: 0px 0px 5px black;
   }
   .panel-primary {
-    border-color: #f0d7d2;
-    border-radius: 3px 3px 0px 0px;
+    border-color: #e6e6e6;
+    border-radius: 5px 5px 5px 5px;
   }
   .panel-heading {
-    background-color: #f0d7d2;
-    border-color: #f0d7d2;
-    padding: 10px 15px 0px 15px;
+    background-color: #62c6d3;
+    border-color: #62c6d3;
+    
+    padding: 5px 15px 5px 15px;
     .taskList-head {
       display: flex;
       .edite {
@@ -31,27 +34,36 @@
         padding-left: 15px;
       }
       .Icon {
-        color: rgb(151, 151, 151);
+        color: rgb(126, 126, 126);
+        line-height: 24px;
         &:hover {
-          color: rgb(53, 53, 53);
+          color: rgb(78, 78, 78);
           cursor: pointer;
         }
       }
       .head-title {
+        height: 27px;
         flex: 7;
         color: #4f5558;
         font-weight: bold;
-        i {
-          display: inline;
-          line-height: 22px;
+        .titleArea{
+          padding-left: 5px;
         }
-        &:hover i {
-          display: inline;
-        }
+          i {
+            display: inline;
+            line-height: 24px;
+          }
+          &:hover i {
+            display: inline;
+          }
         .newTaskListName {
+          margin-top:3px;
           width: 200px;
           border: none;
           border-radius: 3px;
+          padding-left: 5px;
+          outline: none;
+          height: 20px;
         }
       }
       .head-insertBtn {
@@ -65,7 +77,7 @@
     }
   }
   .taskInsertArea {
-    background-color: #f0d7d2;
+    background-color: #62c6d3;
 
     .taskInsertForm {
       padding: 0px 5px 0px 7px;
@@ -74,6 +86,7 @@
         resize: none;
         border: none;
         border-radius: 5px;
+        outline: none;
       }
     }
     .taskInsertBtn {
@@ -94,31 +107,33 @@
   }
   .taskArea {
     height: 95%;
-    .test {
+    .taskBox {
       overflow: auto;
       overflow-x: hidden;
       max-height: 95%;
+      padding: 2px 2px 0px 2px;
       .tasks {
         min-height: 1px;
         padding: 1px 10px 10px 10px;
-        background: #f0d7d2;
+        background: #cecece;
         .task {
-          margin-top: 10px;
+          margin-top: 5px;
           
           .panel {
             box-shadow: 1px 1px 5px 1px grey;
             margin-bottom: 0px;
-            animation: fadein 2s;
+            // animation: fadein 2s;
           }
         }
       }
     }
     .completeTasks {  
       padding: 3px 10px;
-      background:#d1d1d1;
+      background:#62c6d3;
       display: flex;
       justify-content: space-between;
-      border-radius: 0px 0px 3px 3px;
+      border-radius: 3px 3px 3px 3px;
+      box-shadow: 0px 0px 5px black;
       cursor: pointer;
       color: white;
       b{
@@ -132,16 +147,17 @@
    
   }
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 0px !important;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: #b4b8ba;
+    background-color: white;
     border-radius: 10px !important;
     background-clip: padding-box;
     border: 1px solid transparent !important;
   }
   ::-webkit-scrollbar-track {
-    background-color: #f0d7d2 !important;
-    box-shadow: 0px 0px 0px 0px white !important;
+    background-color: #cecece !important;
+    box-shadow: 0px 0px 0px 0px black inset !important;
+
   }
 }

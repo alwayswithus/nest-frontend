@@ -20,6 +20,13 @@ class TopBar extends Component {
       historyOpen:!this.state.historyOpen
     })
   }
+
+  selectpicker(e) {
+    this.setState({
+      selectPicker: e.target.value,
+      searchKeyword:""
+    });
+  }
   render() {
     let activePath = this.props.activePath.split('/')[4];
     
@@ -34,24 +41,49 @@ class TopBar extends Component {
         <div className="topBar">
           <nav className="navbar navbar-default">
             <div className="container-fluid">
-              <div className="navbar-header col-sm-3">
-                <Link to={`#`} className="navbar-brand">
-                  <b>{this.props.projectTitle}</b>
-                </Link>
-              </div>
-              <div className="col-sm-6 topCenterOut">
+              <div className="col-sm-4 topCenterOut">
                 <div className="topCenterIn">
                   <ul className="nav navbar-nav">
-                    <li className={kanbanboard === true ? "active" : null}>
+                    <li className={kanbanboard === true ? "topli active" : "topli"}>
                       <Link to={`/nest/dashboard/${this.props.projectNo}/kanbanboard`}>업무</Link>
                     </li>
-                    <li className={timeline === true ? "active" : null}>
+                    {/* <li className={timeline === true ? "topli active" : "topli"}>
                       <Link to={`/nest/dashboard/${this.props.projectNo}/timeline`}>타임라인</Link>
-                    </li>
-                    <li className={file === true ? "active" : null}>
+                    </li> */}
+                    <li className={file === true ? "topli active" : "topli"}>
                       <Link to={{pathname:`/nest/dashboard/${this.props.projectNo}/file`, state:{history : this.props.history}}}>파일</Link>
                     </li>
-                    <li>
+                    
+                  </ul>
+                    <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Search" name="search"></input>
+                    </div>
+                    <select
+                      className="selectpicker"
+                      // onChange={this.selectpicker.bind(this)}
+                    >
+                      <option className="option" value="task">
+                        업무
+                      </option>
+                      <option className="option" value="tag">
+                        태그
+                      </option>
+                    </select>
+                  </form>
+                </div>
+              </div>
+              <div className="navbar-header col-sm-4 navbar-brand">
+              {this.props.projectTitle}
+                {/* <div className="navbar-brand"> */}
+                  
+                {/* </div> */}
+              </div>
+              <div className="col-sm-4 testtest">
+                
+                {kanbanboard ?
+                <ul className="nav navbar-nav navbar-right" >
+                  <li>
                       <div className="popover__wrapper">
                           <span className="popover__title" onClick={this.onClickHistory.bind(this)}>활동로그</span>
                           {/* log lists */}
@@ -74,13 +106,11 @@ class TopBar extends Component {
                         }
                       </div>
                     </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-sm-3">
-                <ul className="nav navbar-nav navbar-right" >
-                  <i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i>
+                    <li>
+                    <i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i> 
+                    </li>
                 </ul>
+                 :null}
               </div>
             </div>
           </nav>

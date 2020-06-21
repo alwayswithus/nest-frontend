@@ -1,76 +1,104 @@
 .kanbanBoard {
   padding: 20px;
   padding-top: 63px;
-  display: block;
   height: 100%;
-
+  .kanbanBoardTopMenu{
+    display: flex;
+    justify-content: space-between;
   .input-group {
     padding-left: 20px;
-
     .form-control {
-      border: 1px solid #2e3238;
+      border: 1px solid #969696;
       width: 100%;
       height: 32px;
-      border-left: 0px;
+      border-right: 0px;
+      position: static;
       outline: none;
+      border-radius: 5px 0px 0px 5px;
+      &:focus{
+        box-shadow: 0px 0px 0px
+      }
     }
     .selectpicker{
-      border-radius: 3px 0px 0px 3px;
-      border: 1px solid #2e3238;
-      width: 100px;
-    padding: 0px;
+      position: static;
+      border-radius: 0px 5px 5px 0px;
+      border: 1px solid #969696;
+      width: 70px;
+      padding: 0px;
+      border-left: 1px dashed #969696 ;
+      outline: none;
+      height: 32px;
       .option{
         outline: none;
+        &:focus{
+          outline: none;
+        }
       }
     }
   }
+  
+  .taskListAdd {
+    // position: fixed;
+    // top: 50px;
+    // right: 0px;
+    .taskListInsertForm {
+      // margin: 12px 7px 0px 10px;
+      height: 40px;
+      width: 300px;
+      padding: 10px 15px;
+      background-color: #62c6d3;
+      border-radius: 3px;
+      .taskListInsertInput{
+        display: flex;
+        input{
+          outline: none;
+          padding-left: 5px;
+        }
+      }
+
+      div {
+        .textArea {
+          width: 200px;
+          border: none;
+          resize: none;
+          border-radius: 3px;
+        }
+      }
+      .taskListInsertBtn {
+        padding-left: 10px;
+        .Icon {
+          margin-left: 15px;
+          color: #979797;
+          &:hover {
+            color: rgb(53, 53, 53);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .addTaskListBtn {
+      width: 300px;
+      height: 40px;
+      // margin: 12px 7px 0px 10px;
+      outline: none;
+      background-color: #62c6d3;
+      color: white;
+      border: none;
+      &:active{
+        box-shadow: 2px 2px 8px black inset;
+        font-size: 12px;
+      }
+    }
+  }
+}
   .taskListArea {
     display: flex;
-    height: 100%;
+    height: 95%;
     .taskList {
       display: inline-flex;
-      padding-top: 40px;
+      // padding-top: 40px;
       height: 100%;
     }
-    .taskListAdd {
-      position: fixed;
-      top: 50px;
-      right: 0px;
-      .taskListInsertForm {
-        margin: 10px;
-        width: 300px;
-        padding: 12px 15px;
-        background-color: #f0d7d2;
-        border-radius: 3px;
-        .test{
-          display: flex;
-        }
-
-        div {
-          .textArea {
-            width: 200px;
-            border: none;
-            resize: none;
-            border-radius: 3px;
-          }
-        }
-        .taskListInsertBtn {
-          padding-left: 10px;
-          .Icon {
-            margin-left: 15px;
-            color: #979797;
-            &:hover {
-              color: rgb(53, 53, 53);
-              cursor: pointer;
-            }
-          }
-        }
-      }
-      .addTaskListBtn {
-        width: 300px;
-        height: 40px;
-        margin: 12px 10px 0px 10px;
-      }
-    }
+    
   }
 }
