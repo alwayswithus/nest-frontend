@@ -11,7 +11,7 @@ import update from "react-addons-update";
 import ApiService from '../../../../ApiService'
 import TaskMember from './TaskMember';
 import moment, { now }  from 'moment';
-
+import {Link} from 'react-router-dom';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -225,7 +225,7 @@ class Setting extends Component {
             this.props.match.params.taskNo)
     }
 
-    receiveKanban(){
+    componentDidMount(){
         
     }
 
@@ -254,7 +254,12 @@ class Setting extends Component {
                 <div style={{ height: '100%', position: 'absolute', right: '0', zIndex: '999'}}>
                 {taskItem.taskState == "del" ? 
                     <div className="task-delete"> 
-                        <div className ="task-delete-warning">삭제된 업무입니다.</div>
+                        <div className ="task-delete-warning">
+                        <span>삭제된 업무입니다.</span>
+                            <Link style= {{color:'black', textDecoration:'none'}} to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} >
+                                <div className="setting-close">닫기</div>
+                            </Link>
+                        </div>
                     </div> : null }
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
@@ -283,15 +288,15 @@ class Setting extends Component {
                                     
                                     
                                         {!taskItem.taskStart && !taskItem.taskEnd && 
-                                        <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} > 
+                                        <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} > 
                                         <i className="fas fa-plus fa-1x"></i>
                                         </Button>}
                                         {taskItem.taskStart && !taskItem.taskEnd &&
-                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
                                         <b className="taskDate">  {taskItem.taskStart} ~</b> 
                                          </Button>}
                                         {taskItem.taskStart && taskItem.taskEnd && 
-                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
                                         <b className="taskDate"> {taskItem.taskStart} ~ {taskItem.taskEnd}</b> 
                                         </Button>}
                                     </div>
@@ -315,7 +320,7 @@ class Setting extends Component {
                                 <div style={{ float: 'left', marginTop: '12px' }}><i className="fas fa-user-plus"></i></div>
                                 <div style={{ float: 'left' }}><h5><b>배정된멤버</b></h5></div>
                                 <div style={{ float: 'left' }}>
-                                    {this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
+                                    {taskItem.taskState == "del" ||this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
                                         <Button 
                                             onClick={this.onClickTaskMember.bind(this)} 
                                             variant="" ><i className="fas fa-plus fa-1x"></i></Button>
@@ -333,13 +338,17 @@ class Setting extends Component {
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {/* 업무 멤버 리스트 */}
                                     {taskItem.memberList.map(member => 
+                                        member.userGrade !== "비회원" ?
                                         <div key={member.userNo} className="Member">
                                             <img src={member.userPhoto} className="img-circle" alt="Cinque Terre" />
                                             <span>{member.userName}</span>
-                                            <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,taskListNo)}>
-                                                <i className="fas fa-times"></i>
-                                            </span>
-                                        </div>
+                                            {this.props.authUserRole === 3 || taskItem.taskState == "del" ? null : 
+                                                <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,taskListNo)}>
+                                                    <i className="fas fa-times"></i>
+                                                </span>
+                                            
+                                            }
+                                        </div> : null
                                     )}
                                 </div>
                             </li>
@@ -349,7 +358,7 @@ class Setting extends Component {
                                 <div style={{ float:'left' }}><h5><b>태그</b></h5></div>
 
                                 <div style={{ float:'left' }} className="link">
-                                {this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
+                                {taskItem.taskState == "del" || this.props.authUserRole === 3 ? <i className="fas fa-lock"></i> :
                                         <Button onClick ={this.onClickTag.bind(this,taskListNo)} variant=""><i className="fas fa-plus fa-1x"></i> </Button>
                                     }
                                     <div style={{position:'relative', marginLeft:'20%', right: '198px'}}>
@@ -382,7 +391,7 @@ class Setting extends Component {
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
                                                 {tag.tagName}
 
-                                                {this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
+                                                {taskItem.taskState == "del" || this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
                                             </span>
                                         </div>
                                     )}
@@ -421,7 +430,7 @@ class Setting extends Component {
                                     {taskItem.checkList && taskItem.checkList.map(checklist =>
                                         <div key={checklist.checklistNo} className="inner-checklist">
                                                 <input 
-                                                    disabled={this.props.authUserRole === 3 ? true : false}
+                                                    disabled={taskItem.taskState == "del" || this.props.authUserRole === 3 ? true : false}
                                                     type="checkbox" 
                                                     className="doneCheck" 
                                                     checked={checklist.checklistState === "done"} 
@@ -436,7 +445,7 @@ class Setting extends Component {
                                                                 taskCallbacks={this.props.taskCallbacks} 
                                                                 checklist={checklist} 
                                                                 key={checklist.checklistNo}/>
-                                                        {this.props.authUserRole === 3 ? null : 
+                                                        {taskItem.taskState == "del" || this.props.authUserRole === 3 ? null : 
                                                             <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo,taskListNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
                                                         }
                                                         
@@ -446,7 +455,7 @@ class Setting extends Component {
                                             <i style = {{marginLeft: '40%'}} className="fas fa-plus fa-2x"></i>
                                         </button>
                                         <div className = "checkListInput">
-                                            {this.props.authUserRole === 3 ? 
+                                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ? 
                                                 <input 
                                                     readOnly
                                                     type="text"

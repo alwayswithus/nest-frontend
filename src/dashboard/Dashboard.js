@@ -166,7 +166,8 @@ export default class Dashboard extends React.Component {
         this.state.project.members, 
         "projectMemberJoin", 
         userName, 
-        projectNo)
+        projectNo,
+        this.clientRef)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
 
@@ -369,7 +370,8 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectMemberInvite", 
       memberName, 
-      projectNo)
+      projectNo,
+      this.clientRef)
 
     fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
@@ -868,7 +870,8 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectDateUpdate", 
       projectTitle, 
-      projectNo)
+      projectNo,
+      this.clientRef)
 
     if (from === 'Invalid date') {
       from = undefined;

@@ -6,6 +6,29 @@
     display: block;
     cursor: default;
     color:#555555;
+    .delete-user{
+        left: 41px;
+        width: 301px;
+        height: 190px;
+        background-color: #000000eb;
+        z-index: 2;
+        position: absolute;
+        color: white;
+        .close-delete-user{
+            color:white;
+            font-size: 2.25rem;
+            float: right;
+            margin-right: 9px;
+            background: none;
+            border: none;
+        }
+        .delete-user-message{
+            margin-top: 75px;
+            margin-left: 77px;
+            font-weight: bolder;
+            font-size: 1.75rem;
+        }
+    }
     .card-profile {
         padding: 14px;
         position: absolute;

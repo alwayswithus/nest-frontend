@@ -45,14 +45,15 @@ class Modal extends Component {
 
     userRoleUpdate(projectNo, userNo, roleNo, array){
         let projectIndexArray =[];
+        let projectArray = [];
         let index = [];
 
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+        this.state.projects.map(project => project.roleNo === 1 ? projectArray.push(project.projectNo):null);
 
         array.map(array => projectIndexArray.push(array.projectNo))
-
-        index.push(this.state.projects.map(project => projectIndexArray.indexOf(project.projectNo)))
-
+        index.push(projectArray.map(projectNo => projectIndexArray.indexOf(projectNo)))
+        // index.push(this.state.projects.map(project => projectIndexArray.indexOf(project.projectNo)))
+        // index.push(projectArray.map(projectNo => ))
         if(index[0].indexOf(-1) == -1){
             this.setState({
                 delete:true,
@@ -85,7 +86,7 @@ class Modal extends Component {
                     {this.state.delete ? 
                     <>
                         <div className="delete-warning-message">
-                            <span>아래 delete 버튼을 누르면 본 계정은 정말로 삭제됩니다. 삭제하시려면 아래 버튼을 눌러주세요</span>
+                            <span>아래 delete 버튼을 누르면 본 계정은 정말로 삭제됩니다. 삭제하시려면 아래 버튼을 눌러주세요.</span>
                         </div>
                         <div className="button-wrap-delete">
                             <Link to = "/nest/"><button onClick = {this.onDeleteAccount.bind(this)}> Delete </button></Link>

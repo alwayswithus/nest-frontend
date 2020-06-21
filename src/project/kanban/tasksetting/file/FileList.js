@@ -14,19 +14,27 @@ const API_HEADERS = {
 class FileList extends Component{
 
     render(){
+   
         return (
             <div className="FileList">
                 <table>
                     <tbody>
-                        {this.props.taskItem.commentList.map(file => 
+                    {this.props.taskItem.commentList
+                        .filter((element) => 
+                            element.fileState === "T" && element.originName.indexOf(this.props.searchFile) !== -1)
+                        .map(file => 
                             file.fileState !== 'T'? null :
+                            <>
                             <FileComponent
+                                searchFile={this.props.searchFile}
+                                taskItem={this.props.taskItem}
+                                authUserRole={this.props.authUserRole}
                                 key={file.fileNo}
                                 taskListNo={this.props.taskListNo}
                                 taskNo={this.props.taskNo}
                                 taskCallbacks={this.props.taskCallbacks} 
                                 file = {file}
-                            />
+                            /></>
                         )}
                     </tbody>
                 </table>

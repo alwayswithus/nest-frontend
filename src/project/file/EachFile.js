@@ -22,7 +22,7 @@ class EachFile extends Component {
     }
 
        //파일 다운로드
-       downloadEmployeeData(fileNo) {
+    downloadEmployeeData(fileNo) {
         //blob : 이미지, 사운드, 비디오와 같은 멀티미디어 데이터를 다룰 때 사용, MIME 타입을 알아내거나, 데이터를 송수신
         fetch(`${API_URL}/api/download/${fileNo}`)
             .then(response => {
@@ -42,66 +42,92 @@ class EachFile extends Component {
     onClickDeleteFile(fileNo, commentNo) {
         this.props.onClickDeleteFile(fileNo, commentNo)
     }
-       //이미지 뷰어
-       onClickImage() {
+
+    //이미지 뷰어
+    onClickImage() {
         this.setState({
             visible: !this.state.visible
         })
     }
+
+    //파일클릭
+    onClickFile(fileNo) {
+        if (window.confirm("파일을 다운로드 하시겠습니까?")) {
+            this.downloadEmployeeData(fileNo)
+        }
+    }
+
     render() {
-        
         return (
             <tr className="file-contents" key={this.props.projectFile.fileNo}>
-                <td>
-                    <div className="file-name-cell">
-                        <div className="file-name-cell-image">
-                            <img className="file-image" src={`${API_URL}${this.props.projectFile.filePath}`} onClick={this.onClickImage.bind(this)} />
-                            {this.props.projectFile.originName}
-                        </div>
-                        {/* 이미지 미리보기 */}
-                        <Viewer
-                            visible={this.state.visible}
-                            onClose={() => this.setState({ visible: false })}
-                            downloadable='true'
-                            rotatable={this.state.rotatable}
-                            images={[{ src: API_URL + this.props.projectFile.filePath }]} />
+                    <td>
+                        <div className="file-name-cell">
+                            <div className="file-name-cell-image">
+                            {this.props.projectFile.originName.split('.')[1] === 'csv' || this.props.projectFile.originName.split('.')[1] === 'xlxs' ?
+                            <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }} src='/assets/images/excel.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img> :
+                            <>{this.props.projectFile.originName.split('.')[1] === 'txt' ?
+                                <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }}
+                                    src='/assets/images/txt.png'
+                                    alt={this.props.projectFile.originName}
+                                    onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
+                                :
+                                <>{this.props.projectFile.originName.split('.')[1] === 'png' || this.props.projectFile.originName.split('.')[1] === 'jpg' ?
+                                    <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }}
+                                        src={`${API_URL}${this.props.projectFile.filePath}`}
+                                        alt={this.props.projectFile.originName}
+                                        onClick={this.onClickImage.bind(this)}></img> :
+                                    <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }} src='/assets/images/attach.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
+                                }</>
+                            }</>
+                        }
+                            </div>
+                                <div className="file-originname">{this.props.projectFile.originName}</div>
+                            {/* 이미지 미리보기 */}
+                            <Viewer
+                                visible={this.state.visible}
+                                onClose={() => this.setState({ visible: false })}
+                                downloadable='true'
+                                rotatable={this.state.rotatable}
+                                images={[{ src: API_URL + this.props.projectFile.filePath }]} />
 
-                        <div className="file-name-and-path">
-                            <span className="file-name">{this.props.projectFile.fileName}</span>
+                            <div className="file-name-and-path">
+                                <span className="file-name">{this.props.projectFile.fileName}</span>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td style={{ paddingTop: "23px" }}>
-                    <Link
-                        style={{ color: 'black', textDecoration: 'none' }}
-                        to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/${this.props.projectFile.tasklistNo}/task/${this.props.projectFile.taskNo}/file`}>
-                        <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom" 
-                             style={{whiteSpace: 'nowrap',
-                                    width: '50%',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis'}}>
-                            {this.props.projectFile.tasklistName} &gt; {this.props.projectFile.taskContents}
+                    </td>
+                    <td style={{ paddingTop: "23px" }}>
+                        <Link
+                            style={{ color: 'black', textDecoration: 'none' }}
+                            to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.projectFile.taskNo}/file`}>
+                            <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom" 
+                                style={{whiteSpace: 'nowrap',
+                                        width: '50%',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis'}}>
+                                {this.props.projectFile.tasklistName} &gt; {this.props.projectFile.taskContents}
+                            </div>
+                            <ReactTooltip />
+                        </Link>
+                    </td>
+                    <td style={{ paddingTop: "23px" }}>{moment(this.props.projectFile.fileRegdate).format("MM월 DD일 hh:mm")}</td>
+                    <td style={{ paddingTop: "17px" }}>
+                        <div className="share-person">
+                            {this.props.projectFile.userName}
                         </div>
-                        <ReactTooltip />
-                    </Link>
-                </td>
-                <td style={{ paddingTop: "23px" }}>{moment(this.props.projectFile.fileRegdate).format("MM월 DD일 hh:mm")}</td>
-                <td style={{ paddingTop: "17px" }}>
-                    <div className="share-person">
-                        {this.props.projectFile.userName}
-                    </div>
-                    <div className="contents-dropdown">
-                        <div className="dropdown">
-                            <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                <i className="fas fa-ellipsis-v"></i>
-                            </button>
-                            <ul className="dropdown-menu">
-                                <li><a href="#" onClick={this.downloadEmployeeData.bind(this, this.props.projectFile.fileNo)}>다운로드</a></li>
-                                <li><a href="#" onClick={this.onClickDeleteFile.bind(this, this.props.projectFile.fileNo, this.props.projectFile.commentNo)}>삭제</a></li>
-                            </ul>
+                        <div className="contents-dropdown">
+                            <div className="dropdown">
+                                <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <i className="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul className="dropdown-menu">
+                                    <li><a href="#" onClick={this.downloadEmployeeData.bind(this, this.props.projectFile.fileNo)}>다운로드</a></li>
+                                    {this.props.projectFile.userNo == sessionStorage.getItem("authUserNo") ? 
+                                        <li><a href="#" onClick={this.onClickDeleteFile.bind(this, this.props.projectFile.fileNo, this.props.projectFile.commentNo)}>삭제</a></li>
+                                        : null}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
             </tr>
         )
     }

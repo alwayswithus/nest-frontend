@@ -36,7 +36,7 @@ class TaskMember extends Component {
                             <input type="text" className="form-control find-member" value= {this.state.keyword} onChange={this.onChangeMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.props.projectMembers && this.props.projectMembers
-                                .filter(projectMember => projectMember.userName.indexOf(this.state.keyword) !== -1 || projectMember.userEmail.indexOf(this.state.keyword) !== -1)
+                                .filter(projectMember => projectMember.userGrade !== "비회원" && (projectMember.userName.indexOf(this.state.keyword) !== -1 || projectMember.userEmail.indexOf(this.state.keyword) !== -1))
                                 .map(projectMember =>
                                     <TaskMembers 
                                         taskItem={this.props.taskItem}
