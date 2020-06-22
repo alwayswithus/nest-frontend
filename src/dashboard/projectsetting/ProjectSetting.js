@@ -378,6 +378,7 @@ class ProjectSetting extends Component {
                                 {/* 프로젝트 멤버 리스트 */}
                                 <div className="Member-list" style={{ display: 'inline-block' }}>
                                     {this.props.project.members && this.props.project.members.map(member =>
+                                        member.userGrade === "비회원" ? null :
                                         <div className="dropdown" key={member.userNo}>
 
                                             {sessionStorage.getItem("authUserNo") == member.userNo ? 

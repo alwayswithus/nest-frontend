@@ -7,7 +7,9 @@ class TopBar extends Component {
   constructor(){
     super(...arguments)
     this.state ={
-      historyOpen:false
+      historyOpen:false,
+      searchKeyword:"",
+      
     }
   }
   onProjectSetting(){
@@ -16,15 +18,14 @@ class TopBar extends Component {
   }
 
   onClickHistory(){
-    this.setState({
-      historyOpen:!this.state.historyOpen
-    })
+    window.jQuery(".wrap, a").toggleClass('active');
   }
+
 
   selectpicker(e) {
     this.setState({
       selectPicker: e.target.value,
-      searchKeyword:""
+      searchKeyword:"",
     });
   }
   render() {
@@ -34,10 +35,25 @@ class TopBar extends Component {
     const timeline = activePath.indexOf("timeline") !== -1
     const file = activePath.indexOf("file") !== -1
 
-    // const log = this.props.activePath.indexOf("log") !== -1
 
     return (
       <>
+      <div className='wrap'>
+        <div className='content'>
+        {this.props.history.length == 0 ? 
+          <>
+            <i className="fas fa-sad-tear"></i>
+            <div className="log-warning">활동기록이 없습니다.</div>
+          </> :
+          this.props.history.map(history => 
+            <div className="message">
+              <span><strong>{history.logContents.split("님이")[0]}</strong>님이&nbsp; 
+                {history.logContents.split("님이")[1]}
+              </span>
+          </div>
+          )}
+        </div>
+      </div>
         <div className="topBar">
           <nav className="navbar navbar-default">
             <div className="container-fluid">
@@ -55,6 +71,7 @@ class TopBar extends Component {
                     </li>
                     
                   </ul>
+
                     <form class="navbar-form navbar-left">
                     <div class="form-group">
                       <input type="text" class="form-control" placeholder="Search" name="search"></input>
@@ -84,27 +101,7 @@ class TopBar extends Component {
                 {kanbanboard ?
                 <ul className="nav navbar-nav navbar-right" >
                   <li>
-                      <div className="popover__wrapper">
-                          <span className="popover__title" onClick={this.onClickHistory.bind(this)}>활동로그</span>
-                          {/* log lists */}
-                          {this.state.historyOpen ? 
-                        <div className="popover__content">
-                          {/* log */}
-                            <p className="popover__message">
-                            {this.props.history.length == 0 ? 
-                            <>
-                              <i className="fas fa-sad-tear"></i>
-                              <div className="log-warning">활동기록이 없습니다.</div>
-                            </> :
-                           this.props.history.map(history => 
-                              <div className="message">
-                                <span><strong>{history.logContents.split("님이")[0]}</strong>님이&nbsp; 
-                                {history.logContents.split("님이")[1]}</span>
-                              </div>
-                                                         
-                            )}</p></div> : null 
-                        }
-                      </div>
+                      <a href="#" onClick={this.onClickHistory.bind(this)}>활동로그</a>
                     </li>
                     <li>
                     <i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i> 

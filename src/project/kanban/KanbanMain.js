@@ -139,7 +139,8 @@ class KanbanMain extends Component {
           this.state.projectMembers, 
           "taskListDragNdrop", 
           taskListName, 
-          this.props.match.params.projectNo)
+          this.props.match.params.projectNo,
+          this.clientRef)
           .then(response => response.json())
           .then(json=>
             this.setState({
@@ -249,7 +250,8 @@ class KanbanMain extends Component {
         this.state.projectMembers, 
         "taskDragNdrop", 
         taskName, 
-        this.props.match.params.projectNo)
+        this.props.match.params.projectNo,
+        this.clientRef)
         .then(response => response.json())
         .then(json=>
           this.setState({
@@ -350,7 +352,8 @@ class KanbanMain extends Component {
       this.state.projectMembers, 
       "taskDragNdrop", 
       taskName, 
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -473,7 +476,8 @@ class KanbanMain extends Component {
           this.state.projectMembers, 
           "taskInsert", 
           taskName, 
-          this.props.match.params.projectNo)
+          this.props.match.params.projectNo,
+          this.clientRef)
           .then(response => response.json())
           .then(json=>
             this.setState({
@@ -482,6 +486,7 @@ class KanbanMain extends Component {
           )
 
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTask));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(newTask))
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newTask));
        
       });
@@ -542,7 +547,8 @@ class KanbanMain extends Component {
       this.state.projectMembers, 
       "taskDelete", 
       taskName,
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -552,7 +558,7 @@ class KanbanMain extends Component {
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(deleteTask));
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(deleteTask));
-
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(deleteTask));
   }
 
   // task 복사
@@ -620,8 +626,25 @@ class KanbanMain extends Component {
           taskCount:this.state.taskCount,
           completedTask:this.state.completedTask
         }
+
+        const calendarSocketData = {
+          taskNo:json.data.taskNo,
+          projectNo:this.state.taskList[TaskListIndex].projectNo,
+          members:this.state.projectMembers,
+          taskCount:this.state.taskCount,
+          completedTask:this.state.completedTask,
+          socketType:"taskCopy",
+          taskState: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState,
+          taskLabel: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskLabel,
+          taskEnd: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskEnd,
+          taskStart: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskStart,
+          taskPoint: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskPoint,
+          tasklistNo: this.state.taskList[TaskListIndex].taskListNo           
+        }
+
         this.clientRef.sendMessage("/app/all", JSON.stringify(taskCopy));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCopy));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
       })
     
   }
@@ -652,19 +675,41 @@ class KanbanMain extends Component {
     //   })
     // })
 
+    let calendarSocketData;
     if(this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done"){
       this.setState({
         taskCount:this.state.taskCount,
         completedTask:this.state.completedTask-1
       })
+
+      calendarSocketData = {
+        taskListNo: taskListNo,
+        taskId: taskId,
+        socketType:"taskCheck",
+        projectNo:this.state.taskList[TaskListIndex].projectNo,
+        members:this.state.projectMembers,
+        taskCount:this.state.taskCount,
+        completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1,
+        taskState: "do" 
+      }
     }else{
       this.setState({
         taskCount:this.state.taskCount,
         completedTask:this.state.completedTask+1
       })
+
+      calendarSocketData = {
+        taskListNo: taskListNo,
+        taskId: taskId,
+        socketType:"taskCheck",
+        projectNo:this.state.taskList[TaskListIndex].projectNo,
+        members:this.state.projectMembers,
+        taskCount:this.state.taskCount,
+        completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1,
+        taskState: "done" 
+      }
     }
     
-
     const taskCheck = {
       taskListNo:taskListNo,
       taskId:taskId,
@@ -673,8 +718,8 @@ class KanbanMain extends Component {
       members:this.state.projectMembers,
       taskCount:this.state.taskCount,
       completedTask: this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done" ?this.state.completedTask-1 : this.state.completedTask+1
-
     }
+
     const taskName = this.state.taskList[TaskListIndex].tasks[taskIndex].taskContents
 
     ApiHistory.fetchInsertHistory(
@@ -683,7 +728,8 @@ class KanbanMain extends Component {
       this.state.projectMembers, 
       "taskStateUpdate", 
       taskName,
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -694,6 +740,7 @@ class KanbanMain extends Component {
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(taskCheck));
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(taskCheck));
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData))
   }
 
   // task list 추가
@@ -711,7 +758,8 @@ class KanbanMain extends Component {
       this.state.projectMembers, 
       "taskListInsert", 
       taskListName, 
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -767,7 +815,8 @@ class KanbanMain extends Component {
       this.state.projectMembers, 
       "taskListDelete", 
       TaskListName, 
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -810,12 +859,19 @@ class KanbanMain extends Component {
           }
         })
 
-        console.log(this.state.taskList[TaskListIndex].tasks.length)
-
         this.setState({
           taskCount:this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length,
           completedTask:this.state.completedTask - doneCount
         })
+
+        const calendarSocketData = {
+          taskListNo: taskListBody.taskListNo,
+          projectNo: taskListBody.projectNo,
+          taskCount: this.state.taskCount,
+          completedTask: this.state.completedTask,
+          socketType:"taskListDelete",
+          members: this.state.projectMembers
+        }
 
         const newData = {
           TaskListIndex: TaskListIndex,
@@ -828,7 +884,7 @@ class KanbanMain extends Component {
         }
         this.clientRef.sendMessage("/app/all", JSON.stringify(newData));
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(newData));
-
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData))
       });
   }
 
@@ -854,7 +910,8 @@ class KanbanMain extends Component {
         this.state.projectMembers, 
         "checklistInsert", 
         taskName, 
-        this.props.match.params.projectNo)
+        this.props.match.params.projectNo,
+        this.clientRef)
         .then(response => response.json())
         .then(json=>
           this.setState({
@@ -1078,7 +1135,8 @@ class KanbanMain extends Component {
       this.state.projectMembers, 
       "checklistStateUpdate", 
       taskName, 
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -1324,6 +1382,10 @@ class KanbanMain extends Component {
 
     const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
+
+    const taskContents = this.state.taskList[taskListIndex].tasks[taskIndex].taskContents
+    const taskListName = this.state.taskList[taskListIndex].taskListName
+    
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"), 
       sessionStorage.getItem("authUserName"),
@@ -1393,7 +1455,7 @@ class KanbanMain extends Component {
                       taskListIndex:{$set:taskListIndex},
                       taskIndex:{$set:taskIndex},
                       members:{$set: this.state.projectMembers},
-                      projectNo:{$set:this.props.match.params.projectNo}
+                      projectNo:{$set:this.props.match.params.projectNo},
                     }
                   }
                 }
@@ -1416,7 +1478,10 @@ class KanbanMain extends Component {
                       taskListIndex:{$set:taskListIndex},
                       taskIndex:{$set:taskIndex},
                       members:{$set: this.state.projectMembers},
-                      projectNo:{$set:this.props.match.params.projectNo}
+                      projectNo:{$set:this.props.match.params.projectNo},
+                      projectTitle:{$set:this.state.projectTitle},
+                      taskContents:{$set:taskContents},
+                      taskListName:{$set:taskListName}
                     }
                   }
                 }
@@ -1428,6 +1493,7 @@ class KanbanMain extends Component {
           taskList: newTaskList
         })
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
+        this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
     })
 
 }
@@ -1453,7 +1519,7 @@ class KanbanMain extends Component {
             [taskIndex]: {
               commentList: {
                 [commentIndex]:{
-                  commentState:{$set:'F'},
+                  commentState:{$set:'F'}
                 }
               },
             },
@@ -1472,7 +1538,11 @@ class KanbanMain extends Component {
                 },
                 commentList:{
                   [commentIndex]:{
-                    fileState:{$set:'F'}
+                    fileState:{$set:'F'},
+                    socketType:{$set:'fileDelete'},
+                    fileNo:{$set:fileNo},
+                    members:{$set:this.state.projectMembers},
+                    projectNo:{$set:this.props.match.params.projectNo}
                   }
                 }
               },
@@ -1481,7 +1551,8 @@ class KanbanMain extends Component {
         });
 
       }
-
+      
+      this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
       this.setState({
         taskList:newTaskList
       })
@@ -1553,7 +1624,8 @@ class KanbanMain extends Component {
         this.state.projectMembers, 
         "taskMemberJoin", 
         taskName, 
-        this.props.match.params.projectNo)
+        this.props.match.params.projectNo,
+        this.clientRef)
         .then(response => response.json())
         .then(json=>
           this.setState({
@@ -1677,7 +1749,8 @@ callbackTaskDateUpdate(from, to, taskListIndex, taskIndex){
       this.state.projectMembers, 
       "taskDateUpdate", 
       taskName, 
-      this.props.match.params.projectNo)
+      this.props.match.params.projectNo,
+      this.clientRef)
       .then(response => response.json())
       .then(json=>
         this.setState({
@@ -1805,14 +1878,15 @@ callbackUpdateTaskPoint(point , taskListNo, taskNo){
 callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
   const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
   const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
-  
+
   ApiHistory.fetchInsertHistory(
     sessionStorage.getItem("authUserNo"), 
     sessionStorage.getItem("authUserName"),
     this.state.projectMembers, 
     "taskContentsUpdate", 
     taskContents, 
-    this.props.match.params.projectNo)
+    this.props.match.params.projectNo,
+    this.clientRef)
     .then(response => response.json())
     .then(json=>
       this.setState({
@@ -1821,7 +1895,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
     )
 
   let newTaskList = update(this.state.taskList, {
-    [taskListNo]:{
+    [taskListIndex]:{
       tasks:{
         [taskIndex]:{
           taskContents:{
@@ -2330,6 +2404,7 @@ editTaskListName(newTaskList){
 }
 
 receiveKanban(socketData) {
+
   if(socketData.projectNo+"" === this.props.location.pathname.split('/')[3]){
     if(socketData.socketType === 'taskListName'){
     
@@ -2447,22 +2522,12 @@ receiveKanban(socketData) {
       newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
       this.setState({
         taskList: newTaskList,
+        taskCount: socketData.taskCount,
+        completedTask: socketData.completedTask
       });
 
       const taskName = socketData.taskContents
-      ApiHistory.fetchInsertHistory(
-        null, 
-        socketData.userName,
-        this.state.projectMembers, 
-        "taskInsert", 
-        taskName, 
-        this.props.match.params.projectNo)
-        .then(response => response.json())
-        .then(json=>
-          this.setState({
-            history:json.data
-          }) 
-        )
+
     }else if(socketData.socketType === 'taskDelete'){
     
       const TaskListIndex = this.state.taskList.findIndex(
@@ -3095,6 +3160,18 @@ receiveKanban(socketData) {
         this.setState({
             taskList:newTaskList
           })
+      } else if(socketData.historyType === "taskContentsUpdate"){
+          let newHistoryData = {
+            logContents:socketData.senderName+" 님이"+socketData.actionName+"으로 업무이름을 수정하셨습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
+          }
+
+          this.setState({
+            history : update(this.state.history,{
+              $push:[newHistoryData]
+            })
+          })
       }
     }else{
       return
@@ -3169,7 +3246,7 @@ receiveKanban(socketData) {
       <>
         <SockJsClient
                 url={`${API_URL}/socket`}
-                topics={[`/topic/all/${sessionStorage.getItem("authUserNo")}`]}
+                topics={[`/topic/all/${sessionStorage.getItem("authUserNo")}`, `/topic/history/all/${sessionStorage.getItem("authUserNo")}`]}
                 onMessage={this.receiveKanban.bind(this)}
                 ref={(client) => {
                   this.clientRef = client
@@ -3205,7 +3282,7 @@ receiveKanban(socketData) {
                   modalStateUpdate:this.modalStateUpdate.bind(this),
                   tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
                   taskMemberState: this.taskMemberState.bind(this),
-                  addDeleteMember: this.addDeleteMember.bind(this),
+                  addDeleteMember: this.addDeleteMember.bind(this), // 업무에 멤버 추가 & 삭제
                   updateTaskPoint: this.callbackUpdateTaskPoint.bind(this), // 업무 포인트 업뎃
                   updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
                   updateTaskLabel: this.callbackUpdateTaskLabel.bind(this), // 업무 라벨 수정

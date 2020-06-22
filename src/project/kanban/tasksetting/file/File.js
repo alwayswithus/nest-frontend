@@ -4,6 +4,7 @@ import FileList from './FileList'
 import Header from './Header';
 import { AlertList } from "react-bs-notifier";
 import Dropzone from './DropZone';
+import {Link} from 'react-router-dom';
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -21,6 +22,7 @@ class File extends Component {
             alerts: [],
             timeout: 2000,
             newMessage: "지원하지 않는 파일 형식입니다.",
+            fileSearch:'',
         }
     }
 
@@ -130,7 +132,12 @@ class File extends Component {
         }
     }
 
-    
+    //파일검색
+    searchFile(event){
+        this.setState({
+            fileSearch:event.target.value
+        })
+    }
 
     render() {
         if (!this.props.task) {
@@ -147,8 +154,18 @@ class File extends Component {
         ))
         const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
+       console.log(taskItem.taskState)
         return (
             <div className="SettingFile">
+                {taskItem.taskState == "del" ? 
+                    <div className="task-delete"> 
+                        <div className ="task-delete-warning">
+                            <span>삭제된 업무입니다.</span>
+                            <Link style= {{color:'black', textDecoration:'none'}} to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} >
+                                <div className="setting-close">닫기</div>
+                            </Link>
+                        </div>
+                    </div> : null }
                 <AlertList
                     style={{ top: '70px' }}
                     position={this.state.position}
@@ -167,15 +184,24 @@ class File extends Component {
                     projectNo={this.props.projectNo}
                     taskListNo = {taskListNo} />
                 <div className="File">
-                    <Dropzone handleDrop={this.handleDrop.bind(this)}>
-                        <div className="FileMenu">
+                    {taskItem.taskState == "del" || this.props.authUserRole === 3 ? 
+                    // 삭제된 업무이거나 권한이 3인경우
+                        <div style={{height:'100%'}} ><div
+                        style={{display: 'inline-block', position: 'relative', height:'100%'}}><div className="FileMenu">
                             <form className="navbar-form navbar-left">
                                 <div className="input-group">
-                                    <input type="text" className="form-control" placeholder="Search" name="search" />
+                                    <input 
+                                         type="text" 
+                                         className="form-control" 
+                                         value={this.state.fileSearch} 
+                                         placeholder="파일 이름 검색" 
+                                         name="search"
+                                         onChange={this.searchFile.bind(this)}
+                                         readOnly />
                                     <div className="input-group-btn"></div>
                                 </div>
                             </form>
-                            {this.props.authUserRole === 3 ?
+                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
                                 <>
@@ -202,11 +228,64 @@ class File extends Component {
                         </table>
                         <hr style={{ paddingLeft: '10px' }} />
                         <FileList
+                            searchFile={this.state.fileSearch}
+                            authUserRole={this.props.authUserRole}
+                            taskListNo={taskListNo}
+                            taskNo={this.props.match.params.taskNo}
+                            taskCallbacks={this.props.taskCallbacks}
+                            taskItem={taskItem} /> </div></div>
+                     :
+                     // 삭제된 업무가 아니고 권한이 있는경우 
+                     <div style={{height:'100%'}} ><Dropzone handleDrop={this.handleDrop.bind(this)}>
+                        <div className="FileMenu">
+                            <form className="navbar-form navbar-left">
+                                <div className="input-group">
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        value={this.state.fileSearch} 
+                                        placeholder="파일 이름 검색" 
+                                        name="search"
+                                        onChange={this.searchFile.bind(this)} />
+                                    <div className="input-group-btn"></div>
+                                </div>
+                            </form>
+                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ?
+                                <button className="disabled-submit-button"> 파일첨부</button>
+                                :
+                                <>
+                                <label htmlFor="fileUpload" className="fileUplaod-label">
+                                    <div className="fileUpload"> 파일첨부</div>
+                                </label>
+                                <input
+                                    id="fileUpload"
+                                    onChange={(e) => this.onChangeFileUpload(e,taskListNo)}
+                                    type='file'
+                                    style={{display:'none'}} />
+                                    </>
+                            }
+                        </div>
+                        <hr style={{marginTop: '11%'}} />
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>이름</td>
+                                    <td>공유한날짜</td>
+                                    <td>공유한사람</td>
+                                </tr>
+                            </thead>
+                        </table>
+                        <hr style={{ paddingLeft: '10px' }} />
+                        <FileList
+                            searchFile={this.state.fileSearch}
+                            authUserRole={this.props.authUserRole}
                             taskListNo={taskListNo}
                             taskNo={this.props.match.params.taskNo}
                             taskCallbacks={this.props.taskCallbacks}
                             taskItem={taskItem} />
-                    </Dropzone>
+                    </Dropzone></div>
+                    }
+                    
                 </div>
             </div>
         )

@@ -117,7 +117,14 @@ export default class Dashboard extends React.Component {
         membersNo: membersNo
       }
 
+      // let calendarSocketData = {
+      //   projectNo: projectNo,
+      //   members: [member],
+      //   socketType: "userDelete"
+      // }
+
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
     }
     else {
       let memberArray = [
@@ -166,10 +173,11 @@ export default class Dashboard extends React.Component {
         this.state.project.members, 
         "projectMemberJoin", 
         userName, 
-        projectNo)
+        projectNo,
+        this.clientRef)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
-
+      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
     }
   }
 
@@ -369,7 +377,8 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectMemberInvite", 
       memberName, 
-      projectNo)
+      projectNo,
+      this.clientRef)
 
     fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
@@ -868,7 +877,8 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectDateUpdate", 
       projectTitle, 
-      projectNo)
+      projectNo,
+      this.clientRef)
 
     if (from === 'Invalid date') {
       from = undefined;
@@ -1197,7 +1207,8 @@ export default class Dashboard extends React.Component {
                 [memberIndex]: {
                   roleNo: { $set: socketData.roleNo }
                 }
-              }
+              },
+              roleNo: { $set: socketData.roleNo }
             }
           })
   
@@ -1240,7 +1251,7 @@ export default class Dashboard extends React.Component {
                 [memberIndex]: {
                   roleNo: { $set: socketData.roleNo }
                 }
-              }
+              },
             }
           })
 
@@ -1519,6 +1530,21 @@ export default class Dashboard extends React.Component {
           }
         })
         
+        this.setState({
+          projects: newProject
+        })
+      }
+    }
+
+    else if(socketData.socketType === "calendarTaskAdd") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+
+      if(projectIndex != -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            taskCount: { $set: socketData.taskCount }
+          }
+        })
         this.setState({
           projects: newProject
         })
