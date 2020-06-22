@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import SockJsClient from "react-stomp";
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };

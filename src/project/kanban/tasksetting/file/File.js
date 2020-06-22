@@ -6,7 +6,7 @@ import { AlertList } from "react-bs-notifier";
 import Dropzone from './DropZone';
 import {Link} from 'react-router-dom';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     "Context-Type": "application/json",
 }

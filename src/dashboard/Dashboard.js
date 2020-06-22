@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 import ApiHistory from '../project/topBar/ApiHistory'
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -173,7 +173,8 @@ export default class Dashboard extends React.Component {
         this.state.project.members, 
         "projectMemberJoin", 
         userName, 
-        projectNo)
+        projectNo,
+        this.clientRef)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
@@ -376,7 +377,8 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectMemberInvite", 
       memberName, 
-      projectNo)
+      projectNo,
+      this.clientRef)
 
     fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
@@ -875,7 +877,8 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectDateUpdate", 
       projectTitle, 
-      projectNo)
+      projectNo,
+      this.clientRef)
 
     if (from === 'Invalid date') {
       from = undefined;
@@ -1554,7 +1557,7 @@ export default class Dashboard extends React.Component {
     return (
       <div className="Dashboard">
         <SockJsClient
-          url="http://localhost:8080/nest/socket"
+          url={`${API_URL}/socket`}
           topics={[`/topic/dashboard/all/${sessionStorage.getItem("authUserNo")}`]}
           onMessage={this.receiveDashBoard.bind(this)}
           ref={(client) => {
