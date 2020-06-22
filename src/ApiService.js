@@ -66,6 +66,10 @@ class ApiService {
     fetchHistory(projectNo){
         return axios.get(`/nest/api/history/${projectNo}`)
     }
+
+    fetchTasksCount(projectNo){
+        return axios.get(`/nest/api/kanbanMain/tasksCount/${projectNo}`)
+    }
 }
 
 export default new ApiService();

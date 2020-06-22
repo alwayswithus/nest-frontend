@@ -349,6 +349,8 @@ class myCalendar extends Component {
 
     this.setState({
       eventShowStart: eventShowStart,
+      newTaskContents: "",
+      pathChange: "",
       eventStart: event.start,
       privateTask: true
     })
@@ -406,7 +408,28 @@ class myCalendar extends Component {
           title: json.data.taskContents,
         }
 
-        let socketData = {
+        let events = update(this.state.events, {
+          $push: [responseNewEvent]
+        })
+
+        let taskState = this.state.taskState;
+        taskState.push({ id: responseNewEvent.id, state: newEvent.taskState })
+        let taskNumber = this.state.taskNumber;
+        taskNumber.push(responseNewEvent.id);
+
+        let taskPoint = this.state.taskPoint;
+        taskPoint.push({ id: responseNewEvent.id, point: newEvent.taskPoint, isChecked: false })
+        let taskPointNumber = this.state.taskPointNumber;
+        taskPointNumber.push(responseNewEvent.id);
+
+        let dashboardSocketData = {
+          projectNo: json.data.projectNo,
+          membersNo: membersNo,
+          taskCount: taskCount,
+          socketType: "calendarTaskAdd"
+        }
+
+        let kanbanboardSocketData = {
           commentList: [],
           taskStart: json.data.taskStart,
           taskEnd: json.data.taskEnd,
@@ -423,45 +446,16 @@ class myCalendar extends Component {
           taskWriter: json.data.taskWriter,
           userName: sessionStorage.getItem("authUserName"),
           socketType: "taskInsert",
-          projectNo: json.data.projectNo,
-          taskListNo: json.data.taskListNo,
           taskCount: taskCount,
           completedTask: completedTask,
-          membersNo: membersNo
+          projectNo: json.data.projectNo,
+          taskListNo: json.data.taskListNo,
+          members: this.state.projects[projectIndex].members
         }
 
-        let events = [
-          ...this.state.events,
-          responseNewEvent
-        ]
-
-        let taskState = this.state.taskState;
-        taskState.push({ id: responseNewEvent.id, state: newEvent.taskState })
-        let taskNumber = this.state.taskNumber;
-        taskNumber.push(responseNewEvent.id);
-
-        let taskPoint = this.state.taskPoint;
-        taskPoint.push({ id: responseNewEvent.id, point: newEvent.taskPoint, isChecked: false })
-        let taskPointNumber = this.state.taskPointNumber;
-        taskPointNumber.push(responseNewEvent.id);
-
-        let eventSocketData = {
-          event: responseNewEvent,
-          membersNo: membersNo
-        }
-
-        this.setState({
-          projects: newProject,
-          taskState: taskState,
-          taskNumber: taskNumber,
-          taskPoint: taskPoint,
-          taskPointNumber: taskPointNumber,
-          events: events,
-          privateTask: false
-        })
-        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(eventSocketData));
-        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
-        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(dashboardSocketData));
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanboardSocketData));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanboardSocketData));
       })
 
   }
@@ -535,17 +529,337 @@ class myCalendar extends Component {
     })
   }
 
-  receiveCalendar(eventSocketData) {
-    console.log("Qweqwe")
+  receiveCalendar(socketData) {
+    if(socketData.socketType === "taskInsert") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        let taskCount = socketData.taskCount;
+        let completedTask = socketData.completedTask;
+        
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {  
+            taskCount: { $set: taskCount },
+            completedTask: { $set: completedTask }
+          }
+        })
+        
+        let responseNewEvent = {
+          color: socketData.taskLabel,
+          end: new Date(socketData.taskEnd),
+          id: Number(socketData.taskNo),
+          projectNo: Number(socketData.projectNo),
+          start: new Date(socketData.taskStart),
+          taskPoint: null,
+          taskState: "do",
+          tasklistNo: Number(socketData.taskListNo),
+          title: socketData.taskContents,
+        }
 
-    let events = [
-      ...this.state.events,
-      eventSocketData.event
-    ]
+        let events = update(this.state.events, {
+          $push: [responseNewEvent]
+        })
 
-    this.setState({
-      events: events
-    })
+        let taskState = this.state.taskState;
+        taskState.push({ id: responseNewEvent.id, state: responseNewEvent.taskState })
+        let taskNumber = this.state.taskNumber;
+        taskNumber.push(responseNewEvent.id);
+
+        let taskPoint = this.state.taskPoint;
+        taskPoint.push({ id: responseNewEvent.id, point: responseNewEvent.taskPoint, isChecked: false })
+        let taskPointNumber = this.state.taskPointNumber;
+        taskPointNumber.push(responseNewEvent.id);
+
+        let set = []
+
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+
+        this.setState({
+          projects: newProject,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          events: events,
+          taskUniquePoint: setProcess.sort().reverse(),
+          privateTask: false
+        })
+      }
+    }
+    // else if(socketData.socketType === "userDelete") {
+    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+    //   if(projectIndex !== -1) {
+    //     let newProject = update(this.state.projects, {
+    //       $splice: [[projectIndex, 1]]
+    //     })
+
+    //     let events = [];
+    //     this.state.events.map(event => {
+    //       if(event.projectNo === socketData.projectNo) {
+            
+    //       }
+    //       else {
+    //         events.push(event)
+    //       }
+    //     })
+
+    //     console.log(this.state.taskNumber);
+
+    //     this.setState({
+    //       projects: newProject,
+    //       events: events
+    //     })
+    //   }
+    // }
+
+    else if(socketData.socketType === "taskDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        let taskCount = socketData.taskCount;
+        let completedTask = socketData.completedTask;
+        
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {  
+            taskCount: { $set: taskCount },
+            completedTask: { $set: completedTask }
+          }
+        })
+
+        const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
+        let events = update(this.state.events, {
+          $splice: [[eventIndex, 1]]
+        }) 
+
+        let taskState = update(this.state.taskState, {
+          $splice: [[eventIndex, 1]]
+        })
+
+        let taskNumber = update(this.state.taskNumber, {
+          $splice: [[eventIndex, 1]]
+        })
+
+        let taskPoint = update(this.state.taskPoint, {
+          $splice: [[eventIndex, 1]]
+        })
+
+        let taskPointNumber = update(this.state.taskPointNumber, {
+          $splice: [[eventIndex, 1]]
+        })
+        
+        let set = []
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+        
+        this.setState({
+          projects: newProject,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          //taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          events: events,
+          taskUniquePoint: setProcess.sort().reverse(),
+          privateTask: false
+        })
+      }
+    }
+    else if(socketData.socketType === "taskCopy") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        let taskCount = socketData.taskCount;
+        let completedTask = socketData.completedTask;
+        
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {  
+            taskCount: { $set: taskCount },
+            completedTask: { $set: completedTask }
+          }
+        })
+        
+        let responseNewEvent = {
+          color: socketData.taskLabel,
+          end: new Date(socketData.taskEnd),
+          id: Number(socketData.taskNo),
+          projectNo: Number(socketData.projectNo),
+          start: new Date(socketData.taskStart),
+          taskPoint: socketData.taskPoint,
+          taskState: socketData.taskState,
+          tasklistNo: Number(socketData.taskListNo),
+          title: socketData.taskContents,
+        }
+
+        let events = update(this.state.events, {
+          $push: [responseNewEvent]
+        })
+
+        let taskState = this.state.taskState;
+        taskState.push({ id: responseNewEvent.id, state: responseNewEvent.taskState })
+        let taskNumber = this.state.taskNumber;
+        taskNumber.push(responseNewEvent.id);
+
+        let taskPoint = this.state.taskPoint;
+        taskPoint.push({ id: responseNewEvent.id, point: responseNewEvent.taskPoint, isChecked: false })
+        let taskPointNumber = this.state.taskPointNumber;
+        taskPointNumber.push(responseNewEvent.id);
+
+        let set = []
+
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+
+        this.setState({
+          projects: newProject,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          events: events,
+          taskUniquePoint: setProcess.sort().reverse(),
+          privateTask: false
+        })
+      }
+    }
+    else if(socketData.socketType === "taskCheck") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        let taskCount = socketData.taskCount;
+        let completedTask = socketData.completedTask;
+        
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {  
+            taskCount: { $set: taskCount },
+            completedTask: { $set: completedTask }
+          }
+        })
+        
+        const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
+        let events = update(this.state.events, {
+          [eventIndex]: {
+            taskState: { $set: socketData.taskState }
+          }
+        })
+        
+        let taskState = update(this.state.taskState, {
+          [eventIndex]: {
+            state: { $set: socketData.taskState }
+          }
+        })
+
+        this.setState({
+          projects: newProject,
+          taskState: taskState,
+          events: events,
+          privateTask: false
+        })
+      }
+    }
+
+    else if(socketData.socketType === "taskListDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        let taskCount = socketData.taskCount;
+        let completedTask = socketData.completedTask;
+        
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {  
+            taskCount: { $set: taskCount },
+            completedTask: { $set: completedTask }
+          }
+        })
+
+        let events = this.state.events;
+        let eventId = [];
+        events.map((event, index) => {
+          if(event.tasklistNo == socketData.taskListNo) {
+            eventId.push({ id: event.id });
+            events.splice(index);
+          }
+        })
+
+        let taskState = this.state.taskState;
+        taskState.map((task, index) => {
+          eventId.map(event => {
+            if(event.id == task.id) {
+              taskState.splice(index);
+            }
+          })
+        })
+
+        let taskNumber = this.state.taskNumber;
+        taskNumber.map((task, index) => {
+          eventId.map(event => {
+            if(event.id == task) {
+              taskNumber.splice(index)
+            }
+          })
+        })
+
+        let taskPoint = this.state.taskPoint;
+        taskPoint.map((task, index) => {
+          eventId.map(event => {
+            if(event.id == task.id) {
+              taskPoint.splice(index)
+            }
+          })
+        })
+
+        let taskPointNumber = this.state.taskPointNumber;
+        taskPointNumber.map((task, index) => {
+          eventId.map(event => {
+            if(event.id == task) {
+              taskPointNumber.splice(index);
+            }
+          })
+        })
+
+        let set = []
+
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+
+        this.setState({
+          projects: newProject,
+          events: events,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          taskUniquePoint: setProcess.sort().reverse(),
+          privateTask: false
+        })
+      }
+    }
   }
 
   render() {

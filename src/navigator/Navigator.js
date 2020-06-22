@@ -39,6 +39,33 @@ export default class Navigator extends React.Component {
         })
     }
 
+    componentDidMount(){
+        // var source = null;
+        // function start() {
+        //     source = new EventSource("http://localhost:8080/nest/api/sse/notice");
+        //     console.log("create EventSource");
+        //     source.onmessage = function(ev) {
+        //         console.log("on message: ", ev.data);
+        //         // "#stockValue".text(ev.data);
+        //     };
+        //     // source.onerror = function(err) {
+        //     //     console.log("on err: ", err);
+        //     //     stop();
+        //     // };
+        // }
+        // function stop() {
+        //     if (source != null) {
+        //         source.close();
+        //         console.log("close EventSource");
+        //         source = null;
+        //     }
+        // }
+        // start();
+        // // window.on("unload", function () {
+        // //     stop();
+        // // });
+    }
+
     render() {
         return (
             <div className='Navigator'>

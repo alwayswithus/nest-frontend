@@ -313,7 +313,9 @@ class TaskList extends Component {
                               {this.props.taskList.tasks
                               .map((task, index) => (
                                 <div>
-                                  {this.state.showComplete 
+                                  { task.taskState === "del" 
+                                  ? null
+                                  : this.state.showComplete 
                                     ? 
                                     <Task
                                       authUserRole={this.props.authUserRole}

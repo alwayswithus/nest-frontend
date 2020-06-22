@@ -91,6 +91,7 @@ class TaskInnerContents extends Component {
             </div>
             {this.props.authUserRole === 1 ? 
             <div className="setting">
+              
               <div className="btn-group">
                 <button
                   className="btn btn-default dropdown-toggle btn-xs"
