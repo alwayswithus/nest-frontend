@@ -41,7 +41,6 @@ class KanbanMain extends Component {
       projects: null,                                               // projects data
       users: null,                                                  // user data
       userProject: [],                                              // authUser projectNo and roleNo
-
       project: [],                                                  // project
       members: [],                                                  // members in project
       message: null,
@@ -64,11 +63,17 @@ class KanbanMain extends Component {
       projectWriter: "",                                             // project writer
       projectKeyword: "",                                            // project search
       memberKeyword: "",                                             // member search
+      loading: false,
 
       history:[], //히스토리배열
       projectMembers:[] // 프로젝트 멤버
     };
-    this.clientRef= React.createRef()
+    const { history } = this.props;
+    // 세션 체크...
+    if (!sessionStorage.getItem("authUserNo")) {
+      history.push("/nest/");
+      return;
+    }
   }
 
   // onDragStart = (result) => {
@@ -1809,7 +1814,8 @@ modalStateFalse(){
  this.setState({
   modalState : false,
   taskMemberState:false,
-  tagModal: false
+  tagModal: false,
+  setOn:true
  })
 }
 // 모달 상태 변경
@@ -1973,13 +1979,14 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
         .then(json => {
           this.setState({
             userProject: json.data,
-            setOn: !this.state.setOn,
+            setOn: false,
             project: this.state.projects[projectIndex]
           })
-        })  
+        })
+
     }else{
       this.setState({
-        setOn: !this.state.setOn,
+        setOn: true,
       })
     }
 
@@ -2058,6 +2065,11 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
       projectState: state
     }
 
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
+
     fetch(`${API_URL}/api/projectsetting/state`, {
       method: 'post',
       headers: API_HEADERS,
@@ -2065,16 +2077,15 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectState: { $set: json.data.projectState }
-          }
-        })
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        let socketData = {
+          projectNo: projectNo,
+          projectState: json.data.projectState,
+          membersNo: membersNo,
+          socketType: "stateChange"
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
@@ -2405,6 +2416,26 @@ editTaskListName(newTaskList){
 
 receiveKanban(socketData) {
 
+  if(socketData.socketType === "labelUpdate"){
+    let newTaskList = update(this.state.taskList,{
+      [socketData.taskListIndex]:{
+        tasks:{
+          [socketData.taskIndex]:{
+            taskLabel:{$set: socketData.color}
+          }
+        }
+      }
+    })
+    this.setState({
+      taskList:newTaskList
+    })
+
+    fetch(`${API_URL}/api/tasksetting/tasklabel/${socketData.taskNo}`,{
+      method:'post',
+      headers:API_HEADERS,
+      body:socketData.color
+    })
+  }
   if(socketData.projectNo+"" === this.props.location.pathname.split('/')[3]){
     if(socketData.socketType === 'taskListName'){
     
@@ -3162,7 +3193,7 @@ receiveKanban(socketData) {
           })
       } else if(socketData.historyType === "taskContentsUpdate"){
           let newHistoryData = {
-            logContents:socketData.senderName+" 님이"+socketData.actionName+"으로 업무이름을 수정하셨습니다.",
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 으로 업무이름을 수정하셨습니다.",
             logDate:socketData.historyDate,
             projectNo:socketData.projectNo
           }
@@ -3172,7 +3203,151 @@ receiveKanban(socketData) {
               $push:[newHistoryData]
             })
           })
-      }
+      } else if(socketData.historyType === "taskListInsert"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskListDelete"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트를 삭제하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskDateUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 마감일을 수정하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskMemberJoin"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 멤버를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "checklistInsert"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 체크리스트를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "checklistStateUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 체크리스트 상태를 수정하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskContentsUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 코멘트를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskDragNdrop"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 위치를 변경하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskListDragNdrop"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트의 위치를 변경하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskStateUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무 상태를 변경하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskInsert"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskDelete"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 삭제하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } 
     }else{
       return
     }
@@ -3241,6 +3416,7 @@ receiveKanban(socketData) {
 
 
   render() {
+    console.log()
 
     return (
       <>
@@ -3346,12 +3522,13 @@ receiveKanban(socketData) {
           }}
             />
         
-        <div id="projectSetArea" style={{ display: this.state.setOn ? 'none' :'block' }}>
+        <div id="projectSetArea" style={{ display: this.state.setOn ? 'none'  :'block'}}>
             <ProjectSetting
               modalState={this.state.modalState}
               users={this.state.users}
               project={this.state.project}
               userProject={this.state.userProject}
+              loading={this.state.loading}
               callbackProjectSetting={{
                 close: this.callbackCloseProjectSetting.bind(this),
                 addDeleteMember: this.callbackAddDeleteMember.bind(this),

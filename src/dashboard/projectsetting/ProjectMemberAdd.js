@@ -43,10 +43,11 @@ class ProjectMemberAdd extends Component {
                             <input type="text" className="form-control find-member" onChange={this.onFindMemberSearch.bind(this)} placeholder="이름 혹은 이메일로 찾기" />
                             <div className="invite-card-member-list">
                                 {this.props.users && this.props.users
-                                    .filter(user => user.userName.indexOf(this.state.memberKeyword) !== -1 ||
-                                    user.userEmail.indexOf(this.state.memberKeyword) !== -1)
+                                    .filter(user => user.userGrade !== "비회원" && (user.userName.indexOf(this.state.memberKeyword) !== -1 ||
+                                    user.userEmail.indexOf(this.state.memberKeyword) !== -1))
                                     .map(user =>
-                                        <ProjectSettingUser key={user.userNo} user={user} project={this.props.project} callbackProjectSetting={this.props.callbackProjectSetting} />)}
+                                        <ProjectSettingUser key={user.userNo} user={user} project={this.props.project} callbackProjectSetting={this.props.callbackProjectSetting} />
+                                    )}
                                 <div className="invite-member" onClick={this.callbackOpenInviteMember.bind(this)}>
                                     <i className="fas fa-user-plus fa-2x"></i>
                                     <span>멤버 초대하기</span>

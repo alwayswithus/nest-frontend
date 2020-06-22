@@ -380,7 +380,6 @@ class ProjectSetting extends Component {
                                     {this.props.project.members && this.props.project.members.map(member =>
                                         member.userGrade === "비회원" ? null :
                                         <div className="dropdown" key={member.userNo}>
-
                                             {sessionStorage.getItem("authUserNo") == member.userNo ? 
                                             <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown" disabled>
                                                 <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
@@ -462,11 +461,11 @@ class ProjectSetting extends Component {
                                 </div>
                             </li>
 
-                            {/* csv로 내보내기 */}
+                            {/* csv로 내보내기
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>csv로 내보내기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link"><button>csv로 내보내기</button></div>
-                            </li>
+                            </li> */}
 
                             {/* 프로젝트 나가기 */}
                             {this.props.project.members && Object.keys(this.props.project.members).length === 1 ? "" :

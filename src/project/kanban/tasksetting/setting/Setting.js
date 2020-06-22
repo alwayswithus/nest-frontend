@@ -225,16 +225,11 @@ class Setting extends Component {
             taskListNo,
             this.props.match.params.taskNo)
     }
-
-    componentDidMount(){
-        
-    }
-
     render() {
+
         if(!this.props.task){
             return <></>;
         }
-
         const taskList = this.props.task;
 
         let Indexs = []
@@ -246,7 +241,7 @@ class Setting extends Component {
         ))
         const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
-    
+        console.log(this.props.match.url)
         return (
             <>
             
@@ -265,6 +260,7 @@ class Setting extends Component {
                     {/* 업무속성 헤더 */}
                     <div style={{ float: 'right' }}>
                         <Header 
+                            location={this.props.match.url}
                             authUserRole={this.props.authUserRole}
                             name={taskItem.userName} 
                             date={taskItem.taskRegdate}

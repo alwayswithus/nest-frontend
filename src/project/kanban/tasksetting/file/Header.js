@@ -50,12 +50,17 @@ class Header extends Component {
    }
 
     render(){
+        
     return (
         <div style={{display:'block'}} id= "taskSettingHeader" className="Header">
-            <Link 
+            {this.props.location.indexOf("calendar") === -1 ? <Link 
                 style= {{color:'black'}}
                 to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} 
-                ><i className="fas fa-times fa-1x"></i></Link>
+                ><i className="fas fa-times fa-1x"></i></Link> :
+
+                <Link 
+                style= {{color:'black'}}
+                to = {`/nest/calendar/`}><i className="fas fa-times fa-1x"></i></Link> }
             <div className="Header-list">
                 {/* 업무 내용 수정 */}
                 {this.state.input ? 
