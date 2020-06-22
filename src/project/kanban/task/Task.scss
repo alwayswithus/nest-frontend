@@ -1,29 +1,36 @@
 .task {
   .panel:hover {
     cursor: pointer;
-    background-color: rgb(255, 245, 245);
+    // background-color: #00bad2;
+    .option{
+      display: flex;
+    }
   }
 
   .task-item {
     padding: 5px 0px 0px 0px;
   }
   .task-top {
-    .setting {
-      float: right;
-      .btn {
-        width: 20px;
-        height: 20px;
-        padding: 0;
-        .fa-ellipsis-v {
-          color: #777777;
-        }
-      }
+    height: 26px;
+    .option{
+      display: none;
     }
-    .dropdown-menu {
-      left: -110px;
-      top: -3px;
-      min-width: 100px;
-    }
+    // .setting {
+    //   float: right;
+    //   .btn {
+    //     width: 20px;
+    //     height: 20px;
+    //     padding: 0;
+    //     .fa-ellipsis-v {
+    //       color: #777777;
+    //     }
+    //   }
+    // }
+    // .dropdown-menu {
+    //   left: -110px;
+    //   top: -3px;
+    //   min-width: 100px;
+    // }
   }
   .task-title {
     .title {

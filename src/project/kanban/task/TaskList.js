@@ -164,8 +164,8 @@ class TaskList extends Component {
                         autoFocus
                       />
                     ) : (
-                      <div style={{ display: "flex" }}>
-                        <div style={{ fontSize: "17px" }}>
+                      <div style={{ display: "flex" }} className="titleArea">
+                        <div style={{ fontSize: "17px" , color:"white"}}>
                           {this.props.taskList.taskListName} &nbsp;
                         </div>
                         {this.state.taskInsertState ? (
@@ -261,14 +261,15 @@ class TaskList extends Component {
               )}
             </div>
             <div className="taskArea">
-              <div className="test">
+              <div className="taskBox">
                 <Droppable
                   droppableId={this.props.taskList.taskListNo}
                   type="task"
                 >
                   {(provided, snapshot) => (
                     <>
-                      <div className="tasks" ref={provided.innerRef} {...provided.droppableProps}>
+                      <div className="tasks" ref={provided.innerRef} {...provided.droppableProps} 
+                      style={{ backgroundColor: snapshot.isDraggingOver ? '#62c6d3' : null}}>
                         {/* task 목록 */}
                         {this.props.selectPicker === "task" 
                           ? <>

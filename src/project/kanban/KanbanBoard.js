@@ -156,42 +156,77 @@ class KanbanBoard extends Component {
     return (
       <>
         <div className="kanbanBoard">
+          <div className="kanbanBoardTopMenu">
           {/*업무 검색*/}
           <div
-            style={{ position: "fixed", display: "inline-flex" }}
+            style={{ display: "inline-flex" }}
             className="input-group"
           >
-            <select
-              className="form-control selectpicker"
-              onChange={this.selectpicker.bind(this)}
-              style={
-                this.state.selectPicker === "task"
-                  ? { borderColor: "green" }
-                  : { borderColor: "blue" }
-              }
-            >
-              <option className="option" value="task">
-                업무 검색
-              </option>
-              <option className="option" value="tag">
-                태그 검색
-              </option>
-            </select>
             <input
               type="text"
               className="form-control"
-              placeholder={
-                this.state.selectPicker === "task" ? "업무 검색" : "태그 검색"
-              }
+              id="searchBox"
+              placeholder={this.state.selectPicker === "task" ? "업무 검색" : "태그 검색"}
               value={this.state.searchKeyword}
               onChange={this.searchKeyword.bind(this)}
-              style={
-                this.state.selectPicker === "task"
-                  ? { borderColor: "green" }
-                  : { borderColor: "blue" }
-              }
             ></input>
+            <select
+              className="selectpicker"
+              onChange={this.selectpicker.bind(this)}
+            >
+              <option className="option" value="task">
+                업무
+              </option>
+              <option className="option" value="tag">
+                태그
+              </option>
+            </select>
           </div>
+          {/* TaskList 추가 */}
+          <div className="taskListAdd">
+              {this.state.taskListInsertState ? (
+                <>
+                  <div className="taskListInsertForm" style={{display: this.props.setOn ?"block":"none"}}>
+                    <div className="taskListInsertInput">
+                    <div>
+                      <input
+                        type="text"
+                        className="textArea"
+                        onChange={this.onTextAreaChanged.bind(this)}
+                        onKeyPress={this.addTaskListEnter.bind(this)}
+                        value={this.state.taskListName}
+                        autoFocus
+                      ></input>
+                    </div>
+                    <div className="taskListInsertBtn">
+                      &nbsp;
+                      <i
+                        className="fas fa-check Icon"
+                        onClick={this.addTaskList.bind(this)}
+                      ></i>
+                      <i class="fas fa-times Icon" onClick={this.taskListStateBtn.bind(this)}
+                        data-tip="취소"></i>
+                      <ReactTooltip />
+                    </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {this.props.authUserRole === 1 ? (
+                    <button
+                      type="button"
+                      className="btn btn-default addTaskListBtn"
+                      onClick={this.taskListStateBtn.bind(this)}
+                      style={{display: this.props.setOn ?"block":"none"}}
+                    >
+                      + 업무 목록 추가
+                    </button>
+                  ) : null}
+                </>
+              )}
+            </div>
+            </div>
           <div className="taskListArea">
             {/*task 리스트*/}
 
@@ -200,11 +235,12 @@ class KanbanBoard extends Component {
               direction="horizontal"
               type="column"
             >
-              {(provided) => (
+              {(provided,snapshot) => (
                 <div
                   className="taskList"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
+                  
                 >
                   {this.state.selectPicker === "task"
                     ? this.props.taskList &&
@@ -262,51 +298,9 @@ class KanbanBoard extends Component {
                 </div>
               )}
             </Droppable>
-            {/* TaskList 추가 */}
-            <div className="taskListAdd">
-              {this.state.taskListInsertState ? (
-                <>
-                  <div className="taskListInsertForm" style={{display: this.props.setOn ?"block":"none"}}>
-                    <div className="test">
-                    <div>
-                      <input
-                        type="text"
-                        className="textArea"
-                        onChange={this.onTextAreaChanged.bind(this)}
-                        onKeyPress={this.addTaskListEnter.bind(this)}
-                        value={this.state.taskListName}
-                        autoFocus
-                      ></input>
-                    </div>
-                    <div className="taskListInsertBtn">
-                      &nbsp;
-                      <i
-                        className="fas fa-check Icon"
-                        onClick={this.addTaskList.bind(this)}
-                      ></i>
-                      <i class="fas fa-times Icon" onClick={this.taskListStateBtn.bind(this)}
-                        data-tip="취소"></i>
-                      <ReactTooltip />
-                    </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {this.props.authUserRole === 1 ? (
-                    <button
-                      type="button"
-                      className="btn btn-default addTaskListBtn"
-                      onClick={this.taskListStateBtn.bind(this)}
-                      style={{display: this.props.setOn ?"block":"none"}}
-                    >
-                      + 업무 목록 추가
-                    </button>
-                  ) : null}
-                </>
-              )}
-            </div>
+            
           </div>
+          
         </div>
       </>
     );
