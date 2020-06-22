@@ -16,6 +16,22 @@
         color: grey;
         font-size: 36;
         margin-top: -80px;
+        .animated {
+            margin: auto;
+            right: 0;
+            left: 0;
+            height: 180px;
+            border-radius: 2px;
+            animation-duration: 2.5s;
+            animation-iteration-count: infinite;
+            animation-name: bounce-1;
+            animation-timing-function: linear;
+          }
+          @keyframes bounce-1 {
+            0%   { transform: translateY(0); }
+            50%  { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
         .dragging-text-span{
             display: block;
             color: white;

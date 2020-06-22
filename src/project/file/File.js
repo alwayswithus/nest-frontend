@@ -12,6 +12,7 @@ import { paginate } from './Paginate';
 import update from "react-addons-update";
 import Viewer from 'react-viewer'
 import EachFile from "./EachFile";
+import SockJsClient from "react-stomp";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -151,13 +152,64 @@ export default class File extends React.Component {
         }
     }
 
+    receiveKanban(socketData){
+        console.log(socketData)
+        if(socketData.projectNo === this.props.match.params.projectNo){
+            if(socketData.socketType=="fileDelete"){
+                const fileIndex = this.state.projectFiles.findIndex(file => file.fileNo == socketData.fileNo)
+                console.log(fileIndex)
+                let newprojectFiles = update(this.state.projectFiles, {
+                    [fileIndex]:{
+                        fileState:{$set:'F'}
+                    }
+                })
+
+                this.setState({
+                    projectFiles:newprojectFiles
+                })
+            }else{
+                let newFile = {
+                    changeName:null,
+                    commentNo:socketData.commentNo,
+                    fileNo:socketData.fileNo,
+                    filePath:socketData.filePath,
+                    fileRegdate:socketData.commentRegdate,
+                    fileState:socketData.fileState,
+                    originName:socketData.originName,
+                    projectNo:socketData.projectNo,
+                    projectTitle:socketData.projectTitle,
+                    taskContents:socketData.taskContents,
+                    taskNo:socketData.taskNo,
+                    tasklistName:socketData.taskListName,
+                    userName:socketData.userName,
+                    userNo:socketData.userNo
+                }
+    
+                let newProjectFiles = update(this.state.projectFiles, {
+                    $push:[newFile]
+                })
+                this.setState({
+                    projectFiles:newProjectFiles
+                })
+            }
+        }
+    }
     render() {
 
         // if (this.state.count === 0)
         //     return <p>There are no movies in the database.</p>
-
+        console.log(this.state.projectFiles)
         const files = paginate(this.state.projectFiles, this.state.currentPage, this.state.pageSize); // 페이지 별로 아이템이 속한 배열을 얻어옴
         return (
+            <>
+            <SockJsClient
+                url={`${API_URL}/socket`}
+                topics={[`/topic/topbar/all/${sessionStorage.getItem("authUserNo")}`]}
+                onMessage={this.receiveKanban.bind(this)}
+                ref={(client) => {
+                  this.clientRef = client
+                }}
+             />
             <div className="File">
                 <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 <TopBar history={this.state.history} projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname} />
@@ -174,6 +226,7 @@ export default class File extends React.Component {
                         <tbody>
                             {files && files
                             .map(projectFile =>
+                                projectFile.taskState == "del" || projectFile.fileState == "F" ? null :
                                 <EachFile 
                                     onClickDeleteFile = {this.onClickDeleteFile.bind(this)}
                                     projectFile = {projectFile}
@@ -199,6 +252,7 @@ export default class File extends React.Component {
                 </div>
                     
             </div>
+            </>
         )
     }
     componentDidMount() {

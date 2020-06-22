@@ -59,6 +59,7 @@ class FileComponent extends Component {
     }
 
     render() {
+        console.log(this.props.taskItem.taskState)
         return (
             <>
                 <tr key={this.props.file.fileNo} className="FileList-tr">
@@ -85,16 +86,20 @@ class FileComponent extends Component {
                     <td>{this.props.file.userName}</td>
                     <li>
                         <div className="contents-dropdown">
+                            {this.props.taskItem.taskState == "del" || this.props.authUserRole === 3 ? null : 
                             <div className="dropdown">
                                 <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                                     <i className="fas fa-ellipsis-v"></i>
                                 </button>
-                                <ul className="dropdown-menu">
-                                    <li><a href="#" onClick={this.downloadEmployeeData.bind(this, this.props.file.fileNo)}>다운로드</a></li>
-                                    <li><a href="#">이름변경</a></li>
-                                    <li><a href="#" onClick={this.onClickDeleteFile.bind(this, this.props.file.fileNo, this.props.file.commentNo)} style={{ color: 'red' }}>삭제</a></li>
-                                </ul>
+                                    <ul className="dropdown-menu">
+                                        <li><a href="#" onClick={this.downloadEmployeeData.bind(this, this.props.file.fileNo)}>다운로드</a></li>
+
+                                        {this.props.file.userNo == sessionStorage.getItem("authUserNo") ? 
+                                            <li><a href="#" onClick={this.onClickDeleteFile.bind(this, this.props.file.fileNo, this.props.file.commentNo)} style={{ color: 'red' }}>삭제</a></li> : null
+                                        }
+                                    </ul>
                             </div>
+                                }
                         </div>
                     </li>
                 </tr>

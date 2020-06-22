@@ -71,7 +71,7 @@ class DropZone extends Component {
             >
               <div 
                 className={this.state.drag ? "dragging-text" : "dragging-text-false"}
-              ><img style={{width:'30%'}} src='/assets/images/upload.png'></img>
+              ><img className="animated bounce" style={{width:'30%'}} src='/assets/images/upload.png'></img>
               </div>
               <span className="dragging-text-span">파일을 업로드 하시려면 여기에 드롭해주세요</span>
             </div>

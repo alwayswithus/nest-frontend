@@ -23,7 +23,7 @@ class Important extends Component {
               <div className="container">
                 <div className="dropdown">
                   <button
-                    disabled={this.props.authUserRole === 3 ? true : false} 
+                    disabled={this.props.taskItem.taskState == "del" || this.props.authUserRole === 3 ? true : false} 
                     className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style={{backgroundColor:'white'}}>
                     {this.props.taskItem.taskPoint === null ? "평가되지않음" : this.props.taskItem.taskPoint+"  "}
                     {this.props.taskItem.taskPoint !== null ? 
