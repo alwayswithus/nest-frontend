@@ -41,7 +41,6 @@ class KanbanMain extends Component {
       projects: null,                                               // projects data
       users: null,                                                  // user data
       userProject: [],                                              // authUser projectNo and roleNo
-
       project: [],                                                  // project
       members: [],                                                  // members in project
       message: null,
@@ -64,11 +63,17 @@ class KanbanMain extends Component {
       projectWriter: "",                                             // project writer
       projectKeyword: "",                                            // project search
       memberKeyword: "",                                             // member search
+      loading: false,
 
       history:[], //히스토리배열
       projectMembers:[] // 프로젝트 멤버
     };
-    this.clientRef= React.createRef()
+    const { history } = this.props;
+    // 세션 체크...
+    if (!sessionStorage.getItem("authUserNo")) {
+      history.push("/nest/");
+      return;
+    }
   }
 
   // onDragStart = (result) => {
@@ -1809,7 +1814,8 @@ modalStateFalse(){
  this.setState({
   modalState : false,
   taskMemberState:false,
-  tagModal: false
+  tagModal: false,
+  setOn:true
  })
 }
 // 모달 상태 변경
@@ -1973,13 +1979,14 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
         .then(json => {
           this.setState({
             userProject: json.data,
-            setOn: !this.state.setOn,
+            setOn: false,
             project: this.state.projects[projectIndex]
           })
-        })  
+        })
+
     }else{
       this.setState({
-        setOn: !this.state.setOn,
+        setOn: true,
       })
     }
 
@@ -2058,6 +2065,11 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
       projectState: state
     }
 
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
+
     fetch(`${API_URL}/api/projectsetting/state`, {
       method: 'post',
       headers: API_HEADERS,
@@ -2065,16 +2077,15 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectState: { $set: json.data.projectState }
-          }
-        })
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        let socketData = {
+          projectNo: projectNo,
+          projectState: json.data.projectState,
+          membersNo: membersNo,
+          socketType: "stateChange"
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
       })
   }
 
@@ -3241,6 +3252,7 @@ receiveKanban(socketData) {
 
 
   render() {
+    console.log()
 
     return (
       <>
@@ -3346,12 +3358,13 @@ receiveKanban(socketData) {
           }}
             />
         
-        <div id="projectSetArea" style={{ display: this.state.setOn ? 'none' :'block' }}>
+        <div id="projectSetArea" style={{ display: this.state.setOn ? 'none'  :'block'}}>
             <ProjectSetting
               modalState={this.state.modalState}
               users={this.state.users}
               project={this.state.project}
               userProject={this.state.userProject}
+              loading={this.state.loading}
               callbackProjectSetting={{
                 close: this.callbackCloseProjectSetting.bind(this),
                 addDeleteMember: this.callbackAddDeleteMember.bind(this),
