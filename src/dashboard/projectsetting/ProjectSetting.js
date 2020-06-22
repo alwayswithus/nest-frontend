@@ -462,11 +462,11 @@ class ProjectSetting extends Component {
                                 </div>
                             </li>
 
-                            {/* csv로 내보내기 */}
+                            {/* csv로 내보내기
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>csv로 내보내기</b></h5></div>
                                 <div style={{ display: 'inline-block' }} className="link"><button>csv로 내보내기</button></div>
-                            </li>
+                            </li> */}
 
                             {/* 프로젝트 나가기 */}
                             {this.props.project.members && Object.keys(this.props.project.members).length === 1 ? "" :

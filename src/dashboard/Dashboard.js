@@ -173,8 +173,7 @@ export default class Dashboard extends React.Component {
         this.state.project.members, 
         "projectMemberJoin", 
         userName, 
-        projectNo,
-        this.clientRef)
+        projectNo)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
@@ -377,8 +376,7 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectMemberInvite", 
       memberName, 
-      projectNo,
-      this.clientRef)
+      projectNo)
 
     fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
@@ -877,8 +875,7 @@ export default class Dashboard extends React.Component {
       this.state.project.members, 
       "projectDateUpdate", 
       projectTitle, 
-      projectNo,
-      this.clientRef)
+      projectNo)
 
     if (from === 'Invalid date') {
       from = undefined;
@@ -1619,11 +1616,20 @@ export default class Dashboard extends React.Component {
                   (project.projectEnd && project.projectEnd.indexOf(this.state.projectKeyword) !== -1))
                 .map(project =>
                   <div key={project.projectNo} className="panel panel-default projects">
-                    <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`}>
+                    <Link to={`/nest/dashboard/${project.projectNo}/kanbanboard`} style={{textDecoration: "none"}}>
                       <div className="panel-header">
                         <span className="project-title">
                           {project.projectTitle}
                         </span>
+                        <div style={{marginLeft: "15px", color: "black"}}>
+                          <span className="update-date" style={{ width: "100%" }}>
+                            <h6 style={{fontSize: "10px"}}>
+                              {!project.projectStart && !project.projectEnd && "프로젝트 일정 미정"}
+                              {project.projectStart && !project.projectEnd && `${project.projectStart} ~ 마감일 미정`}
+                              {project.projectStart && project.projectEnd && `${project.projectStart} ~ ${project.projectEnd}`}
+                            </h6>
+                          </span>
+                        </div>
                       </div>
                       <div className="panel-body">
                         <Link to="#">
@@ -1693,28 +1699,26 @@ export default class Dashboard extends React.Component {
                           <i className="fas fa-cog fa-lg" onClick={this.onProjectSetting.bind(this, project.projectNo)} ></i>
                         </Link>
                       </div>
-                      <div className="panel-footer">
-                        <span className="update-task" style={{ width: "100%" }}><h6>{project.taskCount}개 중 {project.completedTask}개 업무 완료</h6></span>
-                        <span className="update-date" style={{ width: "100%" }}>
-                          <h6>
-                            {!project.projectStart && !project.projectEnd && "프로젝트 일정 미정"}
-                            {project.projectStart && !project.projectEnd && `${project.projectStart} ~ 마감일 미정`}
-                            {project.projectStart && project.projectEnd && `${project.projectStart} ~ ${project.projectEnd}`}
-                          </h6>
-                        </span><br></br>
+                      <div className="panel-footer" style={{backgroundColor: "#FFFFFF"}}>     
+                        <div>                
+                          <div className="update-task">
+                            <h6 style={{float: "left", fontSize: "10px", marginBottom: "10px", color: "darkgray"}}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</h6>
+                            <h6 style={{float: "right", fontSize: "10px", marginRight: "8px", color: "darkgray"}}>{project.completedTask} / {project.taskCount} 업무</h6>
+                          </div>
+                        </div>
                         <div className="progress">
                           {project.projectState === "완료됨" ?
                             <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="100"
-                              aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
+                              aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
                             project.projectState === "진행중" ?
                               <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100"
-                                aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
+                                aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
                               project.projectState === "계획됨" ?
                                 <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100"
-                                  aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
+                                  aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
                                 project.projectState === "상태없음" ?
                                   <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100"
-                                    aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</div> :
+                                    aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
                                   ""}
                         </div>
                       </div>
@@ -1725,7 +1729,7 @@ export default class Dashboard extends React.Component {
             {/* 새 프로젝트 */}
             <div className="panel-group" >
               <div className="panel panel-default new-project" onClick={this.onStartNewProject.bind(this)} data-toggle="modal" data-target="#add-project">
-                <div className="panel-body new-project-body">
+                <div className="panel-body new-project-body" style={{paddingTop: "51px"}}>
                   <i className="fas fa-plus fa-2x"></i><br />
                   <div className="new-project-name">새 프로젝트</div>
                 </div>
