@@ -2405,6 +2405,26 @@ editTaskListName(newTaskList){
 
 receiveKanban(socketData) {
 
+  if(socketData.socketType === "labelUpdate"){
+    let newTaskList = update(this.state.taskList,{
+      [socketData.taskListIndex]:{
+        tasks:{
+          [socketData.taskIndex]:{
+            taskLabel:{$set: socketData.color}
+          }
+        }
+      }
+    })
+    this.setState({
+      taskList:newTaskList
+    })
+
+    fetch(`${API_URL}/api/tasksetting/tasklabel/${socketData.taskNo}`,{
+      method:'post',
+      headers:API_HEADERS,
+      body:socketData.color
+    })
+  }
   if(socketData.projectNo+"" === this.props.location.pathname.split('/')[3]){
     if(socketData.socketType === 'taskListName'){
     
@@ -3162,7 +3182,7 @@ receiveKanban(socketData) {
           })
       } else if(socketData.historyType === "taskContentsUpdate"){
           let newHistoryData = {
-            logContents:socketData.senderName+" 님이"+socketData.actionName+"으로 업무이름을 수정하셨습니다.",
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 으로 업무이름을 수정하셨습니다.",
             logDate:socketData.historyDate,
             projectNo:socketData.projectNo
           }
@@ -3172,7 +3192,151 @@ receiveKanban(socketData) {
               $push:[newHistoryData]
             })
           })
-      }
+      } else if(socketData.historyType === "taskListInsert"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskListDelete"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트를 삭제하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskDateUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 마감일을 수정하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskMemberJoin"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 멤버를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "checklistInsert"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 체크리스트를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "checklistStateUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 체크리스트 상태를 수정하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskContentsUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 코멘트를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskDragNdrop"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 위치를 변경하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskListDragNdrop"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트의 위치를 변경하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskStateUpdate"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무 상태를 변경하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskInsert"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 추가하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } else if(socketData.historyType === "taskDelete"){
+        let newHistoryData = {
+          logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 삭제하였습니다.",
+          logDate:socketData.historyDate,
+          projectNo:socketData.projectNo
+        }
+
+        this.setState({
+          history : update(this.state.history,{
+            $push:[newHistoryData]
+          })
+        })
+      } 
     }else{
       return
     }

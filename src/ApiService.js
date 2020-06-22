@@ -11,6 +11,10 @@ class ApiService {
         return axios.get(`/nest/api/calendar/${window.sessionStorage.getItem("authUserNo")}`);
     }
 
+    fetchCalendarAllTask(authUserNo){
+        return axios.get(`/nest/api/calendar/alltask/${authUserNo}`)
+    }
+
     fetchProjectMember(projectNo) {
         return axios.get(`/nest/api/dashboard/member/${projectNo}`)
     }

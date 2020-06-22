@@ -144,7 +144,6 @@ function App() {
         {/* 캘린더 */}
         <Route
           path="/nest/calendar"
-          exact
           render={(match) =>
             <Calendar {...match} callbackChangeBackground={{ change: callbackChangeBackground }} />
           }
