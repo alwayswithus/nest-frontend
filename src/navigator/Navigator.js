@@ -64,6 +64,55 @@ export default class Navigator extends React.Component {
         // // window.on("unload", function () {
         // //     stop();
         // // });
+        function createNotification(observable){ 
+ 
+            //console.log('show notification... : ' + observable.get('notificationEnabled') );
+            console.log("create notification..");
+            if(window.Notification){
+                // if( Notification.permission == 'denied' ){
+                //     observable.set('notificationEnabled', false);
+                // }else{
+                //     observable.set('notificationEnabled', true);
+                // }    
+            }            
+         
+            //var template = kendo.template($("#notification-template").html());
+            const eventSource = new EventSource('http://localhost:8080/nest/api/sse/notifications/issue.json'); 
+         
+            eventSource.onmessage = function(e) { 
+                console.log('msg: ' + e.data);
+                var obj = JSON.parse(e.data);
+                var title = "";
+                if( obj.state == 'CREATED' ){
+                    title = "신규 이슈 알림";
+                    
+                }else {
+                    title = "이슈 변경 알림";
+                } 
+         
+                if(observable.get('notificationEnabled')){
+                     var notification = new Notification(title, {
+                            // body: template(obj),
+                            // icon: iconDataURI
+                    });         
+                }else{
+                    // title = title + " : " + new Date().toLocaleTimeString() ;
+                    // community.ui.notification({ 
+                    //     autoHideAfter:0, 
+                    //     allowHideAfter: 0,
+                    //     width : 500,
+                    //     templates : [{
+                    //         type : "alert",
+                    //         template : '<div class="notification-info g-pa-20">#if(title){#<div class="notification-title g-font-weight-400">#= title #</div>#}#<div class="notification-mesage">#= message #</div></div>'
+                    //     }]
+                    // }).show({ title:title, 'message': template(obj), time: new Date().toLocaleTimeString() },"alert");
+                }
+                return;            
+            } 
+           console.log("???????___!!!!")
+        }
+        createNotification();
+        // 아직 작업중...
     }
 
     render() {
