@@ -4,6 +4,7 @@ import './navigator.scss';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 import NavNotice from './NavNotice';
+import ApiService from '../ApiService';
 
 export default class Navigator extends React.Component {
 
@@ -40,79 +41,105 @@ export default class Navigator extends React.Component {
     }
 
     componentDidMount(){
-        // var source = null;
-        // function start() {
-        //     source = new EventSource("http://localhost:8080/nest/api/sse/notice");
-        //     console.log("create EventSource");
-        //     source.onmessage = function(ev) {
-        //         console.log("on message: ", ev.data);
-        //         // "#stockValue".text(ev.data);
-        //     };
-        //     // source.onerror = function(err) {
-        //     //     console.log("on err: ", err);
-        //     //     stop();
-        //     // };
-        // }
-        // function stop() {
-        //     if (source != null) {
-        //         source.close();
-        //         console.log("close EventSource");
-        //         source = null;
-        //     }
-        // }
-        // start();
-        // // window.on("unload", function () {
-        // //     stop();
-        // // });
-        function createNotification(observable){ 
+        // // var source = null;
+        // // function start() {
+        // //     source = new EventSource("http://localhost:8080/nest/api/sse/notice");
+        // //     console.log("create EventSource");
+        // //     source.onmessage = function(ev) {
+        // //         console.log("on message: ", ev.data);
+        // //         // "#stockValue".text(ev.data);
+        // //     };
+        // //     // source.onerror = function(err) {
+        // //     //     console.log("on err: ", err);
+        // //     //     stop();
+        // //     // };
+        // // }
+        // // function stop() {
+        // //     if (source != null) {
+        // //         source.close();
+        // //         console.log("close EventSource");
+        // //         source = null;
+        // //     }
+        // // }
+        // // start();
+        // // // window.on("unload", function () {
+        // // //     stop();
+        // // // });
+        // function createNotification(observable){ 
  
-            //console.log('show notification... : ' + observable.get('notificationEnabled') );
-            console.log("create notification..");
-            if(window.Notification){
-                // if( Notification.permission == 'denied' ){
-                //     observable.set('notificationEnabled', false);
-                // }else{
-                //     observable.set('notificationEnabled', true);
-                // }    
-            }            
+        //     //console.log('show notification... : ' + observable.get('notificationEnabled') );
+        //     console.log("create notification..");
+        //     // if(window.Notification){
+        //     //     // if( Notification.permission == 'denied' ){
+        //     //     //     observable.set('notificationEnabled', false);
+        //     //     // }else{
+        //     //     //     observable.set('notificationEnabled', true);
+        //     //     // }    
+        //     // }            
          
-            //var template = kendo.template($("#notification-template").html());
-            const eventSource = new EventSource('http://localhost:8080/nest/api/sse/notifications/issue.json'); 
+        //     //var template = kendo.template($("#notification-template").html());
+        //     // const eventSource = new EventSource('http://localhost:8080/nest/api/sse/notifications/issue.json'); 
          
-            eventSource.onmessage = function(e) { 
-                console.log('msg: ' + e.data);
-                var obj = JSON.parse(e.data);
-                var title = "";
-                if( obj.state == 'CREATED' ){
-                    title = "신규 이슈 알림";
+        //     // eventSource.onmessage = function(e) { 
+        //     //     console.log('msg: ' + e.data);
+        //     //     var obj = JSON.parse(e.data);
+        //     //     var title = "";
+        //     //     if( obj.state == 'CREATED' ){
+        //     //         title = "신규 이슈 알림";
                     
-                }else {
-                    title = "이슈 변경 알림";
-                } 
+        //     //     }else {
+        //     //         title = "이슈 변경 알림";
+        //     //     } 
          
-                if(observable.get('notificationEnabled')){
-                     var notification = new Notification(title, {
-                            // body: template(obj),
-                            // icon: iconDataURI
-                    });         
-                }else{
-                    // title = title + " : " + new Date().toLocaleTimeString() ;
-                    // community.ui.notification({ 
-                    //     autoHideAfter:0, 
-                    //     allowHideAfter: 0,
-                    //     width : 500,
-                    //     templates : [{
-                    //         type : "alert",
-                    //         template : '<div class="notification-info g-pa-20">#if(title){#<div class="notification-title g-font-weight-400">#= title #</div>#}#<div class="notification-mesage">#= message #</div></div>'
-                    //     }]
-                    // }).show({ title:title, 'message': template(obj), time: new Date().toLocaleTimeString() },"alert");
-                }
-                return;            
-            } 
-           console.log("???????___!!!!")
-        }
-        createNotification();
-        // 아직 작업중...
+        //     //     if(observable.get('notificationEnabled')){
+        //     //          var notification = new Notification(title, {
+        //     //                 // body: template(obj),
+        //     //                 // icon: iconDataURI
+        //     //         });         
+        //     //     }else{
+        //     //         // title = title + " : " + new Date().toLocaleTimeString() ;
+        //     //         // community.ui.notification({ 
+        //     //         //     autoHideAfter:0, 
+        //     //         //     allowHideAfter: 0,
+        //     //         //     width : 500,
+        //     //         //     templates : [{
+        //     //         //         type : "alert",
+        //     //         //         template : '<div class="notification-info g-pa-20">#if(title){#<div class="notification-title g-font-weight-400">#= title #</div>#}#<div class="notification-mesage">#= message #</div></div>'
+        //     //         //     }]
+        //     //         // }).show({ title:title, 'message': template(obj), time: new Date().toLocaleTimeString() },"alert");
+        //     //     }
+        //     //     return;            
+        //     // } 
+        // }
+        // //createNotification();
+
+        // // 아직 작업중...
+        // function aaaaa(){
+        //     console.log("핸들러 켜짐..")
+        //     //const evtSource = new EventSource("http://localhost:8080/nest/api/sse/notifications/issue.json",{ withCredentials: true });
+        //     let eventSource = new EventSource("http://localhost:8080/nest/api/sse/notifications/issue.json",{ withCredentials: true })
+        //     eventSource.onmessage = e => updateProdutList(JSON.parse(e.data))
+        //     console.log(eventSource.onmessage);
+        //     // ApiService.fetchSSE()
+        //     // .then(response => {
+        //     //     console.log(response);
+        //     //     console.log(response.data);
+        //     // });
+
+        //     // setInterval(function() {
+        //     //     console.log("반복!")
+        //     //     ApiService.fetchSSE()
+        //     //     .then(response => {
+
+        //     //         console.log(response);
+
+        //     //         console.log(response.data);
+
+        //     //     });
+        //     // }, 30000);
+        // }
+
+        // aaaaa();
     }
 
     render() {
