@@ -175,6 +175,7 @@ class File extends Component {
                     onDismiss={this.onAlertDismissed.bind(this)}
                 />
                 <Header
+                    location={this.props.match.url}
                     authUserRole={this.props.authUserRole}
                     taskItem={taskItem}
                     name={taskItem.userName}

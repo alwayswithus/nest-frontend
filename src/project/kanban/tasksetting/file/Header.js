@@ -23,13 +23,14 @@ class Header extends Component {
     }
 
     onKeyPressEnter(event){
-        if(event.key === 'Enter'){
+        
+        if(this.state.keyword.length !== 0 && event.key === 'Enter'){
             this.setState({
                 input: !this.state.input
             })
             console.log("!!!!!")
             this.props.taskCallbacks.updateTaskContents(this.state.keyword, this.props.taskListNo, this.props.params.taskNo)
-        }
+        } 
     }
 
     onChangeInput(event){
