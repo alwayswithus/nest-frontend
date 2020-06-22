@@ -70,6 +70,10 @@ class ApiService {
     fetchTasksCount(projectNo){
         return axios.get(`/nest/api/kanbanMain/tasksCount/${projectNo}`)
     }
+
+    fetchSSE(){
+        return axios.get(`/nest/api/sse/notifications/issue.json`)
+    }
 }
 
 export default new ApiService();
