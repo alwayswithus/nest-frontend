@@ -1669,8 +1669,13 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                 defaultDate={moment().toDate()}
                 events={this.state.events.filter(event =>
                   this.state.radioGroup["allTask"] === true ?
-                    (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
-                    (this.state.userNumber === event.userNo ? (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
+                    (this.state.taskNumber.indexOf(event.id) !== -1 ? 
+                    (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? 
+                    (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
+                    (this.state.userNumber == event.userNo ? 
+                      (this.state.taskNumber.indexOf(event.id) !== -1 ? 
+                      (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? 
+                      (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
                 )}
                 startAccessor="start"
                 endAccessor="end"
