@@ -226,10 +226,6 @@ class Setting extends Component {
             this.props.match.params.taskNo)
     }
 
-    componentDidMount(){
-        
-    }
-
     render() {
         if(!this.props.task){
             return <></>;
