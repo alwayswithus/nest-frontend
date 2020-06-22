@@ -225,8 +225,6 @@ class Setting extends Component {
             taskListNo,
             this.props.match.params.taskNo)
     }
-
-
     render() {
 
         if(!this.props.task){

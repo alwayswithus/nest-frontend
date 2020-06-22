@@ -151,6 +151,17 @@ class KanbanBoard extends Component {
     });
   }
 
+  onClickClose = () => {
+    this.setState({
+      taskListInsertState:false
+    })
+}
+
+// componentDidMount(){
+//    //비제어
+//    document.addEventListener("click", this.onClickClose, true)
+// }
+
   render() {
    
     return (

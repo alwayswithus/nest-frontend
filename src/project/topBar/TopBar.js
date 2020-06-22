@@ -18,7 +18,7 @@ class TopBar extends Component {
   }
 
   onClickHistory(){
-    window.jQuery(".wrap, a").toggleClass('active');
+    window.jQuery(".wrap, .topRight a").toggleClass('active');
   }
 
 
@@ -28,6 +28,7 @@ class TopBar extends Component {
       searchKeyword:"",
     });
   }
+  
   render() {
     let activePath = this.props.activePath.split('/')[4];
     
@@ -55,49 +56,48 @@ class TopBar extends Component {
         </div>
       </div>
         <div className="topBar">
-          <nav className="navbar navbar-default">
             <div className="container-fluid">
-              <div className="col-sm-4 topCenterOut">
+          {/* <nav class=""> */}
+            <div class="row">
+              <div className="col-sm-4 topLeft">
+              <ul class="">
+                  <li className={kanbanboard === true ? "active" : ""}><Link to={`/nest/dashboard/${this.props.projectNo}/kanbanboard`}><a>업무</a></Link></li>
+                  <li className={file === true ? "active" : ""}><Link to={{pathname:`/nest/dashboard/${this.props.projectNo}/file`, state:{history : this.props.history}}}><a>파일</a></Link></li>
+                </ul>
+              </div>
+
+              <div class="col-sm-4 topCenter">
+                  <a>{this.props.projectTitle}</a>
+              </div>
+
+              <div className="col-sm-4 topRight">
+              {kanbanboard ?
+                <ul class="">
+                    <li><a href="#" onClick={this.onClickHistory.bind(this)}>활동로그</a></li>
+                    <li><Link to={`/nest/dashboard/${this.props.projectNo}/kanbanboard`}><i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i></Link>  </li>
+                </ul>
+                :null}
+              </div>
+            </div>
+          {/* </nav> */}
+          {/* <nav className="navbar navbar-default">
+            <div className="container-fluid">
+              <div className="navbar-header col-sm-4 topCenterOut">
                 <div className="topCenterIn">
                   <ul className="nav navbar-nav">
                     <li className={kanbanboard === true ? "topli active" : "topli"}>
                       <Link to={`/nest/dashboard/${this.props.projectNo}/kanbanboard`}>업무</Link>
                     </li>
-                    {/* <li className={timeline === true ? "topli active" : "topli"}>
-                      <Link to={`/nest/dashboard/${this.props.projectNo}/timeline`}>타임라인</Link>
-                    </li> */}
                     <li className={file === true ? "topli active" : "topli"}>
                       <Link to={{pathname:`/nest/dashboard/${this.props.projectNo}/file`, state:{history : this.props.history}}}>파일</Link>
                     </li>
-                    
                   </ul>
-
-                    <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Search" name="search"></input>
-                    </div>
-                    <select
-                      className="selectpicker"
-                      // onChange={this.selectpicker.bind(this)}
-                    >
-                      <option className="option" value="task">
-                        업무
-                      </option>
-                      <option className="option" value="tag">
-                        태그
-                      </option>
-                    </select>
-                  </form>
                 </div>
               </div>
               <div className="navbar-header col-sm-4 navbar-brand">
-              {this.props.projectTitle}
-                {/* <div className="navbar-brand"> */}
-                  
-                {/* </div> */}
+                {this.props.projectTitle}
               </div>
-              <div className="col-sm-4 testtest">
-                
+              <div className="col-sm-4 topRightSide">
                 {kanbanboard ?
                 <ul className="nav navbar-nav navbar-right" >
                   <li>
@@ -106,11 +106,11 @@ class TopBar extends Component {
                     <li>
                     <i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i> 
                     </li>
-                </ul>
-                 :null}
+                </ul> :null}
               </div>
             </div>
-          </nav>
+          </nav> */}
+          </div>
         </div>
       </>
     );
