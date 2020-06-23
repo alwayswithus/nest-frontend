@@ -1,0 +1,22 @@
+.Important{
+    .dropdown{
+        .dropdown-toggle{
+            border:none;
+        }
+        .dropdown-menu{
+            .dropdown-list-contents{
+                padding: 4%;
+                .status-name{
+                    cursor: pointer;
+                }
+                .status-color{
+                    float: right;
+                    margin-right: 4%;
+                }
+                &:hover{
+                    background-color: red;
+                }
+            }
+        }
+    }
+}

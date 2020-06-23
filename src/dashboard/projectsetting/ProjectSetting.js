@@ -277,7 +277,12 @@ class ProjectSetting extends Component {
                             {/* 프로젝트상태 */}
                             <li>
                                 <div style={{ display: 'inline-block' }}><h5><b>프로젝트 상태</b></h5></div>
-                                <div style={{ display: 'inline-block' }}><ProjectStatus userProject={this.props.userProject} project={this.props.project} callbackProjectSetting={this.props.callbackProjectSetting} /> </div>
+                                <div style={{ display: 'inline-block' }}>
+                                    <ProjectStatus 
+                                        userProject={this.props.userProject} 
+                                        project={this.props.project} 
+                                        callbackProjectSetting={this.props.callbackProjectSetting} /> 
+                                </div>
                             </li>
 
                             {/* 마감일 */}
