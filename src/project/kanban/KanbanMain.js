@@ -18,7 +18,7 @@ import ProjectSetting from '../../dashboard/projectsetting/ProjectSetting';
 import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -3416,8 +3416,6 @@ receiveKanban(socketData) {
 
 
   render() {
-    console.log()
-
     return (
       <>
         <SockJsClient
@@ -3475,7 +3473,6 @@ receiveKanban(socketData) {
                 authUserRole={this.state.authUserRole}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
-                clientRef2={this.clientRef.current}
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트

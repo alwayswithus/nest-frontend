@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import ProfileModal from './ProfileModal';
 import moment from 'moment';
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 class CommentList extends Component {
 
     constructor() {
@@ -186,7 +186,7 @@ class CommentList extends Component {
                                                 border: '4px solid rgb(39, 182, 186)',
                                                 width: '485px',
                                                 background: 'white',
-                                                borderRadius: '16px'
+                                                borderRadius: '16px',
                                             }}>
                                                 <ReactQuill
                                                     theme=''

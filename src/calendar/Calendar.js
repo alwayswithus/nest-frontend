@@ -14,7 +14,7 @@ import SockJsClient from "react-stomp";
 import update from 'react-addons-update';
 import Setting from '../project/kanban/tasksetting/setting/Setting'
 import { Route } from "react-router-dom";
-
+import CustomEvent from './CustomEvent';
 
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
@@ -22,7 +22,7 @@ import ApiService from '../ApiService';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -873,19 +873,28 @@ class myCalendar extends Component {
   }
 
   onSelectEvent(event) {
-    const allProjectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == event.projectNo)
+    // CustomEvent.customEventService(event)
 
     let link = (
-      <div>
+      <div className="test" style={{top:`${this.y}px`, left:`${this.x}px`}}>
         <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`}>
-          <h6>Hi</h6>
+          <i className="fas fa-bullhorn"></i>
         </Link>
       </div>
     )
+      this.setState({
+        link: link,
+      })
+  }
+
+  onClickSetting(event, projectIndex){
+    console.log("onClickSetting")
+    console.log(this.state.taskList[projectIndex].allTaskList)
+
     this.setState({
-      link: link,
-      taskList:this.state.taskList[allProjectsIndex].allTaskList
+      taskList:this.state.taskList[projectIndex].allTaskList
     })
+
   }
 
   tagModalStateUpdate(){
@@ -1508,7 +1517,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
 
 
   render() {
-    
+
     return (
       <div id="Calendar">
         {this.state.link}
@@ -1671,7 +1680,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
             <div>
 
             </div>
-            <div className="calendar-body-contents-calendar">
+            <div className="calendar-body-contents-calendar" onMouseOver={(e) => {this.x = e.clientX-50; this.y = e.clientY-50}}>
               
               <Calendar
                 selectable
@@ -1696,7 +1705,9 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                 }}
                 onSelectEvent={this.onSelectEvent.bind(this)}
                 onSelectSlot={this.onOpenDialog.bind(this)}
+                // components={{event:this.state.link}}
               />
+              
             </div>
             <Dialog open={this.state.privateTask} onClose={this.onPrivateTaskClose.bind(this)}>
               <DialogTitle style={{ textAlign: "center", padding: "10px 10px", paddingBottom: "0" }}>
@@ -1876,6 +1887,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
 
       ApiService.fetchCalendarAllTask(sessionStorage.getItem("authUserNo"))
       .then((response) => {
+        // console.log(response.data.data.allProjects)
           this.setState({
             taskList: response.data.data.allProjects,
             authUserRole: response.data.data.authUserRole,
