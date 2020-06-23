@@ -6,7 +6,7 @@ import update from "react-addons-update";
 import "./KanbanBoard.scss";
 import ApiService from "../../ApiService";
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -150,6 +150,17 @@ class KanbanBoard extends Component {
       searchKeyword:""
     });
   }
+
+  onClickClose = () => {
+    this.setState({
+      taskListInsertState:false
+    })
+}
+
+// componentDidMount(){
+//    //비제어
+//    document.addEventListener("click", this.onClickClose, true)
+// }
 
   render() {
    

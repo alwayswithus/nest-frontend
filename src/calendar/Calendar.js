@@ -22,7 +22,7 @@ import ApiService from '../ApiService';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -1465,6 +1465,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
     const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
     
+    
     let data = {
       color: color,
       taskListIndex : taskListIndex,
@@ -1484,6 +1485,14 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
         }
       }
     })
+
+    const eventIndex = this.state.events.findIndex(event => event.id == taskNo);
+    let events = update(this.state.events, {
+      [eventIndex]: {
+        color: { $set: color }
+      }
+    })
+
     this.setState({
       taskList:newTaskList,
       events:newTaskList
@@ -1663,14 +1672,20 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
 
             </div>
             <div className="calendar-body-contents-calendar">
+              
               <Calendar
                 selectable
                 localizer={localizer}
                 defaultDate={moment().toDate()}
                 events={this.state.events.filter(event =>
                   this.state.radioGroup["allTask"] === true ?
-                    (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
-                    (this.state.userNumber === event.userNo ? (this.state.taskNumber.indexOf(event.id) !== -1 ? (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
+                    (this.state.taskNumber.indexOf(event.id) !== -1 ? 
+                    (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? 
+                    (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
+                    (this.state.userNumber == event.userNo ? 
+                      (this.state.taskNumber.indexOf(event.id) !== -1 ? 
+                      (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? 
+                      (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")
                 )}
                 startAccessor="start"
                 endAccessor="end"
