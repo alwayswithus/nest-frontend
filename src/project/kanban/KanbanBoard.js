@@ -40,14 +40,16 @@ class KanbanBoard extends Component {
 
   // 리스트 추가
   addTaskList() {
-    this.props.taskCallbacks.addList(
-      this.state.taskListName,
-      this.props.projectNo
-    );
-    this.setState({
-      taskListName: "",
-    });
-    this.taskListStateBtn();
+    if(this.state.taskListName.replace(/\s| /gi, "").length !== 0){
+      this.props.taskCallbacks.addList(
+        this.state.taskListName.replace(/ /gi, ''),
+        this.props.projectNo
+        );
+        this.setState({
+          taskListName: "",
+        });
+        this.taskListStateBtn();
+      }
   }
 
   // 리스트명 입력 이벤트
@@ -211,10 +213,14 @@ class KanbanBoard extends Component {
                     </div>
                     <div className="taskListInsertBtn">
                       &nbsp;
-                      <i
+                      {this.state.taskListName.length===0 ?  <i
                         className="fas fa-check Icon"
-                        onClick={this.addTaskList.bind(this)}
-                      ></i>
+                        style={{color:"#979797"}}
+                      ></i>: <i
+                      className="fas fa-check Icon"
+                      onClick={this.addTaskList.bind(this)}
+                    ></i>}
+                     
                       <i class="fas fa-times Icon" onClick={this.taskListStateBtn.bind(this)}
                         data-tip="취소"></i>
                       <ReactTooltip />

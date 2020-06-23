@@ -71,59 +71,6 @@
       }
     }
   }
-
-  // .navbar-header{
-  //   font-weight: bold;
-  //   text-align: center;
-  //   color:white;
-  //   text-shadow: 0px 0px 5px black;
-  //   &:hover{
-  //     color: #57C3CF;
-  //     text-shadow: 0px 0px 4px black;
-  //   }
-  // }
-  // .navbar {
-  //   border-radius: 0px;
-  //   background-color: #393939;
-  //   // border-left:11px solid #808080;
-  //   border-top: 0px;
-  //   border-bottom: 0px;
-  //   border-right: 0px;
-  //   .container-fluid{
-  //     box-shadow: 0px 0px 8px black;
-  //     .col-sm-4{
-  //       height: 49px;
-  //     }
-  //   }
-
-  // }
-  // .topCenterOut {
-  //   text-align: left;
-  //   height: 0px;
-  //   .topCenterIn {
-  //     display: inline-block;
-  //     cursor: pointer;
-  //     .topli{
-  //       a{
-  //         color: white;
-  //         &:hover{
-  //           color: #57C3CF;
-  //           text-shadow: 0px 0px 4px black;
-  //         }
-  //       }
-  //     }
-  //     .active {
-  //       a {
-  //         background-color: #393939;
-  //         padding-bottom: 12px;
-  //         color: #57C3CF;
-  //         font-weight: bold;;
-  //         font-size: 20px;
-  //         text-shadow: 0px 0px 4px black;
-  //       }
-  //     }
-  //   }
-  // }
   .gearIcon {
     margin: 9px;
     cursor: pointer;
@@ -134,17 +81,6 @@
       text-shadow: 0px 0px 4px black;
     }
   }
-
-  // .topRightSide{
-  //   ul{
-  //     li{
-  //       a:hover{
-  //         color: #57C3CF;
-  //         text-shadow: 0px 0px 4px black;
-  //       }
-  //     }
-  //   }
-  // }
 }
 .wrap {
   z-index: 1;
@@ -152,10 +88,10 @@
   height: 300px;
   position: absolute;
   overflow: hidden;
-  top: 7%;
-  right: 10%;
+  top: 60px;
+  right: 10px;
   bottom: 85px;
-  left: 66%;
+  // left: 66%;
   padding: 20px 40px;
   display: block;
   border-radius: 4px;

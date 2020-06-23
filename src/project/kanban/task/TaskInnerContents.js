@@ -77,11 +77,15 @@ class TaskInnerContents extends Component {
     });
 
     taskItem.commentList.map((comment) => {
-      commentListCount = commentListCount + 1;
+      if(comment.commentState === "T"){
+        commentListCount = commentListCount + 1;
+      }
     });
 
     taskItem.fileList.map((file) => {
-      fileListCount = fileListCount + 1;
+      if(file.fileState==="T"){
+        fileListCount = fileListCount + 1;
+      }
     });
 
     taskItem.memberList.map((member) => {

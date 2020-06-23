@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './projectset.scss';
+import './ProjectStatus.scss';
 
 class ProjectStatus extends Component {
 
@@ -8,21 +8,48 @@ class ProjectStatus extends Component {
   }
 
   render() {
+
     return (
       <div className="Important">
-        {this.props.userProject.roleNo === 1 ?
-        <select className="imp-select" onChange={this.callbackChangeState.bind(this)}>
-          {this.props.project.projectState === "계획됨" ? <option selected="selected" value="계획됨">계획됨</option> : <option value="계획됨">계획됨</option>}
-          {this.props.project.projectState === "진행중" ? <option selected="selected" value="진행중">진행중</option> : <option value="진행중">진행중</option>}
-          {this.props.project.projectState === "완료됨" ? <option selected="selected" value="완료됨">완료됨</option> : <option value="완료됨">완료됨</option>}
-          {this.props.project.projectState === "상태없음" ? <option selected="selected" value="상태없음">상태없음</option> : <option value="상태없음">상태없음</option>}
-        </select> : 
-        <select className="imp-select" disabled>
-          {this.props.project.projectState === "계획됨" ? <option selected="selected" value="계획됨">계획됨</option> : <option value="계획됨">계획됨</option>}
-          {this.props.project.projectState === "진행중" ? <option selected="selected" value="진행중">진행중</option> : <option value="진행중">진행중</option>}
-          {this.props.project.projectState === "완료됨" ? <option selected="selected" value="완료됨">완료됨</option> : <option value="완료됨">완료됨</option>}
-          {this.props.project.projectState === "상태없음" ? <option selected="selected" value="상태없음">상태없음</option> : <option value="상태없음">상태없음</option>}
-        </select>}
+        <div className="dropdown">
+          <button 
+            className="btn btn-primary dropdown-toggle" 
+            type="button" 
+            data-toggle="dropdown"
+            style={this.props.project.projectState === "상태없음" ?
+            { backgroundColor: "#D9534F" } : this.props.project.projectState === "계획됨" ?
+              { backgroundColor: "orange" } : this.props.project.projectState === "진행중" ?
+                { backgroundColor: "#5CB85C" } : this.props.project.projectState === "완료됨" ?
+                  { backgroundColor: "#337AB7" } : null}>
+            {this.props.project.projectState}
+            <span className="caret"></span></button>
+          <ul className="dropdown-menu">
+            <div className="dropdown-list-contents">
+              <span className="status-name">계획됨</span>
+              <div className="status-color">
+                <i className="fas fa-circle fa-xs" style={{ color: "orange" }}></i>
+              </div>
+            </div>
+            <div className="dropdown-list-contents">
+              <span className="status-name">진행중</span>
+              <div className="status-color">
+                <i className="fas fa-circle fa-xs" style={{ color: "#5CB85C" }}></i>
+              </div>
+            </div>
+            <div className="dropdown-list-contents">
+              <span className="status-name">완료됨</span>
+              <div className="status-color">
+                <i className="fas fa-circle fa-xs" style={{ color: "#337AB7" }}></i>
+              </div>
+            </div>
+            <div className="dropdown-list-contents">
+              <span className="status-name">상태없음</span>
+              <div className="status-color">
+                <i className="fas fa-circle fa-xs" style={{ color: "#D9534F" }}></i>
+              </div>
+            </div>
+          </ul>
+        </div>
       </div>
     );
   }

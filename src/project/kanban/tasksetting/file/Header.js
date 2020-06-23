@@ -61,7 +61,7 @@ class Header extends Component {
 
                 <Link 
                 style= {{color:'black'}}
-                to = {`/nest/calendar/`}><i className="fas fa-times fa-1x"></i></Link> }
+                to = {`/nest/calendar`}><i className="fas fa-times fa-1x"></i></Link> }
             <div className="Header-list">
                 {/* 업무 내용 수정 */}
                 {this.state.input ? 
