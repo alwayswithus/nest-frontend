@@ -140,33 +140,6 @@ class TaskInnerContents extends Component {
               </div>
               </>
             ) : null}
-            
-                {/* <div className="setting">
-                  <button
-                    className="btn btn-default btn-xs"
-                    type="button"
-                    onClick={this.test.bind(this)}
-                  >
-                    <i className="fas fa-ellipsis-v" aria-hidden="true"></i>
-                  </button>
-                  <ul
-                    className="menu"
-                    role="menu"
-                    onClick={this.noneClick.bind(this)}
-                    style={
-                      this.state.dropdownMenu
-                        ? { display: "block" }
-                        : { display: "none" }
-                    }
-                  >
-                    <li>
-                      <a onClick={this.copyTask.bind(this)}>업무 복사</a>
-                    </li>
-                    <li>
-                      <a onClick={this.deleteTask.bind(this)}>업무 삭제</a>
-                    </li>
-                  </ul>
-                </div> */}
               
           </div>
           <div className="task-item task-title">
@@ -197,7 +170,7 @@ class TaskInnerContents extends Component {
                     ></input>
                   ) : null}
                   &nbsp;
-                  <label>{taskItem.taskContents}</label>
+                  {taskItem.taskContents}
                 </>
               )}
             </div>

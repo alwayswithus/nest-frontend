@@ -241,7 +241,7 @@ class Setting extends Component {
         ))
         const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
-        console.log(this.props.match)
+
         return (
             <>
             

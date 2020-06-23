@@ -66,3 +66,15 @@
 
   }
 }
+
+.task-title{
+  .title{
+    width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: 700;
+  }
+}

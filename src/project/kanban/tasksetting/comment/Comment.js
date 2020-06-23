@@ -37,6 +37,7 @@ class Comment extends Component {
                     </div> : null }
                     <div style={{float:'right'}}>
                         <Header
+                            location={this.props.match.url}
                             authUserRole={this.props.authUserRole}
                             name={taskItem.userName}
                             date={taskItem.taskRegdate}
