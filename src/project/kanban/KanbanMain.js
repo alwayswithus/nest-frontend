@@ -18,7 +18,7 @@ import ProjectSetting from '../../dashboard/projectsetting/ProjectSetting';
 import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -950,7 +950,7 @@ class KanbanMain extends Component {
         },
       });
 
-      const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == json.data.checklistNo)
+      const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo === json.data.checklistNo)
       newTaskList = update(newTaskList, {
         [taskListIndex]: {
           tasks: {
@@ -2546,7 +2546,7 @@ receiveKanban(socketData) {
         
     }else if(socketData.socketType === 'taskInsert'){
       const TaskListIndex = this.state.taskList.findIndex(
-        (taskList) => taskList.taskListNo == socketData.taskListNo
+        (taskList) => taskList.taskListNo === socketData.taskListNo
       );
       
       let newTaskList = this.state.taskList;

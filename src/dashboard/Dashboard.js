@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 import ApiHistory from '../project/topBar/ApiHistory'
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -1028,7 +1028,7 @@ export default class Dashboard extends React.Component {
       }
     }
     else if (socketData.socketType === "userDelete") {
-      if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
+      if (sessionStorage.getItem("authUserNo") === socketData.member.userNo) {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
         
         if(projectIndex !== -1) {
@@ -1058,7 +1058,7 @@ export default class Dashboard extends React.Component {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
       
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.member.userNo);
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.member.userNo);
         
           let newProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1090,7 +1090,7 @@ export default class Dashboard extends React.Component {
     }
 
     else if (socketData.socketType === "userAdd") {
-      if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
+      if (sessionStorage.getItem("authUserNo") === socketData.member.userNo) {
         let newProject = update(this.state.projects, {
           $push: [socketData.newProject]
         })
@@ -1133,7 +1133,7 @@ export default class Dashboard extends React.Component {
 
     else if (socketData.socketType === "memberDelete") {
 
-      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+      if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
 
         if(projectIndex !== -1) {
@@ -1195,7 +1195,7 @@ export default class Dashboard extends React.Component {
     }
     else if (socketData.socketType === "roleChange") {
 
-      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+      if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
         
         if(projectIndex !== -1) {
@@ -1292,12 +1292,12 @@ export default class Dashboard extends React.Component {
         }  
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
         
 
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo);
-          const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.sessionUserNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo);
+          const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.sessionUserNo)
 
           let deleteProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1354,7 +1354,7 @@ export default class Dashboard extends React.Component {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
         
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
 
           let deleteProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1427,10 +1427,10 @@ export default class Dashboard extends React.Component {
     }
 
     else if(socketData.socketType === "projectAdd") {
-      let memberIndex = socketData.newProject.members.findIndex(member => member.userNo == sessionStorage.getItem("authUserNo"))
+      let memberIndex = socketData.newProject.members.findIndex(member => member.userNo === sessionStorage.getItem("authUserNo"))
   
       if(memberIndex !== -1) {
-        if(socketData.newProject.projectWriter == sessionStorage.getItem("authUserNo")) {
+        if(socketData.newProject.projectWriter === sessionStorage.getItem("authUserNo")) {
           let newProjects = update(this.state.projects, {
             $push: [socketData.newProject]
           });
@@ -1520,7 +1520,7 @@ export default class Dashboard extends React.Component {
     socketData.socketType === "taskCopy"|| 
     socketData.socketType === "taskCheck" ||
     socketData.socketType === "taskListDelete") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1537,9 +1537,9 @@ export default class Dashboard extends React.Component {
     }
 
     else if(socketData.socketType === "calendarTaskAdd") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
 
-      if(projectIndex != -1) {
+      if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
           [projectIndex]: {
             taskCount: { $set: socketData.taskCount }

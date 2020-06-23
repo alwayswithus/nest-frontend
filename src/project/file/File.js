@@ -14,7 +14,7 @@ import Viewer from 'react-viewer'
 import EachFile from "./EachFile";
 import SockJsClient from "react-stomp";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
     "Content-Type": "application/json",
 };
@@ -155,8 +155,8 @@ export default class File extends React.Component {
     receiveKanban(socketData){
         console.log(socketData)
         if(socketData.projectNo === this.props.match.params.projectNo){
-            if(socketData.socketType=="fileDelete"){
-                const fileIndex = this.state.projectFiles.findIndex(file => file.fileNo == socketData.fileNo)
+            if(socketData.socketType==="fileDelete"){
+                const fileIndex = this.state.projectFiles.findIndex(file => file.fileNo === socketData.fileNo)
                 console.log(fileIndex)
                 let newprojectFiles = update(this.state.projectFiles, {
                     [fileIndex]:{
@@ -226,7 +226,7 @@ export default class File extends React.Component {
                         <tbody>
                             {files && files
                             .map(projectFile =>
-                                projectFile.taskState == "del" || projectFile.fileState == "F" ? null :
+                                projectFile.taskState === "del" || projectFile.fileState === "F" ? null :
                                 <EachFile 
                                     onClickDeleteFile = {this.onClickDeleteFile.bind(this)}
                                     projectFile = {projectFile}

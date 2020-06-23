@@ -26,7 +26,7 @@ class Comment extends Component {
             <div className = "tasksetting-commnet">
             
             <div className="TaskSetComment">
-                {taskItem.taskState == "del" ? 
+                {taskItem.taskState === "del" ? 
                     <div className="task-delete"> 
                         <div className ="task-delete-warning">
                         <span>삭제된 업무입니다.</span>

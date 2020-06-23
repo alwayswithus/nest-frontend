@@ -22,7 +22,7 @@ import ApiService from '../ApiService';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -282,7 +282,7 @@ class myCalendar extends Component {
     let projectNumber = this.state.projectNumber;
 
     projects.forEach(project => {
-      if (project.projectNo == event.target.value) {
+      if (project.projectNo === event.target.value) {
         project.isChecked = event.target.checked
         if (project.isChecked === true) {
           if (projectNumber.includes(project.projectNo)) {
@@ -541,7 +541,7 @@ class myCalendar extends Component {
 
   receiveCalendar(socketData) {
     if(socketData.socketType === "taskInsert") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
       if(projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -605,7 +605,7 @@ class myCalendar extends Component {
       }
     }
     // else if(socketData.socketType === "userDelete") {
-    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
     //   if(projectIndex !== -1) {
     //     let newProject = update(this.state.projects, {
     //       $splice: [[projectIndex, 1]]
@@ -631,7 +631,7 @@ class myCalendar extends Component {
     // }
 
     else if(socketData.socketType === "taskDelete") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
       if(projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -643,7 +643,7 @@ class myCalendar extends Component {
           }
         })
 
-        const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
+        const eventIndex = this.state.events.findIndex(event => event.id === socketData.taskId)
         let events = update(this.state.events, {
           $splice: [[eventIndex, 1]]
         }) 
@@ -689,7 +689,7 @@ class myCalendar extends Component {
       }
     }
     else if(socketData.socketType === "taskCopy") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
       if(projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -753,7 +753,7 @@ class myCalendar extends Component {
       }
     }
     else if(socketData.socketType === "taskCheck") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
       if(projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -765,7 +765,7 @@ class myCalendar extends Component {
           }
         })
         
-        const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
+        const eventIndex = this.state.events.findIndex(event => event.id === socketData.taskId)
         let events = update(this.state.events, {
           [eventIndex]: {
             taskState: { $set: socketData.taskState }
@@ -788,7 +788,7 @@ class myCalendar extends Component {
     }
 
     else if(socketData.socketType === "taskListDelete") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
       if(projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -803,7 +803,7 @@ class myCalendar extends Component {
         let events = this.state.events;
         let eventId = [];
         events.map((event, index) => {
-          if(event.tasklistNo == socketData.taskListNo) {
+          if(event.tasklistNo === socketData.taskListNo) {
             eventId.push({ id: event.id });
             events.splice(index);
           }
@@ -812,7 +812,7 @@ class myCalendar extends Component {
         let taskState = this.state.taskState;
         taskState.map((task, index) => {
           eventId.map(event => {
-            if(event.id == task.id) {
+            if(event.id === task.id) {
               taskState.splice(index);
             }
           })
@@ -821,7 +821,7 @@ class myCalendar extends Component {
         let taskNumber = this.state.taskNumber;
         taskNumber.map((task, index) => {
           eventId.map(event => {
-            if(event.id == task) {
+            if(event.id === task) {
               taskNumber.splice(index)
             }
           })
@@ -830,7 +830,7 @@ class myCalendar extends Component {
         let taskPoint = this.state.taskPoint;
         taskPoint.map((task, index) => {
           eventId.map(event => {
-            if(event.id == task.id) {
+            if(event.id === task.id) {
               taskPoint.splice(index)
             }
           })
@@ -839,7 +839,7 @@ class myCalendar extends Component {
         let taskPointNumber = this.state.taskPointNumber;
         taskPointNumber.map((task, index) => {
           eventId.map(event => {
-            if(event.id == task) {
+            if(event.id === task) {
               taskPointNumber.splice(index);
             }
           })
@@ -873,7 +873,7 @@ class myCalendar extends Component {
   }
 
   onSelectEvent(event) {
-    const allProjectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == event.projectNo)
+    const allProjectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo === event.projectNo)
 
     let link = (
       <div>
@@ -927,7 +927,7 @@ class myCalendar extends Component {
           },
         });
   
-        const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == json.data.checklistNo)
+        const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo === json.data.checklistNo)
         newTaskList = update(newTaskList, {
           [taskListIndex]: {
             tasks: {
@@ -1486,7 +1486,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
       }
     })
 
-    const eventIndex = this.state.events.findIndex(event => event.id == taskNo);
+    const eventIndex = this.state.events.findIndex(event => event.id === taskNo);
     let events = update(this.state.events, {
       [eventIndex]: {
         color: { $set: color }
@@ -1682,7 +1682,7 @@ callbackUpdateTaskContents(taskContents, taskListNo, taskNo){
                     (this.state.taskNumber.indexOf(event.id) !== -1 ? 
                     (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? 
                     (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") :
-                    (this.state.userNumber == event.userNo ? 
+                    (this.state.userNumber === event.userNo ? 
                       (this.state.taskNumber.indexOf(event.id) !== -1 ? 
                       (this.state.projectNumber.indexOf(event.projectNo) !== -1 ? 
                       (this.state.taskPointNumber.indexOf(event.id) !== -1 ? this.state.events : "") : "") : "") : "")

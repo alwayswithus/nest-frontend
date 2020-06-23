@@ -10,7 +10,7 @@ class SimpleNotice extends React.Component {
         const today = new Date();
         return (
             <Link to={
-                `/nest/dashboard/${notice.projectNo}${notice.taskListNo === null ?"/kanbanboard/" :`/kanbanboard/${notice.taskListNo}/task/${notice.taskNo}`}${(notice.noticeType === 'commentInsert')||(notice.noticeType === 'commentLike')?"/comment":""}`
+                `/nest/dashboard/${notice.projectNo}${notice.taskListNo === null ?"/kanbanboard/" :`/kanbanboard/task/${notice.taskNo}`}${(notice.noticeType === 'commentInsert')||(notice.noticeType === 'commentLike')?"/comment":""}`
             }>
             <div className="notice-one-contents" style={{display:'inline-block'}}>
                 <div className="notice-contents-avatar-image">

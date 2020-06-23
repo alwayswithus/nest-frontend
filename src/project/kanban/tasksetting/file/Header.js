@@ -73,7 +73,7 @@ class Header extends Component {
                             className="Header-input"
                             autoFocus></input>
                     </h2> : 
-                   this.props.taskItem.taskState != "del" && this.props.authUserRole !== 3 ? <h2 onClick={this.onClickTaskContents.bind(this)}>
+                   this.props.taskItem.taskState !== "del" && this.props.authUserRole !== 3 ? <h2 onClick={this.onClickTaskContents.bind(this)}>
                         <div className="header-list-div"><b>{this.props.taskItem.taskContents}</b></div>
                         <i className="far fa-edit Icon"></i>
                     </h2> : <h2>

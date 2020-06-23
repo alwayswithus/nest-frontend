@@ -5,7 +5,7 @@ import ApiService from '../ApiService';
 import update from 'react-addons-update';
 import {Link} from 'react-router-dom';
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -54,7 +54,7 @@ class Modal extends Component {
         index.push(projectArray.map(projectNo => projectIndexArray.indexOf(projectNo)))
         // index.push(this.state.projects.map(project => projectIndexArray.indexOf(project.projectNo)))
         // index.push(projectArray.map(projectNo => ))
-        if(index[0].indexOf(-1) == -1){
+        if(index[0].indexOf(-1) === -1){
             this.setState({
                 delete:true,
                 transferOk:true,

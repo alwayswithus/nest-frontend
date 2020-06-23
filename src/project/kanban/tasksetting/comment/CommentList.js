@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import ProfileModal from './ProfileModal';
 import moment from 'moment';
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 class CommentList extends Component {
 
     constructor() {
@@ -26,13 +26,13 @@ class CommentList extends Component {
 
     onClickUserImg(e, index) {
 
-        if (e.target.id == this.state.index || this.state.index == "") {
+        if (e.target.id === this.state.index || this.state.index === "") {
             this.setState({
                 modal: !this.state.modal,
                 index: e.target.id
             })
         }
-        if (this.state.modal == true) {
+        if (this.state.modal === true) {
             this.setState({
                 modal: !this.state.modal,
                 index: ""
@@ -124,7 +124,7 @@ class CommentList extends Component {
                                     <div key={comment.commentNo} style={{ height: '20px' }} />
                                     <a className="pull-left" href="#">
                                         <div onClick={(e) => this.onClickUserImg(e, index)} className="img-circle" style={{ backgroundImage: `url(${comment.userPhoto})` }} id={index}></div>
-                                        <div className={(this.state.modal && index == this.state.index) ? "profile-modal" : "profile-modal-none"} >
+                                        <div className={(this.state.modal && index === this.state.index) ? "profile-modal" : "profile-modal-none"} >
                                             <ProfileModal
                                                 onClickUserImg={this.onClickUserImg.bind(this)}
                                                 commentList={this.props.taskItem.commentList}
@@ -146,7 +146,7 @@ class CommentList extends Component {
                                                             : `몇 초 전`
                                             }
                                         </span>
-                                        {this.props.taskItem.taskState == "del" || this.props.authUserRole === 3 ? null :
+                                        {this.props.taskItem.taskState === "del" || this.props.authUserRole === 3 ? null :
                                             <ul className="list-unstyled list-inline media-detail pull-right">
                                                 <li>
                                                     <span data-tooltip-text="공감하기">
@@ -181,7 +181,7 @@ class CommentList extends Component {
                                                 }</>
                                         }
 
-                                        {this.state.change && this.state.modifyIndex == index ?
+                                        {this.state.change && this.state.modifyIndex === index ?
                                             <p style={{
                                                 border: '4px solid rgb(39, 182, 186)',
                                                 width: '485px',
@@ -231,7 +231,7 @@ class CommentList extends Component {
                         </div>
                     </form>
                     <div className="Bottom-bar">
-                        {this.props.taskItem.taskState == "del" || this.props.authUserRole === 3 ?
+                        {this.props.taskItem.taskState === "del" || this.props.authUserRole === 3 ?
                             <button
                                 style={{ backgroundColor: '#CCCCCC' }}
                                 className="pull-right"
