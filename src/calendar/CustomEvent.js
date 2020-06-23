@@ -4,6 +4,7 @@ import Popover from 'react-bootstrap/Popover'
 
 class CustomEvent {
     customEventService(event){
+
         alert(event)
         // let popoverClickRootClose = (
         //     <Popover id="popover-trigger-click-root-close" style={{ zIndex: 10000 }}>

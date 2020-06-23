@@ -72,7 +72,7 @@ export default class Dashboard extends React.Component {
   }
 
   // CallBack Add Delete Member Function
-  callbackAddDeleteMember(userNo, userName, userPhoto, projectNo) {
+  callbackAddDeleteMember(userNo, userName, userPhoto, projectNo, userGrade) {
     
     const memberIndex = this.state.project.members.findIndex(member =>
       member.userNo === userNo)
@@ -85,6 +85,7 @@ export default class Dashboard extends React.Component {
       userName: userName,
       userPhoto: userPhoto,
       projectNo: projectNo,
+      userGrade: userGrade,
       roleNo: 3
     }
 
@@ -117,6 +118,13 @@ export default class Dashboard extends React.Component {
         membersNo: membersNo
       }
 
+      let kanbanSocketData = {
+        projectNo: projectNo,
+        members: this.state.projects[projectIndex].members,
+        userNo: userNo,
+        socketType: "userDelete"
+      }
+
       // let calendarSocketData = {
       //   projectNo: projectNo,
       //   members: [member],
@@ -124,6 +132,7 @@ export default class Dashboard extends React.Component {
       // }
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+      this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
       // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
     }
     else {
@@ -167,6 +176,15 @@ export default class Dashboard extends React.Component {
         membersNo: membersNo
       }
 
+      const memberIndex = newProject[projectIndex].members.findIndex(member => member.userNo === userNo);
+
+      let kanbanSocketData = {
+        projectNo: projectNo,
+        members: newProject[projectIndex].members,
+        member: newProject[projectIndex].members[memberIndex],
+        socketType: "userAdd"
+      }
+
       ApiHistory.fetchInsertHistory(
         sessionStorage.getItem("authUserNo"),
         sessionStorage.getItem("authUserName"),
@@ -177,6 +195,7 @@ export default class Dashboard extends React.Component {
         this.clientRef)
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+      this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
       // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
     }
   }
@@ -243,7 +262,15 @@ export default class Dashboard extends React.Component {
       membersNo: membersNo
     }
 
+    let kanbanSocketData = {
+      projectNo: projectNo,
+      userNo: memberNo,
+      socketType: "memberDelete",
+      members: this.state.projects[projectIndex].members
+    }
+
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+    this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
   }
 
   // CallBack Change State Function
@@ -1553,7 +1580,6 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-
     return (
       <div className="Dashboard">
         <SockJsClient
