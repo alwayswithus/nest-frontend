@@ -148,7 +148,7 @@ class ProjectSetting extends Component {
     handleClose() {
         let members = []
         this.props.project.members.map(member => {
-            if(member.userNo === sessionStorage.getItem("authUserNo")) {
+            if(member.userNo == sessionStorage.getItem("authUserNo")) {
 
             }
             else {
@@ -385,7 +385,7 @@ class ProjectSetting extends Component {
                                     {this.props.project.members && this.props.project.members.map(member =>
                                         member.userGrade === "비회원" ? null :
                                         <div className="dropdown" key={member.userNo}>
-                                            {sessionStorage.getItem("authUserNo") === member.userNo ? 
+                                            {sessionStorage.getItem("authUserNo") == member.userNo ? 
                                             <button className="btn btn-default dropdown-toggle Member" type="button" data-toggle="dropdown" disabled>
                                                 <img src={member.userPhoto} className="img-circle" alt={member.userPhoto} />
                                                 <span>{member.userName}</span>

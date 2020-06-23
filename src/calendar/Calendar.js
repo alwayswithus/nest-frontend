@@ -281,7 +281,7 @@ class myCalendar extends Component {
     let projectNumber = this.state.projectNumber;
 
     projects.forEach(project => {
-      if (project.projectNo === event.target.value) {
+      if (project.projectNo == event.target.value) {
         project.isChecked = event.target.checked
         if (project.isChecked === true) {
           if (projectNumber.includes(project.projectNo)) {
@@ -604,7 +604,7 @@ class myCalendar extends Component {
       }
     }
     // else if(socketData.socketType === "userDelete") {
-    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
     //   if(projectIndex !== -1) {
     //     let newProject = update(this.state.projects, {
     //       $splice: [[projectIndex, 1]]
@@ -642,7 +642,7 @@ class myCalendar extends Component {
           }
         })
 
-        const eventIndex = this.state.events.findIndex(event => event.id === socketData.taskId)
+        const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
         let events = update(this.state.events, {
           $splice: [[eventIndex, 1]]
         })
@@ -1490,7 +1490,7 @@ class myCalendar extends Component {
       }
     })
 
-    const eventIndex = this.state.events.findIndex(event => event.id === taskNo);
+    const eventIndex = this.state.events.findIndex(event => event.id == taskNo);
     let events = update(this.state.events, {
       [eventIndex]: {
         color: { $set: color }
@@ -1499,7 +1499,7 @@ class myCalendar extends Component {
 
     this.setState({
       taskList: newTaskList,
-      events: newTaskList
+      events: events
     })
 
     fetch(`${API_URL}/api/tasksetting/tasklabel/${taskNo}`, {
@@ -1515,7 +1515,7 @@ class myCalendar extends Component {
 
     return (
       <div id="Calendar">
-        
+        {this.state.link}
         <SockJsClient
           url={`${API_URL}/socket`}
           topics={[`/topic/calendar/all/${sessionStorage.getItem("authUserNo")}`]}

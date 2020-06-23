@@ -41,7 +41,7 @@ class TopBar extends Component {
       <>
       <div className='wrap'>
         <div className='content'>
-        {this.props.history.length === 0 ? 
+        {this.props.history.length == 0 ? 
           <>
             <i className="fas fa-sad-tear"></i>
             <div className="log-warning">활동기록이 없습니다.</div>

@@ -121,7 +121,7 @@ class EachFile extends Component {
                                 </button>
                                 <ul className="dropdown-menu">
                                     <li><a href="#" onClick={this.downloadEmployeeData.bind(this, this.props.projectFile.fileNo)}>다운로드</a></li>
-                                    {this.props.projectFile.userNo === sessionStorage.getItem("authUserNo") ? 
+                                    {this.props.projectFile.userNo == sessionStorage.getItem("authUserNo") ? 
                                         <li><a href="#" onClick={this.onClickDeleteFile.bind(this, this.props.projectFile.fileNo, this.props.projectFile.commentNo)}>삭제</a></li>
                                         : null}
                                 </ul>

@@ -53,7 +53,7 @@ class TransferAccount extends Component {
     render() {
         return (
             <div>
-                {this.props.project.roleNo === '1' ?
+                {this.props.project.roleNo == '1' ?
                     <div style={{ margin: '2%' }}>
                         <div className="project-title-transfer" >{this.props.project.projectTitle}</div>
                         <img className="project-user-photo" src={this.state.transferMemberPhoto} data-tip={this.state.transferMemberName} data-place="bottom" onClick={this.onClickProjectTitle.bind(this, this.props.project.projectNo)} />

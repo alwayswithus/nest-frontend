@@ -75,10 +75,10 @@ export default class Dashboard extends React.Component {
   callbackAddDeleteMember(userNo, userName, userPhoto, projectNo, userGrade) {
     
     const memberIndex = this.state.project.members.findIndex(member =>
-      member.userNo === userNo)
+      member.userNo == userNo)
 
     const projectIndex = this.state.projects.findIndex(project =>
-      project.projectNo === projectNo)
+      project.projectNo == projectNo)
 
     let member = {
       userNo: userNo,
@@ -90,7 +90,7 @@ export default class Dashboard extends React.Component {
     }
 
     let newProject;
-    if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo === userNo) {
+    if (this.state.project.members[memberIndex] && this.state.project.members[memberIndex].userNo == userNo) {
       fetch(`${API_URL}/api/user/delete/`, {
         method: 'post',
         headers: API_HEADERS,
@@ -176,7 +176,7 @@ export default class Dashboard extends React.Component {
         membersNo: membersNo
       }
 
-      const memberIndex = newProject[projectIndex].members.findIndex(member => member.userNo === userNo);
+      const memberIndex = newProject[projectIndex].members.findIndex(member => member.userNo == userNo);
 
       let kanbanSocketData = {
         projectNo: projectNo,
@@ -203,7 +203,7 @@ export default class Dashboard extends React.Component {
   // Join And Exit Member in Project Function
   callbackJoinExitMember(userNo, userName, userPhoto) {
     const memberIndex = this.state.members.findIndex(member =>
-      member.userNo === userNo)
+      member.userNo == userNo)
 
     let member = {
       userNo: userNo,
@@ -213,7 +213,7 @@ export default class Dashboard extends React.Component {
     }
     let members;
 
-    if (this.state.members[memberIndex] && this.state.members[memberIndex].userNo === userNo) {
+    if (this.state.members[memberIndex] && this.state.members[memberIndex].userNo == userNo) {
       members = update(this.state.members, {
         $splice: [[memberIndex, 1]]
       })
@@ -238,10 +238,10 @@ export default class Dashboard extends React.Component {
     }
 
     const projectIndex = this.state.projects.findIndex(project =>
-      project.projectNo === projectNo)
+      project.projectNo == projectNo)
 
     const memberIndex = this.state.project.members.findIndex(
-      (member) => member.userNo === memberNo
+      (member) => member.userNo == memberNo
     );
 
     fetch(`${API_URL}/api/user/delete`, {
@@ -275,7 +275,7 @@ export default class Dashboard extends React.Component {
 
   // CallBack Change State Function
   callbackChangeState(projectNo, state) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let project = {
       projectNo: projectNo,
@@ -314,7 +314,7 @@ export default class Dashboard extends React.Component {
       projectTitle: title
     }
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo)
     let membersNo = []
     this.state.projects[projectIndex].members.map(member => {
       membersNo.push(member.userNo);
@@ -348,7 +348,7 @@ export default class Dashboard extends React.Component {
       projectDesc: desc
     }
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo)
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo)
     let membersNo = []
     this.state.projects[projectIndex].members.map(member => {
       membersNo.push(member.userNo);
@@ -376,7 +376,7 @@ export default class Dashboard extends React.Component {
   // CallBack Invite Member Function
   callbackInviteMember(projectNo, memberEmail, memberName) {
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let member = {
       userNo: this.state.users.length + 1,
@@ -438,10 +438,10 @@ export default class Dashboard extends React.Component {
 
   // CallBack Member Role Change Function
   callbackRoleChange(projectNo, userNo, roleNo) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     const memberIndex = this.state.project.members.findIndex(member =>
-      member.userNo === userNo)
+      member.userNo == userNo)
 
     let userProject = {
       projectNo: projectNo,
@@ -476,7 +476,7 @@ export default class Dashboard extends React.Component {
   // CallBack Project Delete Function
   callbackProjectDelete(projectNo, userNo) {
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let project = {
       projectNo: projectNo,
@@ -513,7 +513,7 @@ export default class Dashboard extends React.Component {
   // CallBack Not Transfer Role Project Delete Function
   callbackProjectNotTransferDelete(projectNo) {
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let project = {
       projectNo: projectNo,
@@ -551,7 +551,7 @@ export default class Dashboard extends React.Component {
       projectNo: projectNo
     }
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
     let membersNo = []
     this.state.projects[projectIndex].members.map(member => {
       membersNo.push(member.userNo)
@@ -576,7 +576,7 @@ export default class Dashboard extends React.Component {
 
   // State Change Function
   onStateChange(projectNo, state) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let project = {
       projectNo: projectNo,
@@ -611,7 +611,7 @@ export default class Dashboard extends React.Component {
 
     this.modalStateFalse();
 
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let userProject = {
       projectNo: projectNo,
@@ -774,7 +774,7 @@ export default class Dashboard extends React.Component {
   onValidateProjectTitle(event) {
     const blank_pattern = /[\s]/g;
 
-    if (event.target.value.length > 0 && blank_pattern.test(event.target.value) === false) {
+    if (event.target.value.length > 0 && blank_pattern.test(event.target.value) == false) {
       this.setState({
         isProjectTitleValid: true,
         isNotEmptyValid: false
@@ -814,7 +814,7 @@ export default class Dashboard extends React.Component {
   onDelteMember(memberNo) {
 
     const memberIndex = this.state.members.findIndex(
-      (member) => member.userNo === memberNo
+      (member) => member.userNo == memberNo
     );
 
     let deleteMember = update(this.state.members, {
@@ -907,15 +907,15 @@ export default class Dashboard extends React.Component {
       projectNo,
       this.clientRef)
 
-    if (from === 'Invalid date') {
+    if (from == 'Invalid date') {
       from = undefined;
     }
-    if (to === 'Invalid date') {
+    if (to == 'Invalid date') {
       to = undefined;
     }
 
     const projectIndex = this.state.projects.findIndex(project =>
-      project.projectNo === projectNo)
+      project.projectNo == projectNo)
 
     let newProject = update(this.state.projects, {
       [projectIndex]: {
@@ -951,8 +951,8 @@ export default class Dashboard extends React.Component {
   }
 
   receiveDashBoard(socketData) {
-    if (socketData.socketType === "stateChange") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+    if (socketData.socketType == "stateChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -966,7 +966,7 @@ export default class Dashboard extends React.Component {
             projects: newProject
           })
         }
-        else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
           this.setState({
             projects: newProject,
             project: newProject[projectIndex]
@@ -980,9 +980,9 @@ export default class Dashboard extends React.Component {
         }
       }
     }
-    else if (socketData.socketType === "dateChange") {
+    else if (socketData.socketType == "dateChange") {
       const projectIndex = this.state.projects.findIndex(project =>
-        project.projectNo === socketData.projectNo)
+        project.projectNo == socketData.projectNo)
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1001,7 +1001,7 @@ export default class Dashboard extends React.Component {
             projects: newProject
           })
         }
-        else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
           this.setState({
             projects: newProject,
             project: newProject[projectIndex]
@@ -1015,9 +1015,9 @@ export default class Dashboard extends React.Component {
         }
       }
     }
-    else if (socketData.socketType === "inviteUser") {
+    else if (socketData.socketType == "inviteUser") {
 
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1038,7 +1038,7 @@ export default class Dashboard extends React.Component {
             projects: newProject
           })
         }
-        else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
           this.setState({
             users: users,
             projects: newProject,
@@ -1054,9 +1054,9 @@ export default class Dashboard extends React.Component {
         }
       }
     }
-    else if (socketData.socketType === "userDelete") {
-      if (sessionStorage.getItem("authUserNo") === socketData.member.userNo) {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+    else if (socketData.socketType == "userDelete") {
+      if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
         
         if(projectIndex !== -1) {
           if(this.state.project.projectNo !== this.state.projects[projectIndex].projectNo) {
@@ -1069,7 +1069,7 @@ export default class Dashboard extends React.Component {
               projects: newProject
             })
           }
-          else if(this.state.project.projectNo === this.state.projects[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == this.state.projects[projectIndex].projectNo) {
             let newProject = update(this.state.projects, {
               $splice: [[projectIndex, 1]]
             })
@@ -1082,10 +1082,10 @@ export default class Dashboard extends React.Component {
         }
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.member.userNo);
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.member.userNo);
         
           let newProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1100,7 +1100,7 @@ export default class Dashboard extends React.Component {
               projects: newProject
             })
           }
-          else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
             this.setState({
               projects: newProject,
               project: newProject[projectIndex]
@@ -1116,8 +1116,8 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if (socketData.socketType === "userAdd") {
-      if (sessionStorage.getItem("authUserNo") === socketData.member.userNo) {
+    else if (socketData.socketType == "userAdd") {
+      if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
         let newProject = update(this.state.projects, {
           $push: [socketData.newProject]
         })
@@ -1126,7 +1126,7 @@ export default class Dashboard extends React.Component {
         })
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
         
         if(projectIndex !== -1) {
           let newProject = update(this.state.projects, {
@@ -1142,7 +1142,7 @@ export default class Dashboard extends React.Component {
               projects: newProject
             })
           }
-          else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
             this.setState({
               projects: newProject,
               project: newProject[projectIndex]
@@ -1158,10 +1158,10 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if (socketData.socketType === "memberDelete") {
+    else if (socketData.socketType == "memberDelete") {
 
-      if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
 
         if(projectIndex !== -1) {
           if(this.state.project.projectNo !== this.state.projects[projectIndex].projectNo) {
@@ -1174,7 +1174,7 @@ export default class Dashboard extends React.Component {
               projects: newProject
             })
           }
-          else if(this.state.project.projectNo === this.state.projects[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == this.state.projects[projectIndex].projectNo) {
             let newProject = update(this.state.projects, {
               $splice: [[projectIndex, 1]]
             })
@@ -1187,10 +1187,10 @@ export default class Dashboard extends React.Component {
         }  
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
          
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo)
         
           let deleteMemberProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1205,7 +1205,7 @@ export default class Dashboard extends React.Component {
               projects: deleteMemberProject
             })
           }
-          else if(this.state.project.projectNo === deleteMemberProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == deleteMemberProject[projectIndex].projectNo) {
             this.setState({
               projects: deleteMemberProject,
               project: deleteMemberProject[projectIndex]
@@ -1220,13 +1220,13 @@ export default class Dashboard extends React.Component {
         }
       }
     }
-    else if (socketData.socketType === "roleChange") {
+    else if (socketData.socketType == "roleChange") {
 
-      if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
         
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo)
 
           let newProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1250,7 +1250,7 @@ export default class Dashboard extends React.Component {
               projects: newProject
             })
           }
-          else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
             this.setState({
               userProject: userProject,
               projects: newProject,
@@ -1267,10 +1267,10 @@ export default class Dashboard extends React.Component {
         }
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
         
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo)
 
           let newProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1287,7 +1287,7 @@ export default class Dashboard extends React.Component {
               projects: newProject
             })
           }
-          else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
             this.setState({
               projects: newProject,
               project: newProject[projectIndex]
@@ -1303,10 +1303,10 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if (socketData.socketType === "projectDelete") {
+    else if (socketData.socketType == "projectDelete") {
       
-      if (sessionStorage.getItem("authUserNo") === socketData.sessionUserNo) {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+      if (sessionStorage.getItem("authUserNo") == socketData.sessionUserNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
         if(projectIndex !== -1) {
           let deleteProject = update(this.state.projects, {
@@ -1319,12 +1319,12 @@ export default class Dashboard extends React.Component {
         }  
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
         
 
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo);
-          const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.sessionUserNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo);
+          const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.sessionUserNo)
 
           let deleteProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1348,7 +1348,7 @@ export default class Dashboard extends React.Component {
               projects: deleteProject
             })
           }
-          else if(this.state.project.projectNo === deleteProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == deleteProject[projectIndex].projectNo) {
             this.setState({
               projects: deleteProject,
               project: deleteProject[projectIndex],
@@ -1366,9 +1366,9 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if (socketData.socketType === "projectNotTransferDelete") {
-      if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+    else if (socketData.socketType == "projectNotTransferDelete") {
+      if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
         let deleteProject = update(this.state.projects, {
           $splice: [[projectIndex, 1]]
         })
@@ -1378,10 +1378,10 @@ export default class Dashboard extends React.Component {
         })
       }
       else {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
         
         if(projectIndex !== -1) {
-          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo)
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo)
 
           let deleteProject = update(this.state.projects, {
             [projectIndex]: {
@@ -1396,7 +1396,7 @@ export default class Dashboard extends React.Component {
               projects: deleteProject
             })
           }
-          else if(this.state.project.projectNo === deleteProject[projectIndex].projectNo) {
+          else if(this.state.project.projectNo == deleteProject[projectIndex].projectNo) {
             this.setState({
               projects: deleteProject,
               project: deleteProject[projectIndex]
@@ -1412,9 +1412,9 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if(socketData.socketType === "foreverDelete") {
+    else if(socketData.socketType == "foreverDelete") {
 
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
 
       if(projectIndex !== -1) {
         
@@ -1427,7 +1427,7 @@ export default class Dashboard extends React.Component {
             projects: deleteProject
           })
         }
-        else if(this.state.project.projectNo === this.state.projects[projectIndex].projectNo) {
+        else if(this.state.project.projectNo == this.state.projects[projectIndex].projectNo) {
           let deleteProject = update(this.state.projects, {
             $splice: [[projectIndex, 1]]
           })
@@ -1453,11 +1453,11 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if(socketData.socketType === "projectAdd") {
-      let memberIndex = socketData.newProject.members.findIndex(member => member.userNo === sessionStorage.getItem("authUserNo"))
+    else if(socketData.socketType == "projectAdd") {
+      let memberIndex = socketData.newProject.members.findIndex(member => member.userNo == sessionStorage.getItem("authUserNo"))
   
       if(memberIndex !== -1) {
-        if(socketData.newProject.projectWriter === sessionStorage.getItem("authUserNo")) {
+        if(socketData.newProject.projectWriter == sessionStorage.getItem("authUserNo")) {
           let newProjects = update(this.state.projects, {
             $push: [socketData.newProject]
           });
@@ -1482,8 +1482,8 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if(socketData.socketType === "titleChange") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+    else if(socketData.socketType == "titleChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1497,7 +1497,7 @@ export default class Dashboard extends React.Component {
             projects: newProject
           })
         }
-        else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
           this.setState({
             projects: newProject,
             project: newProject[projectIndex]
@@ -1512,8 +1512,8 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if(socketData.socketType === "descChange") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+    else if(socketData.socketType == "descChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1527,7 +1527,7 @@ export default class Dashboard extends React.Component {
             projects: newProject
           })
         }
-        else if(this.state.project.projectNo === newProject[projectIndex].projectNo) {
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
           this.setState({
             projects: newProject,
             project: newProject[projectIndex]
@@ -1542,12 +1542,12 @@ export default class Dashboard extends React.Component {
       } 
     }
     
-    else if(socketData.socketType === "taskInsert" ||
-    socketData.socketType === "taskDelete" ||
-    socketData.socketType === "taskCopy"|| 
-    socketData.socketType === "taskCheck" ||
-    socketData.socketType === "taskListDelete") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo)
+    else if(socketData.socketType == "taskInsert" ||
+    socketData.socketType == "taskDelete" ||
+    socketData.socketType == "taskCopy"|| 
+    socketData.socketType == "taskCheck" ||
+    socketData.socketType == "taskListDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1563,8 +1563,8 @@ export default class Dashboard extends React.Component {
       }
     }
 
-    else if(socketData.socketType === "calendarTaskAdd") {
-      const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+    else if(socketData.socketType == "calendarTaskAdd") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if(projectIndex !== -1) {
         let newProject = update(this.state.projects, {
@@ -1664,23 +1664,23 @@ export default class Dashboard extends React.Component {
                       <div className="panel-body">
                         <Link to="#">
                           <div className="btn-group">
-                            {project.roleNo === 1 ?
+                            {project.roleNo == 1 ?
                               <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
                                 data-toggle="dropdown"
-                                style={project.projectState === "상태없음" ?
-                                  { backgroundColor: "#D9534F" } : project.projectState === "계획됨" ?
-                                    { backgroundColor: "orange" } : project.projectState === "진행중" ?
-                                      { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                style={project.projectState == "상태없음" ?
+                                  { backgroundColor: "#D9534F" } : project.projectState == "계획됨" ?
+                                    { backgroundColor: "orange" } : project.projectState == "진행중" ?
+                                      { backgroundColor: "#5CB85C" } : project.projectState == "완료됨" ?
                                         { backgroundColor: "#337AB7" } : ""}>
                                 &nbsp;&nbsp;{project.projectState}
                                 <span className="caret"></span>
                               </button> :
                               <button type="button" className="btn btn-primary dropdown-toggle btn-xs project-state-change"
                                 data-toggle="dropdown"
-                                style={project.projectState === "상태없음" ?
-                                  { backgroundColor: "#D9534F" } : project.projectState === "계획됨" ?
-                                    { backgroundColor: "orange" } : project.projectState === "진행중" ?
-                                      { backgroundColor: "#5CB85C" } : project.projectState === "완료됨" ?
+                                style={project.projectState == "상태없음" ?
+                                  { backgroundColor: "#D9534F" } : project.projectState == "계획됨" ?
+                                    { backgroundColor: "orange" } : project.projectState == "진행중" ?
+                                      { backgroundColor: "#5CB85C" } : project.projectState == "완료됨" ?
                                         { backgroundColor: "#337AB7" } : ""} disabled>
                                 &nbsp;&nbsp;{project.projectState}
                                 <span className="caret"></span>
@@ -1737,16 +1737,16 @@ export default class Dashboard extends React.Component {
                           </div>
                         </div>
                         <div className="progress">
-                          {project.projectState === "완료됨" ?
+                          {project.projectState == "완료됨" ?
                             <div className="progress-bar progress-bar" role="progressbar" aria-valuenow="100"
                               aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
-                            project.projectState === "진행중" ?
+                            project.projectState == "진행중" ?
                               <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100"
                                 aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
-                              project.projectState === "계획됨" ?
+                              project.projectState == "계획됨" ?
                                 <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100"
                                   aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
-                                project.projectState === "상태없음" ?
+                                project.projectState == "상태없음" ?
                                   <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100"
                                     aria-valuemin="0" aria-valuemax="100" style={{ width: `${(project.completedTask / project.taskCount) * 100}%` }}></div> :
                                   ""}

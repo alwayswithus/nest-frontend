@@ -13,7 +13,7 @@ class TransferText extends Component {
                 <div className="transfer">
                     <div>
                         {this.props.projects&&this.props.projects.map(project => 
-                         project.roleNo !== '1' ? 
+                         project.roleNo != '1' ? 
                          <div className="project-title">{project.projectTitle}</div>
                             : null
                         )}
@@ -33,7 +33,7 @@ class TransferText extends Component {
                         <>
                             <i className="fas fa-quote-left"></i>
                             {this.props.projects.map(project => 
-                                project.roleNo === '1' ? 
+                                project.roleNo == '1' ? 
                                     <div key={project.projectNo} className="role-project-title">{project.projectTitle}, </div> : null
                             )}
                             <i className="fas fa-quote-right"></i>

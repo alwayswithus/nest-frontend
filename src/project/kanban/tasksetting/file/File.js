@@ -157,7 +157,7 @@ class File extends Component {
        console.log(taskItem.taskState)
         return (
             <div className="SettingFile">
-                {taskItem.taskState === "del" ? 
+                {taskItem.taskState == "del" ? 
                     <div className="task-delete"> 
                         <div className ="task-delete-warning">
                             <span>삭제된 업무입니다.</span>
@@ -185,7 +185,7 @@ class File extends Component {
                     projectNo={this.props.projectNo}
                     taskListNo = {taskListNo} />
                 <div className="File">
-                    {taskItem.taskState === "del" || this.props.authUserRole === 3 ? 
+                    {taskItem.taskState == "del" || this.props.authUserRole === 3 ? 
                     // 삭제된 업무이거나 권한이 3인경우
                         <div style={{height:'100%'}} ><div
                         style={{display: 'inline-block', position: 'relative', height:'100%'}}><div className="FileMenu">
@@ -202,7 +202,7 @@ class File extends Component {
                                     <div className="input-group-btn"></div>
                                 </div>
                             </form>
-                            {taskItem.taskState === "del" || this.props.authUserRole === 3 ?
+                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
                                 <>
@@ -251,7 +251,7 @@ class File extends Component {
                                     <div className="input-group-btn"></div>
                                 </div>
                             </form>
-                            {taskItem.taskState === "del" || this.props.authUserRole === 3 ?
+                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
                                 <>
