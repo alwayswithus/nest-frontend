@@ -24,6 +24,7 @@ const API_HEADERS = {
 };
 
 class KanbanMain extends Component {
+
   constructor() {
     super(...arguments);
     this.state = {
@@ -2331,190 +2332,172 @@ class KanbanMain extends Component {
       let projectMembers = update(this.state.projectMembers, {
         $splice: [[memberIndex, 1]]
       })
-
+  
       this.setState({
         projectMembers: projectMembers
       })
     }
-
+  
     if(socketData.socketType === "userDelete") {
       const memberIndex = this.state.projectMembers.findIndex(member => member.userNo === socketData.userNo)
-
+  
       if(sessionStorage.getItem("authUserNo") == socketData.userNo) {
         this.props.history.push("/nest/dashboard")
       }
-
+  
       let projectMembers = update(this.state.projectMembers, {
         $splice: [[memberIndex, 1]]
       })
-
+  
       this.setState({
         projectMembers: projectMembers
       })
     }
-
+  
     if(socketData.socketType === "userAdd") {
       const memberIndex = this.state.projectMembers.findIndex(member => member.userNo === socketData.userNo);
       
       let projectMembers = update(this.state.projectMembers, {
         $push: [socketData.member]
       })
-
+  
       this.setState({
         projectMembers: projectMembers
       })
     }
-
-    if (socketData.socketType === "labelUpdate") {
-      let newTaskList = update(this.state.taskList, {
-        [socketData.taskListIndex]: {
-          tasks: {
-            [socketData.taskIndex]: {
-              taskLabel: { $set: socketData.color }
+    if(socketData.socketType === "labelUpdate"){
+      let newTaskList = update(this.state.taskList,{
+        [socketData.taskListIndex]:{
+          tasks:{
+            [socketData.taskIndex]:{
+              taskLabel:{$set: socketData.color}
             }
           }
         }
       })
       this.setState({
-        taskList: newTaskList
+        taskList:newTaskList
       })
-
-      fetch(`${API_URL}/api/tasksetting/tasklabel/${socketData.taskNo}`, {
-        method: 'post',
-        headers: API_HEADERS,
-        body: socketData.color
+  
+      fetch(`${API_URL}/api/tasksetting/tasklabel/${socketData.taskNo}`,{
+        method:'post',
+        headers:API_HEADERS,
+        body:socketData.color
       })
     }
-    if (socketData.projectNo + "" === this.props.location.pathname.split('/')[3]) {
-      if (socketData.socketType === 'taskListName') {
-
-        const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
-
+    if(socketData.projectNo+"" === this.props.location.pathname.split('/')[3]){
+      if(socketData.socketType === 'taskListName'){
+      
+        const taskListIndex =this.state.taskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
+    
         let newData = update(this.state.taskList, {
-          [taskListIndex]: {
-            taskListName: {
-              $set: socketData.taskListName
+          [taskListIndex] : {
+            taskListName :{
+              $set:socketData.taskListName
             }
           }
         })
-
+        
         this.setState({
           taskList: newData
         })
-      } else if (socketData.socketType === 'taskListInsert') {
-
-
+      }else if(socketData.socketType === 'taskListInsert'){
+       
+        
         let newTaskList = update(this.state.taskList, {
-          $push: [socketData]
+              $push:[socketData]
         })
         this.setState({
           taskList: newTaskList,
         });
-      } else if (socketData.socketType === 'taskListDelete') {
-
+      }else if(socketData.socketType === 'taskListDelete'){
+       
         let newTaskList = this.state.taskList;
-
-        newTaskList = update(newTaskList, {
-          $push: [this.state.taskList[socketData.TaskListIndex]]
+    
+        newTaskList = update (newTaskList,{
+          $push:[this.state.taskList[socketData.TaskListIndex]]
         })
-
+  
         newTaskList = update(newTaskList, {
           $splice: [[socketData.TaskListIndex, 1]],
         });
-
+        
         this.state.taskList.map((taskList, index) => {
-          newTaskList = update(newTaskList, {
-            [index]: {
-              taskListOrder: { $set: index + 1 },
-            },
-          });
+            newTaskList = update(newTaskList, {
+              [index]: {
+                taskListOrder: { $set: index+1 },
+              },
+            });
         });
-
-        newTaskList[newTaskList.length - 1].tasks.map((task, index) => {
-          newTaskList = update(newTaskList, {
-            [newTaskList.length - 1]: {
-              tasks: {
-                [index]: {
-                  taskState: { $set: "del" }
+  
+        newTaskList[newTaskList.length-1].tasks.map((task,index) => {
+          newTaskList = update(newTaskList , {
+            [newTaskList.length-1]:{
+              tasks:{
+                [index]:{
+                  taskState : {$set:"del"}
                 }
               }
             }
           })
         });
-
+  
         newTaskList = update(newTaskList, {
-          [newTaskList.length - 1]: {
-            taskListState: { $set: "F" }
+          [newTaskList.length-1]:{
+            taskListState:{$set:"F"}
           }
         });
         this.setState({
           taskList: newTaskList,
         });
-
-      } else if (socketData.socketType === 'taskListDnD') {
-        if (socketData.userNo === sessionStorage.getItem("authUserNo")) {
+        
+      }else if(socketData.socketType === 'taskListDnD'){
+        if(socketData.userNo === sessionStorage.getItem("authUserNo")){
           return;
         }
-        const { destination, source, type } = socketData.result;
-
-        let newTaskList = Array.from(this.state.taskList);
-        newTaskList.splice(source.index, 1);
-        newTaskList.splice(
-          destination.index,
-          0,
-          this.state.taskList[source.index]
-        );
-
-        const endTaskList = this.state.taskList[destination.index];
-
-        newTaskList.map((taskList, index) => {
-          if (source.index <= index && destination.index > index) {
-            newTaskList = update(newTaskList, {
-              [index]: {
-                taskListOrder: { $set: taskList.taskListOrder - 1 },
-              },
-            });
-          }
-          if (source.index >= index && destination.index < index) {
-            newTaskList = update(newTaskList, {
-              [index]: {
-                taskListOrder: { $set: taskList.taskListOrder + 1 },
-              },
-            });
-          }
-        });
-        newTaskList = update(newTaskList, {
-          [destination.index]: {
-            taskListOrder: { $set: endTaskList.taskListOrder },
-          },
-        });
-        this.setState({
-          taskList: newTaskList,
-        });
-
-      
+          const { destination, source, type } = socketData.result;
+          
+          let newTaskList = Array.from(this.state.taskList);
+          newTaskList.splice(source.index, 1);
+          newTaskList.splice(
+            destination.index,
+            0,
+            this.state.taskList[source.index]
+            );
+            
+            const endTaskList = this.state.taskList[destination.index];
+            
+            newTaskList.map((taskList, index) => {
+              if (source.index <= index && destination.index > index) {
+                newTaskList = update(newTaskList, {
+                  [index]: {
+                    taskListOrder: { $set: taskList.taskListOrder - 1 },
+                  },
+                });
+              }
+              if (source.index >= index && destination.index < index) {
+                newTaskList = update(newTaskList, {
+                [index]: {
+                  taskListOrder: { $set: taskList.taskListOrder + 1 },
+                },
+              });
+            }
+          });
+          newTaskList = update(newTaskList, {
+            [destination.index]: {
+              taskListOrder: { $set: endTaskList.taskListOrder },
+            },
+          });
+          this.setState({
+            taskList: newTaskList,
+          });
         
-    }else if(socketData.socketType === 'taskInsert'){
-      const TaskListIndex = this.state.taskList.findIndex(
-        (taskList) => taskList.taskListNo === socketData.taskListNo
-      );
-      
-      let newTaskList = this.state.taskList;
-      newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
-      this.setState({
-        taskList: newTaskList,
-        taskCount: socketData.taskCount,
-        completedTask: socketData.completedTask
-      });
-
-      const taskName = socketData.taskContents
-
-    }else if(socketData.socketType === 'taskDelete'){
-    
-      const TaskListIndex = this.state.taskList.findIndex(
-        (taskList) => taskList.taskListNo === socketData.taskListNo
+          
+      }else if(socketData.socketType === 'taskInsert'){
+        const TaskListIndex = this.state.taskList.findIndex(
+          (taskList) => taskList.taskListNo == socketData.taskListNo
         );
-
+        
         let newTaskList = this.state.taskList;
         newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
         this.setState({
@@ -2522,22 +2505,20 @@ class KanbanMain extends Component {
           taskCount: socketData.taskCount,
           completedTask: socketData.completedTask
         });
-
-        const taskName = socketData.taskContents
-
-      } else if (socketData.socketType === 'taskDelete') {
-
+  
+      }else if(socketData.socketType === 'taskDelete'){
+      
         const TaskListIndex = this.state.taskList.findIndex(
           (taskList) => taskList.taskListNo === socketData.taskListNo
-        );
-
+          );
+          
         const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
           (task) => task.taskNo === socketData.taskId
         );
-
-
+    
+        
         const taskListLength = this.state.taskList[TaskListIndex].tasks.length;
-
+        
         let newTaskList = update(this.state.taskList, {
           [TaskListIndex]: {
             tasks: {
@@ -2555,14 +2536,14 @@ class KanbanMain extends Component {
         newTaskList = update(newTaskList, {
           [TaskListIndex]: {
             tasks: {
-              [taskListLength - 1]: {
-                taskState: { $set: "del" }
+              [taskListLength-1] : {
+                taskState:{$set:"del"}
               }
             },
           },
         });
-
-
+    
+    
         newTaskList[TaskListIndex].tasks.map((task, index) => {
           newTaskList = update(newTaskList, {
             [TaskListIndex]: {
@@ -2574,149 +2555,152 @@ class KanbanMain extends Component {
             },
           });
         });
-
+  
         this.setState({
           taskList: newTaskList,
         });
-
+    
         const deleteTask = {
           startTasks: newTaskList[TaskListIndex].tasks,
           reOrderTask: socketData.taskId,
-
+          
         };
-        if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
+        if(sessionStorage.getItem("authUserNo") === socketData.userNo){
           fetch(`${API_URL}/api/task/delete`, {
             method: "post",
             headers: API_HEADERS,
             body: JSON.stringify(deleteTask),
           });
         }
-
-
-
-      } else if (socketData.socketType === 'taskCopy') {
+       
+    
+        
+      }else if(socketData.socketType === 'taskCopy'){
+    
+       
+      
         const task = this.state.taskList[socketData.taskListIndex].tasks[socketData.taskIndex];
-
-        let newTasks = this.state.taskList[socketData.taskListIndex].tasks;
-        newTasks.splice(socketData.taskIndex + 1, 0, {});
-        newTasks = update(newTasks, {
-          [socketData.taskIndex + 1]: {
-            $set: {
-              commentList: [],
-              taskStart: task.taskStart,
-              taskEnd: task.taskEnd,
-              taskOrder: null,
-              tagList: task.tagList,
-              taskState: task.taskState,
-              memberList: task.memberList,
-              taskContents: `${task.taskContents}_copy`,
-              taskNo: socketData.taskNo + "",
-              checkList: task.checkList,
-              taskPoint: task.taskPoint,
-              taskLabel: task.taskLabel,
-              fileList: [],
-            },
-          },
-        });
-
-        let newTaskList = update(this.state.taskList, {
-          [socketData.taskListIndex]: {
-            tasks: {
-              $set: newTasks,
-            },
-          },
-        });
-
-        const taskListLength = newTaskList[socketData.taskListIndex].tasks.length;
-        newTaskList[socketData.taskListIndex].tasks.map((task, index) => {
-          newTaskList = update(newTaskList, {
-            [socketData.taskListIndex]: {
-              tasks: {
-                [index]: {
-                  taskOrder: { $set: taskListLength - index },
+        
+            let newTasks = this.state.taskList[socketData.taskListIndex].tasks;
+            newTasks.splice(socketData.taskIndex + 1, 0, {});
+            newTasks = update(newTasks, {
+              [socketData.taskIndex + 1]: {
+                $set: {
+                  commentList: [],
+                  taskStart: task.taskStart,
+                  taskEnd: task.taskEnd,
+                  taskOrder: null,
+                  tagList: task.tagList,
+                  taskState: task.taskState,
+                  memberList: task.memberList,
+                  taskContents: `${task.taskContents}_copy`,
+                  taskNo: socketData.taskNo + "",
+                  checkList: task.checkList,
+                  taskPoint: task.taskPoint,
+                  taskLabel: task.taskLabel,
+                  fileList: [],
                 },
               },
-            },
-          });
-        });
-
-        if (newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].tagList.length !== 0) {
-          newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].tagList.map(
-            (tag, index) => {
+            });
+    
+            let newTaskList = update(this.state.taskList, {
+              [socketData.taskListIndex]: {
+                tasks: {
+                  $set: newTasks,
+                },
+              },
+            });
+    
+            const taskListLength = newTaskList[socketData.taskListIndex].tasks.length;
+            newTaskList[socketData.taskListIndex].tasks.map((task, index) => {
               newTaskList = update(newTaskList, {
                 [socketData.taskListIndex]: {
                   tasks: {
-                    [socketData.taskIndex]: {
-                      tagList: {
-                        [index]: {
-                          taskNo: {
-                            $set: socketData.taskNo,
-                          },
-                        },
-                      },
+                    [index]: {
+                      taskOrder: { $set: taskListLength - index },
                     },
                   },
                 },
               });
-            }
-          );
-        }
-        if (
-          newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].checkList.length !== 0
-        ) {
-          newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].checkList.map(
-            (checkList, index) => {
-              newTaskList = update(newTaskList, {
-                [socketData.taskListIndex]: {
-                  tasks: {
-                    [socketData.taskIndex]: {
-                      checkList: {
-                        [index]: {
-                          taskNo: {
-                            $set: socketData.taskNo,
+            });
+    
+            if (newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].tagList.length !== 0) {
+              newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].tagList.map(
+                (tag, index) => {
+                  newTaskList = update(newTaskList, {
+                    [socketData.taskListIndex]: {
+                      tasks: {
+                        [socketData.taskIndex]: {
+                          tagList: {
+                            [index]: {
+                              taskNo: {
+                                $set: socketData.taskNo,
+                              },
+                            },
                           },
                         },
                       },
                     },
-                  },
-                },
+                  });
+                }
+              );
+            }
+            if (
+              newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].checkList.length !== 0
+            ) {
+              newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex].checkList.map(
+                (checkList, index) => {
+                  newTaskList = update(newTaskList, {
+                    [socketData.taskListIndex]: {
+                      tasks: {
+                        [socketData.taskIndex]: {
+                          checkList: {
+                            [index]: {
+                              taskNo: {
+                                $set: socketData.taskNo,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  });
+                }
+              );
+            }
+    
+            if(sessionStorage.getItem("authUserNo") === socketData.userNo){
+    
+              fetch(`${API_URL}/api/task/reOrder/sameList`, {
+                method: "post",
+                headers: API_HEADERS,
+                body: JSON.stringify(newTaskList[socketData.taskListIndex].tasks),
               });
             }
-          );
-        }
-
-        if (sessionStorage.getItem("authUserNo") === socketData.userNo) {
-
-          fetch(`${API_URL}/api/task/reOrder/sameList`, {
-            method: "post",
-            headers: API_HEADERS,
-            body: JSON.stringify(newTaskList[socketData.taskListIndex].tasks),
-          });
-        }
-        this.setState({
-          taskList: newTaskList,
-        });
-
-      } else if (socketData.socketType === 'taskCheck') {
-
-
+            this.setState({
+              taskList: newTaskList,
+            });
+          
+      }else if(socketData.socketType === 'taskCheck'){
+        
+    
         const TaskListIndex = this.state.taskList.findIndex(
           (taskList) => taskList.taskListNo === socketData.taskListNo
         );
-
+    
         const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
           (task) => task.taskNo === socketData.taskId
         );
-
-        if (this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "do") {
-
+    
+        if(this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "do"){
+    
           let doneIndex = [];
-
-          this.state.taskList[TaskListIndex].tasks.map((task, index) => task.taskState === 'done' ? doneIndex.push(index) : null)
-          if (doneIndex[0] === undefined) {
+    
+          this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'done' ?  doneIndex.push(index) : null)
+          if(doneIndex[0] === undefined){
             doneIndex.push(this.state.taskList[TaskListIndex].tasks.length)
           }
-
+    
           let newTaskList = update(this.state.taskList, {
             [TaskListIndex]: {
               tasks: {
@@ -2726,239 +2710,232 @@ class KanbanMain extends Component {
               },
             },
           });
-
-          newTaskList[TaskListIndex].tasks.splice(doneIndex[0], 0, newTaskList[TaskListIndex].tasks[TaskIndex]);
-
-          newTaskList[TaskListIndex].tasks.splice(TaskIndex, 1);
-
+    
+          newTaskList[TaskListIndex].tasks.splice(doneIndex[0], 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+          
+          newTaskList[TaskListIndex].tasks.splice(TaskIndex, 1); 
+    
           let tasksLength = newTaskList[TaskListIndex].tasks.length
-
-          newTaskList[TaskListIndex].tasks.map((task, index) => {
+          
+          newTaskList[TaskListIndex].tasks.map((task, index) => 
+          {
             newTaskList = update(newTaskList, {
-              [TaskListIndex]: {
-                tasks: {
-                  [index]: {
-                    taskOrder: { $set: tasksLength },
+                [TaskListIndex]: {
+                  tasks: {
+                    [index]: {
+                      taskOrder: { $set: tasksLength },
+                    },
                   },
                 },
-              },
-            })
-            tasksLength = tasksLength - 1
-          }
-
+              })
+              tasksLength = tasksLength -1 
+            }
+    
           )
-
+    
           fetch(`${API_URL}/api/task/state`, {
             method: "post",
             headers: API_HEADERS,
             body: JSON.stringify(newTaskList[TaskListIndex].tasks),
           })
-
+    
           this.setState({
             taskList: newTaskList,
           });
-        } else {
+        }else{
           let doIndex = 0;
           let test = 0;
-
-          this.state.taskList[TaskListIndex].tasks.map((task, index) => task.taskState === 'do' ? doIndex = index : test = test + 1)
-
+    
+          this.state.taskList[TaskListIndex].tasks.map((task,index)=> task.taskState === 'do' ?  doIndex = index: test = test+1)
+    
           let newTaskList = update(this.state.taskList, {
             [TaskListIndex]: {
               tasks: {
                 [TaskIndex]: {
-                  taskState: { $set: 'do' },
-                },
+                  taskState: { $set: 'do'},
+                },  
               },
             },
           });
-
-          if (test === newTaskList[TaskListIndex].tasks.length) {
-            newTaskList[TaskListIndex].tasks.splice(doIndex, 0, newTaskList[TaskListIndex].tasks[TaskIndex]);
-          } else {
-            newTaskList[TaskListIndex].tasks.splice(doIndex + 1, 0, newTaskList[TaskListIndex].tasks[TaskIndex]);
+    
+          if(test ===  newTaskList[TaskListIndex].tasks.length){
+            newTaskList[TaskListIndex].tasks.splice(doIndex, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
+          }else{
+            newTaskList[TaskListIndex].tasks.splice(doIndex+1, 0, newTaskList[TaskListIndex].tasks[TaskIndex]); 
           }
-
-          newTaskList[TaskListIndex].tasks.splice(TaskIndex + 1, 1);
-
+          
+          newTaskList[TaskListIndex].tasks.splice(TaskIndex+1, 1);  
+          
           let tasksLength = newTaskList[TaskListIndex].tasks.length
-
-          newTaskList[TaskListIndex].tasks.map((task, index) => {
-            newTaskList = update(newTaskList, {
-              [TaskListIndex]: {
-                tasks: {
-                  [index]: {
-                    taskOrder: { $set: tasksLength },
+          
+          newTaskList[TaskListIndex].tasks.map((task, index) => 
+          {
+              newTaskList = update(newTaskList, {
+                [TaskListIndex]: {
+                  tasks: {
+                    [index]: {
+                      taskOrder: { $set: tasksLength },
+                    },
                   },
                 },
-              },
+              })
+              tasksLength = tasksLength -1 
+            }
+            )
+            
+            fetch(`${API_URL}/api/task/state`, {
+              method: "post",
+              headers: API_HEADERS,
+              body: JSON.stringify(newTaskList[TaskListIndex].tasks),
             })
-            tasksLength = tasksLength - 1
-          }
-          )
-
-          fetch(`${API_URL}/api/task/state`, {
-            method: "post",
-            headers: API_HEADERS,
-            body: JSON.stringify(newTaskList[TaskListIndex].tasks),
-          })
-        this.setState({
-          taskList: newTaskList,
-        });
-      }
-    }else if(socketData.socketType === 'taskDnD'){
-      if(socketData.userNo !== sessionStorage.getItem("authUserNo")){
-  
-      
-      const {destination, source, type} = socketData.result
-  
-      // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
-      let startIndex = 0;
-      let finishIndex = 0;
-      this.state.taskList.map((taskList, index) =>
-        taskList.taskListNo === source.droppableId ? (startIndex = index) : null
-      );
-      this.state.taskList.map((taskList, index) =>
-        taskList.taskListNo === destination.droppableId
-          ? (finishIndex = index)
-          : null
-      );
-  
-      // 위의 인덱스를 가지고 출발list, 도착list를 생성
-      const start = this.state.taskList[startIndex];
-      const finish = this.state.taskList[finishIndex];
-  
-      /* 같은 목록에서의 Task 이동 */
-      if (start === finish) {
-        // tasks 가공
-        const newTasks = Array.from(start.tasks);
-        newTasks.splice(source.index, 1);
-        newTasks.splice(
-          destination.index,
-          0,
-          this.state.taskList[startIndex].tasks[source.index]
-        );
-  
-        let newTaskList = update(this.state.taskList, {
-          [startIndex]: {
-            tasks: {
-              $set: newTasks,
-            },
-          },
-        });
-  
-        newTasks.map((task, index) => {
-          if (source.index <= index && destination.index > index) {
-            newTaskList = update(newTaskList, {
-              [startIndex]: {
-                tasks: {
-                  $set: newTasks,
-                },
-              },
-            });
-
-            newTasks.map((task, index) => {
-              if (source.index <= index && destination.index > index) {
-                newTaskList = update(newTaskList, {
-                  [startIndex]: {
-                    tasks: {
-                      [index]: {
-                        taskOrder: { $set: task.taskOrder + 1 },
-                      },
-                    },
-                  },
-                });
-              }
-              if (source.index >= index && destination.index < index) {
-                newTaskList = update(newTaskList, {
-                  [startIndex]: {
-                    tasks: {
-                      [index]: {
-                        taskOrder: { $set: task.taskOrder - 1 },
-                      },
-                    },
-                  },
-                });
-              }
-            });
-            newTaskList = update(newTaskList, {
-              [finishIndex]: {
-                tasks: {
-                  [destination.index]: {
-                    taskOrder: { $set: finish.tasks[destination.index].taskOrder },
-                  },
-                },
-              },
-            });
-
-            this.setState({
-              taskList: newTaskList,
-            });
-            return;
-          }
-
-          /* 한 목록에서 다른 목록으로 이동 */
-
-          // 출발 tasks 가공
-          const startTasks = Array.from(start.tasks);
-          startTasks.splice(source.index, 1);
-
-          // 도착 tasks 가공
-          const finishTasks = Array.from(finish.tasks);
-          finishTasks.splice(
-            destination.index,
-            0,
-            this.state.taskList[startIndex].tasks[source.index]
-          );
-
-          let newTaskList = update(this.state.taskList, {
-            [startIndex]: {
-              tasks: {
-                $set: startTasks,
-              },
-            },
-            [finishIndex]: {
-              tasks: {
-                $set: finishTasks,
-              },
-            },
-          });
-
-          newTaskList[startIndex].tasks.map((task, index) => {
-            newTaskList = update(newTaskList, {
-              [startIndex]: {
-                tasks: {
-                  [index]: {
-                    taskOrder: {
-                      $set: newTaskList[startIndex].tasks.length - index,
-                    },
-                  },
-                },
-              },
-            });
-          });
-
-          newTaskList[finishIndex].tasks.map((task, index) => {
-            newTaskList = update(newTaskList, {
-              [finishIndex]: {
-                tasks: {
-                  [index]: {
-                    taskOrder: {
-                      $set: newTaskList[finishIndex].tasks.length - index,
-                    },
-                  },
-                },
-              },
-            });
-          });
-
+    
           this.setState({
             taskList: newTaskList,
           });
         }
-
-      } else if (socketData.socketType === 'taskCheckListUpdate') {
-
+      }else if(socketData.socketType === 'taskDnD'){
+        if(socketData.userNo !== sessionStorage.getItem("authUserNo")){
+    
+        
+        const {destination, source, type} = socketData.result
+    
+        // 출발한 list의 인덱스 번호와 도착한 list의 인덱스 번호를 저장
+        let startIndex = 0;
+        let finishIndex = 0;
+        this.state.taskList.map((taskList, index) =>
+          taskList.taskListNo === source.droppableId ? (startIndex = index) : null
+        );
+        this.state.taskList.map((taskList, index) =>
+          taskList.taskListNo === destination.droppableId
+            ? (finishIndex = index)
+            : null
+        );
+    
+        // 위의 인덱스를 가지고 출발list, 도착list를 생성
+        const start = this.state.taskList[startIndex];
+        const finish = this.state.taskList[finishIndex];
+    
+        /* 같은 목록에서의 Task 이동 */
+        if (start === finish) {
+          // tasks 가공
+          const newTasks = Array.from(start.tasks);
+          newTasks.splice(source.index, 1);
+          newTasks.splice(
+            destination.index,
+            0,
+            this.state.taskList[startIndex].tasks[source.index]
+          );
+    
+          let newTaskList = update(this.state.taskList, {
+            [startIndex]: {
+              tasks: {
+                $set: newTasks,
+              },
+            },
+          });
+    
+          newTasks.map((task, index) => {
+            if (source.index <= index && destination.index > index) {
+              newTaskList = update(newTaskList, {
+                [startIndex]: {
+                  tasks: {
+                    [index]: {
+                      taskOrder: { $set: task.taskOrder + 1 },
+                    },
+                  },
+                },
+              });
+            }
+            if (source.index >= index && destination.index < index) {
+              newTaskList = update(newTaskList, {
+                [startIndex]: {
+                  tasks: {
+                    [index]: {
+                      taskOrder: { $set: task.taskOrder - 1 },
+                    },
+                  },
+                },
+              });
+            }
+          });
+          newTaskList = update(newTaskList, {
+            [finishIndex]: {
+              tasks: {
+                [destination.index]: {
+                  taskOrder: { $set: finish.tasks[destination.index].taskOrder },
+                },
+              },
+            },
+          });
+    
+          this.setState({
+            taskList: newTaskList,
+          });
+          return;
+        }
+    
+        /* 한 목록에서 다른 목록으로 이동 */
+    
+        // 출발 tasks 가공
+        const startTasks = Array.from(start.tasks);
+        startTasks.splice(source.index, 1);
+    
+        // 도착 tasks 가공
+        const finishTasks = Array.from(finish.tasks);
+        finishTasks.splice(
+          destination.index,
+          0,
+          this.state.taskList[startIndex].tasks[source.index]
+        );
+    
+        let newTaskList = update(this.state.taskList, {
+          [startIndex]: {
+            tasks: {
+              $set: startTasks,
+            },
+          },
+          [finishIndex]: {
+            tasks: {
+              $set: finishTasks,
+            },
+          },
+        });
+    
+        newTaskList[startIndex].tasks.map((task, index) => {
+          newTaskList = update(newTaskList, {
+            [startIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: {
+                    $set: newTaskList[startIndex].tasks.length - index,
+                  },
+                },
+              },
+            },
+          });
+        });
+    
+        newTaskList[finishIndex].tasks.map((task, index) => {
+          newTaskList = update(newTaskList, {
+            [finishIndex]: {
+              tasks: {
+                [index]: {
+                  taskOrder: {
+                    $set: newTaskList[finishIndex].tasks.length - index,
+                  },
+                },
+              },
+            },
+          });
+        });
+    
+        this.setState({
+          taskList: newTaskList,
+        });
+      }
+    
+      } else if(socketData.socketType === 'taskCheckListUpdate'){
+  
         const taskListIndex = this.state.taskList.findIndex(
           (taskList) => taskList.taskListNo === socketData.taskListNo
         );
@@ -2968,53 +2945,53 @@ class KanbanMain extends Component {
         const checklistIndex = this.state.taskList[taskListIndex].tasks[
           taskIndex
         ].checkList.findIndex((checklist) => checklist.checklistNo === socketData.checklistNo);
-
-
-        let newTaskList = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                checkList: {
-                  [checklistIndex]: {
-                    checklistState: {
-                      $set: socketData.checklistState === "done" ? "do" : "done",
-                    },
+  
+  
+      let newTaskList = update(this.state.taskList, {
+        [taskListIndex]: {
+          tasks: {
+            [taskIndex]: {
+              checkList: {
+                [checklistIndex]: {
+                  checklistState: {
+                    $set: socketData.checklistState === "done" ? "do" : "done",
                   },
                 },
               },
             },
           },
-        });
-
-        this.setState({
-          taskList: newTaskList,
-        });
-
-      } else if (socketData.authUserNo !== sessionStorage.getItem("authUserNo")) {
-        if (socketData.socketType === 'comment') {
-          let newData = update(this.state.taskList, {
-            [socketData.taskListIndex]: {
-              tasks: {
-                [socketData.taskIndex]: {
-                  commentList:
-                    { $push: [socketData] }
+        },
+      });
+  
+      this.setState({
+        taskList: newTaskList,
+      });
+  
+      }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
+        if(socketData.socketType === 'comment'){
+            let newData = update(this.state.taskList, {
+              [socketData.taskListIndex] : {
+                tasks :{
+                  [socketData.taskIndex] : {
+                    commentList : 
+                      {$push: [socketData]} 
+                  }
                 }
               }
-            }
-          })
-
-          this.setState({
-            taskList: newData,
-            history: this.state.history
-          })
-        } else if (socketData.socketType === 'dateUpdate') {
-          if (socketData.from === 'Invalid date') {
+            })
+          
+            this.setState({
+              taskList: newData,
+              history:this.state.history
+            })
+        } else if(socketData.socketType === 'dateUpdate'){
+          if(socketData.from === 'Invalid date'){
             socketData.from = undefined;
           }
-          if (socketData.to === 'Invalid date') {
+          if(socketData.to === 'Invalid date'){
             socketData.to = undefined;
           }
-
+          
           let newTaskList = update(this.state.taskList, {
             [socketData.taskListIndex]: {
               tasks: {
@@ -3030,34 +3007,34 @@ class KanbanMain extends Component {
             },
           });
           this.setState({
-            taskList: newTaskList
+            taskList:newTaskList
           })
-        } else if (socketData.socketType === "labelUpdate") {
-          let newTaskList = update(this.state.taskList, {
-            [socketData.taskListIndex]: {
-              tasks: {
-                [socketData.taskIndex]: {
-                  taskLabel: { $set: socketData.color }
+        }  else if(socketData.socketType === "labelUpdate"){
+          let newTaskList = update(this.state.taskList,{
+            [socketData.taskListIndex]:{
+              tasks:{
+                [socketData.taskIndex]:{
+                  taskLabel:{$set: socketData.color}
                 }
               }
             }
           })
           this.setState({
-            taskList: newTaskList
+            taskList:newTaskList
           })
-
-          fetch(`${API_URL}/api/tasksetting/tasklabel/${socketData.taskNo}`, {
-            method: 'post',
-            headers: API_HEADERS,
-            body: socketData.color
+    
+          fetch(`${API_URL}/api/tasksetting/tasklabel/${socketData.taskNo}`,{
+            method:'post',
+            headers:API_HEADERS,
+            body:socketData.color
           })
-        } else if (socketData.socketType === "taskTagAdd") {
+        } else if(socketData.socketType === "taskTagAdd"){
           let newTagData = update(this.state.taskList, {
-            [socketData.taskListIndex]: {
-              tasks: {
-                [socketData.taskIndex]: {
-                  tagList:
-                    { $push: [socketData] }
+            [socketData.taskListIndex] : {
+              tasks :{
+                [socketData.taskIndex] : {
+                  tagList : 
+                    {$push: [socketData]} 
                 }
               }
             }
@@ -3066,32 +3043,32 @@ class KanbanMain extends Component {
           this.setState({
             taskList: newTagData
           })
-
-        } else if (socketData.socketType === "taskTagDelete") {
+    
+        } else if(socketData.socketType === "taskTagDelete"){
           fetch(`${API_URL}/api/tag/delete/${socketData.taskNo}/${socketData.tagNo}`, {
             method: "delete"
           })
-            .then(response => response.json())
-            .then(json => {
-              let newTaskList = update(this.state.taskList, {
-                [socketData.taskListIndex]: {
-                  tasks: {
-                    [socketData.taskIndex]: {
-                      tagList: {
-                        $splice: [[socketData.tagIndex, 1]],
-                      },
+          .then(response => response.json())
+          .then(json => {
+            let newTaskList = update(this.state.taskList, {
+              [socketData.taskListIndex]: {
+                tasks: {
+                  [socketData.taskIndex]: {
+                    tagList: {
+                      $splice: [[socketData.tagIndex, 1]],
                     },
                   },
                 },
-              });
-              this.onSetStateTaskTagNo(newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex])
-              this.setState({
-                taskList: newTaskList,
-              });
-            })
-          // } 
-        } else if (socketData.socketType === "checkListAdd") {
-
+              },
+            });
+          this.onSetStateTaskTagNo(newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex])
+          this.setState({
+            taskList: newTaskList,
+          });
+        })
+       // } 
+        } else if(socketData.socketType === "checkListAdd"){
+    
           let newTaskList = update(this.state.taskList, {
             [socketData.taskListIndex]: {
               tasks: {
@@ -3103,248 +3080,248 @@ class KanbanMain extends Component {
               },
             },
           });
-
+    
           this.setState({
-            taskList: newTaskList
+            taskList:newTaskList
           })
-        } else if (socketData.socketType === "checkListDelete") {
+        } else if(socketData.socketType === "checkListDelete"){
           fetch(`${API_URL}/api/tasksetting/checklist/${socketData.checklistNo}`, {
-            method: 'delete'
+            method:'delete'
           })
-            .then(response => response.json())
-            .then(json => {
-              let newTaskList = update(this.state.taskList, {
-                [socketData.taskListIndex]: {
-                  tasks: {
-                    [socketData.taskIndex]: {
-                      checkList: {
-                        $splice: [[socketData.checkListIndex, 1]]
-                      }
+          .then(response => response.json())
+          .then(json => {
+            let newTaskList = update(this.state.taskList, {
+              [socketData.taskListIndex]:{
+                tasks:{
+                  [socketData.taskIndex]:{
+                    checkList:{
+                      $splice:[[socketData.checkListIndex,1]]
                     }
                   }
                 }
-              })
-
-              this.setState({
-                taskList: newTaskList
-              })
+              }
             })
-        } else if (socketData.socketType === "taskMemberAdd") {
-          let newTaskList = update(this.state.taskList, {
-            [socketData.taskListIndex]: {
-              tasks: {
-                [socketData.taskIndex]: {
-                  memberList: {
-                    $push: [socketData]
+    
+            this.setState({
+              taskList: newTaskList
+            })
+          })
+        } else if(socketData.socketType === "taskMemberAdd"){
+          let newTaskList = update(this.state.taskList,{
+            [socketData.taskListIndex]:{
+              tasks:{
+                [socketData.taskIndex]:{
+                  memberList:{
+                    $push:[socketData]
                   }
                 }
               }
             }
           })
           this.setState({
-            taskList: newTaskList
-          })
-        } else if (socketData.socketType === "taskMemberDelete") {
-
-          let newTaskList = update(this.state.taskList, {
-            [socketData.taskListIndex]: {
-              tasks: {
-                [socketData.taskIndex]: {
-                  memberList: {
-                    $splice: [[socketData.memberIndex, 1]]
+              taskList:newTaskList
+            })
+        } else if(socketData.socketType === "taskMemberDelete"){
+    
+          let newTaskList = update(this.state.taskList,{
+            [socketData.taskListIndex]:{
+              tasks:{
+                [socketData.taskIndex]:{
+                  memberList:{
+                    $splice:[[socketData.memberIndex,1]]
                   }
                 }
               }
             }
           })
           this.setState({
-            taskList: newTaskList
-          })
-        } else if (socketData.historyType === "taskContentsUpdate") {
+              taskList:newTaskList
+            })
+        } else if(socketData.historyType === "taskContentsUpdate"){
+            let newHistoryData = {
+              logContents:socketData.senderName+" 님이"+socketData.actionName+" 으로 업무이름을 수정하셨습니다.",
+              logDate:socketData.historyDate,
+              projectNo:socketData.projectNo
+            }
+  
+            this.setState({
+              history : update(this.state.history,{
+                $push:[newHistoryData]
+              })
+            })
+        } else if(socketData.historyType === "taskListInsert"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 으로 업무이름을 수정하셨습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트를 추가하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskListInsert") {
+        } else if(socketData.historyType === "taskListDelete"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무리스트를 추가하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트를 삭제하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskListDelete") {
+        } else if(socketData.historyType === "taskDateUpdate"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무리스트를 삭제하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 마감일을 수정하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskDateUpdate") {
+        } else if(socketData.historyType === "taskMemberJoin"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무의 마감일을 수정하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 멤버를 추가하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskMemberJoin") {
+        } else if(socketData.historyType === "checklistInsert"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무에 멤버를 추가하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 체크리스트를 추가하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "checklistInsert") {
+        } else if(socketData.historyType === "checklistStateUpdate"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무에 체크리스트를 추가하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 체크리스트 상태를 수정하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "checklistStateUpdate") {
+        } else if(socketData.historyType === "taskContentsUpdate"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무의 체크리스트 상태를 수정하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무에 코멘트를 추가하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskContentsUpdate") {
+        } else if(socketData.historyType === "taskDragNdrop"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무에 코멘트를 추가하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무의 위치를 변경하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskDragNdrop") {
+        } else if(socketData.historyType === "taskListDragNdrop"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무의 위치를 변경하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무리스트의 위치를 변경하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskListDragNdrop") {
+        } else if(socketData.historyType === "taskStateUpdate"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무리스트의 위치를 변경하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무 상태를 변경하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskStateUpdate") {
+        } else if(socketData.historyType === "taskInsert"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무 상태를 변경하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 추가하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskInsert") {
+        } else if(socketData.historyType === "taskDelete"){
           let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무를 추가하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 삭제하였습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
           }
-
+  
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            history : update(this.state.history,{
+              $push:[newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskDelete") {
-          let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무를 삭제하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
-          }
-
-          this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
-            })
-          })
-        }
-      } else {
+        } 
+      }else{
         return
       }
       return;
     }
-
-
-    if (socketData.socketType === "allTagUpdate") {
+    
+   
+    if(socketData.socketType === "allTagUpdate"){
       let Indexs = []
-
-      this.state.taskList.map((taskList, taskListIndex) =>
-        taskList.tasks.map((task, taskIndex) =>
-          task.tagList.map((tag, tagIndex) => tag.tagNo === socketData.tagNo ?
-            Indexs.push({ taskListIndex, taskIndex, tagIndex })
-            : null
-          )))
-
-
-      Indexs.map(index =>
+  
+      this.state.taskList.map( (taskList,taskListIndex) => 
+      taskList.tasks.map((task,taskIndex) => 
+        task.tagList.map((tag,tagIndex) => tag.tagNo === socketData.tagNo ? 
+        Indexs.push({taskListIndex, taskIndex, tagIndex})
+        : null
+      )))
+  
+  
+      Indexs.map(index => 
         this.setState({
-          taskList: update(this.state.taskList, {
-            [index.taskListIndex]: {
-              tasks: {
-                [index.taskIndex]: {
-                  tagList: {
-                    [index.tagIndex]: {
-                      tagName: { $set: socketData.tagName },
-                      tagColor: { $set: socketData.tagColor }
+          taskList:update(this.state.taskList,{
+            [index.taskListIndex]:{
+              tasks:{
+                [index.taskIndex]:{
+                  tagList:{
+                    [index.tagIndex]:{
+                      tagName:{$set:socketData.tagName},
+                      tagColor:{$set:socketData.tagColor}
                     }
                   }
                 }
@@ -3353,26 +3330,26 @@ class KanbanMain extends Component {
           })
         })
       )
-    } else if (socketData.socketType === "allTagDelete") {
+    } else if(socketData.socketType === "allTagDelete"){
       let Indexs = []
-      this.state.taskList.map((taskList, taskListIndex) =>
-        taskList.tasks.map((task, taskIndex) =>
-          task.tagList.map((tag, tagIndex) =>
-            tag.tagNo === socketData.tagNo ?
-              Indexs.push({ taskListIndex, taskIndex, tagIndex }) : null
+      this.state.taskList.map((taskList, taskListIndex) => 
+        taskList.tasks.map((task,taskIndex) => 
+          task.tagList.map((tag, tagIndex) => 
+            tag.tagNo === socketData.tagNo ? 
+            Indexs.push({taskListIndex, taskIndex, tagIndex}) : null
           )
         )
       )
-
-
-      Indexs.map(index =>
+  
+  
+      Indexs.map(index => 
         this.setState({
-          taskList: update(this.state.taskList, {
-            [index.taskListIndex]: {
-              tasks: {
-                [index.taskIndex]: {
-                  tagList: {
-                    $splice: [[index.tagIndex, 1]],
+          taskList: update(this.state.taskList,{
+            [index.taskListIndex]:{
+              tasks:{
+                [index.taskIndex]:{
+                  tagList:{
+                    $splice:[[index.tagIndex,1]],
                   }
                 }
               }
@@ -3382,7 +3359,6 @@ class KanbanMain extends Component {
       )
     }
   }
-}
   render() {
     return (
       <>
