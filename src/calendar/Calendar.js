@@ -15,7 +15,6 @@ import update from 'react-addons-update';
 import Setting from '../project/kanban/tasksetting/setting/Setting'
 import { Route } from "react-router-dom";
 
-import CustomEvent from './CustomEvent';
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
 import ApiService from '../ApiService';
@@ -873,21 +872,29 @@ class myCalendar extends Component {
   }
 
   onSelectEvent(event) {
-    CustomEvent.customEventService(event);
 
-    // const allProjectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == event.projectNo)
+    // CustomEvent.customEventService(event)
 
-    // let link = (
-    //   <div>
-    //     <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`}>
-    //       <h6>Hi</h6>
-    //     </Link>
-    //   </div>
-    // )
-    // this.setState({
-    //   link: link,
-    //   taskList: this.state.taskList[allProjectsIndex].allTaskList
-    // })
+    let link = (
+      <div className="test" style={{top:`${this.y}px`, left:`${this.x}px`}}>
+        <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`}>
+          <i className="fas fa-bullhorn"></i>
+        </Link>
+      </div>
+    )
+      this.setState({
+        link: link,
+      })
+  }
+
+  onClickSetting(event, projectIndex){
+    console.log("onClickSetting")
+    console.log(this.state.taskList[projectIndex].allTaskList)
+
+    this.setState({
+      taskList:this.state.taskList[projectIndex].allTaskList
+    })
+
   }
 
   tagModalStateUpdate() {
@@ -1673,7 +1680,8 @@ class myCalendar extends Component {
             <div>
 
             </div>
-            <div className="calendar-body-contents-calendar">
+
+            <div className="calendar-body-contents-calendar" onMouseOver={(e) => {this.x = e.clientX-50; this.y = e.clientY-50}}>
 
               <Calendar
                 selectable
@@ -1698,7 +1706,9 @@ class myCalendar extends Component {
                 }}
                 onSelectEvent={this.onSelectEvent.bind(this)}
                 onSelectSlot={this.onOpenDialog.bind(this)}
+                // components={{event:this.state.link}}
               />
+              
             </div>
             <Dialog open={this.state.privateTask} onClose={this.onPrivateTaskClose.bind(this)}>
               <DialogTitle style={{ textAlign: "center", padding: "10px 10px", paddingBottom: "0" }}>
@@ -1878,11 +1888,13 @@ class myCalendar extends Component {
 
     ApiService.fetchCalendarAllTask(sessionStorage.getItem("authUserNo"))
       .then((response) => {
+
         this.setState({
           taskList: response.data.data.allProjects,
           authUserRole: response.data.data.authUserRole,
         });
       }
+
       );
 
     ApiService.fetchProjectMember(1)

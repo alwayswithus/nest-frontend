@@ -3510,7 +3510,6 @@ class KanbanMain extends Component {
                 authUserRole={this.state.authUserRole}
                 projectNo={this.props.match.params.projectNo}
                 task={this.state.taskList}
-                clientRef2={this.clientRef.current}
                 taskCallbacks={{
                   commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
                   commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트

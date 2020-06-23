@@ -186,7 +186,7 @@ class CommentList extends Component {
                                                 border: '4px solid rgb(39, 182, 186)',
                                                 width: '485px',
                                                 background: 'white',
-                                                borderRadius: '16px'
+                                                borderRadius: '16px',
                                             }}>
                                                 <ReactQuill
                                                     theme=''

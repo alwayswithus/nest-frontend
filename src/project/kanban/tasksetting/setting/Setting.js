@@ -227,20 +227,30 @@ class Setting extends Component {
     }
     render() {
 
-        if(!this.props.task){
+        if(this.props.task.length == 0){
             return <></>;
         }
-        const taskList = this.props.task;
+        
+        let taskList=[];
+        
+        if(this.props.match.url.indexOf("calendar") !== -1){
+            
+            const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
+            taskList = this.props.task[projectIndex].allTaskList
 
-        let Indexs = []
-        taskList.map( (taskList,taskListIndex) => 
-            taskList.tasks.map((task,taskIndex) => 
-                task.taskNo === this.props.match.params.taskNo
-                    ?Indexs.push({taskListIndex, taskIndex})
-                    :null
-        ))
-        const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
-        const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
+        } else{
+            taskList = this.props.task;
+        }
+
+            let Indexs = []
+            taskList.map( (taskList,taskListIndex) => 
+                taskList.tasks.map((task,taskIndex) => 
+                    task.taskNo === this.props.match.params.taskNo
+                        ?Indexs.push({taskListIndex, taskIndex})
+                        :null
+            ))
+            const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
+            const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
 
         return (
             <>

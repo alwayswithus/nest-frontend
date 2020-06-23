@@ -58,13 +58,13 @@ class ProjectHeader extends Component {
                                 onKeyPress={this.onInputKeyPress.bind(this)}
                                 autoFocus />
                             {this.props.userProject.roleNo === 1 ? 
-                            <i className="far fa-edit Icon" onClick={this.onProjectTitleCheck.bind(this)}></i> :
+                            <div className="projectset-header-edit"><i className="far fa-edit Icon" onClick={this.onProjectTitleCheck.bind(this)}></i></div> :
                             ""}
                         </div> :
                         <div className="project-title-header">
                             <h2><b>{this.props.project.projectTitle}</b></h2>
                             {this.props.userProject.roleNo === 1 ? 
-                            <i className="far fa-edit Icon" onClick={this.onProjectTitleCheck.bind(this)}></i> :
+                            <div className="projectset-header-edit"><i className="far fa-edit Icon" onClick={this.onProjectTitleCheck.bind(this)}></i></div> :
                             ""}
                         </div>}
                     <span>작성자 &nbsp; <strong>{this.props.project.projectWriterName}</strong> &nbsp; • &nbsp; 작성일 &nbsp; <strong>{this.props.project.projectRegDate}</strong></span>
