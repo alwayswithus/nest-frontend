@@ -54,7 +54,7 @@ class Modal extends Component {
         index.push(projectArray.map(projectNo => projectIndexArray.indexOf(projectNo)))
         // index.push(this.state.projects.map(project => projectIndexArray.indexOf(project.projectNo)))
         // index.push(projectArray.map(projectNo => ))
-        if(index[0].indexOf(-1) == -1){
+        if(index[0].indexOf(-1) === -1){
             this.setState({
                 delete:true,
                 transferOk:true,

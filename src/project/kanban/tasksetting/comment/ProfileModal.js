@@ -11,7 +11,7 @@ class ProfileModal extends Component {
     render(){
         return(
             <>
-            {this.state.userProfile && this.state.userProfile.userGrade == "비회원" ? 
+            {this.state.userProfile && this.state.userProfile.userGrade === "비회원" ? 
                 <div className="delete-user">
                     <button type="button" className="close-delete-user" style={{ lineHeight: "35px"}} onClick={this.props.onClickUserImg}>&times;</button>
                     <div className="delete-user-message">탈퇴한회원입니다.</div>

@@ -6,10 +6,12 @@ import './file.scss';
 // import Viewer from 'react-viewer'
 import FileComponent from './FileComponent'
 
+
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
     "Context-Type": "application/json",
 }
+
 
 class FileList extends Component{
 

@@ -856,7 +856,6 @@ class KanbanMain extends Component {
             },
           },
         });
-
         const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == json.data.checklistNo)
         newTaskList = update(newTaskList, {
           [taskListIndex]: {
@@ -2492,6 +2491,23 @@ class KanbanMain extends Component {
         this.setState({
           taskList: newTaskList,
         });
+
+      
+        
+    }else if(socketData.socketType === 'taskInsert'){
+      const TaskListIndex = this.state.taskList.findIndex(
+        (taskList) => taskList.taskListNo === socketData.taskListNo
+      );
+      
+      let newTaskList = this.state.taskList;
+      newTaskList[TaskListIndex].tasks.splice(0, 0, socketData);
+      this.setState({
+        taskList: newTaskList,
+        taskCount: socketData.taskCount,
+        completedTask: socketData.completedTask
+      });
+
+      const taskName = socketData.taskContents
 
     }else if(socketData.socketType === 'taskDelete'){
     

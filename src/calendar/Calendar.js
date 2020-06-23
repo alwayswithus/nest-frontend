@@ -281,7 +281,7 @@ class myCalendar extends Component {
     let projectNumber = this.state.projectNumber;
 
     projects.forEach(project => {
-      if (project.projectNo == event.target.value) {
+      if (project.projectNo === event.target.value) {
         project.isChecked = event.target.checked
         if (project.isChecked === true) {
           if (projectNumber.includes(project.projectNo)) {
@@ -604,7 +604,7 @@ class myCalendar extends Component {
       }
     }
     // else if(socketData.socketType === "userDelete") {
-    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
     //   if(projectIndex !== -1) {
     //     let newProject = update(this.state.projects, {
     //       $splice: [[projectIndex, 1]]
@@ -642,7 +642,7 @@ class myCalendar extends Component {
           }
         })
 
-        const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
+        const eventIndex = this.state.events.findIndex(event => event.id === socketData.taskId)
         let events = update(this.state.events, {
           $splice: [[eventIndex, 1]]
         })
@@ -763,7 +763,6 @@ class myCalendar extends Component {
             completedTask: { $set: completedTask }
           }
         })
-
         const eventIndex = this.state.events.findIndex(event => event.id == socketData.taskId)
         let events = update(this.state.events, {
           [eventIndex]: {
@@ -785,7 +784,6 @@ class myCalendar extends Component {
         })
       }
     }
-
     else if (socketData.socketType === "taskListDelete") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       if (projectIndex !== -1) {
@@ -872,9 +870,7 @@ class myCalendar extends Component {
   }
 
   onSelectEvent(event) {
-
     // CustomEvent.customEventService(event)
-
     let link = (
       <div className="test" style={{top:`${this.y}px`, left:`${this.x}px`}}>
         <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`}>
@@ -935,7 +931,6 @@ class myCalendar extends Component {
             },
           },
         });
-
         const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == json.data.checklistNo)
         newTaskList = update(newTaskList, {
           [taskListIndex]: {
@@ -1495,7 +1490,7 @@ class myCalendar extends Component {
       }
     })
 
-    const eventIndex = this.state.events.findIndex(event => event.id == taskNo);
+    const eventIndex = this.state.events.findIndex(event => event.id === taskNo);
     let events = update(this.state.events, {
       [eventIndex]: {
         color: { $set: color }
