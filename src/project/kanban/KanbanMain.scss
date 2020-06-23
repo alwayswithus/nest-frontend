@@ -2,16 +2,17 @@
   height: 100%;
   .kanban {
     height: 100%;
-    #projectSetArea{
+    #projectSetArea {
       position: absolute;
       right: 0px;
       display: block;
       z-index: 3;
-  
     }
     .topBar {
       margin-left: 62px;
     }
+    
+
     #projectSetArea {
       top: 52px;
       .ProjectSet {

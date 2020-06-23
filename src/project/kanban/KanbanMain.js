@@ -11,14 +11,14 @@ import { Route, Switch } from "react-router-dom";
 import Setting from "../kanban/tasksetting/setting/Setting";
 import Comment from "../kanban/tasksetting/comment/Comment";
 import File from "../kanban/tasksetting/file/File";
-import moment, { now }  from 'moment';
+import moment from 'moment';
 import ApiNotification from '../../notification/ApiNotification'
 import SockJsClient from "react-stomp";
 import ProjectSetting from '../../dashboard/projectsetting/ProjectSetting';
 import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -99,7 +99,7 @@ class KanbanMain extends Component {
     // list 재정렬
     if (type === "column") {
 
-      const { destination, source, type } = result;
+      const { destination, source} = result;
 
   
       let newTaskList = Array.from(this.state.taskList);
@@ -380,7 +380,8 @@ class KanbanMain extends Component {
       result : result,
       socketType:"taskDnD",
       userNo : sessionStorage.getItem("authUserNo"),
-      projectNo:newTaskList[startIndex].projectNo
+      projectNo:newTaskList[startIndex].projectNo,
+      members:this.state.projectMembers,
     }
     this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
     
@@ -427,24 +428,6 @@ class KanbanMain extends Component {
           membersNo.push(member.userNo);
         })
 
-        // let taskCount=1;
-
-        // this.state.taskList.map(taskList => {
-        //   taskList.tasks.map(task => {
-        //     if(task.taskState !== "del"){
-        //       taskCount = taskCount+1
-        //     }
-        //   })
-        // })
-
-        // let completedTask=0;
-        // this.state.taskList.map( taskList => {
-        //   taskList.tasks.map(task => {
-        //     if(task.taskState === "done"){
-        //       completedTask = completedTask +1
-        //     }
-        //   })
-        // })
         this.setState({
           taskCount:this.state.taskCount+1,
           completedTask:this.state.completedTask,
@@ -507,33 +490,12 @@ class KanbanMain extends Component {
     const TaskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
       (task) => task.taskNo === taskId
     );
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === this.state.taskList[TaskListIndex].projectNo);
-
-
-    // let taskCount = this.state.taskList[TaskListIndex].tasks.length;
-    // console.log(this.state.taskList[TaskListIndex].tasks.length)
-    // this.state.taskList.map(taskList => {
-    //   taskList.tasks.map(task => {
-    //     if(task.taskState === "del"){
-    //       taskCount = taskCount - 1;
-    //     }
-    //   })
-    // })
-
-    // let completedTask=0;
-    // this.state.taskList.map( taskList => {
-    //   taskList.tasks.map(task => {
-    //     if(task.taskState === "done"){
-    //       completedTask = completedTask +1
-    //     }
-    //   })
-    // })
 
     this.setState({
       taskCount:this.state.taskCount-1,
       completedTask:this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "done" ? this.state.completedTask - 1 :this.state.completedTask
     })
-
+    console.log(this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState)
     const deleteTask = {
       taskListNo:taskListNo,
       taskId:taskId,
@@ -598,23 +560,6 @@ class KanbanMain extends Component {
           (taskList) => taskList.taskListNo === taskListNo
         );
     
-        // let taskCount=1;
-        // this.state.taskList.map(taskList => {
-        //   taskList.tasks.map(task => {
-        //     if(task.taskState !== "del"){
-        //     taskCount = taskCount+1
-        //     }
-        //   })
-        // })
-
-        // let completedTask=0;
-        // this.state.taskList.map( taskList => {
-        //   taskList.tasks.map(task => {
-        //     if(task.taskState === "done"){
-        //       completedTask = completedTask +1
-        //     }
-        //   })
-        // })
         this.setState({
           taskCount:this.state.taskCount +1,
           completedTask:this.state.completedTask
@@ -661,24 +606,6 @@ class KanbanMain extends Component {
     );
 
     const taskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(task => task.taskNo === taskId);
-
-    // let taskCount=0;
-    // this.state.taskList.map(taskList => {
-    //   taskList.tasks.map(task => {
-    //     if(task.taskState !== "del"){
-    //     taskCount = taskCount+1
-    //     }
-    //   })
-    // })
-
-    // let completedTask=0;
-    // this.state.taskList.map( taskList => {
-    //   taskList.tasks.map(task => {
-    //     if(task.taskState === "done"){
-    //       completedTask = completedTask +1
-    //     }
-    //   })
-    // })
 
     let calendarSocketData;
     if(this.state.taskList[TaskListIndex].tasks[taskIndex].taskState === "done"){
@@ -836,26 +763,6 @@ class KanbanMain extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-    
-        // let taskCount=0;
-        // this.state.taskList.map(taskList => {
-        //   taskList.tasks.map(task => {
-        //     if(task.taskState !== "del"){
-        //     taskCount = taskCount+1
-        //     }
-        //   })
-        // })
-
-        // taskCount = taskCount-this.state.taskList[TaskListIndex].tasks.length
-
-        // let completedTask=0;
-        // this.state.taskList.map( taskList => {
-        //   taskList.tasks.map(task => {
-        //     if(task.taskState === "done"){
-        //       completedTask = completedTask +1
-        //     }
-        //   })
-        // })
 
         let doneCount=0;
         this.state.taskList[TaskListIndex].tasks.map(task => {
@@ -864,6 +771,7 @@ class KanbanMain extends Component {
           }
         })
 
+        console.log(this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length)
         this.setState({
           taskCount:this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length,
           completedTask:this.state.completedTask - doneCount
@@ -2557,8 +2465,6 @@ receiveKanban(socketData) {
         completedTask: socketData.completedTask
       });
 
-      const taskName = socketData.taskContents
-
     }else if(socketData.socketType === 'taskDelete'){
     
       const TaskListIndex = this.state.taskList.findIndex(
@@ -2847,7 +2753,6 @@ receiveKanban(socketData) {
         });
       }
     }else if(socketData.socketType === 'taskDnD'){
-      
       if(socketData.userNo !== sessionStorage.getItem("authUserNo")){
   
       
@@ -3414,9 +3319,7 @@ receiveKanban(socketData) {
   }
 }
 
-
   render() {
-    console.log()
 
     return (
       <>
@@ -3521,7 +3424,6 @@ receiveKanban(socketData) {
             onProjectSetting : this.onProjectSetting.bind(this) // 프로젝트 세팅 열기
           }}
             />
-        
         <div id="projectSetArea" style={{ display: this.state.setOn ? 'none'  :'block'}}>
             <ProjectSetting
               modalState={this.state.modalState}

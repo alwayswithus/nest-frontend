@@ -6,7 +6,7 @@ import update from "react-addons-update";
 
 import "./TaskList.scss";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -36,7 +36,7 @@ class TaskList extends Component {
   editNameInputState() {
     if (this.state.showEditNameInput) {
       const newTaskList = update(this.props.taskList, {
-        taskListName: { $set: this.state.keyword },
+        taskListName: { $set: this.state.keyword.replace(/ /gi, '') },
       });
 
       this.props.taskCallbacks.editTaskListName(newTaskList);
@@ -71,7 +71,7 @@ class TaskList extends Component {
 
   // Task List 이름 수정 (Enter키로 함수 호출)
   onInputKeyPress(event) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && this.state.keyword.replace(/\s| /gi, "").length !== 0) {
       this.editNameInputState();
     }
   }
@@ -187,10 +187,16 @@ class TaskList extends Component {
                   {/* task list 이름 수정 시 버튼 유무*/}
                   {this.state.showEditNameInput ? (
                     <>
-                      <i 
-                        className="fas fa-check Icon edite" 
-                        data-tip="저장(Enter)"
-                        onClick={this.editNameInputState.bind(this)}></i>
+                    {this.state.keyword.length !== 0
+                    ?  <i 
+                    className="fas fa-check Icon edite" 
+                    data-tip="저장(Enter)"
+                    onClick={this.editNameInputState.bind(this)}></i>
+                    : <i 
+                    className="fas fa-check Icon edite" 
+                    data-tip="공백 불가"
+                    style={{color:"#7e7e7e"}}></i>
+                    }
                       <i
                         className="fas fa-times Icon edite"
                         data-tip="취소"
@@ -237,6 +243,7 @@ class TaskList extends Component {
                       onChange={this.onTextAreaChanged.bind(this)}
                       value={this.state.taskContents}
                       autoFocus
+
                     ></textarea>
                   </div>
                   <div className="taskInsertBtn">
@@ -247,13 +254,23 @@ class TaskList extends Component {
                     >
                       취소
                     </button>
-                    <button
+                    {this.state.taskContents === "" 
+                      ?<button
+                        type="button"
+                        className="btn comfirm"
+                        onClick={this.addTask.bind(this)}
+                        disabled
+                      >
+                        추가
+                      </button>
+                      :<button
                       type="button"
                       className="btn comfirm"
                       onClick={this.addTask.bind(this)}
                     >
-                      만들기
-                    </button>
+                      추가
+                    </button>}
+                    
                   </div>
                 </div>
               ) : (
