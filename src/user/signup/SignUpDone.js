@@ -10,12 +10,11 @@ const SignUpDone = () => {
     <>
       <div className="SignUp">
         <div className="SignUpBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
-          <InputLabel id="SignUpText">가입 완료.</InputLabel>
+          <InputLabel id="SignUpText" className="SignUpText">가입 완료 🎉</InputLabel>
 
           <br/>
           <p>
-              회원 가입이 완료되었습니다.
+          회원 가입을 환영합니다!
           </p>
 
           <br/>

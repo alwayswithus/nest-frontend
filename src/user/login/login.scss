@@ -1,14 +1,13 @@
 #root {
   height: 100%;
+  background-image: url("/assets/images/loginBG.png");
+  background-size: cover;
+  background-position: center;
 }
 .App {
   height: 100%;
 }
 .Login {
-  background-image: url("/assets/images/loginBG.png");
-  //   background-color: white;
-  background-size: cover;
-  background-position: center;
 
   height: 100%;
   text-align: center;

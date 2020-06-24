@@ -63,7 +63,6 @@ const Login = (it) => {
     <>
       <div className="Login">
         <div className="loginBox">
-          {/* <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/> */}
           <form onSubmit={login}  action="/nest/auth" method="POST" >
             <InputLabel id="loginText">NEST</InputLabel>
             <p id="note_texts"> {textbox} <br/></p>

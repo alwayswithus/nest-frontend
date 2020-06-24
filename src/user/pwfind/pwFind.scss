@@ -1,5 +1,8 @@
 
 .PwFind {
+	background-image: url("/assets/images/loginBG.png");
+	background-size: cover;
+	background-position: center;
 	height: 100%;
 	text-align: center;
 	&:before {
@@ -16,19 +19,41 @@
 		vertical-align: middle;
 		width: 300px;
 		padding: 20px;
-		border: 2px solid #666;
 		border-radius: 10px;
-		background-color: #e7e7e7;
+		background-color: #ffffff85;
+		box-shadow: 3px 3px 5px grey;
 	
 		#pwFindText {
-			color: #000;
-			font-size: 14pt;
-			font-weight: bold;
+			color: #1eabd7;
+			font-size: 17pt;
+			text-shadow: 2px 2px 1px lightgrey;
 		}
+		.MuiInput-underline:hover:not(.Mui-disabled):before {
+			border-bottom: 2px solid #62c6d3;
+		  }
+		  .MuiInput-underline:before {
+			left: 0;
+			right: 0;
+			bottom: 0;
+			content: "\00a0";
+			position: absolute;
+			transition: border-bottom-color 500ms cubic-bezier(0.4, 0, 0.2, 1) 2ms;
+			border-bottom: 1px solid hsla(187, 53%, 59%, 0.42);
+			pointer-events: none;
+		  }
 	
 		form .pwFindItems {
 			height: 42px;
 			font-size: 12pt;
+			input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        transition: background-color 5000s ease-in-out 0s;
+        -webkit-transition: background-color 9999s ease-out;
+        -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset !important;
+        -webkit-text-fill-color: rgb(0, 0, 0) !important;
+      }
 		}
 
 		#errorText {
@@ -45,6 +70,10 @@
 			width: 200px;
 			font-size: 12pt;
 		}
+		.MuiButton-root:hover {
+			text-decoration: none;
+			background-color: #5fc1ce29;
+		  }
 		
 	}
 
