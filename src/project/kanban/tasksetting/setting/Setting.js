@@ -108,6 +108,10 @@ class Setting extends Component {
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
 
         this.props.taskCallbacks.updateTaskTag(taskItem)
+        this.setState({
+            closeTag: false, 
+            closeModifyTag:false
+        })
         
     }
 
@@ -225,6 +229,15 @@ class Setting extends Component {
             taskListNo,
             this.props.match.params.taskNo)
     }
+
+    modalStateUpdate(){
+        this.setState({
+            closeTag:false,
+            closeModifyTag:false
+        })
+        this.props.taskCallbacks.modalStateUpdate()
+    }
+    
     render() {
 
         if(this.props.task.length == 0){
@@ -295,15 +308,15 @@ class Setting extends Component {
                                     
                                     
                                         {!taskItem.taskStart && !taskItem.taskEnd && 
-                                        <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} > 
+                                        <Button variant="" onClick={this.modalStateUpdate.bind(this)} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} > 
                                         <i className="fas fa-plus fa-1x"></i>
                                         </Button>}
                                         {taskItem.taskStart && !taskItem.taskEnd &&
-                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                         <Button variant="" onClick={this.modalStateUpdate.bind(this)} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
                                         <b className="taskDate">  {taskItem.taskStart} ~</b> 
                                          </Button>}
                                         {taskItem.taskStart && taskItem.taskEnd && 
-                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                         <Button variant="" onClick={this.modalStateUpdate.bind(this)} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
                                         <b className="taskDate"> {taskItem.taskStart} ~ {taskItem.taskEnd}</b> 
                                         </Button>}
                                     </div>

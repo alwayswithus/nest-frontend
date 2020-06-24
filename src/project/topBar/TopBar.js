@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./TopBar.scss";
 import { Link } from 'react-router-dom'
+import moment from 'moment';
 
 class TopBar extends Component {
 
@@ -36,7 +37,8 @@ class TopBar extends Component {
     const timeline = activePath.indexOf("timeline") !== -1
     const file = activePath.indexOf("file") !== -1
 
-
+    const today = new Date();
+    
     return (
       <>
       <div className='wrap'>
@@ -48,8 +50,19 @@ class TopBar extends Component {
           </> :
           this.props.history.map(history => 
             <div className="message">
-              <span><strong>{history.logContents.split("님이")[0]}</strong>님이&nbsp; 
+              <span className="messageContents"><strong>{history.logContents.split("님이")[0]}</strong>님이&nbsp; 
                 {history.logContents.split("님이")[1]}
+              </span>
+              <span>
+              {
+                moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).days() !== 0 
+                ? `${moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).days()} 일 전` 
+                : moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).hours() !== 0 
+                    ? `${moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).hours()} 시간 전` 
+                    : moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).minutes() !== 0 
+                        ? `${moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).minutes()} 분 전` 
+                        : `${moment.duration(moment(today, 'YYYY-MM-DD HH:mm:ss').diff(moment(history.logDate, 'YYYY-MM-DD HH:mm:ss'))).seconds()} 초 전`
+              }
               </span>
           </div>
           )}
@@ -79,37 +92,6 @@ class TopBar extends Component {
                 :null}
               </div>
             </div>
-          {/* </nav> */}
-          {/* <nav className="navbar navbar-default">
-            <div className="container-fluid">
-              <div className="navbar-header col-sm-4 topCenterOut">
-                <div className="topCenterIn">
-                  <ul className="nav navbar-nav">
-                    <li className={kanbanboard === true ? "topli active" : "topli"}>
-                      <Link to={`/nest/dashboard/${this.props.projectNo}/kanbanboard`}>업무</Link>
-                    </li>
-                    <li className={file === true ? "topli active" : "topli"}>
-                      <Link to={{pathname:`/nest/dashboard/${this.props.projectNo}/file`, state:{history : this.props.history}}}>파일</Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="navbar-header col-sm-4 navbar-brand">
-                {this.props.projectTitle}
-              </div>
-              <div className="col-sm-4 topRightSide">
-                {kanbanboard ?
-                <ul className="nav navbar-nav navbar-right" >
-                  <li>
-                      <a href="#" onClick={this.onClickHistory.bind(this)}>활동로그</a>
-                    </li>
-                    <li>
-                    <i className="fas fa-cog fa-2x gearIcon" onClick={this.onProjectSetting.bind(this)}></i> 
-                    </li>
-                </ul> :null}
-              </div>
-            </div>
-          </nav> */}
           </div>
         </div>
       </>

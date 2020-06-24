@@ -59,7 +59,6 @@ class FileComponent extends Component {
     }
 
     render() {
-        console.log(this.props.taskItem.taskState)
         return (
             <>
                 <tr key={this.props.file.fileNo} className="FileList-tr">

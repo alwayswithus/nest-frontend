@@ -1,5 +1,5 @@
 
-import moment from 'moment';
+import moment, {now} from 'moment';
 import SockJsClient from "react-stomp";
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -23,10 +23,12 @@ class ApiHistory {
       senderName: senderName,
       receiver: userArray, // 받는사람 여러명
       historyType: historyType,
-      historyDate: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss"),
+      historyDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       actionName: actionName, // 행위
       projectNo: projectNo,
     };
+    
+    console.log(historyData.historyDate)
 
     clientRef.sendMessage("/app/history/all",JSON.stringify(historyData));
     return fetch(`${API_URL}/api/history/insertHistory`, {
