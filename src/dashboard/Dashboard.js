@@ -120,6 +120,7 @@ export default class Dashboard extends React.Component {
 
       let kanbanSocketData = {
         projectNo: projectNo,
+        member: member,
         members: this.state.projects[projectIndex].members,
         userNo: userNo,
         socketType: "userDelete"
@@ -302,7 +303,15 @@ export default class Dashboard extends React.Component {
           socketType: "stateChange"
         }
 
-        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          projectState: json.data.projectState,
+          members: this.state.projects[projectIndex].members,
+          socketType: "stateChange"
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
       })
   }
 
@@ -427,7 +436,16 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          data: json.data,
+          alerts: [...this.state.alerts, newAlert],
+          socketType: "inviteUser",
+          members: this.state.projects[projectIndex].members
+        }
+
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
 
         this.setState({
           alerts: [...this.state.alerts, newAlert],
@@ -469,13 +487,21 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          userNo: userNo,
+          roleNo: json.data.roleNo,
+          socketType: "roleChange",
+          members: this.state.projects[projectIndex].members
+        }
+
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
       })
   }
 
   // CallBack Project Delete Function
   callbackProjectDelete(projectNo, userNo) {
-
     const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo);
 
     let project = {
@@ -496,8 +522,6 @@ export default class Dashboard extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-
-        
         let socketData = {
           projectNo: projectNo,
           userNo: userNo,
@@ -506,7 +530,16 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
-        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          userNo: userNo,
+          sessionUserNo: window.sessionStorage.getItem("authUserNo"),
+          socketType: "projectDelete",
+          members: this.state.projects[projectIndex].members
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
       })
   }
 
@@ -540,7 +573,15 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
-        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          userNo: sessionStorage.getItem("authUserNo"),
+          socketType: "projectNotTransferDelete",
+          members: this.state.projects[projectIndex].members
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
       })
   }
 
@@ -570,7 +611,14 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          socketType: "foreverDelete",
+          members: this.state.projects[projectIndex].members
+        }
+
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
       })
   }
 
@@ -602,7 +650,15 @@ export default class Dashboard extends React.Component {
           socketType: "stateChange"
         }
 
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          projectState: json.data.projectState,
+          members: this.state.projects[projectIndex].members,
+          socketType: "stateChange"
+        }
+
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
       })
   }
 
@@ -941,6 +997,14 @@ export default class Dashboard extends React.Component {
       socketType: "dateChange"
     }
 
+    let kanbanSocketData = {
+      from: from,
+      to: to,
+      members: this.state.projects[projectIndex].members,
+      projectNo: projectNo,
+      socketType: "dateChange"
+    }
+
     fetch(`${API_URL}/api/projectsetting/calendar`, {
       method: 'post',
       headers: API_HEADERS,
@@ -948,6 +1012,7 @@ export default class Dashboard extends React.Component {
     })
 
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+    this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
   }
 
   receiveDashBoard(socketData) {
@@ -1118,9 +1183,12 @@ export default class Dashboard extends React.Component {
 
     else if (socketData.socketType == "userAdd") {
       if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
+        socketData.newProject["roleNo"] = 3;
+
         let newProject = update(this.state.projects, {
-          $push: [socketData.newProject]
+          $push: [socketData.newProject],
         })
+
         this.setState({
           projects: newProject
         })
@@ -1318,31 +1386,36 @@ export default class Dashboard extends React.Component {
           })
         }  
       }
-      else {
+      else if(sessionStorage.getItem("authUserNo") == socketData.userNo) {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
         
-
         if(projectIndex !== -1) {
           const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo);
           const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.sessionUserNo)
 
-          let deleteProject = update(this.state.projects, {
+          let newProject = update(this.state.projects, {
             [projectIndex]: {
               members: {
                 [memberIndex]: {
                   roleNo: { $set: 1 }
                 },
+              },
+              roleNo: { $set: 1 }
+            }
+          })
+
+          let deleteProject = update(newProject, {
+            [projectIndex]: {
+              members: {
                 $splice: [[sessionMemberIndex, 1]]
               }
             }
           })
 
-          let userProject = {
-            projectNo: socketData.projectNo,
-            userNo: socketData.userNo,
-            roleNo: deleteProject[projectIndex].members[memberIndex].roleNo
-          }
-  
+          let userProject = update(this.state.userProject, {
+            roleNo: { $set: 1 } 
+          })
+
           if(this.state.project.projectNo !== deleteProject[projectIndex].projectNo) {
             this.setState({
               projects: deleteProject
@@ -1362,6 +1435,37 @@ export default class Dashboard extends React.Component {
               userProject: userProject
             })
           }
+        }
+      }
+      else {
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo === socketData.projectNo);
+
+        if(projectIndex !== -1) {
+          const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.userNo);
+          const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.sessionUserNo);
+
+          let newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                [memberIndex]: {
+                  roleNo: { $set: 1 }
+                },
+              }
+            }
+          })
+
+          let deleteProject = update(newProject, {
+            [projectIndex]: {
+              members: {
+                $splice: [[sessionMemberIndex, 1]]
+              }
+            }
+          })
+
+          this.setState({
+            projects: deleteProject,
+            project: deleteProject[projectIndex]
+          })
         }
       }
     }
@@ -1732,7 +1836,9 @@ export default class Dashboard extends React.Component {
                       <div className="panel-footer" style={{backgroundColor: "#FFFFFF"}}>     
                         <div>                
                           <div className="update-task">
-                            <h6 style={{float: "left", fontSize: "10px", marginBottom: "10px", color: "darkgray"}}>{Math.ceil((project.completedTask / project.taskCount) * 100)}%</h6>
+                            <h6 style={{float: "left", fontSize: "10px", marginBottom: "10px", color: "darkgray"}}>
+                              {project.completedTask == 0 ? project.taskCount == 0 ? "0" : Math.ceil((project.completedTask / project.taskCount) * 100) : Math.ceil((project.completedTask / project.taskCount) * 100)}%
+                            </h6>
                             <h6 style={{float: "right", fontSize: "10px", marginRight: "8px", color: "darkgray"}}>{project.completedTask} / {project.taskCount} 업무</h6>
                           </div>
                         </div>
