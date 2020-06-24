@@ -5,7 +5,9 @@ class Tag extends Component {
   render() {
     const tagColor = this.props.tag.tagColor;
     const tagStyle = {
-      backgroundColor:`${tagColor}`
+      backgroundColor:`${tagColor}`,
+      display:'inline-block',
+      padding:'2%'
     };
 
     return (
