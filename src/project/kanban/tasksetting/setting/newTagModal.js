@@ -18,13 +18,14 @@ class NewTagModal extends Component {
         }
     }
 
-    handleChange = (color) => {
+    handleChange (color) {
         this.setState({
             tagColor: color.hex
         })
     }
 
     render() {
+
         return (
             <Fragment>
             {this.props.closeTag ? 
@@ -50,7 +51,7 @@ class NewTagModal extends Component {
                                 <GithubPicker 
                                     width='214px'
                                     color={this.state.tagColor}
-                                    onChange={ this.handleChange }
+                                    onChange={ this.handleChange.bind(this) }
                                 />
                             </div>
                         </div>

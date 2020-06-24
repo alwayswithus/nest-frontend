@@ -6,15 +6,28 @@
     background-position: center;
 	background-attachment: fixed;
 	
-	.test{
+	.caledar-task-setting{
 		position: absolute;
-		width: 100px;
-		height: 100px;
+		background-color: #000000c7;
 		z-index: 7;
-		h6{
-			margin-top: 0px;
-    		margin-bottom: 0px;
+		padding: 0.5%;
+		border-radius: 18px;
+		.fa-bullhorn{
+			color: white;
+			transform: scale(1.2);
 		}
+		.task-setting-message{
+			display: inline-block;
+			.task-title{
+				max-width:120px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				display: inline-block;
+				vertical-align: bottom;
+			}
+		}
+		
 	}
 
     .calendar-contents {
