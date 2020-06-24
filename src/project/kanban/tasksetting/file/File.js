@@ -91,6 +91,7 @@ class File extends Component {
         formData.append('file', files[0])
         formData.append('taskNo', this.props.match.params.taskNo);
         formData.append('userNo', sessionStorage.getItem("authUserNo"));
+        
 
         fetch(`${API_URL}/api/upload`, {
             method: 'post',
@@ -154,7 +155,6 @@ class File extends Component {
         ))
         const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
-       console.log(taskItem.taskState)
         return (
             <div className="SettingFile">
                 {taskItem.taskState == "del" ? 

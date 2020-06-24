@@ -162,5 +162,23 @@
     background-color: #f0f0f0;
     margin-bottom: 1%;
     border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    
+    .messageContents{
+      width: 440px;
+      max-height: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: inline-block;
+      white-space: nowrap;
+      transition: max-height 0.5s;
+    &:hover{
+      max-height: 60px;
+      white-space: normal;
+    }
+    }
+
+    
   }
 }

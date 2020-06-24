@@ -19,63 +19,49 @@ class Navigation extends Component {
       textAlign: 'center', 
       borderBottom: '3px solid #27B6BA'
     }
+  
+    console.log(this.props.match.path === '/nest/calendar/:projectNo/task/:taskNo')
     return (
       <div className="Navigation">
-        {this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/file' ?
-          (<ul className="nav nav-tabs">
+        {this.props.match.path.indexOf("calendar") == -1 ?
+        // 칸반에서의 이동
+          <ul className="nav nav-tabs">
             <li className="nav-item">
               <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}`}>
-                <p style={Styled} >속성 </p>
+                <p style={this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/' ? StyledBottom : Styled} >속성 </p>
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to ={`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/comment`}>
-                <p style={Styled} >코멘트</p>
+                <p style={this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/comment' ? StyledBottom : Styled} >코멘트</p>
               </Link>
             </li>
             <li className="nav-item">
             <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
-              <p style={StyledBottom} >파일 & 링크</p>
+              <p style={this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/file' ? StyledBottom : Styled} >파일 & 링크</p>
             </Link>
             </li>
-          </ul>) :
-
-          (<>{this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/comment' ?
-            (<ul className="nav nav-tabs">
-              <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}`}>
-                <p id='setting' className="nav-link" style={Styled} >속성 </p>
-              </Link>
-              </li>
-              <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/comment`}>
-                <p id='comment' className="nav-link" style={StyledBottom} >코멘트</p>
-              </Link>
-              </li>
-              <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
-                <p id='file' className="nav-link" style={Styled} >파일 & 링크</p>
-              </Link>
-              </li>
-            </ul>) :
-
-            (<ul className="nav nav-tabs">
-              <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}`}>
-                <p id='setting' className="nav-link" style={StyledBottom} >속성 </p>
-              </Link>
-              </li>
-              <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/comment`}>
-                <p id='comment' className="nav-link" style={Styled} >코멘트</p>
-              </Link>
-              </li>
-              <li className="nav-item">
-              <Link to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
-                <p id='file' className="nav-link" style={Styled} >파일 & 링크</p>
-              </Link>
-              </li> </ul>)}</>)
+          </ul> :
+          // 캘린더에서의 이동
+        <ul className="nav nav-tabs">
+          <li className="nav-item">
+            <Link className="nav-link" to = {`/nest/calendar/${this.props.projectNo}/task/${this.props.params.taskNo}`}>
+              <p style={this.props.match.path === '/nest/calendar/:projectNo/task/:taskNo' ? StyledBottom : Styled} >속성 </p>
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to ={`/nest/calendar/${this.props.projectNo}/task/${this.props.params.taskNo}/comment`}>
+              <p style={this.props.match.path === '/nest/calendar/:projectNo/task/:taskNo/comment' ? StyledBottom : Styled} >코멘트</p>
+            </Link>
+          </li>
+          <li className="nav-item">
+          <Link className="nav-link" to = {`/nest/calendar/${this.props.projectNo}/task/${this.props.params.taskNo}/file`}>
+            <p style={this.props.match.path === '/nest/calendar/:projectNo/task/:taskNo/file' ? StyledBottom : Styled} >파일 & 링크</p>
+          </Link>
+          </li>
+        </ul>
         }
+        
       </div>
     );
   }

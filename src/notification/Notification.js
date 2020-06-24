@@ -40,7 +40,7 @@ class Notification extends React.Component {
             notices :newNotices
         })
 
-        fetch(`${API_URL}/api/notification/update/${noticeNo}`, {
+        fetch(`${API_URL}/api/notification/update/${noticeNo}/${sessionStorage.getItem("authUserNo")}`, {
             method:'post',
             headers:API_HEADERS,
           })
@@ -51,7 +51,7 @@ class Notification extends React.Component {
         this.state.notices.map(notice => 
             notice.messageCheck === 'N' ? (count +=1) : null
         )
-        console.log(this.state.notices)
+        //console.log(this.state.notices)
         return (
             <div className="Notification" >
                 {/* 사이드바 */}

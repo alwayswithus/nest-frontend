@@ -1,5 +1,8 @@
 
 .Errors {
+	background-image: url("/assets/images/loginBG.png");
+	background-size: cover;
+	background-position: center;
 	height: 100%;
 	text-align: center;
 	&:before {
@@ -12,23 +15,31 @@
 	}
 }
 .ErrorsBox {
-	display: inline-block;
-	vertical-align: middle;
-	width: 300px;
-	padding: 20px;
-	border: 2px solid #666;
-	border-radius: 10px;
-	background-color: #e7e7e7;
+    display: inline-block;
+    vertical-align: middle;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff85;
+    box-shadow: 3px 3px 5px grey;
 
 	#ErrorsText {
-		color: #000;
-		font-size: 17pt;
 		font-weight: bold;
+		color: #1eabd7;
+		font-size: 17pt;
+		text-shadow: 2px 2px 1px lightgrey;
 	}
 
 	#MainBtn {
 		width: 200px;
 		font-size: 12pt;
 	}
+	.MuiButton-root:hover {
+		text-decoration: none;
+		background-color: #5fc1ce29;
+	  }
+	a {
+		text-decoration: none;
+	  }
 
 }

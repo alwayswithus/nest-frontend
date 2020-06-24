@@ -101,13 +101,25 @@ class Setting extends Component {
     onClickTag(taskListNo){
 
         this.props.taskCallbacks.tagModalStateUpdate();
+        let taskList = [];
+        if(this.props.match.url.indexOf("calendar") !== -1){
+            
+            const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
+            taskList = this.props.task[projectIndex].allTaskList
 
-        const taskList = this.props.task;
+        } else{
+            taskList = this.props.task;
+        }
+
         const taskListIndex = taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
         const taskIndex = taskList[taskListIndex].tasks.findIndex(task => task.taskNo === this.props.match.params.taskNo);
         const taskItem = taskList[taskListIndex].tasks[taskIndex]
 
         this.props.taskCallbacks.updateTaskTag(taskItem)
+        this.setState({
+            closeTag: false, 
+            closeModifyTag:false
+        })
         
     }
 
@@ -225,21 +237,32 @@ class Setting extends Component {
             taskListNo,
             this.props.match.params.taskNo)
     }
+
+    modalStateUpdate(){
+        this.setState({
+            closeTag:false,
+            closeModifyTag:false
+        })
+        this.props.taskCallbacks.modalStateUpdate()
+    }
+    
     render() {
 
-        if(this.props.task.length == 0){
+        if(!this.props.task || this.props.task.length == 0){
             return <></>;
         }
         
         let taskList=[];
-        
+        let authUserRole = null;
         if(this.props.match.url.indexOf("calendar") !== -1){
             
             const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
             taskList = this.props.task[projectIndex].allTaskList
+            authUserRole = this.props.task[projectIndex].authUserRole
 
         } else{
             taskList = this.props.task;
+            authUserRole = this.props.authUserRole
         }
 
             let Indexs = []
@@ -295,15 +318,15 @@ class Setting extends Component {
                                     
                                     
                                         {!taskItem.taskStart && !taskItem.taskEnd && 
-                                        <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} > 
+                                        <Button variant="" onClick={this.modalStateUpdate.bind(this)} disabled={taskItem.taskState == "del" || authUserRole !== 1 ? true: false} > 
                                         <i className="fas fa-plus fa-1x"></i>
                                         </Button>}
                                         {taskItem.taskStart && !taskItem.taskEnd &&
-                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                         <Button variant="" onClick={this.modalStateUpdate.bind(this)} disabled={taskItem.taskState == "del" || authUserRole !== 1 ? true: false} className="dateButtom"> 
                                         <b className="taskDate">  {taskItem.taskStart} ~</b> 
                                          </Button>}
                                         {taskItem.taskStart && taskItem.taskEnd && 
-                                         <Button variant="" onClick={this.props.taskCallbacks.modalStateUpdate} disabled={taskItem.taskState == "del" || this.props.authUserRole !== 1 ? true: false} className="dateButtom"> 
+                                         <Button variant="" onClick={this.modalStateUpdate.bind(this)} disabled={taskItem.taskState == "del" || authUserRole !== 1 ? true: false} className="dateButtom"> 
                                         <b className="taskDate"> {taskItem.taskStart} ~ {taskItem.taskEnd}</b> 
                                         </Button>}
                                     </div>
@@ -351,7 +374,7 @@ class Setting extends Component {
                                             <span>{member.userName}</span>
 
                                             {this.props.authUserRole === 3 || taskItem.taskState == "del" ? null : 
-                                                <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, member.userName,taskListNo)}>
+                                                <span className="delete-member" onClick={this.onDelteMember.bind(this, member.userNo, taskListNo)}>
                                                     <i className="fas fa-times"></i>
                                                 </span>
                                             
@@ -398,7 +421,7 @@ class Setting extends Component {
                                             <span className="label label-default tagLabel" style={{backgroundColor:`${tag.tagColor}`, fontSize:'1.25rem', cursor:'default'}}>
                                                 {tag.tagName}
 
-                                                {taskItem.taskState == "del" || this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo)}>&times;</span>}
+                                                {taskItem.taskState == "del" || this.props.authUserRole === 3? null :<span className="tagDelete" onClick={this.onClickTagDelete.bind(this, tag.tagNo, taskListNo)}>&times;</span>}
 
                                             </span>
                                         </div>

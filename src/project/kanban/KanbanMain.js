@@ -772,7 +772,6 @@ class KanbanMain extends Component {
           }
         })
 
-        console.log(this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length)
         this.setState({
           taskCount: this.state.taskCount - this.state.taskList[TaskListIndex].tasks.length,
           completedTask: this.state.completedTask - doneCount
@@ -865,7 +864,7 @@ class KanbanMain extends Component {
               [taskIndex]: {
                 checkList: {
                   [checklistIndex]: {
-                    socketType: { $set: "checkListAdd" },
+                    socketType: { $set: "checklistInsert" },
                     taskListIndex: { $set: taskListIndex },
                     taskIndex: { $set: taskIndex },
                     authUserNo: { $set: sessionStorage.getItem("authUserNo") },
@@ -1227,10 +1226,19 @@ class KanbanMain extends Component {
         });
       })
 
+      // 댓글 유저 찾는 부분
+      const cu = this.state.taskList[taskListIndex].tasks[taskIndex].commentList[commentIndex].userNo
+      let user = null
+      let tmp = null
+      this.state.taskList[taskListIndex].tasks[taskIndex].memberList.map(member => {
+        member.userNo === cu ? user = member : tmp = null
+      })
+
+
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
-      this.state.taskList[taskListIndex].tasks[taskIndex].memberList,
+      [user],
       "commentLike",
       taskNo,
       this.props.match.params.projectNo)
@@ -1385,7 +1393,8 @@ class KanbanMain extends Component {
                       userName: { $set: sessionStorage.getItem("authUserName") },
                       userPhoto: { $set: sessionStorage.getItem("authUserPhoto") },
                       filePath: { $set: file.filePath },
-                      fileState: { $set: 'T' },
+                      fileState: { $set: 'T' }, 
+                      commentState: { $set: 'T' },
                       socketType: { $set: "comment" },
                       authUserNo: { $set: sessionStorage.getItem("authUserNo") },
                       taskListIndex: { $set: taskListIndex },
@@ -1405,6 +1414,7 @@ class KanbanMain extends Component {
         this.setState({
           taskList: newTaskList
         })
+
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
         this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
       })
@@ -1432,13 +1442,17 @@ class KanbanMain extends Component {
               [taskIndex]: {
                 commentList: {
                   [commentIndex]: {
-                    commentState: { $set: 'F' }
+                    commentState: { $set: 'F' },
+                    socketType: { $set: 'commentDelete' },
+                    members: { $set: this.state.projectMembers },
+                    projectNo: { $set: this.props.match.params.projectNo }
                   }
                 },
               },
             },
           },
         });
+        
         if (fileIndex !== -1) {
           newTaskList = update(newTaskList, {
             [taskListIndex]: {
@@ -1446,14 +1460,13 @@ class KanbanMain extends Component {
                 [taskIndex]: {
                   fileList: {
                     [fileIndex]: {
-                      fileState: { $set: 'F' }
+                      fileState: { $set: 'F' },
                     }
                   },
                   commentList: {
                     [commentIndex]: {
                       fileState: { $set: 'F' },
-                      socketType: { $set: 'fileDelete' },
-                      fileNo: { $set: fileNo },
+                      socketType: { $set: 'commentDelete' },
                       members: { $set: this.state.projectMembers },
                       projectNo: { $set: this.props.match.params.projectNo }
                     }
@@ -1462,9 +1475,19 @@ class KanbanMain extends Component {
               },
             },
           });
-
         }
-
+        const socketData = {
+          fileNo:fileNo, 
+          taskListNo:taskListNo, 
+          taskNo:taskNo, 
+          commentNo:commentNo,
+          members: this.state.projectMembers,
+          projectNo: this.props.match.params.projectNo ,
+          socketType: 'commentDelete' ,
+          authUserNo:sessionStorage.getItem("authUserNo")
+        }
+        console.log(socketData)
+        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
         this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
         this.setState({
           taskList: newTaskList
@@ -1492,6 +1515,7 @@ class KanbanMain extends Component {
         },
       },
     });
+
     this.setState({
       taskList: newTaskList,
     });
@@ -1503,6 +1527,29 @@ class KanbanMain extends Component {
       taskNo,
       file.originName
     );
+
+    const socketData = {
+      taskListIndex:taskListIndex,
+      taskIndex:taskIndex,
+      fileIndex:fileIndex,
+      formData:formData,
+      members: this.state.projectMembers ,
+      projectNo: this.props.match.params.projectNo ,
+      authUserNo: sessionStorage.getItem("authUserNo") ,
+      socketType:"fileUpload"
+    }
+
+    this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+
+    // const socketData = {
+    //   formData:formData, 
+    //   taskListNo:taskListNo, 
+    //   taskNo:taskNo,
+    //   members: { $set: this.state.projectMembers },
+    //   projectNo: { $set: this.props.match.params.projectNo },
+
+    // }
+    // this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
   }
 
   // 태그가 추가 될 때마다 taskTagNo를 set 해줌.
@@ -1729,8 +1776,11 @@ class KanbanMain extends Component {
   // 모달 상태 변경
   modalStateUpdate() {
     this.setState({
-      modalState: !this.state.modalState
+      modalState: !this.state.modalState,
+      tagModal: false,
+      taskMemberState:false
     })
+    
   }
 
   taskMemberState() {
@@ -1775,13 +1825,18 @@ class KanbanMain extends Component {
           [taskListIndex]: {
             tasks: {
               [taskIndex]: {
-                taskPoint: {
-                  $set: json.data.taskPoint
-                }
+                taskPoint: {$set: json.data.taskPoint},
+                socketType:{$set:"taskPointChange"},
+                authUserNo: {$set:sessionStorage.getItem("authUserNo")},
+                projectNo: {$set:this.props.match.params.projectNo},
+                members: {$set:this.state.projectMembers},
+                taskListIndex:{$set:taskListIndex},
+                taskIndex:{$set:taskIndex}
               }
             }
           }
         })
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex]))
         this.setState({
           taskList: newTaskList
         })
@@ -1812,9 +1867,13 @@ class KanbanMain extends Component {
       [taskListIndex]: {
         tasks: {
           [taskIndex]: {
-            taskContents: {
-              $set: taskContents
-            }
+            taskContents: {$set: taskContents},
+            socketType:{$set:"taskContentsUpdate"},
+            authUserNo: {$set:sessionStorage.getItem("authUserNo")},
+            projectNo: {$set:this.props.match.params.projectNo},
+            members: {$set:this.state.projectMembers},
+            taskListIndex:{$set:taskListIndex},
+            taskIndex:{$set:taskIndex}
           }
         }
       }
@@ -1822,6 +1881,8 @@ class KanbanMain extends Component {
     this.setState({
       taskList: newTaskList
     })
+
+    this.clientRef.sendMessage("/app/all",JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex]))
 
     fetch(`${API_URL}/api/tasksetting/task/${taskNo}`, {
       method: 'post',
@@ -2540,8 +2601,7 @@ class KanbanMain extends Component {
         this.props.history.push("/nest/dashboard")
       }
       else if(sessionStorage.getItem("authUserNo") == socketData.userNo) {
-        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
-        
+        const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);    
         if(projectIndex !== -1) {
           const memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo);
           const sessionMemberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.sessionUserNo)
@@ -3657,31 +3717,101 @@ class KanbanMain extends Component {
               },
             },
           },
-        });
+        },
+      });
+  
+      this.setState({
+        taskList: newTaskList,
+      });
+  
+      }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
+        if(socketData.socketType === 'comment'){
+          
+            let newData = update(this.state.taskList, {
+              [socketData.taskListIndex] : {
+                tasks :{
+                  [socketData.taskIndex] : {
+                    commentList : 
+                      {$push: [socketData]} ,
+                    fileList : 
+                    {$push: [socketData]} 
+                  }
+                }
+              }
+            })
+          
+            this.setState({
+              taskList: newData,
+              history:this.state.history
+            })
+        } else if(socketData.socketType === 'commentDelete'){
+            
+            const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === socketData.taskListNo+"");
+            const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === socketData.taskNo+"");
+            const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === socketData.commentNo);
+            const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === socketData.fileNo);
 
-        this.setState({
-          taskList: newTaskList,
-        });
-
-      } else if (socketData.authUserNo !== sessionStorage.getItem("authUserNo")) {
-        if (socketData.socketType === 'comment') {
-          let newData = update(this.state.taskList, {
+            // console.log(this.state.tasklist[taskListIndex].tasks[taskIndex])
+          if (socketData.fileNo === null) {
+            socketData.fileNo = 0;
+          }
+              let newTaskList = update(this.state.taskList, {
+                [taskListIndex]: {
+                  tasks: {
+                    [taskIndex]: {
+                      commentList: {
+                        [commentIndex]: {
+                          commentState: { $set: 'F' }
+                        }
+                      },
+                    },
+                  },
+                },
+              });
+              
+              if (fileIndex !== -1) {
+                newTaskList = update(newTaskList, {
+                  [taskListIndex]: {
+                    tasks: {
+                      [taskIndex]: {
+                        fileList: {
+                          [fileIndex]: {
+                            fileState: { $set: 'F' }
+                          }
+                        },
+                        commentList: {
+                          [commentIndex]: {
+                            fileState: { $set: 'F' }
+                          }
+                        }
+                      },
+                    },
+                  },
+                });
+      
+              }
+              this.setState({
+                taskList: newTaskList
+              })
+          
+        }else if (socketData.socketType === 'fileUpload'){
+          let newTaskList = update(this.state.taskList, {
             [socketData.taskListIndex]: {
               tasks: {
                 [socketData.taskIndex]: {
-                  commentList:
-                    { $push: [socketData] }
-                }
-              }
-            }
-          })
-
+                  fileList: {
+                    $push: [socketData.formData],
+                  },
+                },
+              },
+            },
+          });
+      
           this.setState({
-            taskList: newData,
-            history: this.state.history
-          })
-        } else if (socketData.socketType === 'dateUpdate') {
-          if (socketData.from === 'Invalid date') {
+            taskList: newTaskList,
+          });
+        }else if(socketData.socketType === 'dateUpdate'){
+          if(socketData.from === 'Invalid date'){
             socketData.from = undefined;
           }
           if (socketData.to === 'Invalid date') {
@@ -3756,15 +3886,15 @@ class KanbanMain extends Component {
                     },
                   },
                 },
-              });
-              this.onSetStateTaskTagNo(newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex])
-              this.setState({
-                taskList: newTaskList,
-              });
-            })
-          // } 
-        } else if (socketData.socketType === "checkListAdd") {
-
+              },
+            });
+          this.onSetStateTaskTagNo(newTaskList[socketData.taskListIndex].tasks[socketData.taskIndex])
+          this.setState({
+            taskList: newTaskList,
+          });
+        })
+       // } 
+        } else if(socketData.socketType === "checklistInsert"){
           let newTaskList = update(this.state.taskList, {
             [socketData.taskListIndex]: {
               tasks: {
@@ -3776,7 +3906,6 @@ class KanbanMain extends Component {
               },
             },
           });
-
           this.setState({
             taskList: newTaskList
           })
@@ -3831,18 +3960,45 @@ class KanbanMain extends Component {
             }
           })
           this.setState({
+              taskList:newTaskList
+            })
+        } else if(socketData.socketType === "taskContentsUpdate"){
+          let newTaskList = update(this.state.taskList, {
+            [socketData.taskListIndex]: {
+              tasks: {
+                [socketData.taskIndex]: {
+                  taskContents: {$set: socketData.taskContents},
+                }
+              }
+            }
+          })
+          this.setState({
             taskList: newTaskList
           })
-        } else if (socketData.historyType === "taskContentsUpdate") {
-          let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 으로 업무이름을 수정하셨습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
-          }
-
+        } else if(socketData.socketType === "taskPointChange"){
+          let newTaskList = update(this.state.taskList, {
+            [socketData.taskListIndex]: {
+              tasks: {
+                [socketData.taskIndex]: {
+                  taskPoint: {$set: socketData.taskPoint},
+                }
+              }
+            }
+          })
           this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
+            taskList: newTaskList
+          })
+        } else if(socketData.historyType === "taskContentsUpdate"){
+            let newHistoryData = {
+              logContents:socketData.senderName+" 님이"+socketData.actionName+" 으로 업무이름을 수정하셨습니다.",
+              logDate:socketData.historyDate,
+              projectNo:socketData.projectNo
+            }
+  
+            this.setState({
+              history : update(this.state.history,{
+                $push:[newHistoryData]
+              })
             })
           })
         } else if (socketData.historyType === "taskListInsert") {
@@ -3917,19 +4073,7 @@ class KanbanMain extends Component {
               $push: [newHistoryData]
             })
           })
-        } else if (socketData.historyType === "taskContentsUpdate") {
-          let newHistoryData = {
-            logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무에 코멘트를 추가하였습니다.",
-            logDate: socketData.historyDate,
-            projectNo: socketData.projectNo
-          }
-
-          this.setState({
-            history: update(this.state.history, {
-              $push: [newHistoryData]
-            })
-          })
-        } else if (socketData.historyType === "taskDragNdrop") {
+        } else if(socketData.historyType === "taskDragNdrop"){
           let newHistoryData = {
             logContents: socketData.senderName + " 님이" + socketData.actionName + " 업무의 위치를 변경하였습니다.",
             logDate: socketData.historyDate,

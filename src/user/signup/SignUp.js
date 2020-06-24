@@ -50,8 +50,6 @@ const SignUp = () => {
     <>
       <div className="SignUp">
         <div className="SignUpBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
-
           <form onSubmit={SignUp} action="/nest/sendmail?mode=signup" method="POST" >
             <InputLabel id="signUpText">회원가입</InputLabel>
             <br/>

@@ -13,7 +13,8 @@ import TaskList from './TaskList';
 import SockJsClient from "react-stomp";
 import update from 'react-addons-update';
 import Setting from '../project/kanban/tasksetting/setting/Setting'
-import { Route } from "react-router-dom";
+import Comment from '../project/kanban/tasksetting/comment/Comment'
+import { Route, Switch } from "react-router-dom";
 
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
@@ -25,6 +26,7 @@ const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
+
 
 class myCalendar extends Component {
   constructor() {
@@ -78,7 +80,7 @@ class myCalendar extends Component {
 
       taskList: [], // 프로젝트 업무
       authUserRole: "", //회원의 권한
-      projectMembers: "", //프로젝트 멤버 
+      projectMembers: [], //프로젝트 멤버 
 
       taskTagNo: [], //task tag의 no만 모아둔 배열
       modalState: false,
@@ -357,6 +359,7 @@ class myCalendar extends Component {
     let eventShowStart = moment(event.start).format('M월 DD일 HH:mm');
 
     this.setState({
+      // link:'',
       eventShowStart: eventShowStart,
       newTaskContents: "",
       pathChange: "",
@@ -872,9 +875,12 @@ class myCalendar extends Component {
   onSelectEvent(event) {
     // CustomEvent.customEventService(event)
     let link = (
-      <div className="test" style={{top:`${this.y}px`, left:`${this.x}px`}}>
-        <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`}>
+      <div className="caledar-task-setting" style={{top:`${this.y}px`, left:`${this.x}px`}}>
+        <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`} style={{textDecoration: 'none', color:'white'}}>
           <i className="fas fa-bullhorn"></i>
+          <div className="task-setting-message">
+            <div className="task-title">&nbsp;&nbsp;{event.title}</div> 설정 열기
+          </div>
         </Link>
       </div>
     )
@@ -900,12 +906,15 @@ class myCalendar extends Component {
   }
   //checkList 추가하기
   callbackAddCheckList(contents, taskNo, taskListNo) {
-    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
 
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
-
-    const taskName = this.state.taskList[taskListIndex].tasks[taskIndex].taskContents
-
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    
     let newCheckList = {
       checklistNo: null,
       checklistContents: contents,
@@ -921,29 +930,37 @@ class myCalendar extends Component {
       .then(response => response.json())
       .then(json => {
         let newTaskList = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                checkList: {
-                  $push: [json.data],
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    checkList: {
+                      $push: [json.data],
+                    },
+                  },
                 },
               },
             },
           },
         });
-        const checklistIndex = newTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == json.data.checklistNo)
+        const checklistIndex = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo == json.data.checklistNo)
         newTaskList = update(newTaskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                checkList: {
-                  [checklistIndex]: {
-                    socketType: { $set: "checkListAdd" },
-                    taskListIndex: { $set: taskListIndex },
-                    taskIndex: { $set: taskIndex },
-                    authUserNo: { $set: sessionStorage.getItem("authUserNo") },
-                    projectNo: { $set: this.props.match.params.projectNo },
-                    members: { $set: this.state.projectMembers }
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    checkList: {
+                      [checklistIndex]: {
+                        socketType: { $set: "checklistInsert" },
+                        taskListIndex: { $set: taskListIndex },
+                        taskIndex: { $set: taskIndex },
+                        authUserNo: { $set: sessionStorage.getItem("authUserNo") },
+                        projectNo: { $set: projectNo },
+                        members: { $set: this.state.projectMembers[projectIndex].members }
+                      }
+                    }
                   }
                 },
               },
@@ -953,18 +970,20 @@ class myCalendar extends Component {
         this.setState({
           taskList: newTaskList
         })
-
+        this.clientRef.sendMessage("/app/all",JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList[checklistIndex]))
       })
   }
 
   //task에 tag 추가하기
   callbackAddTag(tagNo, tagName, taskListNo, taskNo, tagColor) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
 
     let newTag = {
       tagNo: tagNo,
@@ -981,39 +1000,48 @@ class myCalendar extends Component {
       .then((response) => response.json())
       .then((json) => {
         let newTagData = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                tagList: {
-                  $push: [json.data],
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    tagList: {
+                      $push: [json.data],
+                    },
+                  },
                 },
               },
             },
           },
         });
 
-        const tagIndex = newTagData[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
+        const tagIndex = newTagData[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
         newTagData = update(newTagData, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                tagList: {
-                  [tagIndex]: {
-                    tagName: { $set: tagName },
-                    tagColor: { $set: tagColor },
-                    socketType: { $set: "taskTagAdd" },
-                    taskListIndex: { $set: taskListIndex },
-                    taskIndex: { $set: taskIndex },
-                    authUserNo: { $set: sessionStorage.getItem("authUserNo") },
-                    projectNo: { $set: this.props.match.params.projectNo },
-                    members: { $set: this.state.projectMembers }
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    tagList: {
+                      [tagIndex]: {
+                        tagName: { $set: tagName },
+                        tagColor: { $set: tagColor },
+                        socketType: { $set: "taskTagAdd" },
+                        taskListIndex: { $set: taskListIndex },
+                        taskIndex: { $set: taskIndex },
+                        authUserNo: { $set: sessionStorage.getItem("authUserNo") },
+                        projectNo: { $set: projectNo },
+                        members: { $set: this.state.projectMembers[projectMemberIndex].members }
+                      }
+                    },
                   }
-                },
+                }
               },
             },
           },
         })
-        this.onSetStateTaskTagNo(newTagData[taskListIndex].tasks[taskIndex])
+        this.onSetStateTaskTagNo(newTagData[projectIndex].allTaskList[taskListIndex].tasks[taskIndex])
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTagData[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].tagList[tagIndex]));
         this.setState({
           taskList: newTagData
         })
@@ -1024,15 +1052,16 @@ class myCalendar extends Component {
 
   //task에 tag 삭제하기
   callbackDeleteTag(tagNo, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
-    const tagIndex = this.state.taskList[taskListIndex].tasks[
-      taskIndex
-    ].tagList.findIndex((tag) => tag.tagNo === tagNo);
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    
+    const tagIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].tagList.findIndex(tag => tag.tagNo == tagNo);
 
     let data = {
       taskNo: taskNo,
@@ -1042,8 +1071,8 @@ class myCalendar extends Component {
       tagIndex: tagIndex,
       socketType: "taskTagDelete",
       userNo: sessionStorage.getItem("authUserNo"),
-      projectNo: this.props.match.params.projectNo,
-      members: this.state.projectMembers
+      projectNo: projectNo,
+      members: this.state.projectMembers[projectMemberIndex].members
     }
 
     fetch(`${API_URL}/api/tag/delete/${taskNo}/${tagNo}`, {
@@ -1052,17 +1081,22 @@ class myCalendar extends Component {
       .then(response => response.json())
       .then(json => {
         let newTaskList = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                tagList: {
-                  $splice: [[tagIndex, 1]],
-                },
-              },
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    tagList: {
+                      $splice: [[tagIndex, 1]],
+                    },
+                  },
+                }
+              }
             },
           },
         });
-        this.onSetStateTaskTagNo(newTaskList[taskListIndex].tasks[taskIndex])
+        this.onSetStateTaskTagNo(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex])
+        this.clientRef.sendMessage("/app/all", JSON.stringify(data));
         this.setState({
           taskList: newTaskList,
         });
@@ -1187,10 +1221,17 @@ class myCalendar extends Component {
   //checklist delete
   callbackDeleteCheckList(checklistNo, taskListNo, taskNo) {
 
-    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
-    const checkListIndex = this.state.taskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checklist => checklist.checklistNo === checklistNo)
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
 
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    const checkListIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo);
+   
     let data = {
       checklistNo: checklistNo,
       taskListIndex: taskListIndex,
@@ -1198,8 +1239,8 @@ class myCalendar extends Component {
       checkListIndex: checkListIndex,
       socketType: "checkListDelete",
       userNo: sessionStorage.getItem("authUserNo"),
-      projectNo: this.props.match.params.projectNo,
-      members: this.state.projectMembers
+      projectNo: projectNo,
+      members: this.state.projectMembers[projectMemberIndex].members
     }
 
     fetch(`${API_URL}/api/tasksetting/checklist/${checklistNo}`, {
@@ -1208,17 +1249,21 @@ class myCalendar extends Component {
       .then(response => response.json())
       .then(json => {
         let newTaskList = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                checkList: {
-                  $splice: [[checkListIndex, 1]]
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    checkList: {
+                      $splice: [[checkListIndex, 1]]
+                    }
+                  }
                 }
               }
             }
           }
         })
-
+        this.clientRef.sendMessage("/app/all", JSON.stringify(data));
         this.setState({
           taskList: newTaskList
         })
@@ -1239,16 +1284,21 @@ class myCalendar extends Component {
 
   // 업무 날짜 수정
   callbackTaskDateUpdate(from, to, taskListIndex, taskIndex) {
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
 
-    const taskName = this.state.taskList[taskListIndex].tasks[taskIndex].taskContents
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+
+    const taskName = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskContents;
     const data = {
       from: from,
       to: to,
       taskListIndex: taskListIndex,
       taskIndex: taskIndex,
       socketType: "dateUpdate",
-      projectNo: this.props.match.params.projectNo,
-      members: this.state.projectMembers
+      projectNo: projectNo,
+      members: this.state.projectMembers[projectMemberIndex].members
     }
 
     if (from === 'Invalid date') {
@@ -1259,24 +1309,28 @@ class myCalendar extends Component {
     }
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            taskStart: {
-              $set: moment(from).format("YYYY-MM-DD HH:mm"),
-            },
-            taskEnd: {
-              $set: moment(to).format("YYYY-MM-DD HH:mm"),
+      [projectIndex]:{
+        allTaskList:{
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                taskStart: {
+                  $set: moment(from).format("YYYY-MM-DD HH:mm"),
+                },
+                taskEnd: {
+                  $set: moment(to).format("YYYY-MM-DD HH:mm"),
+                },
+              },
             },
           },
-        },
-      },
+        }
+      }
     });
     this.setState({
       taskList: newTaskList
     })
-
-    const task = newTaskList[taskListIndex].tasks[taskIndex]
+    this.clientRef.sendMessage("/app/all", JSON.stringify(data))
+    const task = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex]
 
     fetch(`${API_URL}/api/tasksetting/calendar/update`, {
       method: 'post',
@@ -1301,13 +1355,20 @@ class myCalendar extends Component {
 
   //업무 멤버 추가 & 삭제
   addDeleteMember(userNo, projectMembers, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
-    const taskItem = this.state.taskList[taskListIndex].tasks[taskIndex]
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMembersIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    const taskItem = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex]
+
     const memberIndex = taskItem.memberList.findIndex(member => member.userNo === userNo)
 
     const projectMemberIndex = projectMembers.findIndex(projectMember => projectMember.userNo === userNo);
-    const taskName = taskItem.taskContents
 
     let member = {
       userNo: userNo,
@@ -1330,8 +1391,8 @@ class myCalendar extends Component {
         taskListIndex: taskListIndex,
         taskIndex: taskIndex,
         authUserNo: sessionStorage.getItem("authUserNo"),
-        projectNo: this.props.match.params.projectNo,
-        members: this.state.projectMembers
+        projectNo: projectNo,
+        members: this.state.projectMembers[projectMembersIndex].members
       }
 
       fetch(`${API_URL}/api/task/member/add`, {
@@ -1342,16 +1403,21 @@ class myCalendar extends Component {
         .then(response => response.json())
         .then(json => {
           let newTaskList = update(this.state.taskList, {
-            [taskListIndex]: {
-              tasks: {
-                [taskIndex]: {
-                  memberList: {
-                    $push: [newMember]
+            [projectIndex]:{
+              allTaskList:{
+                [taskListIndex]: {
+                  tasks: {
+                    [taskIndex]: {
+                      memberList: {
+                        $push: [newMember]
+                      }
+                    }
                   }
-                }
+               }
               }
             }
           })
+          this.clientRef.sendMessage("/app/all", JSON.stringify(newMember));
           this.setState({
             taskList: newTaskList
           })
@@ -1373,8 +1439,8 @@ class myCalendar extends Component {
         taskIndex: taskIndex,
         memberIndex: memberIndex,
         authUserNo: sessionStorage.getItem("authUserNo"),
-        projectNo: this.props.match.params.projectNo,
-        members: this.state.projectMembers
+        projectNo: projectNo,
+        members: this.state.projectMembers[projectMembersIndex].members
       }
 
       fetch(`${API_URL}/api/task/member/${userNo}/${taskNo}`, {
@@ -1383,29 +1449,39 @@ class myCalendar extends Component {
         .then(response => response.json())
         .then(json => {
           let newTaskList = update(this.state.taskList, {
-            [taskListIndex]: {
-              tasks: {
-                [taskIndex]: {
-                  memberList: {
-                    $splice: [[memberIndex, 1]]
+            [projectIndex]:{
+              allTaskList:{
+                [taskListIndex]: {
+                  tasks: {
+                    [taskIndex]: {
+                      memberList: {
+                        $splice: [[memberIndex, 1]]
+                      }
+                    }
                   }
                 }
               }
             }
           })
+          this.clientRef.sendMessage("/app/all", JSON.stringify(newMember));
           this.setState({
             taskList: newTaskList
           })
         })
-
-
+       
     }
   }
 
   //업무 중요도 업데이트
   callbackUpdateTaskPoint(point, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
 
     let newPoint = {
       taskNo: taskNo,
@@ -1420,16 +1496,25 @@ class myCalendar extends Component {
       .then(json => {
         // console.log(json.data.taskPoint)
         let newTaskList = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                taskPoint: {
-                  $set: json.data.taskPoint
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                      taskPoint: {$set: json.data.taskPoint},
+                      socketType:{$set:"taskPointChange"},
+                      authUserNo: {$set:sessionStorage.getItem("authUserNo")},
+                      projectNo: {$set:projectNo},
+                      members: {$set:this.state.projectMembers[projectMemberIndex].members},
+                      taskListIndex:{$set:taskListIndex},
+                      taskIndex:{$set:taskIndex}
+                    }
+                  }
                 }
               }
             }
-          }
         })
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex]))
         this.setState({
           taskList: newTaskList
         })
@@ -1438,20 +1523,34 @@ class myCalendar extends Component {
 
   //업무 내용 수정하기
   callbackUpdateTaskContents(taskContents, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            taskContents: {
-              $set: taskContents
+      [projectIndex]:{
+        allTaskList: {
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                taskContents: {$set: taskContents},
+                members:{$set: this.state.projectMembers[projectMemberIndex].members},
+                socketType:{$set:"taskContentsUpdate"},
+                taskListIndex:{$set:taskListIndex},
+                taskIndex:{$set:taskIndex},
+                projectNo:{$set:projectNo}
+              }
             }
           }
         }
       }
     })
+    this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex])) 
     this.setState({
       taskList: newTaskList
     })
@@ -1461,14 +1560,19 @@ class myCalendar extends Component {
       headers: API_HEADERS,
       body: taskContents
     })
-      .then(response => response.json())
-
+    .then(response => response.json())
   }
   // 라벨 색 수정하기
   callbackUpdateTaskLabel(color, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
 
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
+    
 
     let data = {
       color: color,
@@ -1476,15 +1580,20 @@ class myCalendar extends Component {
       taskIndex: taskIndex,
       taskNo: taskNo,
       socketType: "labelUpdate",
-      projectNo: this.props.match.params.projectNo,
-      members: this.state.projectMembers
+      authUserNo:sessionStorage.getItem("authUserNo"),
+      projectNo: projectNo,
+      members: this.state.projectMembers[projectMemberIndex].members
     }
 
     let newTaskList = update(this.state.taskList, {
-      [taskListIndex]: {
-        tasks: {
-          [taskIndex]: {
-            taskLabel: { $set: color }
+      [projectIndex]:{
+        allTaskList:{
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                taskLabel: { $set: color }
+              }
+            }
           }
         }
       }
@@ -1512,7 +1621,8 @@ class myCalendar extends Component {
 
 
   render() {
-
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
     return (
       <div id="Calendar">
         {this.state.link}
@@ -1524,44 +1634,62 @@ class myCalendar extends Component {
             this.clientRef = client
           }}
         />
-        <Route
-          path="/nest/calendar/:projectNo/task/:taskNo"
-          exact
-          render={(match) => (
-            <>
-              <Setting
-                {...match}
-                authUserRole={this.state.authUserRole}
-                modalState={this.state.modalState}
-                tagModal={this.state.tagModal} // 태그 모달 띄우는 상태변수
-                taskMemberState={this.state.taskMemberState}
-                projectNo={this.props.match.params.projectNo}
-                task={this.state.taskList}
-                taskTagNo={this.state.taskTagNo} //업무 태그 번호만 모아둔 상태배열
-                taskCallbacks={{
-                  checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist state 업데이트
-                  checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
-                  addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
-                  deleteCheckList: this.callbackDeleteCheckList.bind(this), //업무에 checklist 삭제하기
-                  updateTag: this.callbackUpdateTag.bind(this), //업무 태그 수정하기
-                  deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
-                  addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기,
-                  deleteAlltag: this.callbackDeleteAllTag.bind(this), // 모든 업무에서 해당 tag삭제하기
-                  updateTaskTag: this.onSetStateTaskTagNo.bind(this),
-                  updateTaskDate: this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
-                  modalStateUpdate: this.modalStateUpdate.bind(this),
-                  tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
-                  taskMemberState: this.taskMemberState.bind(this),
-                  addDeleteMember: this.addDeleteMember.bind(this), // 업무에 멤버 추가 & 삭제
-                  updateTaskPoint: this.callbackUpdateTaskPoint.bind(this), // 업무 포인트 업뎃
-                  updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
-                  updateTaskLabel: this.callbackUpdateTaskLabel.bind(this), // 업무 라벨 수정
-                }}
-              />
-            </>
-          )}
-        />
+        <Switch>
+          <Route
+            path="/nest/calendar/:projectNo/task/:taskNo"
+            exact
+            render={(match) => (
+              <>
+                <Setting
+                  {...match}
+                  modalState={this.state.modalState}
+                  tagModal={this.state.tagModal} // 태그 모달 띄우는 상태변수
+                  taskMemberState={this.state.taskMemberState}
+                  projectNo={projectNo}
+                  task={this.state.taskList}
+                  taskTagNo={this.state.taskTagNo} //업무 태그 번호만 모아둔 상태배열
+                  taskCallbacks={{
+                    checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist state 업데이트
+                    checklistContentsUpdate: this.callbackCheckListContentsUpdate.bind(this), // checklist contents 업데이트
+                    addCheckList: this.callbackAddCheckList.bind(this), //업무에 checklist 추가하기
+                    deleteCheckList: this.callbackDeleteCheckList.bind(this), //업무에 checklist 삭제하기
+                    updateTag: this.callbackUpdateTag.bind(this), //업무 태그 수정하기
+                    deletetag: this.callbackDeleteTag.bind(this), //업무에 tag 삭제하기
+                    addtag: this.callbackAddTag.bind(this), // 업무에 tag 추가하기,
+                    deleteAlltag: this.callbackDeleteAllTag.bind(this), // 모든 업무에서 해당 tag삭제하기
+                    updateTaskTag: this.onSetStateTaskTagNo.bind(this),
+                    updateTaskDate: this.callbackTaskDateUpdate.bind(this), // 업무 날짜 수정
+                    modalStateUpdate: this.modalStateUpdate.bind(this),
+                    tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
+                    taskMemberState: this.taskMemberState.bind(this),
+                    addDeleteMember: this.addDeleteMember.bind(this), // 업무에 멤버 추가 & 삭제
+                    updateTaskPoint: this.callbackUpdateTaskPoint.bind(this), // 업무 포인트 업뎃
+                    updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
+                    updateTaskLabel: this.callbackUpdateTaskLabel.bind(this), // 업무 라벨 수정
+                  }}
+                />
+              </>
+            )}
+          />
 
+          <Route
+              path="/nest/calendar/:projectNo/task/:taskNo/comment"
+              render={(match) => (
+                <Comment
+                  {...match}
+                  projectNo={projectNo}
+                  task={this.state.taskList}
+                  taskCallbacks={{
+                    commentLikeUpdate: this.callbackCommentLikeUpdate.bind(this), // 코멘트 좋아요 수 증가하기
+                    commentContentsUpdate: this.callbackCommentContentsUpdate.bind(this), //코멘트 내용 업데이트
+                    addComment: this.callbackAddComment.bind(this), // 코멘트 글 쓰기
+                    deleteComment: this.callbackDeleteComment.bind(this), // 코멘트 삭제하기
+                    updateTaskContents: this.callbackUpdateTaskContents.bind(this), //업무 내용 수정
+                    tagModalStateUpdate: this.tagModalStateUpdate.bind(this), //태그 모달 상태 업데이트
+                  }}
+                />)}
+            />
+        </Switch>
 
         {/* 사이드바 */}
         <div className="sidebar">
@@ -1676,7 +1804,7 @@ class myCalendar extends Component {
 
             </div>
 
-            <div className="calendar-body-contents-calendar" onMouseOver={(e) => {this.x = e.clientX-50; this.y = e.clientY-50}}>
+            <div className="calendar-body-contents-calendar" onMouseOver={(e) => {this.x = e.clientX-50; this.y = e.clientY-30}}>
 
               <Calendar
                 selectable
@@ -1886,16 +2014,16 @@ class myCalendar extends Component {
 
         this.setState({
           taskList: response.data.data.allProjects,
-          authUserRole: response.data.data.authUserRole,
         });
       }
 
       );
 
-    ApiService.fetchProjectMember(1)
+    ApiService.fetchCalendarProjectMember(sessionStorage.getItem("authUserNo"))
       .then(response =>
+        // console.log(response.data.data.allProjectMembers)
         this.setState({
-          projectMembers: response.data.data
+          projectMembers: response.data.data.allProjectMembers
         })
       )
   }
