@@ -78,9 +78,9 @@ class ApiService {
         return axios.get(`/nest/api/kanbanMain/tasksCount/${projectNo}`)
     }
 
-    // fetchSSE(){
-    //     return axios.get(`/nest/api/sse/notifications/issue.json`)
-    // }
+    fetchNewNotice(userNo){
+        return axios.get(`/nest/api/notification/new/${userNo}`)
+    }
 }
 
 export default new ApiService();
