@@ -99,7 +99,6 @@ class PwFindEmail extends React.Component {
       <>
         <div className="PwFind">
           <div className="pwFindBox">
-            <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
   
             <form action="/nest/pwupdate" method="POST" >
               <InputLabel id="pwFindText">비밀번호 변경</InputLabel>

@@ -116,11 +116,10 @@ class SignUpEmail extends React.Component {
       <>
         <div className="SignUp">
           <div className="SignUpBox">
-            <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black.png" alt="로고 사진"/>
   
             <form action="/nest/signupset" method="POST" >
               <InputLabel id="signUpText">회원가입</InputLabel>
-              <InputLabel>{this.state.email}</InputLabel>
+              <InputLabel id="userEmailText">{this.state.email}</InputLabel>
               <Input
                       name="no"
                       id="no"

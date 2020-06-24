@@ -15,7 +15,6 @@ const Errors = () => {
     <>
       <div className="Errors">
         <div className="ErrorsBox">
-          <img style={{width:"150px", height:"150px"}} src="/nest/assets/images/nest-logo-black-errors.png" alt="오류 로고 사진" />
           <InputLabel id="ErrorsText">Errors!!</InputLabel>
           <br/>
           <Link to="/nest">
