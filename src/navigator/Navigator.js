@@ -1,9 +1,11 @@
 import React from 'react';
 import './navigator.scss';
 
+import { AlertList } from "react-bs-notifier";
 import { Link } from 'react-router-dom';
 import NavNotice from './NavNotice';
 import SockJsClient from "react-stomp";
+import ApiService from '../ApiService';
 
 const API_URL = "http://localhost:8080/nest";
 
@@ -15,6 +17,10 @@ export default class Navigator extends React.Component {
             backgroundId: "",
             popoverOpen: false,
             noticeCount: 0,
+            position: "top-right",
+            alerts: [],
+            timeout: 3000,
+            newNotices: [],
         }
     }
 
@@ -26,12 +32,12 @@ export default class Navigator extends React.Component {
     }
 
     /* 세션 스토리지 초기화. (로그아웃시 사용...) */
-    sessionClear(){ 
-        sessionStorage.clear(); 
+    sessionClear() {
+        sessionStorage.clear();
         this.modalClose();
     }
 
-    modalClose(){
+    modalClose() {
         window.jQuery(document.body).removeClass("modal-open");
         window.jQuery(".modal-backdrop").remove();
     }
@@ -42,14 +48,68 @@ export default class Navigator extends React.Component {
         })
     }
 
-    componentDidMount(){
-        // this.setState({
-        //     noticeCount: 2
-        // })
+    componentDidMount() {
+        ApiService.fetchNewNotice(sessionStorage.getItem("authUserNo"))
+            .then(response => {
+                let arr = [];
+                for(var i in response.data.data.notice){
+                    var item = response.data.data.notice[i]
+                    arr.push(item.noticeNo);
+                }
+                this.setState({
+                    noticeCount: response.data.data.notice.length,
+                    newNotices: arr,
+                })
+            })
+    }
+
+    // Invite Member Alert Function
+    onAlertDismissed(alert) {
+        const alerts = this.state.alerts;
+
+        // find the index of the alert that was dismissed
+        const idx = alerts.indexOf(alert);
+
+        if (idx >= 0) {
+            this.setState({
+                // remove the alert from the array
+                alerts: [...alerts.slice(0, idx), ...alerts.slice(idx + 1)]
+            });
+        }
     }
 
     receiveNotice(socketData) {
-        console.log(socketData);
+
+        if (socketData[0] && socketData[0].indexOf(parseInt(sessionStorage.getItem("authUserNo"))) !== -1) {
+            const notice = socketData[1];
+            //console.log(notice);
+            if (notice && sessionStorage.getItem("authUserNo") !== notice.senderNo) {
+                let msg = "";
+                if ((notice.noticeType === "projectJoin") || (notice.noticeType === "taskJoin") || (notice.noticeType === "commentLike")) {
+                    msg = sessionStorage.getItem("authUserName") + notice.message;
+                } else {
+                    msg = notice.message;
+                }
+                const newAlert = {
+                    id: (new Date()).getTime(),
+                    //type: "warning",
+                    type: "success",
+                    message: msg
+                };
+                this.setState({
+                    noticeCount: this.state.noticeCount + 1,
+                    alerts: [...this.state.alerts, newAlert],
+                })
+            }
+        } else if (socketData.del&&socketData.target==sessionStorage.getItem("authUserNo")) {
+            const idx = this.state.newNotices.indexOf(socketData.del)
+            if (idx > -1) {
+                let arr = this.state.newNotices.splice(idx, 1);
+                this.setState({
+                    noticeCount: this.state.noticeCount - 1,
+                }); 
+            }
+        }
     }
 
     render() {
@@ -63,13 +123,20 @@ export default class Navigator extends React.Component {
                                 <div className="nav-item-profile" style={{ backgroundImage: `url(${window.sessionStorage.getItem("authUserPhoto")})` }}></div>
                             </div>
 
+                            <AlertList
+                                position={this.state.position}
+                                alerts={this.state.alerts}
+                                timeout={this.state.timeout}
+                                dismissTitle="cancel"
+                                onDismiss={this.onAlertDismissed.bind(this)}
+                            />
                             <SockJsClient
                                 url={`${API_URL}/socket`}
                                 topics={[`/topic/asnotice`]}
                                 onMessage={this.receiveNotice.bind(this)}
                                 ref={(client) => {
                                     this.clientRef = client;
-                                  }}
+                                }}
                             />
                             {/*<!-- Notification link -->*/}
                             <div className="nav-item button" onClick={this.onPopoverOpen.bind(this)}>
@@ -86,8 +153,8 @@ export default class Navigator extends React.Component {
                                     </span>
                                 }
                             </div>
-                            {this.state.popoverOpen ? <NavNotice/> : ""}
-                            
+                            {this.state.popoverOpen ? <NavNotice /> : ""}
+
                             {/*<!-- Calendar link -->*/}
                             <div className="nav-item button">
                                 <Link to="/nest/calendar" className="link">
@@ -169,7 +236,7 @@ export default class Navigator extends React.Component {
                             <div className="modal-footer">
                                 <form action="/nest/logout" method="POST">
                                     <div className="text-center mt-4 user-logout">
-                                        <input type="submit" className="btn btn-cyan mt-1" onClick={this.sessionClear.bind(this)} value="Logout" method="POST"/>
+                                        <input type="submit" className="btn btn-cyan mt-1" onClick={this.sessionClear.bind(this)} value="Logout" method="POST" />
                                         {/*<i className="fas fa-sign-in ml-1"></i>*/}
                                     </div>
                                 </form>

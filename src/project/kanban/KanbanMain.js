@@ -1226,10 +1226,19 @@ class KanbanMain extends Component {
         });
       })
 
+      // 댓글 유저 찾는 부분
+      const cu = this.state.taskList[taskListIndex].tasks[taskIndex].commentList[commentIndex].userNo
+      let user = null
+      let tmp = null
+      this.state.taskList[taskListIndex].tasks[taskIndex].memberList.map(member => {
+        member.userNo === cu ? user = member : tmp = null
+      })
+
+
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
-      this.state.taskList[taskListIndex].tasks[taskIndex].memberList,
+      [user],
       "commentLike",
       taskNo,
       this.props.match.params.projectNo)
