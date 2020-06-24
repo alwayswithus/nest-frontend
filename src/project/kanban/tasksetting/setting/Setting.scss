@@ -1,9 +1,16 @@
-/* @font-face { 
-    font-family: 'BMDOHYEON'; 
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff'); 
-    font-weight: normal; 
-    font-style: normal; 
-} */
+// @font-face { 
+//     font-family: 'BMDOHYEON'; 
+//     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff'); 
+//     // font-weight: normal; 
+//     // font-style: normal; 
+// }
+// @font-face { 
+//   font-family: 'NanumGothic';
+//   src: url('/fonts/NanumGothic.woff') format('woff');
+//   font-weight: normal; 
+//   font-style: normal; 
+// }
+
 .task-delete{
   width: 632px;
   height: 100%;
@@ -42,6 +49,7 @@
     top: 51px;
     right: 0px;
   .Home {
+    // font-family: 'NanumGothic';
     background-color: #f3f4f5;
     width: 632px;
     height: calc(100% - 155px);

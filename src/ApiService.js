@@ -15,6 +15,9 @@ class ApiService {
         return axios.get(`/nest/api/calendar/alltask/${authUserNo}`)
     }
 
+    fetchCalendarProjectMember(authUserNo){
+        return axios.get(`/nest/api/calendar/allProjectMembers/${authUserNo}`)
+    }
     fetchProjectMember(projectNo) {
         return axios.get(`/nest/api/dashboard/member/${projectNo}`)
     }
