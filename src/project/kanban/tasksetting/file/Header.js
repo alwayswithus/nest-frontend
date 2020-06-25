@@ -60,8 +60,11 @@ class Header extends Component {
                 ><i className="fas fa-times fa-1x"></i></Link> :
 
                 <Link 
+                onClick={this.props.taskCallbacks.onCloseSettingHTML}
                 style= {{color:'black'}}
-                to = {`/nest/calendar`}><i className="fas fa-times fa-1x"></i></Link> }
+                to = {`/nest/calendar`}>
+                    <i className="fas fa-times fa-1x" ></i>
+                </Link> }
             <div className="Header-list">
                 {/* 업무 내용 수정 */}
                 {this.state.input ? 
