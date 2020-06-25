@@ -1619,6 +1619,325 @@ class myCalendar extends Component {
     this.clientRef.sendMessage("/app/all", JSON.stringify(data));
   }
 
+  // comment like 수 증가
+  callbackCommentLikeUpdate(taskListNo, taskNo, commentNo) {
+
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
+
+
+    const commentLike = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex].commentLike
+
+    let commentData = {
+      commentLike: commentLike,
+      userNo: sessionStorage.getItem("authUserNo")
+    }
+
+    fetch(`${API_URL}/api/comment/like/${commentNo}`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(commentData)
+    })
+      .then(response => response.json())
+      .then((json) => {
+        let newTaskList = update(this.state.taskList, {
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    commentList: {
+                      [commentIndex]: {
+                        commentLike: {
+                          $set: json.data,
+                        },
+                      },
+                    },
+                  }
+                }
+              },
+            },
+          },
+        });
+
+        this.setState({
+          taskList: newTaskList,
+        });
+      })
+
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
+      "commentLike",
+      taskNo,
+      projectNo)
+  }
+
+  //comment contents 수정
+  callbackCommentContentsUpdate(
+    taskListNo,
+    taskNo,
+    commentNo,
+    commentContents
+  ) {
+     const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[
+      taskIndex
+    ].commentList.findIndex((comment) => comment.commentNo === commentNo);
+
+    // console.log("KanbanMain + " + commentContents)
+    let commentData = {
+      commentContents: commentContents,
+      commentLike: null
+    }
+    fetch(`${API_URL}/api/comment/contents/${commentNo}`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(commentData)
+    })
+      .then(response => response.json())
+      .then((json) => {
+        let newTaskList = update(this.state.taskList, {
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    commentList: {
+                      [commentIndex]: {
+                        commentContents: {
+                          $set: json.data,
+                        },
+                      }
+                    }
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        this.setState({
+          taskList: newTaskList,
+        });
+      })
+
+  }
+
+  //comment 글 쓰기
+  callbackAddComment(file, taskListNo, taskNo, commentContents) {
+
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
+
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    const taskContents = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskContents
+    const taskListName = this.state.taskList[projectIndex].allTaskList[taskListIndex].taskListName
+
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
+      "commentInsert",
+      taskNo,
+      projectNo)
+    let newComment = []
+    if (file === null) {
+      newComment = {
+        commentNo: null,
+        commentRegdate: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
+        commentContents: commentContents,
+        commentLike: 0,
+        userNo: sessionStorage.getItem("authUserNo"),
+        taskNo: taskNo,
+        fileNo: null,
+        originName: null,
+        filePath: null
+      }
+    } else {
+      newComment = {
+        commentNo: null,
+        commentRegdate: moment(Date.now()).format('YYYY-MM-DD HH:mm'),
+        commentContents: commentContents,
+        commentLike: 0,
+        userNo: sessionStorage.getItem("authUserNo"),
+        taskNo: taskNo,
+        fileNo: file.fileNo,
+        originName: file.originName,
+        filePath: file.filePath
+      };
+    }
+
+    fetch(`${API_URL}/api/comment`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(newComment)
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let newTaskList = update(this.state.taskList, {
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    commentList: {
+                      $push: [json.data]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        })
+
+        const commentIndex = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === json.data.commentNo);
+        if (file === null) {
+          newTaskList = update(newTaskList, {
+            [projectIndex]:{
+              allTaskList:{
+                [taskListIndex]: {
+                  tasks: {
+                    [taskIndex]: {
+                      commentList: {
+                        [commentIndex]: {
+                          userName: { $set: sessionStorage.getItem("authUserName") },
+                          userPhoto: { $set: sessionStorage.getItem("authUserPhoto") },
+                          commentState: { $set: 'T' },
+                          socketType: { $set: "comment" },
+                          authUserNo: { $set: sessionStorage.getItem("authUserNo") },
+                          taskListIndex: { $set: taskListIndex },
+                          taskIndex: { $set: taskIndex },
+                          members: { $set: this.state.projectMembers[projectMemberIndex].members },
+                          projectNo: { $set: projectNo },
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          })
+        } else {
+          newTaskList = update(newTaskList, {
+            [projectIndex]:{
+              allTaskList:{
+                [taskListIndex]: {
+                  tasks: {
+                    [taskIndex]: {
+                      commentList: {
+                        [commentIndex]: {
+                          userName: { $set: sessionStorage.getItem("authUserName") },
+                          userPhoto: { $set: sessionStorage.getItem("authUserPhoto") },
+                          filePath: { $set: file.filePath },
+                          fileState: { $set: 'T' },
+                          socketType: { $set: "comment" },
+                          authUserNo: { $set: sessionStorage.getItem("authUserNo") },
+                          taskListIndex: { $set: taskListIndex },
+                          taskIndex: { $set: taskIndex },
+                          members: { $set: this.state.projectMembers[projectMemberIndex].members },
+                          projectNo: { $set: projectNo },
+                          taskContents: { $set: taskContents },
+                          taskListName: { $set: taskListName }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          })
+        }
+        this.setState({
+          taskList: newTaskList
+        })
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
+        // this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
+      })
+
+  }
+
+  //comment 삭제하기
+  callbackDeleteComment(fileNo, taskListNo, taskNo, commentNo) {
+    const taskListIndex = this.state.taskList.findIndex((taskList) => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex((task) => task.taskNo === taskNo);
+    const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
+    const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === fileNo);
+
+    if (fileNo === null) {
+      fileNo = 0;
+    }
+    fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
+      method: "post",
+      headers: API_HEADERS,
+    })
+      .then(json => {
+        let newTaskList = update(this.state.taskList, {
+          [taskListIndex]: {
+            tasks: {
+              [taskIndex]: {
+                commentList: {
+                  [commentIndex]: {
+                    commentState: { $set: 'F' }
+                  }
+                },
+              },
+            },
+          },
+        });
+        if (fileIndex !== -1) {
+          newTaskList = update(newTaskList, {
+            [taskListIndex]: {
+              tasks: {
+                [taskIndex]: {
+                  fileList: {
+                    [fileIndex]: {
+                      fileState: { $set: 'F' }
+                    }
+                  },
+                  commentList: {
+                    [commentIndex]: {
+                      fileState: { $set: 'F' },
+                      socketType: { $set: 'fileDelete' },
+                      fileNo: { $set: fileNo },
+                      members: { $set: this.state.projectMembers },
+                      projectNo: { $set: this.props.match.params.projectNo }
+                    }
+                  }
+                },
+              },
+            },
+          });
+
+        }
+
+        this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
+        this.setState({
+          taskList: newTaskList
+        })
+      })
+  }
 
   render() {
     const {history} = this.props;
