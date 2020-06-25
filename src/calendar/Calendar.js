@@ -1673,13 +1673,7 @@ class myCalendar extends Component {
         });
       })
 
-    ApiNotification.fetchInsertNotice(
-      sessionStorage.getItem("authUserNo"),
-      sessionStorage.getItem("authUserName"),
-      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
-      "commentLike",
-      taskNo,
-      projectNo)
+
   }
 
   //comment contents 수정
@@ -1755,13 +1749,6 @@ class myCalendar extends Component {
     const taskContents = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskContents
     const taskListName = this.state.taskList[projectIndex].allTaskList[taskListIndex].taskListName
 
-    ApiNotification.fetchInsertNotice(
-      sessionStorage.getItem("authUserNo"),
-      sessionStorage.getItem("authUserName"),
-      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
-      "commentInsert",
-      taskNo,
-      projectNo)
     let newComment = []
     if (file === null) {
       newComment = {
