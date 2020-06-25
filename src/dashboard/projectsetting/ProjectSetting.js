@@ -364,7 +364,7 @@ class ProjectSetting extends Component {
                                                             <hr />
                                                             {this.state.isMemberEmailValid ? 
                                                             this.props.loading ? 
-                                                            <div style={{textAlign: "center", marginBottom: "14px"}}><img style={{height: "25px"}} src="../assets/images/ajax-loader.gif" /></div> : 
+                                                            <div style={{textAlign: "center", marginBottom: "14px"}}><img style={{height: "25px"}} src="/nest/assets/images/ajax-loader.gif" /></div> : 
                                                             <input type="button" id="add-member-invite"
                                                                 className="btn btn-outline-primary btn-rounded"
                                                                 onClick={this.callbackInviteMember.bind(this, this.props.project.projectNo, this.state.inviteMemberEmail, this.state.inviteMemberName)}

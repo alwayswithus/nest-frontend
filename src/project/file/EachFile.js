@@ -64,10 +64,10 @@ class EachFile extends Component {
                         <div className="file-name-cell">
                             <div className="file-name-cell-image">
                             {this.props.projectFile.originName.split('.')[1] === 'csv' || this.props.projectFile.originName.split('.')[1] === 'xlxs' ?
-                            <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }} src='/assets/images/excel.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img> :
+                            <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }} src='/nest/assets/images/excel.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img> :
                             <>{this.props.projectFile.originName.split('.')[1] === 'txt' ?
                                 <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }}
-                                    src='/assets/images/txt.png'
+                                    src='/nest/assets/images/txt.png'
                                     alt={this.props.projectFile.originName}
                                     onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
                                 :
@@ -76,7 +76,7 @@ class EachFile extends Component {
                                         src={`${API_URL}${this.props.projectFile.filePath}`}
                                         alt={this.props.projectFile.originName}
                                         onClick={this.onClickImage.bind(this)}></img> :
-                                    <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }} src='/assets/images/attach.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
+                                    <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }} src='/nest/assets/images/attach.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
                                 }</>
                             }</>
                         }
