@@ -61,7 +61,7 @@ function App() {
     <BrowserRouter>
 
       <div className="App" 
-            style={{backgroundImage: `url(${url == 'null' ? "/assets/images/nestBackground.png" : url})`,overflow: 'hidden',position: 'relative'}}>
+            style={{backgroundImage: `url(${url == 'null' ? "/nest/assets/images/nestBackground.png" : url})`,overflow: 'hidden',position: 'relative'}}>
 
         {/* 오류 페이지 */}
         <Route path="/nest/errors" exact component={Errors} />
