@@ -6,6 +6,7 @@ import update from "react-addons-update";
 import NoticeDate from './NoticeDate';
 import Navigator from '../navigator/Navigator';
 import './notification.scss';
+import SockJsClient from "react-stomp";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -46,6 +47,22 @@ class Notification extends React.Component {
           })
     }
 
+    receiveNotice(socketData) {
+        if (socketData[0] && socketData[0].indexOf(parseInt(sessionStorage.getItem("authUserNo"))) !== -1) {
+            const notice = socketData[1];
+            if (notice && sessionStorage.getItem("authUserNo") !== notice.senderNo) {
+                ApiService.fetchNotification().then(
+                    (response) => {
+                        this.setState({
+                            dates: response.data.data.date,
+                            notices: response.data.data.notice
+                        });
+                    }
+                );
+            }
+        }
+    }
+
     render() {
         let count = 0;
         this.state.notices.map(notice => 
@@ -59,6 +76,16 @@ class Notification extends React.Component {
                     <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
                 </div>
                 <div className="notice-header-background"></div>
+
+                <SockJsClient
+                                url={`${API_URL}/socket`}
+                                topics={[`/topic/asnotice`]}
+                                onMessage={this.receiveNotice.bind(this)}
+                                ref={(client) => {
+                                    this.clientRef = client;
+                                }}
+                            />
+
                 <div className="notice-contents">
                     <div className="notice-header-contents">
                         <div className="notice-header-icon">

@@ -506,6 +506,8 @@ class KanbanMain extends Component {
       projectNo: this.state.taskList[TaskListIndex].projectNo,
       members: this.state.projectMembers,
       taskCount: this.state.taskCount - 1,
+      TaskListIndex:TaskListIndex,
+      TaskIndex:TaskIndex,
       completedTask: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "done" ? this.state.completedTask - 1 : this.state.completedTask
     }
 
@@ -1210,34 +1212,30 @@ class KanbanMain extends Component {
               [taskIndex]: {
                 commentList: {
                   [commentIndex]: {
-                    commentLike: {
-                      $set: json.data,
-                    },
+                    commentLike: {$set: json.data}, 
+                    socketType: { $set: "commentLikeUpdate" },
+                    authUserNo: { $set: sessionStorage.getItem("authUserNo") },
+                    taskListIndex: { $set: taskListIndex },
+                    taskIndex: { $set: taskIndex },
+                    commentIndex:{$set:commentIndex},
+                    members: { $set: this.state.projectMembers },
+                    projectNo: { $set: this.props.match.params.projectNo },
                   },
                 },
               },
             },
           },
         });
-
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]))
         this.setState({
           taskList: newTaskList,
         });
       })
 
-      // 댓글 유저 찾는 부분
-      const cu = this.state.taskList[taskListIndex].tasks[taskIndex].commentList[commentIndex].userNo
-      let user = null
-      let tmp = null
-      this.state.taskList[taskListIndex].tasks[taskIndex].memberList.map(member => {
-        member.userNo === cu ? user = member : tmp = null
-      })
-
-
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
-      [user],
+      [this.state.taskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]],
       "commentLike",
       taskNo,
       this.props.match.params.projectNo)
@@ -1465,7 +1463,7 @@ class KanbanMain extends Component {
                   commentList: {
                     [commentIndex]: {
                       fileState: { $set: 'F' },
-                      socketType: { $set: 'commentDelete' },
+                      socketType: { $set: 'fileDelete' }, // top bar file delete
                       members: { $set: this.state.projectMembers },
                       projectNo: { $set: this.props.match.params.projectNo }
                     }
@@ -1485,7 +1483,7 @@ class KanbanMain extends Component {
           socketType: 'commentDelete' ,
           authUserNo:sessionStorage.getItem("authUserNo")
         }
-        console.log(socketData)
+
         this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
         this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
         this.setState({
@@ -1539,16 +1537,6 @@ class KanbanMain extends Component {
     }
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
-
-    // const socketData = {
-    //   formData:formData, 
-    //   taskListNo:taskListNo, 
-    //   taskNo:taskNo,
-    //   members: { $set: this.state.projectMembers },
-    //   projectNo: { $set: this.props.match.params.projectNo },
-
-    // }
-    // this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
   }
 
   // 태그가 추가 될 때마다 taskTagNo를 set 해줌.
@@ -3930,7 +3918,7 @@ class KanbanMain extends Component {
                 taskList: newTaskList
               })
           
-        }else if (socketData.socketType === 'fileUpload'){
+        } else if (socketData.socketType === 'fileUpload'){
           let newTaskList = update(this.state.taskList, {
             [socketData.taskListIndex]: {
               tasks: {
@@ -3946,7 +3934,7 @@ class KanbanMain extends Component {
           this.setState({
             taskList: newTaskList,
           });
-        }else if(socketData.socketType === 'dateUpdate'){
+        } else if(socketData.socketType === 'dateUpdate'){
           if(socketData.from === 'Invalid date'){
             socketData.from = undefined;
           }
@@ -3971,7 +3959,7 @@ class KanbanMain extends Component {
           this.setState({
             taskList:newTaskList
           })
-        }  else if(socketData.socketType === "labelUpdate"){
+        } else if(socketData.socketType === "labelUpdate"){
           let newTaskList = update(this.state.taskList,{
             [socketData.taskListIndex]:{
               tasks:{
@@ -4045,7 +4033,7 @@ class KanbanMain extends Component {
             taskList:newTaskList
           })
         } else if(socketData.socketType === "checkListDelete"){
-          console.log("!!!!!"+socketData.checkListIndex)
+
           fetch(`${API_URL}/api/tasksetting/checklist/${socketData.checklistNo}`, {
             method:'delete'
           })
@@ -4124,6 +4112,24 @@ class KanbanMain extends Component {
           this.setState({
             taskList: newTaskList
           })
+        } else if(socketData.socketType === "commentLikeUpdate"){
+
+            let newTaskList = update(this.state.taskList, {
+              [socketData.taskListIndex]: {
+                tasks: {
+                  [socketData.taskIndex]: {
+                    commentList: {
+                      [socketData.commentIndex]: {
+                        commentLike: {$set: socketData.commentLike}
+                      },
+                    },
+                  },
+                },
+              },
+            });
+            this.setState({
+              taskList: newTaskList,
+            });
         } else if(socketData.historyType === "taskContentsUpdate"){
             let newHistoryData = {
               logContents:socketData.senderName+" 님이"+socketData.actionName+" 으로 업무이름을 수정하셨습니다.",
@@ -4274,7 +4280,6 @@ class KanbanMain extends Component {
       }
       return;
     }
-    
    
     if(socketData.socketType === "allTagUpdate"){
       let Indexs = []

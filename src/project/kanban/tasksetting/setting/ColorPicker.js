@@ -13,9 +13,16 @@ class ColorPicker extends React.Component {
         this.props.taskCallbacks.updateTaskLabel(color.hex, this.props.taskListNo, this.props.taskNo)
     }
   render() {
-    return <CirclePicker
+    return (
+      <>
+      {this.props.authUserRole === 3 ?
+        <CirclePicker color={this.props.taskItem.taskLabel} /> : 
+        <CirclePicker
             color={this.props.taskItem.taskLabel}
-            onChange = {this.handleChange.bind(this)}/>;
+            onChange = {this.handleChange.bind(this)}/>
+      }
+      </>
+    )
   }
 }
 
