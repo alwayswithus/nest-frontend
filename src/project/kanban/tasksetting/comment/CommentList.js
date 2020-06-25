@@ -110,6 +110,14 @@ class CommentList extends Component {
 
     render() {
         const today = new Date();
+        const commentHeader = {
+            display: "inline-block",
+            width: "220px",
+            marginLeft: "30px",
+            display: "inline-block",
+            marginBottom: "3px",
+            border: "1px solid #57C3CF"
+        }
         return (
             <>
                 <div className="CommentList">
@@ -118,9 +126,24 @@ class CommentList extends Component {
                     <div className="media">
                         {/* comment */}
                         {this.props.taskItem.commentList.map((comment, index) =>
+                            
                             comment.fileState === 'T' || comment.commentState === 'T' ?
-
-                                <div className="comment-body">
+                            <div className="comment-body">
+                                {/* {console.log(index)}
+                                    {moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(comment.commentRegdate, 'YYYY-MM-DD h:mm'))).days() !== 0 && index == 0 ?
+                                    <>
+                                        <hr style={commentHeader}/>
+                                            <div style={{display:'inline-block', paddingLeft: "30px"}}>
+                                                {moment(comment.commentRegdate).format("MM월 DD일")}
+                                            </div><hr style={commentHeader}/>
+                                    </> : 
+                                    <>
+                                        <hr style={commentHeader}/>
+                                            <div style={{display:'inline-block', paddingLeft: "30px"}}>
+                                                오늘
+                                            </div><hr style={commentHeader}/>
+                                    </>
+                                    } */}
                                     <div key={comment.commentNo} style={{ height: '20px' }} />
                                     <a className="pull-left" href="#">
                                         <div onClick={(e) => this.onClickUserImg(e, index)} className="img-circle" style={{ backgroundImage: `url(${comment.userPhoto})` }} id={index}></div>
@@ -137,8 +160,9 @@ class CommentList extends Component {
                                         {/* 날짜 계산하기 */}
                                         <span className="media-heading">
                                             {
+                                                // moment(comment.commentRegdate).format("h:mm")
                                                 moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(comment.commentRegdate, 'YYYY-MM-DD h:mm'))).days() !== 0
-                                                    ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(comment.commentRegdate, 'YYYY-MM-DD h:mm'))).days()} 일 전`
+                                                    ? moment(comment.commentRegdate).format("MM월 DD일 h:mm")
                                                     : moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(comment.commentRegdate, 'YYYY-MM-DD h:mm'))).hours() !== 0
                                                         ? `${moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(comment.commentRegdate, 'YYYY-MM-DD h:mm'))).hours()} 시간 전`
                                                         : moment.duration(moment(today, 'YYYY-MM-DD h:mm').diff(moment(comment.commentRegdate, 'YYYY-MM-DD h:mm'))).minutes() !== 0
@@ -147,7 +171,7 @@ class CommentList extends Component {
                                             }
                                         </span>
                                         {this.props.taskItem.taskState == "del" || this.props.authUserRole === 3 ? null :
-                                            <ul className="list-unstyled list-inline media-detail pull-right">
+                                            <ul className="list-unstyled list-inline media-detail pull-right" style={{margin:'1%'}}>
                                                 <li>
                                                     <span data-tooltip-text="공감하기">
                                                         <i onClick={this.onClickThumsUp.bind(this, comment.commentNo)} className="far fa-thumbs-up thumsup" />
@@ -203,7 +227,10 @@ class CommentList extends Component {
                                             />
                                         }
                                         <ul className="list-unstyled list-inline media-detail pull-left">
-                                            {comment.commentLike === 0 ? null : <li><i onClick={this.onClickThumsUp.bind(this, comment.commentNo)} className="fa fa-thumbs-up count"></i>&nbsp;{comment.commentLike}</li>}
+                                            {comment.commentLike === 0 ? null : 
+                                            <li>
+                                                <i onClick={this.onClickThumsUp.bind(this, comment.commentNo)} className="fa fa-thumbs-up count"></i>&nbsp;{comment.commentLike}
+                                            </li>}
                                         </ul>
                                     </div>
                                 </div> : null

@@ -52,8 +52,8 @@ class FileComponent extends Component {
         })
     }
 
-    onClickFile(fileNo) {
-        if (window.confirm("파일을 다운로드 하시겠습니까?")) {
+    onClickFile(fileNo, originName) {
+        if (window.confirm(originName + " 파일을 다운로드 하시겠습니까?")) {
             this.downloadEmployeeData(fileNo)
         }
     }
@@ -69,14 +69,16 @@ class FileComponent extends Component {
                                 <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }}
                                     src='/nest/assets/images/txt.png'
                                     alt={this.props.file.originName}
-                                    onClick={this.onClickFile.bind(this, this.props.file.fileNo)}></img>
+                                    onClick={this.onClickFile.bind(this, this.props.file.fileNo, this.props.file.originName)}></img>
                                 :
                                 <>{this.props.file.originName.split('.')[1] === 'png' || this.props.file.originName.split('.')[1] === 'jpg' ?
                                     <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }}
                                         src={`${API_URL}${this.props.file.filePath}`}
                                         alt={this.props.file.originName}
+
                                         onClick={this.onClickImage.bind(this)}></img> :
                                     <img style={{ width: '50px', paddingRight: '3%', paddingBottom: '1%' }} src='/nest/assets/images/attach.png' alt={this.props.file.originName} onClick={this.onClickFile.bind(this, this.props.file.fileNo)}></img>
+
                                 }</>
                             }</>
                         }
