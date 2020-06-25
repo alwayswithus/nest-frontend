@@ -2612,27 +2612,62 @@ class KanbanMain extends Component {
             $splice: [[sessionMemberIndex, 1]]
           })
 
-          if(this.state.project.projectNo !== deleteProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteProject
+          let multiTask = [];
+          let taskList = this.state.taskList;
+          taskList.map(taskList => {
+            taskList.tasks.map(task => {
+              let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.sessionUserNo);
+              if(memberIndex !== -1) {
+                multiTask.push(task.taskNo);
+              }
             })
+          })
+
+          let jsonMultiTask = {
+            multiTask: multiTask
           }
-          else if(this.state.project.projectNo == deleteProject[projectIndex].projectNo) {
-            this.setState({
-              projectMembers: projectMemberDeleteProject,
-              projects: deleteProject,
-              project: deleteProject[projectIndex],
-              userProject: userProject
+
+          fetch(`${API_URL}/api/task/member/${socketData.sessionUserNo}`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(jsonMultiTask)
+          })
+            .then(response => response.json())
+            .then(json => {
+              let taskList = this.state.taskList;
+              taskList.map(taskList => {
+                taskList.tasks.map(task => {
+                  let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.sessionUserNo);
+                  if(memberIndex !== -1) {
+                    task.memberList.splice(memberIndex, 1);
+                  }
+                })
+              })
+
+              if(this.state.project.projectNo !== deleteProject[projectIndex].projectNo) {
+                this.setState({
+                  projects: deleteProject
+                })
+              }
+              else if(this.state.project.projectNo == deleteProject[projectIndex].projectNo) {
+                this.setState({
+                  taskList: taskList,
+                  projectMembers: projectMemberDeleteProject,
+                  projects: deleteProject,
+                  project: deleteProject[projectIndex],
+                  userProject: userProject
+                })
+              }
+              else {
+                this.setState({
+                  taskList: taskList,
+                  projectMembers: projectMemberDeleteProject,
+                  projects: deleteProject,
+                  project: deleteProject[projectIndex],
+                  userProject: userProject
+                })
+              }
             })
-          }
-          else {
-            this.setState({
-              projectMembers: projectMemberDeleteProject,
-              projects: deleteProject,
-              project: deleteProject[projectIndex],
-              userProject: userProject
-            })
-          }
         }
       }
       else {
@@ -2670,11 +2705,44 @@ class KanbanMain extends Component {
             $splice: [[sessionMemberIndex, 1]]
           })
 
-          this.setState({
-            projectMembers: projectMemberDeleteProject,
-            projects: deleteProject,
-            project: deleteProject[projectIndex]
+          let multiTask = [];
+          let taskList = this.state.taskList;
+          taskList.map(taskList => {
+            taskList.tasks.map(task => {
+              let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.sessionUserNo);
+              if(memberIndex !== -1) {
+                multiTask.push(task.taskNo);
+              }
+            })
           })
+
+          let jsonMultiTask = {
+            multiTask: multiTask
+          }
+
+          fetch(`${API_URL}/api/task/member/${socketData.sessionUserNo}`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(jsonMultiTask)
+          })
+            .then(response => response.json())
+            .then(json => {
+              let taskList = this.state.taskList;
+              taskList.map(taskList => {
+                taskList.tasks.map(task => {
+                  let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.sessionUserNo);
+                  if(memberIndex !== -1) {
+                    task.memberList.splice(memberIndex, 1);
+                  }
+                })
+              })
+
+              this.setState({
+                projectMembers: projectMemberDeleteProject,
+                projects: deleteProject,
+                project: deleteProject[projectIndex]
+              })
+            })
         }
       }
     }
@@ -2688,10 +2756,8 @@ class KanbanMain extends Component {
           $splice: [[projectIndex, 1]]
         })
 
-        if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
-          this.props.history.push("/nest/dashboard")
-        }
-
+        this.props.history.push("/nest/dashboard")
+        
         let projectMembers = update(this.state.projectMembers, {
           $splice: [[memberIndex, 1]]
         })
@@ -2719,25 +2785,60 @@ class KanbanMain extends Component {
             $splice: [[memberIndex, 1]]
           })
 
-          if (this.state.project.projectNo !== deleteProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteProject
+          let multiTask = [];
+          let taskList = this.state.taskList;
+          taskList.map(taskList => {
+            taskList.tasks.map(task => {
+              let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.userNo);
+              if(memberIndex !== -1) {
+                multiTask.push(task.taskNo);
+              }
             })
+          })
+
+          let jsonMultiTask = {
+            multiTask: multiTask
           }
-          else if (this.state.project.projectNo == deleteProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteProject,
-              project: deleteProject[projectIndex],
-              projectMembers: projectMembers
+
+          fetch(`${API_URL}/api/task/member/${socketData.userNo}`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(jsonMultiTask)
+          })
+            .then(response => response.json())
+            .then(json => {
+              let taskList = this.state.taskList;
+              taskList.map(taskList => {
+                taskList.tasks.map(task => {
+                  let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.userNo);
+                  if(memberIndex !== -1) {
+                    task.memberList.splice(memberIndex, 1);
+                  }
+                })
+              })          
+            
+              if (this.state.project.projectNo !== deleteProject[projectIndex].projectNo) {
+                this.setState({
+                  projects: deleteProject
+                })
+              }
+              else if (this.state.project.projectNo == deleteProject[projectIndex].projectNo) {
+                this.setState({
+                  taskList: taskList,
+                  projects: deleteProject,
+                  project: deleteProject[projectIndex],
+                  projectMembers: projectMembers
+                })
+              }
+              else {
+                this.setState({
+                  taskList: taskList,
+                  projects: deleteProject,
+                  project: deleteProject[projectIndex],
+                  projectMembers: projectMembers
+                })
+              }
             })
-          }
-          else {
-            this.setState({
-              projects: deleteProject,
-              project: deleteProject[projectIndex],
-              projectMembers: projectMembers
-            })
-          }
         }
       }
     }
@@ -2967,25 +3068,60 @@ class KanbanMain extends Component {
             $splice: [[memberIndex, 1]]
           })
 
-          if (this.state.project.projectNo !== deleteMemberProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteMemberProject
+          let multiTask = [];
+          let taskList = this.state.taskList;
+          taskList.map(taskList => {
+            taskList.tasks.map(task => {
+              let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.userNo);
+              if(memberIndex !== -1) {
+                multiTask.push(task.taskNo);
+              }
             })
+          })
+
+          let jsonMultiTask = {
+            multiTask: multiTask
           }
-          else if (this.state.project.projectNo == deleteMemberProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteMemberProject,
-              projectMembers: projectMembers,
-              project: deleteMemberProject[projectIndex]
+
+          fetch(`${API_URL}/api/task/member/${socketData.userNo}`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(jsonMultiTask)
+          })
+            .then(response => response.json())
+            .then(json => {
+              let taskList = this.state.taskList;
+              taskList.map(taskList => {
+                taskList.tasks.map(task => {
+                  let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.userNo);
+                  if(memberIndex !== -1) {
+                    task.memberList.splice(memberIndex, 1);
+                  }
+                })
+              })
+
+              if (this.state.project.projectNo !== deleteMemberProject[projectIndex].projectNo) {
+                this.setState({
+                  projects: deleteMemberProject
+                })
+              }
+              else if (this.state.project.projectNo == deleteMemberProject[projectIndex].projectNo) {
+                this.setState({
+                  taskList: taskList,
+                  projects: deleteMemberProject,
+                  projectMembers: projectMembers,
+                  project: deleteMemberProject[projectIndex]
+                })
+              }
+              else {
+                this.setState({
+                  taskList: taskList,
+                  projects: deleteMemberProject,
+                  projectMembers: projectMembers,
+                  project: deleteMemberProject[projectIndex]
+                })
+              }
             })
-          }
-          else {
-            this.setState({
-              projects: deleteMemberProject,
-              projectMembers: projectMembers,
-              project: deleteMemberProject[projectIndex]
-            })
-          }
         }
       }
     }
@@ -2993,15 +3129,13 @@ class KanbanMain extends Component {
     if (socketData.socketType === "userDelete") {
       if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
         const memberIndex = this.state.projectMembers.findIndex(member => member.userNo === socketData.userNo);
-
-        if (sessionStorage.getItem("authUserNo") == socketData.userNo) {
-          this.props.history.push("/nest/dashboard")
-        }
-
+        
+        this.props.history.push("/nest/dashboard")
+        
         let projectMembers = update(this.state.projectMembers, {
           $splice: [[memberIndex, 1]]
         })
-
+        
         this.setState({
           projectMembers: projectMembers
         })
@@ -3024,25 +3158,60 @@ class KanbanMain extends Component {
             $splice: [[memberIndex, 1]]
           })
 
-          if (this.state.project.projectNo !== newProject[projectIndex].projectNo) {
-            this.setState({
-              projects: newProject
+          let multiTask = [];
+          let taskList = this.state.taskList;
+          taskList.map(taskList => {
+            taskList.tasks.map(task => {
+              let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.userNo);
+              if(memberIndex !== -1) {
+                multiTask.push(task.taskNo);
+              }
             })
+          })
+
+          let jsonMultiTask = {
+            multiTask: multiTask
           }
-          else if (this.state.project.projectNo == newProject[projectIndex].projectNo) {
-            this.setState({
-              projects: newProject,
-              project: newProject[projectIndex],
-              projectMembers: projectMembers
+
+          fetch(`${API_URL}/api/task/member/${socketData.userNo}`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(jsonMultiTask)
+          })
+            .then(response => response.json())
+            .then(json => {
+              let taskList = this.state.taskList;
+              taskList.map(taskList => {
+                taskList.tasks.map(task => {
+                  let memberIndex = task.memberList.findIndex(member => member.userNo == socketData.userNo);
+                  if(memberIndex !== -1) {
+                    task.memberList.splice(memberIndex, 1);
+                  }
+                })
+              })
+    
+              if (this.state.project.projectNo !== newProject[projectIndex].projectNo) {
+                this.setState({
+                  projects: newProject
+                })
+              }
+              else if (this.state.project.projectNo == newProject[projectIndex].projectNo) {
+                this.setState({
+                  taskList: taskList,
+                  projects: newProject,
+                  project: newProject[projectIndex],
+                  projectMembers: projectMembers
+                })
+              }
+              else {
+                this.setState({
+                  taskList: taskList,
+                  projects: newProject,
+                  project: newProject[projectIndex],
+                  projectMembers: projectMembers
+                })
+              }
             })
-          }
-          else {
-            this.setState({
-              projects: newProject,
-              project: newProject[projectIndex],
-              projectMembers: projectMembers
-            })
-          }
         }
       }
     }

@@ -19,8 +19,6 @@ class Navigation extends Component {
       textAlign: 'center', 
       borderBottom: '3px solid #27B6BA'
     }
-    
-
     return (
       <div className="Navigation">
         {this.props.match.path.indexOf("calendar") == -1 ?
