@@ -1,262 +1,266 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap");
 
 .Navigator {
+  .navigation {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #393939;
+    border-right: 1px solid #393939;
+    box-shadow: 0px 0px 10px black;
+    z-index: 100;
+    border: 0;
 
-	.navigation {
-		position: fixed;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		background: #393939;
-		border-right: 1px solid #393939;
-		box-shadow: 0px 0px 10px black;
-		z-index: 100;
-		border: 0;
-		
-		.nav-list {
-			text-align: center;
-			list-style: none;
-			margin-top: -14px;
-			margin-bottom: 0;
-			height: 100%;
+    .nav-list {
+      text-align: center;
+      list-style: none;
+      margin-top: -14px;
+      margin-bottom: 0;
+      height: 100%;
 
-			.exclude-nest-li {
-				height: 93%;
-				.profile{
-					margin-bottom: 100px;
-				}
-				.button{
-					margin: 50px 0px;
-				}
+      .exclude-nest-li {
+        height: 93%;
+        .profile {
+          margin-bottom: 100px;
+        }
+        .button {
+          margin: 50px 0px;
+        }
 
-				.popover__wrapper {
-					position: absolute;
-					top: 125px;
-					left: 70px;
-					display: inline-block;
-				
-					.popover__content {
-						border-radius: 10px;
-						background-color: white;
-						z-index: 10;
-						opacity: 1;
-						visibility: visible;
-						transform: translate(0, -20px);
-						transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
-						width: 337px;
-						height: 177px;
+        .popover__wrapper {
+          position: absolute;
+          top: 125px;
+          left: 70px;
+          display: inline-block;
 
-						.notification-contents-list {
-							overflow: auto;
-							height: 177px;
-							width: 337px;
-							background-color: white;
-							border-top-left-radius: 10px;
-							border-top-right-radius: 10px;
+          .popover__content {
+            border-radius: 10px;
+            background-color: white;
+            z-index: 10;
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0, -20px);
+            transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+            width: 337px;
+            height: 177px;
 
-							.notice-one-contents {
-								width: 300px;
-								height: 60px;
-								text-align: left;
-								margin-left: 14px;
-								
-								.notice-contents-avatar-image {
-									margin-top: 5px;
-									display: block;
-									float: left;
+            .notification-contents-list {
+              overflow: auto;
+              height: 177px;
+              width: 337px;
+              background-color: white;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
 
-									.notice-avatar-image {
-										border-radius: 50%;
-										width: 50px;
-										height: 50px;
-									}
-								}
+              .notice-one-contents {
+                width: 300px;
+                height: 60px;
+                text-align: left;
+                margin-left: 14px;
 
-								.notice-avatar-contents {
-									margin: 12px 0px 0px 9px;
-									display: block;
-									margin-left: 5px;
-									line-height: 19px;
-									float: left;
-									
-									.notice-avatar-part {
-										font-weight: bold;
-									}
+                .notice-contents-avatar-image {
+                  margin-top: 5px;
+                  display: block;
+                  float: left;
 
-									.notice-avatar-contents-date {
-										float: right;
-										font-size: 11px;
-										color: #6A7074;
-									}
-								}
-
-								&:hover {
-									background-color: #EFEFEF;
-								}
-							}
-						}
-					}
-
-					.popover__arrow {
-						position: absolute;
-						z-index: -1;
-						content: "";
-						right: 337px;
-						top: 63px;
-						border-style: solid;
-						border-width: 10px 10px 10px 10px;
-						border-color: transparent white transparent transparent;
-						transition-duration: 0.3s;
-						transition-property: transform;
-					}
-				}
-			}
-
-			.nav-item {
-				padding: 11px 0;
-				transition: 0.1s ease-in-out transform;
-				color: #fff;
-				text-decoration: none;
-				cursor: pointer;
-				[data-tooltip-text]::after {
-                    -webkit-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-                    -moz-transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-                    transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
-                
-                    background-color: rgba(0, 0, 0, 0.8);
-                
-                  -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-                    -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-                    box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-                    
-                  -webkit-border-radius: 5px;
-                    -moz-border-radius: 5px;
-                    border-radius: 5px;
-                    
-                    color: #FFFFFF;
-                    font-size: 12px;
-                    // margin-bottom: 1%;
-                    padding: 5px;
-                    position: absolute;
-                    width: 72px;
-                    // min-width: 50px;
-                    // max-width: 300px;
-                    word-wrap: break-word;
-                
-                    z-index:999;
-                
-                    opacity: 0;
-                    right: -9999px;
-                    // top: 1%;
-                    
-                    content: attr(data-tooltip-text);
+                  .notice-avatar-image {
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                  }
                 }
-                
-                [data-tooltip-text]:hover:after {
-                    right: -58px;
-                    opacity: 1;
+
+                .notice-avatar-contents {
+                  margin: 12px 0px 0px 9px;
+                  display: block;
+                  margin-left: 5px;
+                  line-height: 19px;
+                  float: left;
+
+                  .notice-avatar-part {
+                    font-weight: bold;
+                  }
+
+                  .notice-avatar-contents-date {
+                    float: right;
+                    font-size: 11px;
+                    color: #6a7074;
+                  }
                 }
-					.nav-item-profile {
-						border-radius: 50%;
-						display: block;
-						width: 62px;
-						height: 60px;
-						margin: 5px;
-						background-size: cover;
-						background-position: center;
-					
-					}
 
-					#nest-logo {
-						color: darkgray;
-						width: 47px;
-						height: 63px;
-					}
+                &:hover {
+                  background-color: #efefef;
+                }
+              }
+            }
+          }
 
-					.icon {
-						font-size: 1.5em;
-						margin-bottom: 5px;
-						color: #fff;
-						text-shadow: 3px 0 6px rgba(0, 0, 0, 0.1);
-					}
+          .popover__arrow {
+            position: absolute;
+            z-index: -1;
+            content: "";
+            right: 337px;
+            top: 63px;
+            border-style: solid;
+            border-width: 10px 10px 10px 10px;
+            border-color: transparent white transparent transparent;
+            transition-duration: 0.3s;
+            transition-property: transform;
+          }
+        }
+      }
 
-					.label {
-						font-size: 0.6em;
-						font-weight: 300;
-						opacity: 0;
-						transition: 0.2s ease-in-out opacity;
-						color: #fff;
-					}
-			}
-			.nav-item:hover {
-			 	transform: scale(1.1);
-			 	transform-origin: center center;
-			
-			 }
-			.nav-item:nth-child(1):hover {
-				transform: translate(5px, 8px);
-			}
-		}
-	}
+      .nav-item {
+        padding: 11px 0;
+        transition: 0.1s ease-in-out transform;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        [data-tooltip-text]::after {
+          -webkit-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+          -moz-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+          transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
-	.modal-avatar {
+          background-color: rgba(0, 0, 0, 0.8);
 
-		.profile-setting-page {
-			color: #6A7074;
-			text-decoration: none;
+          -webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+          -moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+          box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
 
-			.modal-header {
-				.img-responsive {
-					border-radius: 50%;
-					width: 250px;
-					height: 250px;
-					margin: 0 auto;
-				}
-			}
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
 
-			.modal-header:hover {
-				background-color: #F3F3F3;
-			}
-		}
+          color: #ffffff;
+          font-size: 12px;
+          // margin-bottom: 1%;
+          padding: 5px;
+          position: absolute;
+          width: 72px;
+          // min-width: 50px;
+          // max-width: 300px;
+          word-wrap: break-word;
 
-		.profile-setting-page:hover {
-			text-decoration: none;
-		}
+          z-index: 999;
 
-		.modal-body {
+          opacity: 0;
+          right: -9999px;
+          // top: 1%;
 
-			.background-setting {
-				cursor: pointer;
-				
-				.active {
-					border: 3px solid #000080;
-				}
+          content: attr(data-tooltip-text);
+        }
 
-				.img-responsive {
-					display: inline-block;
-					width: 50px;
-					height: 50px;
-				}
+        [data-tooltip-text]:hover:after {
+          right: -58px;
+          opacity: 1;
+        }
+        .nav-item-profile {
+          border-radius: 50%;
+          display: block;
+          width: 62px;
+          height: 60px;
+          margin: 5px;
+          background-size: cover;
+          background-position: center;
+        }
 
-				.btn {
-					display: inline-block;
-					width: auto;
-					height: 50px;
-					margin-left: 3%;
-					border-color: #393939;
-					padding: 14px 6px 0 6px;
-				}
-			}
-		}
+        #nest-logo {
+          color: darkgray;
+          width: 47px;
+          height: 63px;
+        }
 
-		.modal-footer {
-			.btn {
-				color: #FFFFFF;
-				background-color: #393939;
-			}
-		}
-	}
+        .icon {
+          font-size: 1.5em;
+          margin-bottom: 5px;
+          color: #fff;
+          text-shadow: 3px 0 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .label {
+          font-size: 0.6em;
+          font-weight: 300;
+          opacity: 0;
+          transition: 0.2s ease-in-out opacity;
+          color: #fff;
+        }
+      }
+      .nav-item:hover {
+        transform: scale(1.1);
+        transform-origin: center center;
+      }
+      .nav-item:nth-child(1):hover {
+        transform: translate(5px, 8px);
+      }
+    }
+  }
+
+  .modal-avatar {
+    .profile-setting-page {
+      color: #6a7074;
+      text-decoration: none;
+
+      .modal-header {
+        .img-responsive {
+          border-radius: 50%;
+          width: 250px;
+          height: 250px;
+          margin: 0 auto;
+        }
+      }
+
+      .modal-header:hover {
+        background-color: #f3f3f3;
+      }
+    }
+    .mb-2 {
+      text-align: center;
+    }
+
+    .profile-setting-page:hover {
+      text-decoration: none;
+    }
+
+    .modal-body {
+      display: flex;
+      .background-setting {
+		overflow: hidden;
+		height: 50px;
+        cursor: pointer;
+
+        .active {
+          border: 3px solid #000080;
+        }
+
+        .img-responsive {
+          display: inline-block;
+          width: 50px;
+		  height: 50px;
+		  padding: 1px;
+        }
+        transition-property: height;
+        transition-duration: 0.3s;
+      }
+      .moreBackGround {
+        height: 200px;
+      }
+
+      .btn {
+        display: inline-block;
+		width: 196px;
+        height: 50px;
+        margin-left: 3%;
+        border-color: #393939;
+        padding: 14px 6px 0 6px;
+      }
+    }
+
+    .modal-footer {
+      .btn {
+        color: #ffffff;
+        background-color: #393939;
+      }
+    }
+  }
 }
-
-
-
