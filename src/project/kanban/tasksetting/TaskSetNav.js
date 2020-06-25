@@ -20,7 +20,6 @@ class Navigation extends Component {
       borderBottom: '3px solid #27B6BA'
     }
   
-    console.log(this.props.match.path === '/nest/calendar/:projectNo/task/:taskNo')
     return (
       <div className="Navigation">
         {this.props.match.path.indexOf("calendar") == -1 ?
