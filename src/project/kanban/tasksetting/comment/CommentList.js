@@ -169,14 +169,14 @@ class CommentList extends Component {
                                         }
                                         {comment.fileNo === null ? null :
                                             comment.originName.split('.')[1] === 'csv' || comment.originName.split('.')[1] === 'xlxs' ?
-                                                <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src='/assets/images/excel.png' alt={comment.originName} ></img> :
+                                                <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src='/nest/assets/images/excel.png' alt={comment.originName} ></img> :
                                                 <>{comment.originName.split('.')[1] === 'txt' ?
                                                     <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }}
-                                                        src='/assets/images/txt.png'
+                                                        src='/nest/assets/images/txt.png'
                                                         alt={comment.originName}></img> :
                                                     <>{comment.originName.split('.')[1] === 'png' || comment.originName.split('.')[1] === 'jpg' ?
                                                         <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src={`${API_URL}${comment.filePath}`} alt={comment.originName} ></img>
-                                                        : <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src='/assets/images/attach.png' alt={comment.originName}></img>
+                                                        : <img style={{ display: 'block', width: '150px', padding: '2% 3% 0% 3%' }} src='/nest/assets/images/attach.png' alt={comment.originName}></img>
                                                     }</>
                                                 }</>
                                         }

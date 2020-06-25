@@ -1973,7 +1973,7 @@ export default class Dashboard extends React.Component {
                                     {this.state.isMemberEmailValid ?
 
                                       this.state.loading ?
-                                        <div style={{ textAlign: "center" }}><img style={{ height: "25px" }} src="../assets/images/ajax-loader.gif" /></div> :
+                                        <div style={{ textAlign: "center" }}><img style={{ height: "25px" }} src="/nest/assets/images/ajax-loader.gif" /></div> :
                                         <span>
                                           <input type="button" id="add-member-invite"
                                             className="btn btn-outline-primary btn-rounded"
