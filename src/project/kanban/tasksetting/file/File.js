@@ -29,14 +29,14 @@ class File extends Component {
     // 파일 선택 했을 때.
     onChangeFileUpload(event, taskListNo) {
        
-        console.log("!!")
         this.setState({
             selectedFile: event.target.files[0],
         })
 
         if (event.target.files.length !== 0 && (event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || event.target.files[0].type === 'image/png' || event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-            || event.target.files[0].type === 'text/plain' || event.target.files[0].type === 'image/jpeg' || event.target.files[0].type === 'application/vnd.ms-excel')) {
+            || event.target.files[0].type === 'text/plain' || event.target.files[0].type === 'image/jpeg' || event.target.files[0].type === 'application/vnd.ms-excel'
+            || event.target.files[0].type === "application/x-zip-compressed")) {
 
             const formData = new FormData();
             formData.append('file', event.target.files[0])
@@ -84,9 +84,11 @@ class File extends Component {
         this.setState({
             selectedFile: files[0]
         })
+        console.log(files[0].type)
         if (files[0].length !== 0 && (files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || files[0].type === 'image/png' || files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-            || files[0].type === 'text/plain' || files[0].type === 'image/jpeg' || files[0].type === 'application/vnd.ms-excel')) {
+            || files[0].type === 'text/plain' || files[0].type === 'image/jpeg' || files[0].type === 'application/vnd.ms-excel'
+            || files[0].type === "application/x-zip-compressed")) {
         const formData = new FormData();
         formData.append('file', files[0])
         formData.append('taskNo', this.props.match.params.taskNo);
@@ -141,11 +143,23 @@ class File extends Component {
     }
 
     render() {
-        if (!this.props.task) {
+        if(!this.props.task || this.props.task.length == 0){
+            console.log("!!!")
             return <></>;
         }
 
-        const taskList = this.props.task;
+        let taskList=[];
+        let authUserRole = null;
+        if(this.props.match.url.indexOf("calendar") !== -1){
+            
+            const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
+            taskList = this.props.task[projectIndex].allTaskList
+            authUserRole = this.props.task[projectIndex].authUserRole
+
+        } else{
+            taskList = this.props.task;
+            authUserRole = this.props.authUserRole
+        }
         let Indexs = []
         taskList.map( (taskList,taskListIndex) => 
             taskList.tasks.map((task,taskIndex) => 
@@ -155,15 +169,21 @@ class File extends Component {
         ))
         const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
+
         return (
             <div className="SettingFile">
                 {taskItem.taskState == "del" ? 
                     <div className="task-delete"> 
                         <div className ="task-delete-warning">
                             <span>삭제된 업무입니다.</span>
-                            <Link style= {{color:'black', textDecoration:'none'}} to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} >
-                                <div className="setting-close">닫기</div>
-                            </Link>
+                            {this.props.match.url.indexOf("calendar") === -1 ? 
+                                <Link style= {{color:'black', textDecoration:'none'}} to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard`} >
+                                    <div className="setting-close">닫기</div>
+                                </Link> :
+                                <Link style= {{color:'black', textDecoration:'none'}} to = {`/nest/calendar`} >
+                                    <div className="setting-close" onClick={this.props.taskCallbacks.onCloseSettingHTML}>닫기</div>
+                                </Link>
+                            }
                         </div>
                     </div> : null }
                 <AlertList
@@ -176,7 +196,7 @@ class File extends Component {
                 />
                 <Header
                     location={this.props.match.url}
-                    authUserRole={this.props.authUserRole}
+                    authUserRole={authUserRole}
                     taskItem={taskItem}
                     name={taskItem.userName}
                     date={taskItem.taskRegdate}
@@ -185,7 +205,7 @@ class File extends Component {
                     projectNo={this.props.projectNo}
                     taskListNo = {taskListNo} />
                 <div className="File">
-                    {taskItem.taskState == "del" || this.props.authUserRole === 3 ? 
+                    {taskItem.taskState == "del" || authUserRole === 3 ? 
                     // 삭제된 업무이거나 권한이 3인경우
                         <div style={{height:'100%'}} ><div
                         style={{display: 'inline-block', position: 'relative', height:'100%'}}><div className="FileMenu">
@@ -202,7 +222,7 @@ class File extends Component {
                                     <div className="input-group-btn"></div>
                                 </div>
                             </form>
-                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ?
+                            {taskItem.taskState == "del" || authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
                                 <>
@@ -230,7 +250,7 @@ class File extends Component {
                         <hr style={{ paddingLeft: '10px' }} />
                         <FileList
                             searchFile={this.state.fileSearch}
-                            authUserRole={this.props.authUserRole}
+                            authUserRole={authUserRole}
                             taskListNo={taskListNo}
                             taskNo={this.props.match.params.taskNo}
                             taskCallbacks={this.props.taskCallbacks}
@@ -251,7 +271,7 @@ class File extends Component {
                                     <div className="input-group-btn"></div>
                                 </div>
                             </form>
-                            {taskItem.taskState == "del" || this.props.authUserRole === 3 ?
+                            {taskItem.taskState == "del" || authUserRole === 3 ?
                                 <button className="disabled-submit-button"> 파일첨부</button>
                                 :
                                 <>
@@ -279,7 +299,7 @@ class File extends Component {
                         <hr style={{ paddingLeft: '10px' }} />
                         <FileList
                             searchFile={this.state.fileSearch}
-                            authUserRole={this.props.authUserRole}
+                            authUserRole={authUserRole}
                             taskListNo={taskListNo}
                             taskNo={this.props.match.params.taskNo}
                             taskCallbacks={this.props.taskCallbacks}
