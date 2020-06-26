@@ -360,7 +360,7 @@ class myCalendar extends Component {
     let eventShowStart = moment(event.start).format('M월 DD일 HH:mm');
 
     this.setState({
-      // link:'',
+      link:'',
       eventShowStart: eventShowStart,
       newTaskContents: "",
       pathChange: "",
@@ -475,6 +475,7 @@ class myCalendar extends Component {
 
   onPrivateTaskClose() {
     this.setState({
+      link:'',
       privateTask: false,
       pathSelect: false,
       projectList: false,
@@ -552,6 +553,7 @@ class myCalendar extends Component {
             <div className="task-title">&nbsp;&nbsp;{event.title}</div> 설정 열기
           </div>
         </Link>
+          <div className="task-setting-close" onClick={this.onClickSettingClose.bind(this)}>&times;</div>
       </div>
     )
       this.setState({
@@ -559,12 +561,9 @@ class myCalendar extends Component {
       })
   }
 
-  onClickSetting(event, projectIndex){
-    console.log("onClickSetting")
-    console.log(this.state.taskList[projectIndex].allTaskList)
-
+  onClickSettingClose(){
     this.setState({
-      taskList:this.state.taskList[projectIndex].allTaskList
+      link:''
     })
 
   }

@@ -52,8 +52,7 @@ class Modal extends Component {
 
         array.map(array => projectIndexArray.push(array.projectNo))
         index.push(projectArray.map(projectNo => projectIndexArray.indexOf(projectNo)))
-        // index.push(this.state.projects.map(project => projectIndexArray.indexOf(project.projectNo)))
-        // index.push(projectArray.map(projectNo => ))
+
         if(index[0].indexOf(-1) === -1){
             this.setState({
                 delete:true,
@@ -63,6 +62,8 @@ class Modal extends Component {
         }
     }
     render(){
+        let projectRoleNoArray = [];
+        this.state.projects.map(project => projectRoleNoArray.push(project.roleNo));
         return (
             <React.Fragment>
                 <div className="Modal-overlay" />
@@ -76,6 +77,7 @@ class Modal extends Component {
                                     onUpdateDeleteState:this.onUpdateDeleteState.bind(this),
                                     userRoleUpdate:this.userRoleUpdate.bind(this)
                                 }}
+                                projectRoleNoArray={projectRoleNoArray}
                                 delete={this.state.delete}
                                 userNoArray={this.state.userNoArray}
                                 confirmArray={this.state.confirmArray}
@@ -83,10 +85,10 @@ class Modal extends Component {
                             />
                         </p>
                     </div>
-                    {this.state.delete ? 
+                    {projectRoleNoArray.indexOf(1) === -1 || this.state.delete ? 
                     <>
                         <div className="delete-warning-message">
-                            <span>아래 delete 버튼을 누르면 본 계정은 정말로 삭제됩니다. 삭제하시려면 아래 버튼을 눌러주세요.</span>
+                            <span>전체엑세스 권한이 없습니다. 아래 delete 버튼을 누르면 본 계정은 정말로 삭제됩니다. 삭제하시려면 아래 버튼을 눌러주세요.</span>
                         </div>
                         <div className="button-wrap-delete">
                             <Link to = "/nest/"><button onClick = {this.onDeleteAccount.bind(this)}> Delete </button></Link>

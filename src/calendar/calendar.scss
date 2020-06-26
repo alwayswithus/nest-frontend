@@ -12,6 +12,15 @@
 		z-index: 7;
 		padding: 0.5%;
 		border-radius: 18px;
+		.task-setting-close{
+			display: inline-block;
+			color:white;
+			margin-left: 5px;
+			&:hover{
+				color:red;
+				cursor: pointer;
+			}
+		}
 		.fa-bullhorn{
 			color: white;
 			transform: scale(1.2);
