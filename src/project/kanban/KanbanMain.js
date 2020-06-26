@@ -1956,12 +1956,18 @@ class KanbanMain extends Component {
 
   // CallBack Change Title Function
   callbackProjectTitleChange(projectNo, title) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
-
+    
     let project = {
       projectNo: projectNo,
       projectTitle: title
     }
+
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo)
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
+
 
     fetch(`${API_URL}/api/projectsetting/title`, {
       method: 'post',
@@ -1970,27 +1976,39 @@ class KanbanMain extends Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectTitle: { $set: json.data.projectTitle }
-          }
-        })
+        
+        let socketData = {
+          projectNo: projectNo,
+          projectTitle: json.data.projectTitle,
+          socketType: "titleChange",
+          membersNo: membersNo
+        }
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          projectTitle: json.data.projectTitle,
+          socketType: "titleChange",
+          members: this.state.projects[projectIndex].members
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
       })
   }
 
   // CallBack Chnage Desc Function
   callbackProjectDescChange(projectNo, desc) {
-    const projectIndex = this.state.projects.findIndex(project => project.projectNo === projectNo);
-
+    
     let project = {
       projectNo: projectNo,
       projectDesc: desc
     }
+
+    const projectIndex = this.state.projects.findIndex(project => project.projectNo == projectNo)
+    let membersNo = []
+    this.state.projects[projectIndex].members.map(member => {
+      membersNo.push(member.userNo);
+    })
 
     fetch(`${API_URL}/api/projectsetting/desc`, {
       method: 'post',
@@ -1999,16 +2017,23 @@ class KanbanMain extends Component {
     })
       .then(response => response.json())
       .then(json => {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            projectDesc: { $set: json.data.projectDesc }
-          }
-        })
+        
+        let socketData = {
+          projectNo: projectNo,
+          projectDesc: json.data.projectDesc,
+          socketType: "descChange",
+          membersNo: membersNo
+        }
 
-        this.setState({
-          projects: newProject,
-          project: newProject[projectIndex]
-        })
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          projectDesc: json.data.projectDesc,
+          socketType: "descChange",
+          members: this.state.projects[projectIndex].members
+        }
+
+        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
       })
   }
 
@@ -2560,6 +2585,69 @@ class KanbanMain extends Component {
   }
 
   receiveKanban(socketData) {
+    if(socketData.socketType == "descChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectDesc: { $set: socketData.projectDesc }
+          }
+        })
+
+        if(this.state.project.projectNo !== newProject[projectIndex].projectNo) {
+          this.setState({
+            projects: newProject
+          })
+        }
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex]
+          })
+        }
+        else {
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex]
+          })
+        }
+      } 
+    }
+
+    if(socketData.socketType == "titleChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+
+      if(projectIndex !== -1) {
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            projectTitle: { $set: socketData.projectTitle }
+          }
+        })
+  
+        if(this.state.project.projectNo !== newProject[projectIndex].projectNo) {
+          this.setState({
+            projects: newProject,
+            projectTitle: socketData.projectTitle
+          })
+        }
+        else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex],
+            projectTitle: socketData.projectTitle
+          })
+        }
+        else {
+          this.setState({
+            projects: newProject,
+            project: newProject[projectIndex],
+            projectTitle: socketData.projectTitle
+          })
+        }
+      }
+    }
+
     if(socketData.socketType === "foreverDelete") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
