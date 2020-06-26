@@ -345,7 +345,15 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          projectTitle: json.data.projectTitle,
+          socketType: "titleChange",
+          members: this.state.projects[projectIndex].members
+        }
+
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
       })
   }
 
@@ -378,7 +386,15 @@ export default class Dashboard extends React.Component {
           membersNo: membersNo
         }
 
+        let kanbanSocketData = {
+          projectNo: projectNo,
+          projectDesc: json.data.projectDesc,
+          socketType: "descChange",
+          members: this.state.projects[projectIndex].members
+        }
+
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
+        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
       })
   }
 

@@ -365,6 +365,8 @@ class myCalendar extends Component {
       newTaskContents: "",
       pathChange: "",
       eventStart: event.start,
+      projectList: false,
+      taskList: false,
       privateTask: true
     })
   }
@@ -2267,7 +2269,6 @@ class myCalendar extends Component {
                 }}
                 onSelectEvent={this.onSelectEvent.bind(this)}
                 onSelectSlot={this.onOpenDialog.bind(this)}
-                // components={{event:this.state.link}}
               />
               
             </div>
