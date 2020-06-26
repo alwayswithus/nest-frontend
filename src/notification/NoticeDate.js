@@ -22,7 +22,7 @@ class NoticeDate extends React.Component {
                     moment(notice.noticeDate).locale('en').format('YYYY-MMM-DD') === date ?
                         <div key={notice.noticeNo} className={`notice-body-contents-today ${notice.messageCheck === 'N' ? "newMessage": ""}`} >
                             <div className="notice-body-contents-avatar-image">
-                                <img src={`../${notice.userPhoto}`} className="notice-avatar-image" alt="userimg"/>
+                                <img src={`${notice.userPhoto}`} className="notice-avatar-image" alt="userimg"/>
                             </div>
                             <div className="notice-body-contents-avatar-name">
                                 <span>{notice.userName}</span>
