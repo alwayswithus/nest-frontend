@@ -2205,15 +2205,9 @@ class KanbanMain extends Component {
         socketType: "userDelete"
       }
 
-      // let calendarSocketData = {
-      //   projectNo: projectNo,
-      //   members: [member],
-      //   socketType: "userDelete"
-      // }
-
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
-      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
+      this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData));
     }
     else {
       let memberArray = [
@@ -2272,11 +2266,12 @@ class KanbanMain extends Component {
         "projectMemberJoin",
         userName,
         projectNo,
-        this.clientRef)
+        this.clientRef
+      )
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
-      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
+      this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData));
     }
   }
 
@@ -2322,6 +2317,7 @@ class KanbanMain extends Component {
 
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
     this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData));
   }
 
   // CallBack Invite Member Function

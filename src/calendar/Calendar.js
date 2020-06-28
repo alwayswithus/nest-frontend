@@ -1751,31 +1751,197 @@ class myCalendar extends Component {
         })
       }
     }
-    // else if(socketData.socketType === "userDelete") {
-    //   const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
-    //   if(projectIndex !== -1) {
-    //     let newProject = update(this.state.projects, {
-    //       $splice: [[projectIndex, 1]]
-    //     })
+    else if(socketData.socketType === "userAdd") {
+      let projectNumber = [];
+      ApiService.fetchDashboard()
+        .then(response => {
+          response.data.data.allProject.map(project => {
+            project["isChecked"] = false
+          })
+          response.data.data.allProject.map(project => {
+            projectNumber.push(project.projectNo);
+          })
+          
+          this.setState({
+            projects: response.data.data.allProject,
+            projectNumber: projectNumber
+          })
+        })
+      
+      ApiService.fetchCalendar()
+        .then(response => {
+          let taskState = [];
+          let taskNumber = [];
+          let taskPoint = [];
+          let taskPointNumber = [];
+  
+          response.data.data.allTask.map(task => {
+            task["start"] = new Date(task.start);
+            task["end"] = new Date(task.end + 1);
+          })
+  
+          response.data.data.allTask.map(task => {
+            taskState.push({ id: task.id, state: task.taskState })
+            taskNumber.push(task.id)
+            taskPoint.push({ id: task.id, point: task.taskPoint, isChecked: false })
+            taskPointNumber.push(task.id)
+          })
+  
+          let set = []
+  
+          taskPoint.forEach(task => {
+            if (task.point === null) {
+              set.push({ point: -1 })
+            }
+            else {
+              set.push({ point: task.point })
+            }
+          })
+  
+          let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+  
+          this.setState({
+            events: response.data.data.allTask,
+            taskState: taskState,
+            taskNumber: taskNumber,
+            taskPoint: taskPoint,
+            taskPointNumber: taskPointNumber,
+            taskUniquePoint: setProcess.sort().reverse()
+          })
+        })  
+      
+      ApiService.fetchCalendarAllTask(sessionStorage.getItem("authUserNo"))
+        .then((response) => {
+          this.setState({
+            taskList: response.data.data.allProjects,
+          });
+        });
+    }
+    else if(socketData.socketType === "userDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        const projectNumberIndex = this.state.projectNumber.findIndex(projectNumber => projectNumber == socketData.projectNo);
+        let newProject = update(this.state.projects, {
+          $splice: [[projectIndex, 1]]
+        })
+        let projectNumber = update(this.state.projectNumber, {
+          $splice: [[projectNumberIndex, 1]]
+        })
 
-    //     let events = [];
-    //     this.state.events.map(event => {
-    //       if(event.projectNo === socketData.projectNo) {
+        let events = [];
+        this.state.events.map(event => {
+          if(event.projectNo !== socketData.projectNo) {
+            events.push(event);
+          }
+        })
 
-    //       }
-    //       else {
-    //         events.push(event)
-    //       }
-    //     })
+        const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+        let taskList = update(this.state.taskList, {
+          $splice: [[taskListIndex, 1]]
+        })
 
-    //     console.log(this.state.taskNumber);
+        let taskState = this.state.taskState;
+        let taskNumber = this.state.taskNumber;
+        let taskPoint = this.state.taskPoint;
+        let taskPointNumber = this.state.taskPointNumber;
+        this.state.taskList[taskListIndex].allTaskList.map(taskList => {
+          taskList.tasks.map(task => {
+            let taskStateIndex = taskState.findIndex(taskState => taskState.id == task.taskNo);
+            taskState.splice(taskStateIndex, 1);
+            taskNumber.splice(taskStateIndex, 1);
+            taskPoint.splice(taskStateIndex, 1);
+            taskPointNumber.splice(taskStateIndex, 1);
+          })
+        })
 
-    //     this.setState({
-    //       projects: newProject,
-    //       events: events
-    //     })
-    //   }
-    // }
+        let set = []
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+        
+        this.setState({
+          projects: newProject,
+          projectNumber: projectNumber,
+          events: events,
+          taskList: taskList,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          taskUniquePoint: setProcess.sort().reverse(),
+        })
+      }
+    }
+
+    else if(socketData.socketType === "memberDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        const projectNumberIndex = this.state.projectNumber.findIndex(projectNumber => projectNumber == socketData.projectNo);
+        let newProject = update(this.state.projects, {
+          $splice: [[projectIndex, 1]]
+        })
+        let projectNumber = update(this.state.projectNumber, {
+          $splice: [[projectNumberIndex, 1]]
+        })
+
+        let events = [];
+        this.state.events.map(event => {
+          if(event.projectNo !== socketData.projectNo) {
+            events.push(event);
+          }
+        })
+
+        const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+        let taskList = update(this.state.taskList, {
+          $splice: [[taskListIndex, 1]]
+        })
+
+        let taskState = this.state.taskState;
+        let taskNumber = this.state.taskNumber;
+        let taskPoint = this.state.taskPoint;
+        let taskPointNumber = this.state.taskPointNumber;
+        this.state.taskList[taskListIndex].allTaskList.map(taskList => {
+          taskList.tasks.map(task => {
+            let taskStateIndex = taskState.findIndex(taskState => taskState.id == task.taskNo);
+            taskState.splice(taskStateIndex, 1);
+            taskNumber.splice(taskStateIndex, 1);
+            taskPoint.splice(taskStateIndex, 1);
+            taskPointNumber.splice(taskStateIndex, 1);
+          })
+        })
+
+        let set = []
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+        
+        this.setState({
+          projects: newProject,
+          projectNumber: projectNumber,
+          events: events,
+          taskList: taskList,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          taskUniquePoint: setProcess.sort().reverse(),
+        })
+      }
+    }
 
     else if (socketData.socketType === "taskDelete") {
       
@@ -2042,6 +2208,16 @@ class myCalendar extends Component {
     const {history} = this.props;
     const projectNo =  history.location.pathname.split('/')[3];
 
+    console.log("projects", this.state.projects);
+    console.log("projectNumber", this.state.projectNumber);
+    console.log("events", this.state.events);
+
+    console.log("taskState", this.state.taskState);
+    console.log("taskNumber", this.state.taskNumber);
+    console.log("taskPoint", this.state.taskPoint);
+    console.log("taskPointNumber", this.state.taskPointNumber);
+    console.log("taskUniquePoint", this.state.taskUniquePoint);
+  
     return (
       <div id="Calendar">
         {this.state.link}
@@ -2451,17 +2627,13 @@ class myCalendar extends Component {
 
     ApiService.fetchCalendarAllTask(sessionStorage.getItem("authUserNo"))
       .then((response) => {
-
         this.setState({
           taskList: response.data.data.allProjects,
         });
-      }
-
-      );
+      });
 
     ApiService.fetchCalendarProjectMember(sessionStorage.getItem("authUserNo"))
       .then(response =>
-        // console.log(response.data.data.allProjectMembers)
         this.setState({
           projectMembers: response.data.data.allProjectMembers
         })
