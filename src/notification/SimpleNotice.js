@@ -9,12 +9,12 @@ class SimpleNotice extends React.Component {
         let notice = this.props.notice;
         const today = new Date();
         return (
-            <Link to={
+            <a href={
                 `/nest/dashboard/${notice.projectNo}${notice.taskListNo === null ?"/kanbanboard/" :`/kanbanboard/task/${notice.taskNo}`}${(notice.noticeType === 'commentInsert')||(notice.noticeType === 'commentLike')?"/comment":""}`
             }>
             <div className="notice-one-contents" style={{display:'inline-block'}}>
                 <div className="notice-contents-avatar-image">
-                    <img src={`/nest/../${notice.userPhoto}`} className="notice-avatar-image" />
+                    <img src={`${notice.userPhoto}`} className="notice-avatar-image" alt="userimg"/>
                 </div>
                 <div className="notice-avatar-contents">
                     <div className="notice-avatar-part" style={{width:'200px'}}>
@@ -35,7 +35,7 @@ class SimpleNotice extends React.Component {
                     </div>
                 </div>
             </div>
-            </Link>
+            </a>
         );
     }
     
