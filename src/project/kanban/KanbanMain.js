@@ -498,7 +498,6 @@ class KanbanMain extends Component {
       taskCount: this.state.taskCount - 1,
       completedTask: this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState === "done" ? this.state.completedTask - 1 : this.state.completedTask
     })
-    console.log(this.state.taskList[TaskListIndex].tasks[TaskIndex].taskState)
     const deleteTask = {
       taskListNo: taskListNo,
       taskId: taskId,
@@ -1284,7 +1283,6 @@ class KanbanMain extends Component {
       taskIndex
     ].commentList.findIndex((comment) => comment.commentNo === commentNo);
 
-    // console.log("KanbanMain + " + commentContents)
     let commentData = {
       commentContents: commentContents,
       commentLike: null
@@ -1832,7 +1830,6 @@ class KanbanMain extends Component {
     })
       .then(response => response.json())
       .then(json => {
-        // console.log(json.data.taskPoint)
         let newTaskList = update(this.state.taskList, {
           [taskListIndex]: {
             tasks: {
@@ -2598,7 +2595,6 @@ class KanbanMain extends Component {
       body: JSON.stringify(newTaskList),
     });
 
-    // console.log(newTaskList)
     newTaskList = update(newTaskList, {
       socketType: { $set: "taskListName" },
       members: { $set: this.state.projectMembers }
@@ -2608,7 +2604,6 @@ class KanbanMain extends Component {
   }
 
   receiveKanban(socketData) {
-
     if(socketData.socketType == "descChange") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
@@ -2956,10 +2951,22 @@ class KanbanMain extends Component {
     }
 
     if (socketData.socketType == "inviteUser") {
-
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if (projectIndex !== -1) {
+        let projectMember = {
+          projectNo: socketData.data.projectNo,
+          roleNo: socketData.data.roleNo,
+          userEmail: socketData.data.userEmail,
+          userGrade: "준회원",
+          userNo: socketData.data.userNo,
+          userPhoto: socketData.data.userPhoto
+        }
+
+        let projectMembers = update(this.state.projectMembers, {
+          $push: [projectMember]
+        })
+        
         let newProject = update(this.state.projects, {
           [projectIndex]: {
             members: {
@@ -2982,14 +2989,16 @@ class KanbanMain extends Component {
           this.setState({
             users: users,
             projects: newProject,
-            project: newProject[projectIndex]
+            project: newProject[projectIndex],
+            projectMembers: projectMembers
           })
         }
         else {
           this.setState({
             users: users,
             projects: newProject,
-            project: newProject[projectIndex]
+            project: newProject[projectIndex],
+            projectMembers: projectMembers
           })
         }
       }
@@ -4033,7 +4042,6 @@ class KanbanMain extends Component {
             const commentIndex = this.state.taskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === socketData.commentNo);
             const fileIndex = this.state.taskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === socketData.fileNo);
 
-            // console.log(this.state.tasklist[taskListIndex].tasks[taskIndex])
           if (socketData.fileNo === null) {
             socketData.fileNo = 0;
           }

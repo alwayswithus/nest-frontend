@@ -528,7 +528,7 @@ class myCalendar extends Component {
         .then(response => response.json())
         .then(json => {
           this.setState({
-            taskList: !this.state.taskList,
+            taskListBool: !this.state.taskListBool,
             allTaskList: json.data.allTaskList
           })
         })

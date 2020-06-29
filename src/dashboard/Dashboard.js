@@ -313,7 +313,6 @@ export default class Dashboard extends React.Component {
 
   // CallBack Change Title Function
   callbackProjectTitleChange(projectNo, title) {
-    
     let project = {
       projectNo: projectNo,
       projectTitle: title
@@ -867,7 +866,6 @@ export default class Dashboard extends React.Component {
 
   // Project Search Function
   onNotifyProjectKeywordChange(keyword) {
-    console.log(keyword)
     this.setState({
       projectKeyword: keyword
     })
