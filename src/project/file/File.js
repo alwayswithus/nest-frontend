@@ -135,7 +135,7 @@ export default class File extends React.Component {
         if (window.confirm("파일을 삭제하시겠습니까?")) {
 
             const fileIndex = this.state.projectFiles.findIndex((file) => file.fileNo === fileNo);
-    
+            console.log(fileIndex)
             fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
             method: "delete"
             })
