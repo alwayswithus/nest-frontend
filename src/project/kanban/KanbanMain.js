@@ -4017,7 +4017,6 @@ class KanbanMain extends Component {
   
       }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
         if(socketData.socketType === 'comment'){
-            console.log("!!???")
             let newData = update(this.state.taskList, {
               [socketData.taskListIndex] : {
                 tasks :{
