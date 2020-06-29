@@ -16,9 +16,9 @@
     width: 70%;
     height: auto;
     // background-color: white;
-    border-radius: 10px 10px 10px 10px;
+
     .table {
-      border-radius: 5px 5px 5px 5px;
+      margin-bottom: 0px;
       tbody {
         background-color: white;
         tr {
@@ -37,12 +37,12 @@
       .file-name-cell {
         display: flex;
         align-items: center;
-        .file-originname {
-          white-space: nowrap;
-          width: 50%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+        // .file-originname {
+        //   white-space: nowrap;
+        //   width: 50%;
+        //   overflow: hidden;
+        //   text-overflow: ellipsis;
+        // }
         .file-name-cell-image {
           height: 100%;
           margin-right: 15px;
@@ -97,6 +97,29 @@
               }
             }
           }
+        }
+      }
+    }
+    .paging {
+      background-color: white;
+      .page-link {
+        border-radius: 30px;
+        border: 0px;
+        color: gray;
+      }
+      .page-item {
+        .page-link {
+          color: white;
+          margin: 0px 3px;
+          border-radius: 50%;
+          color:gray
+        }
+
+      }
+      .active{
+        .page-link{
+          background-color: #55c3cf;
+          color: white;
         }
       }
     }

@@ -1,167 +1,171 @@
-
 .SettingFile {
+  position: absolute;
+  right: 0;
+  top: 51px;
+  /* margin-top: -49px; */
+  height: calc(100% - 51px);
+  z-index: 7;
+  .task-delete {
+    width: 632px;
+    height: 100%;
     position: absolute;
-    right: 0;
-    top: 51px;
-    /* margin-top: -49px; */
-    height: calc(100% - 51px);
-    z-index: 7;
-    .task-delete{
-        width: 632px;
-        height: 100%;
-        position: absolute;
-        background-color: #000000b8;
-        z-index: 3;
-        text-align: center;
-        
-        .task-delete-warning{
-          font-size: 2rem;
-          font-weight: bolder;
-        //   background-color: white;
-          color:white;
-          width:200px;
-          height: 50px;
-          padding-top:2%;
-          margin-top: 50%;
-          margin-left: 35%;
+    background-color: #000000b8;
+    z-index: 3;
+    text-align: center;
+
+    .task-delete-warning {
+      font-size: 2rem;
+      font-weight: bolder;
+      //   background-color: white;
+      color: white;
+      width: 200px;
+      height: 50px;
+      padding-top: 2%;
+      margin-top: 50%;
+      margin-left: 35%;
+      border-radius: 5px;
+      cursor: default;
+      .setting-close {
+        background-color: white;
+        width: 100px;
+        border-radius: 3px;
+        height: 36px;
+        padding-top: 2%;
+        margin-left: 25%;
+        margin-top: 5%;
+      }
+    }
+  }
+  .File {
+    width: 632px;
+    background-color: #f3f4f5;
+    float: right;
+    margin-top: 31px;
+    clear: both;
+    height: calc(100% - 153px);
+    box-shadow: -58px -58px 50px -92px #000000, 60px 0px 50px -90px #000000;
+    hr {
+      border: 0.5px solid #dfdfdf;
+    }
+    .FileMenu {
+      align-items: center;
+      margin-top: 2%;
+      .disabled-submit-button {
+        float: right;
+        border: none;
+        padding: 5px 12px;
+        margin-top: 11px;
+        background: #cccccc;
+        color: #fff;
+        font-size: 1em;
+        transition: all 0.4s;
+        cursor: default;
+        margin-right: 5px;
+        outline: none;
+        border-radius: 3px;
+      }
+      .fileUplaod-label {
+        float: right;
+        padding-right: 5%;
+      }
+
+      .fileUpload {
+        border: none;
+        padding: 5px 12px;
+        margin-top: 11px;
+        background: #27b6ba;
+        color: #fff;
+        font-size: 1em;
+        transition: all 0.4s;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+
+      .input-group {
+        position: none;
+        .form-control {
+          width: 250%;
           border-radius: 5px;
-          cursor: default;
-          .setting-close{
-            background-color: white;
-            width: 100px;
-            border-radius: 3px;
-            height: 36px;
-            padding-top: 2%;
-            margin-left: 25%;
-            margin-top: 5%;
+        }
+      }
+      .btn .btn-info {
+        color: black;
+        margin: 8px 0px;
+      }
+
+      .navbar-form .navbar-left {
+        .input-group > .custom-select:not(:last-child),
+        .input-group > .form-control:not(:last-child) {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          width: 120px;
+        }
+      }
+    }
+
+    table td {
+      width: 200px;
+    }
+
+    table {
+      margin: 10px;
+    }
+  }
+
+  .FileList {
+    .FileList-tr {
+      border-radius: 5px;
+      td {
+        padding-left: 10px;
+        .filelist-orginName {
+          display: inline-block;
+          vertical-align: middle;
+          white-space: nowrap;
+          width: 65px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        img {
+          cursor: pointer;
+          object-fit: cover;
+          border-radius: 7px;
+          width: 50px;
+          height: 50px;
+          margin-right: 3%;
+        }
+      }
+    }
+    table tr {
+      height: 55px;
+      vertical-align: middle;
+      background-color: white;
+      button {
+        background: none;
+        border: none;
+        margin-top: 37%;
+      }
+      li {
+        list-style: none;
+        .contents-dropdown {
+          display: inline-block;
+          float: right;
+          .dropdown {
+            .btn-primary {
+              border: 0;
+              color: black;
+              background-color: white;
+            }
+            .dropdown-menu {
+              left: -137px;
+            }
           }
         }
       }
-    .File {
-        width: 632px;
-        background-color: #f3f4f5;
-        float: right;
-        margin-top: 31px;
-        clear: both;
-        height: calc(100% - 153px);;
-        box-shadow: -58px -58px 50px -92px #000000, 60px 0px 50px -90px #000000;
-        hr {
-            border: 0.5px solid #dfdfdf;
-        }
-        .FileMenu {
-            align-items: center;
-            margin-top: 2%;
-            .disabled-submit-button {
-                float: right;
-                border: none;
-                padding: 5px 12px;
-                margin-top: 11px;
-                background: #cccccc;
-                color: #fff;
-                font-size: 1em;
-                transition: all 0.4s;
-                cursor: default;
-                margin-right: 5px;
-                outline: none;
-                border-radius: 3px;
-            }
-            .fileUplaod-label{
-                float: right;
-                padding-right: 5%;
-            }
-
-            .fileUpload {
-                border: none;
-                padding: 5px 12px;
-                margin-top: 11px;
-                background: #27b6ba;
-                color: #fff;
-                font-size: 1em;
-                transition: all 0.4s;
-                cursor: pointer;
-                border-radius: 3px;
-            }
-
-            .input-group {
-                position: none;
-                .form-control {
-                    width: 250%;
-                    border-radius: 5px;
-                }
-            }
-            .btn .btn-info {
-                color: black;
-                margin: 8px 0px;
-            }
-
-            .navbar-form .navbar-left {
-                .input-group > .custom-select:not(:last-child),
-                .input-group > .form-control:not(:last-child) {
-                    border-top-right-radius: 0;
-                    border-bottom-right-radius: 0;
-                    width: 120px;
-                }
-            }
-        }
-
-        table td {
-            width: 200px;
-        }
-
-        table {
-            margin: 10px;
-        }
     }
-
-    .FileList {
-        .FileList-tr {
-            border-radius: 5px;
-            td {
-                padding-left: 10px;
-                .filelist-orginName {
-                    display: inline-block;
-                    vertical-align: middle;
-                    white-space: nowrap;
-                    width: 65px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-                img {
-                    cursor: pointer;
-                }
-            }
-        }
-        table tr {
-            height: 55px;
-            vertical-align: middle;
-            background-color: white;
-            button {
-                background: none;
-                border: none;
-                margin-top: 37%;
-            }
-            li {
-                list-style: none;
-                .contents-dropdown {
-                    display: inline-block;
-                    float: right;
-                    .dropdown {
-                        .btn-primary {
-                            border: 0;
-                            color: black;
-                            background-color: white;
-                        }
-                        .dropdown-menu {
-                            left: -137px;
-                        }
-                    }
-                }
-            }
-        }
-    }
+  }
 }
 .react-viewer-transition {
-    -webkit-transition: opacity 0.01s ease-out !important;
-    -o-transition: opacity 0.01s ease-out !important;
-    transition: opacity 0.01s ease-out !important;
+  -webkit-transition: opacity 0.01s ease-out !important;
+  -o-transition: opacity 0.01s ease-out !important;
+  transition: opacity 0.01s ease-out !important;
 }

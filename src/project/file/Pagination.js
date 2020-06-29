@@ -31,10 +31,10 @@ export default class Pagination extends React.Component {
         const pages = _.range(1, pageCount + 1);
 
         return (
-            <div style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}} className="paging">
                 <nav className="pagination">
-                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackFirstPage.bind(this)}>처음</a></li>
-                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackPreviousPage.bind(this, this.props.currentPage)}>이전</a></li>
+                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackFirstPage.bind(this)}><i class="fas fa-angle-double-left"></i></a></li>
+                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackPreviousPage.bind(this, this.props.currentPage)}><i class="fas fa-angle-left"></i></a></li>
                     {pages.map(page => (
                         <li
                             key={page}
@@ -44,8 +44,8 @@ export default class Pagination extends React.Component {
                             <a className="page-link" onClick={this.callbackHandlePageChange.bind(this, page)}>{page}</a> {/* 페이지 번호 클릭 이벤트 처리기 지정 */}
                         </li>
                     ))}
-                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackNextPage.bind(this, this.props.currentPage, Math.ceil(this.props.itemsCount / this.props.pageSize))}>다음</a></li>
-                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackLastPage.bind(this, Math.ceil(this.props.itemsCount / this.props.pageSize))}>마지막</a></li>
+                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackNextPage.bind(this, this.props.currentPage, Math.ceil(this.props.itemsCount / this.props.pageSize))}><i class="fas fa-angle-right"></i></a></li>
+                    <li style={{ cursor: "pointer" }}><a className="page-link" onClick={this.callbackLastPage.bind(this, Math.ceil(this.props.itemsCount / this.props.pageSize))}><i class="fas fa-angle-double-right"></i></a></li>
                 </nav>
             </div>
         );

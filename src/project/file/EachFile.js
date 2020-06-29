@@ -59,8 +59,8 @@ class EachFile extends Component {
 
     render() {
         return (
-            <tr className="file-contents" key={this.props.projectFile.fileNo}>
-                    <td>
+            <tr className="file-contents" key={this.props.projectFile.fileNo} style={{width: "50%"}}>
+                    <td style={{width:"50%"}}>
                         <div className="file-name-cell">
                             <div className="file-name-cell-image">
                             {this.props.projectFile.originName.split('.')[1] === 'csv' || this.props.projectFile.originName.split('.')[1] === 'xlxs' ?
@@ -100,8 +100,8 @@ class EachFile extends Component {
                         <Link
                             style={{ color: 'black', textDecoration: 'none' }}
                             to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.projectFile.taskNo}/file`}>
-                            <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom">
-                                {this.props.projectFile.tasklistName} &gt; {this.props.projectFile.taskContents}
+                            <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom" style={{display:"flex"}}>
+                            {this.props.projectFile.tasklistName}&nbsp;<i style={{color: "#55c3cf", alignItems: "center", paddingTop:"2px"}} class="fas fa-caret-right"></i>&nbsp;{this.props.projectFile.taskContents}
                             </div>
                             <ReactTooltip />
                         </Link>
