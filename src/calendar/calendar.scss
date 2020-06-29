@@ -859,6 +859,16 @@ button.rbc-input {
 			}
         }
 	}   
+
+	.taskSetting-setting, .TaskSetComment, .SettingFile{
+		top:0px;
+		height: 100%;
+		box-shadow: 0px 0px 3px grey;
+		z-index: 7;
+	}
+	.SettingFile{
+		width: 632px;
+	}
 }
 
 .task-location-select {

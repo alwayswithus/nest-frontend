@@ -156,6 +156,7 @@
   
         .Member-list {
           width: 300px;
+
           .Member {
             border: none;
             border-radius: 5px;
@@ -167,6 +168,7 @@
             cursor: pointer;
             img {
               width: 20px;
+              height: 20px;
             }
             span {
               padding-top: 1%;

@@ -55,7 +55,7 @@ class KanbanBoard extends Component {
   // 리스트명 입력 이벤트
   onTextAreaChanged(event) {
     this.setState({
-      taskListName: event.target.value.substr(0, 13),
+      taskListName: event.target.value.substr(0, 11),
     });
   }
 

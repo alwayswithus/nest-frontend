@@ -66,7 +66,7 @@ class TaskList extends Component {
   // Task List 이름 수정시 글자 수 limit
   onInputChanged(event) {
     this.setState({
-      keyword: event.target.value.substr(0, 13),
+      keyword: event.target.value.substr(0, 11),
     });
   }
 
@@ -87,7 +87,7 @@ class TaskList extends Component {
   // Task 내용 입력 이벤트
   onTextAreaChanged(event) {
     this.setState({
-      taskContents: event.target.value.substr(0, 30),
+      taskContents: event.target.value,
     });
   }
 
