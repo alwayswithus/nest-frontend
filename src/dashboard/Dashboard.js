@@ -126,15 +126,9 @@ export default class Dashboard extends React.Component {
         socketType: "userDelete"
       }
 
-      // let calendarSocketData = {
-      //   projectNo: projectNo,
-      //   members: [member],
-      //   socketType: "userDelete"
-      // }
-
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData));
-      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
+      this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData));
     }
     else {
       let memberArray = [
@@ -193,11 +187,12 @@ export default class Dashboard extends React.Component {
         "projectMemberJoin", 
         userName, 
         projectNo,
-        this.clientRef)
+        this.clientRef
+      )
 
       this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
       this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
-      // this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData));
+      this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData));
     }
   }
 
@@ -272,6 +267,7 @@ export default class Dashboard extends React.Component {
 
     this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
     this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData))
   }
 
   // CallBack Change State Function
