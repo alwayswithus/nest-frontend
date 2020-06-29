@@ -70,7 +70,7 @@ class myCalendar extends Component {
       pathChange: "",
       pathSelect: false,
       projectList: false,
-      taskList: false,
+      taskListBool: false,
       allTaskList: [],
       projectNo: "",
       projectTitle: "",
@@ -102,7 +102,7 @@ class myCalendar extends Component {
   callbackTaskListClose() {
     this.setState({
       pathSelect: true,
-      taskList: false
+      taskListBool: false
     })
   }
 
@@ -367,7 +367,7 @@ class myCalendar extends Component {
       pathChange: "",
       eventStart: event.start,
       projectList: false,
-      taskList: false,
+      taskListBool: false,
       privateTask: true
     })
   }
@@ -482,7 +482,7 @@ class myCalendar extends Component {
       privateTask: false,
       pathSelect: false,
       projectList: false,
-      taskList: false,
+      taskListBool: false,
       projectNo: "",
       projectTitle: "",
       pathChange: "",
@@ -500,7 +500,7 @@ class myCalendar extends Component {
     this.setState({
       pathSelect: true,
       projectList: false,
-      taskList: false,
+      taskListBool: false,
       projectTitle: "",
       tasklistName: ""
     })
@@ -1199,7 +1199,6 @@ class myCalendar extends Component {
     })
       .then(response => response.json())
       .then(json => {
-        // console.log(json.data.taskPoint)
         let newTaskList = update(this.state.taskList, {
           [projectIndex]:{
             allTaskList:{
@@ -1407,7 +1406,6 @@ class myCalendar extends Component {
       taskIndex
     ].commentList.findIndex((comment) => comment.commentNo === commentNo);
 
-    // console.log("KanbanMain + " + commentContents)
     let commentData = {
       commentContents: commentContents,
       commentLike: null
@@ -1800,6 +1798,65 @@ class myCalendar extends Component {
         })
       }
     }
+    else if(socketData.socketType === "taskListInsert") {
+      const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+      let taskListAdd = {
+        projectNo: socketData.projectNo,
+        taskListName: socketData.taskListName,
+        taskListNo: socketData.taskListNo,
+        taskListOrder: socketData.taskListOrder,
+        taskListState: "T",
+        tasks: []
+      }
+      let taskList = update(this.state.taskList, {
+        [taskListIndex]: {
+          allTaskList: {
+            $push: [taskListAdd]
+          }
+        }
+      })
+
+      this.setState({
+        taskList: taskList
+      })
+    }
+    else if(socketData.socketType === "roleChange") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        const userIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo);
+        let newProject = update(this.state.projects, {
+          [projectIndex]: {
+            roleNo: { $set: socketData.roleNo },
+            members: {
+              [userIndex]: {
+                roleNo: { $set: socketData.roleNo }
+              }
+            }
+          }
+        })
+
+        this.setState({
+          projects: newProject
+        })
+      }
+    }
+    else if(socketData.socketType === "projectAdd") {
+      let projectNumber = [];
+      ApiService.fetchDashboard()
+        .then(response => {
+          response.data.data.allProject.map(project => {
+            project["isChecked"] = false
+          })
+          response.data.data.allProject.map(project => {
+            projectNumber.push(project.projectNo);
+          })
+          
+          this.setState({
+            projects: response.data.data.allProject,
+            projectNumber: projectNumber
+          })
+        })
+    }
     else if(socketData.socketType === "userAdd") {
       let projectNumber = [];
       ApiService.fetchDashboard()
@@ -1865,6 +1922,69 @@ class myCalendar extends Component {
             taskList: response.data.data.allProjects,
           });
         });
+    }
+    else if(socketData.socketType === "foreverDelete") {
+      const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+      if(projectIndex !== -1) {
+        const projectNumberIndex = this.state.projectNumber.findIndex(projectNumber => projectNumber == socketData.projectNo);
+        let newProject = update(this.state.projects, {
+          $splice: [[projectIndex, 1]]
+        })
+
+        let projectNumber = update(this.state.projectNumber, {
+          $splice: [[projectNumberIndex, 1]]
+        })
+
+        let events =[];
+        this.state.events.map(event => {
+          if(event.projectNo !== socketData.projectNo) {
+            events.push(event)
+          }
+        })
+
+        const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+        let taskList =update(this.state.taskList, {
+          $splice: [[taskListIndex, 1]]
+        })
+
+        let taskState = this.state.taskState;
+        let taskNumber = this.state.taskNumber;
+        let taskPoint = this.state.taskPoint;
+        let taskPointNumber = this.state.taskPointNumber;
+        this.state.taskList[taskListIndex].allTaskList.map(taskList => {
+          taskList.tasks.map(task => {
+            let taskStateIndex = taskState.findIndex(taskState => taskState.id == task.taskNo);
+            taskState.splice(taskStateIndex, 1);
+            taskNumber.splice(taskStateIndex, 1);
+            taskPoint.splice(taskStateIndex, 1);
+            taskPointNumber.splice(taskStateIndex, 1);
+          })
+        })
+
+        let set = []
+        taskPoint.forEach(task => {
+          if (task.point === null) {
+            set.push({ point: -1 })
+          }
+          else {
+            set.push({ point: task.point })
+          }
+        })
+
+        let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
+        
+        this.setState({
+          projects: newProject,
+          projectNumber: projectNumber,
+          events: events,
+          taskList: taskList,
+          taskState: taskState,
+          taskNumber: taskNumber,
+          taskPoint: taskPoint,
+          taskPointNumber: taskPointNumber,
+          taskUniquePoint: setProcess.sort().reverse(),
+        })
+      }
     }
     else if(socketData.socketType === "userDelete") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
@@ -2239,9 +2359,22 @@ class myCalendar extends Component {
 
         let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
 
+        const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+        const allTaskListIndex = this.state.taskList[taskListIndex].allTaskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo);
+        let taskList = update(this.state.taskList, {
+          [taskListIndex]: {
+            allTaskList: {
+              [allTaskListIndex]: {
+                taskListState: { $set: "F" }
+              }
+            }
+          }
+        })
+
         this.setState({
           projects: newProject,
           events: events,
+          taskList: taskList,
           taskState: taskState,
           taskNumber: taskNumber,
           taskPoint: taskPoint,
@@ -2256,7 +2389,7 @@ class myCalendar extends Component {
   render() {
     const {history} = this.props;
     const projectNo =  history.location.pathname.split('/')[3];
-  
+
     return (
       <div id="Calendar">
         {this.state.link}
@@ -2590,7 +2723,7 @@ class myCalendar extends Component {
                     }}
                     projects={this.state.projects} />
                 </div> : ""}
-              {this.state.taskList ?
+              {this.state.taskListBool ?
                 <div>
                   <TaskList
                     taskList={{

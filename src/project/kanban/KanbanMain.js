@@ -723,11 +723,9 @@ class KanbanMain extends Component {
 
         });
 
-
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(newTaskList));
       });
-
-
   }
 
   // task list 삭제
@@ -2445,6 +2443,7 @@ class KanbanMain extends Component {
 
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
         this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData))
       })
   }
 
@@ -2566,6 +2565,7 @@ class KanbanMain extends Component {
 
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
         this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanSocketData))
       })
   }
 
