@@ -1452,8 +1452,9 @@ class KanbanMain extends Component {
       fileNo = 0;
     }
     fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
-      method: "post",
-      headers: API_HEADERS,
+      // method: "post",
+      // headers: API_HEADERS,
+      method:"delete"
     })
       .then(json => {
         let newTaskList = update(this.state.taskList, {

@@ -1763,6 +1763,7 @@ class myCalendar extends Component {
     })
   }
   receiveCalendar(socketData) {
+
     if (socketData.socketType === "taskInsert") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       if (projectIndex !== -1) {
@@ -1773,7 +1774,7 @@ class myCalendar extends Component {
         const taskListIndex = this.state.taskList[projectsIndex].allTaskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
         
         const taskIndex = this.state.taskList[projectsIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === socketData.taskNo);
-        
+
         let newTaskList = update(this.state.taskList,{
           [projectsIndex]:{
             allTaskList:{
@@ -1785,6 +1786,7 @@ class myCalendar extends Component {
             }
           }
         })
+
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
 
@@ -2162,12 +2164,16 @@ class myCalendar extends Component {
     }
 
     else if (socketData.socketType === "taskDelete") {
+      console.log(socketData)
       this.onCloseOpenSettingHTML();
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
   
       const allProjectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+      console.log(this.state.taskList[allProjectIndex].allTaskList)
+      
       const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == socketData.projectNo)
 
+      console.log(this.state.taskList[allProjectIndex].allTaskList[socketData.TaskListIndex].tasks[socketData.TaskIndex])
       if (projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -2212,7 +2218,7 @@ class myCalendar extends Component {
 
 
         let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
-        
+      
         let newTaskList = update(this.state.taskList, {
           [allProjectIndex]:{
             allTaskList:{
