@@ -12,7 +12,7 @@ import User from './User';
 import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
-import ApiHistory from '../project/topBar/ApiHistory'
+import ApiHistory from '../project/topBar/ApiHistory';
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
@@ -750,17 +750,34 @@ export default class Dashboard extends React.Component {
       .then(response => response.json())
       .then(json => {
         
+        const newAlert = {
+          id: (new Date()).getTime(),
+          type: "success",
+          message: this.state.newMessage
+        };
+
         let socketData = {
           newProject: json.data,
           socketType: "projectAdd",
+          alerts: [...this.state.alerts, newAlert],
           membersNo: membersNo
         }
 
         let calendarSocketData = {
           newProject: json.data,
           socketType: "projectAdd",
+          alerts: [...this.state.alerts, newAlert],
           members: project.members
         }
+
+        ApiNotification.fetchInsertNotice(
+          sessionStorage.getItem("authUserNo"),
+          sessionStorage.getItem("authUserName"),
+          json.data.members,
+          "projectJoin",
+          null,
+          json.data.projectNo
+        )
 
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData))
         this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendarSocketData))

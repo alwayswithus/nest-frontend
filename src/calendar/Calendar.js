@@ -553,7 +553,7 @@ class myCalendar extends Component {
         <Link to={`/nest/calendar/${event.projectNo}/task/${event.id}`} style={{textDecoration: 'none', color:'white'}}>
           <i className="fas fa-bullhorn"></i>
           <div className="task-setting-message">
-            <div className="task-title">&nbsp;&nbsp;{event.title}</div> 설정 열기
+            <div className="task-title" onClick={this.onCloseOpenSettingHTML.bind(this)}>&nbsp;&nbsp;{event.title}</div> 설정 열기
           </div>
         </Link>
           <div className="task-setting-close" onClick={this.onClickSettingClose.bind(this)}>&times;</div>
@@ -1044,10 +1044,21 @@ class myCalendar extends Component {
         }
       }
     });
+
+    const eventIndex = this.state.events.findIndex(event => event.id == this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskNo)
+    let events = update(this.state.events, {
+      [eventIndex]: {
+        start: { $set: new Date(from) },
+        end: { $set: new Date(to) }
+      }
+    })
+
     this.setState({
-      taskList: newTaskList
+      taskList: newTaskList,
+      events: events
     })
     this.clientRef.sendMessage("/app/all", JSON.stringify(data))
+  
     const task = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex]
 
     fetch(`${API_URL}/api/tasksetting/calendar/update`, {
