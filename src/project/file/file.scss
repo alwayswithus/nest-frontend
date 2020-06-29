@@ -1,79 +1,104 @@
 .File {
-    margin-left: 62px;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    overflow: auto;
+  margin-left: 62px;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow: auto;
+  .topBar {
+    z-index: 1;
+  }
 
-    .file-resource-table {
-        position: relative;
-        margin: 30px auto;
-        top: 90px;
-        width: 70%;
-        height: auto;
+  .file-resource-table {
+    position: relative;
+    margin: 30px auto;
+    top: 90px;
+    width: 70%;
+    height: auto;
+    // background-color: white;
+    border-radius: 10px 10px 10px 10px;
+    .table {
+      border-radius: 5px 5px 5px 5px;
+      tbody {
         background-color: white;
-        border-radius: 10px 10px 10px 10px;
-
-        .file-contents {
-            &:hover {
-                background-color: #DFDFDF;
-            }
-
-            .file-name-cell {
-                display: flex;
-                .file-originname{
-                    white-space: nowrap;
-                    width: 50%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    padding-top: 2%;
-                }
-                .file-name-cell-image {
-                    height: 100%;
-                    margin-right: 15px;
-                    .file-image {
-                        cursor: pointer;
-                        width: 50px;
-                        height: 50px;
-                    }
-                }
-
-                .file-name-and-path {
-
-                    .file-name {
-                        font-size: 12px;
-                        display: inline-block;
-                        margin-top: 5px;
-                        color: #27b6ba;
-                    }
-
-                    .file-image-location {
-                        color: #8d919a;
-                        font-size: 10px;
-                        margin-top: 5px;
-                    }
-                }
-            }
-
-            .share-person {
-                display: inline-block;
-                padding-top: 8px;
-            }
-
-            .contents-dropdown {
-                display: inline-block;
-                float: right;
-
-                .dropdown {
-
-                    .btn-primary {
-                        border: 0;
-                        color: black;
-                        background-color: white;
-                    }
-                }
-            }
+        tr {
+          td {
+            vertical-align: middle;
+          }
         }
+      }
     }
+
+    .file-contents {
+      &:hover {
+        background-color: #f2f2f2;
+      }
+
+      .file-name-cell {
+        display: flex;
+        align-items: center;
+        .file-originname {
+          white-space: nowrap;
+          width: 50%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .file-name-cell-image {
+          height: 100%;
+          margin-right: 15px;
+          .file-image {
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+          }
+          img {
+            width: 65px;
+            height: 65px;
+            border-radius: 8px;
+            padding-right: 3%;
+            padding-bottom: 1%;
+            object-fit: cover;
+          }
+        }
+
+        .file-name-and-path {
+          .file-name {
+            font-size: 15px;
+            color: #55c3cf;
+          }
+
+          .file-image-location {
+            color: #8d919a;
+            font-size: 10px;
+            margin-top: 5px;
+            white-space: nowrap;
+            width: 50%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      .share {
+        display: flex;
+        align-items: center;
+        .share-person {
+          flex-grow: 1;
+        }
+        .contents-dropdown {
+          flex-grow: 1;
+          .dropdown {
+            .btn-primary {
+              border: 0;
+              color: black;
+              background-color: #f7f7f7;
+              &:hover {
+                background-color: #cacaca;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
