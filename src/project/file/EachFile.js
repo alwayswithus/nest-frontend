@@ -64,24 +64,27 @@ class EachFile extends Component {
                         <div className="file-name-cell">
                             <div className="file-name-cell-image">
                             {this.props.projectFile.originName.split('.')[1] === 'csv' || this.props.projectFile.originName.split('.')[1] === 'xlxs' ?
-                            <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }} src='/nest/assets/images/excel.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img> :
+                            <img src='/nest/assets/images/excel.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img> :
                             <>{this.props.projectFile.originName.split('.')[1] === 'txt' ?
-                                <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }}
+                                <img 
                                     src='/nest/assets/images/txt.png'
                                     alt={this.props.projectFile.originName}
                                     onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
                                 :
                                 <>{this.props.projectFile.originName.split('.')[1] === 'png' || this.props.projectFile.originName.split('.')[1] === 'jpg' ?
-                                    <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }}
+                                    <img 
                                         src={`${API_URL}${this.props.projectFile.filePath}`}
                                         alt={this.props.projectFile.originName}
                                         onClick={this.onClickImage.bind(this)}></img> :
-                                    <img style={{ width: '65px', borderRadius: "8px", paddingRight: '3%', paddingBottom: '1%' }} src='/nest/assets/images/attach.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
+                                    <img src='/nest/assets/images/attach.png' alt={this.props.projectFile.originName} onClick={this.onClickFile.bind(this, this.props.projectFile.fileNo)}></img>
                                 }</>
                             }</>
                         }
                             </div>
-                                <div className="file-originname">{this.props.projectFile.originName}</div>
+                                {/* <div className="file-originname">{this.props.projectFile.originName}</div> */}
+                            <div className="file-name-and-path">
+                                <span className="file-name">{this.props.projectFile.originName}</span>
+                            </div>
                             {/* 이미지 미리보기 */}
                             <Viewer
                                 visible={this.state.visible}
@@ -90,27 +93,26 @@ class EachFile extends Component {
                                 rotatable={this.state.rotatable}
                                 images={[{ src: API_URL + this.props.projectFile.filePath }]} />
 
-                            <div className="file-name-and-path">
-                                <span className="file-name">{this.props.projectFile.fileName}</span>
-                            </div>
                         </div>
                     </td>
-                    <td style={{ paddingTop: "23px" }}>
+                    <td>
+                    <div>
                         <Link
                             style={{ color: 'black', textDecoration: 'none' }}
                             to={`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.projectFile.taskNo}/file`}>
-                            <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom" 
-                                style={{whiteSpace: 'nowrap',
-                                        width: '50%',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis'}}>
+                            <div className="file-image-location" data-tip="프로젝트로 가기" data-place="bottom">
                                 {this.props.projectFile.tasklistName} &gt; {this.props.projectFile.taskContents}
                             </div>
                             <ReactTooltip />
                         </Link>
+                        </div>
                     </td>
-                    <td style={{ paddingTop: "23px" }}>{moment(this.props.projectFile.fileRegdate).format("MM월 DD일 hh:mm")}</td>
-                    <td style={{ paddingTop: "17px" }}>
+                    <td>
+                    <div>{moment(this.props.projectFile.fileRegdate).format("MM월 DD일 hh:mm")}
+                        </div>
+                        </td>
+                    <td>
+                    <div className="share">
                         <div className="share-person">
                             {this.props.projectFile.userName}
                         </div>
@@ -126,6 +128,7 @@ class EachFile extends Component {
                                         : null}
                                 </ul>
                             </div>
+                        </div>
                         </div>
                     </td>
             </tr>
