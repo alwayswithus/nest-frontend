@@ -1851,6 +1851,7 @@ class myCalendar extends Component {
     }
     else if(socketData.socketType === "taskListInsert") {
       const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+      console.log("taskListIndex", taskListIndex)
       let taskListAdd = {
         projectNo: socketData.projectNo,
         taskListName: socketData.taskListName,
@@ -2164,16 +2165,15 @@ class myCalendar extends Component {
     }
 
     else if (socketData.socketType === "taskDelete") {
-      console.log(socketData)
+
       this.onCloseOpenSettingHTML();
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
   
       const allProjectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
-      console.log(this.state.taskList[allProjectIndex].allTaskList)
-      
       const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == socketData.projectNo)
+      const taskListIndex = this.state.taskList[allProjectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
+      const taskIndex = this.state.taskList[allProjectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === socketData.taskId);
 
-      console.log(this.state.taskList[allProjectIndex].allTaskList[socketData.TaskListIndex].tasks[socketData.TaskIndex])
       if (projectIndex !== -1) {
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
@@ -2222,9 +2222,9 @@ class myCalendar extends Component {
         let newTaskList = update(this.state.taskList, {
           [allProjectIndex]:{
             allTaskList:{
-              [socketData.TaskListIndex]:{
+              [taskListIndex]:{
                 tasks:{
-                  [socketData.TaskIndex]:{
+                  [taskIndex]:{
                     taskState:{$set:"del"}
                   }
                 }
