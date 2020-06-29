@@ -70,21 +70,24 @@ class File extends Component {
     }
 
     handleDrop(files) {
+        let taskList = this.props.task;
 
-        const taskList = this.props.task;
+        const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
+        taskList = this.props.task[projectIndex].allTaskList
+
         let Indexs = []
         taskList.map( (taskList,taskListIndex) => 
-            taskList.tasks.map((task,taskIndex) => 
-                task.taskNo === this.props.match.params.taskNo
-                    ?Indexs.push({taskListIndex, taskIndex})
-                    :null
+        taskList.tasks.map((task,taskIndex) => 
+        task.taskNo === this.props.match.params.taskNo
+        ?Indexs.push({taskListIndex, taskIndex})
+        :null
         ))
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
-
+        
         this.setState({
             selectedFile: files[0]
         })
-        console.log(files[0].type)
+        
         if (files[0].length !== 0 && (files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || files[0].type === 'image/png' || files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             || files[0].type === 'text/plain' || files[0].type === 'image/jpeg' || files[0].type === 'application/vnd.ms-excel'
@@ -144,7 +147,6 @@ class File extends Component {
 
     render() {
         if(!this.props.task || this.props.task.length == 0){
-            console.log("!!!")
             return <></>;
         }
 

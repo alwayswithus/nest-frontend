@@ -806,7 +806,6 @@ class myCalendar extends Component {
   //task checkList check 업데이트
   callbackCheckListStateUpdate(taskListNo, taskNo, checklistNo, checklistState) {
     
-    console.log(checklistState)
     const {history} = this.props;
     const projectNo =  history.location.pathname.split('/')[3];
 
@@ -818,6 +817,7 @@ class myCalendar extends Component {
 
     const checklistIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
+    console.log(checklistState)
     let newCheckList = {
       checklistNo: checklistNo,
       checklistContents: null,
@@ -832,7 +832,26 @@ class myCalendar extends Component {
     })
       .then(response => response.json())
       .then(json => {
-
+        let newTaskList = update(this.state.taskList,{
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]:{
+                tasks:{
+                  [taskIndex]:{
+                    checkList:{
+                      [checklistIndex]:{
+                        checklistState:{$set:checklistState === "done" ? "do" : "done"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        })
+        this.setState({
+          taskList:newTaskList
+        })
         const socketData = {
           checklistState: checklistState,
           socketType: "taskCheckListUpdate",
@@ -853,22 +872,29 @@ class myCalendar extends Component {
     checklistNo,
     checklistContents
   ) {
-    const taskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
 
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
-    const checkListIndex = this.state.taskList[taskListIndex].tasks[
-      taskIndex
-    ].checkList.findIndex((checkList) => checkList.checklistNo === checklistNo);
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMembersIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    const checklistIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
     let newCheckList = {
       checklistNo: checklistNo,
       checklistContents: checklistContents,
       checklistState: null,
       taskNo: taskNo,
+      socketType: "checkListUpdate",
+      members: this.state.projectMembers[projectMembersIndex].members ,
+      projectNo: projectNo ,
+      authUserNo: sessionStorage.getItem("authUserNo") ,
+      taskListIndex:taskListIndex,
+      taskIndex:taskIndex,
+      checkListIndex:checklistIndex
     };
 
     fetch(`${API_URL}/api/tasksetting/checklist/update`, {
@@ -879,13 +905,17 @@ class myCalendar extends Component {
       .then((response) => response.json())
       .then((json) => {
         let newTaskList = update(this.state.taskList, {
-          [taskListIndex]: {
-            tasks: {
-              [taskIndex]: {
-                checkList: {
-                  [checkListIndex]: {
-                    checklistContents: {
-                      $set: checklistContents,
+          [projectIndex]:{
+            allTaskList:{
+              [taskListIndex]: {
+                tasks: {
+                  [taskIndex]: {
+                    checkList: {
+                      [checklistIndex]: {
+                        checklistContents: {
+                          $set: checklistContents,
+                        },
+                      },
                     },
                   },
                 },
@@ -893,7 +923,7 @@ class myCalendar extends Component {
             },
           },
         });
-
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newCheckList))
         this.setState({
           taskList: newTaskList,
         });
@@ -975,7 +1005,7 @@ class myCalendar extends Component {
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
-      this.state.taskList[taskListIndex].tasks[taskIndex].memberList,
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
       "taskDateChange",
       this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskNo,
       projectNo)
@@ -1574,10 +1604,10 @@ class myCalendar extends Component {
             }
           })
         }
+        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
         this.setState({
           taskList: newTaskList
         })
-        this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
         this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
       })
 
@@ -1737,6 +1767,27 @@ class myCalendar extends Component {
     if (socketData.socketType === "taskInsert") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       if (projectIndex !== -1) {
+        console.log(socketData)
+        const projectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+
+        const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == socketData.projectNo)
+        
+        const taskListIndex = this.state.taskList[projectsIndex].allTaskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
+        
+        console.log(taskListIndex)
+        const taskIndex = this.state.taskList[projectsIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === socketData.taskNo);
+        console.log(this.state.taskList[projectsIndex].allTaskList[taskListIndex].tasks)
+        let newTaskList = update(this.state.taskList,{
+          [projectsIndex]:{
+            allTaskList:{
+              [taskListIndex]:{
+                tasks:{
+                  $push:[socketData]
+                }
+              }
+            }
+          }
+        })
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
 
@@ -1794,7 +1845,8 @@ class myCalendar extends Component {
           taskPointNumber: taskPointNumber,
           events: events,
           taskUniquePoint: setProcess.sort().reverse(),
-          privateTask: false
+          privateTask: false,
+          taskList:newTaskList
         })
       }
     }
@@ -2113,7 +2165,7 @@ class myCalendar extends Component {
     }
 
     else if (socketData.socketType === "taskDelete") {
-      
+      this.onCloseOpenSettingHTML();
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
   
       const allProjectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
@@ -2291,6 +2343,7 @@ class myCalendar extends Component {
     else if (socketData.socketType === "taskListDelete") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       if (projectIndex !== -1) {
+        this.onCloseOpenSettingHTML();
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
 

@@ -465,6 +465,7 @@ class Setting extends Component {
                                 <div className="checkList">
                                     {taskItem.checkList && taskItem.checkList.map(checklist =>
                                         <div key={checklist.checklistNo} className="inner-checklist">
+
                                                 <input 
                                                     disabled={taskItem.taskState == "del" || authUserRole === 3 ? true : false}
                                                     type="checkbox" 

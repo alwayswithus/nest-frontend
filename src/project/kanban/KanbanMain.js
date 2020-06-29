@@ -1065,6 +1065,23 @@ class KanbanMain extends Component {
     })
       .then(response => response.json())
       .then(json => {
+        
+        let newTaskList = update(this.state.taskList,{
+          [taskListIndex]:{
+            tasks:{
+              [taskIndex]:{
+                checkList:{
+                  [checklistIndex]:{
+                    checklistState:{$set:checklistState === "done" ? "do" : "done"}
+                  }
+                }
+              }
+            }
+          }
+        })
+        this.setState({
+          taskList:newTaskList
+        })
 
         const socketData = {
           checklistState: checklistState,
@@ -1075,8 +1092,8 @@ class KanbanMain extends Component {
           taskIndex:taskIndex,
           checklistIndex:checklistIndex
         }
-
         this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
+        
       })
   }
 
@@ -2591,7 +2608,7 @@ class KanbanMain extends Component {
   }
 
   receiveKanban(socketData) {
-    console.log(socketData)
+
     if(socketData.socketType == "descChange") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
@@ -3968,7 +3985,7 @@ class KanbanMain extends Component {
       }
     
       } else if(socketData.socketType === 'taskCheckListUpdate'){
-        
+
       let newTaskList = update(this.state.taskList, {
         [socketData.taskListIndex]: {
           tasks: {
@@ -3991,7 +4008,7 @@ class KanbanMain extends Component {
   
       }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
         if(socketData.socketType === 'comment'){
-          
+            console.log("!!???")
             let newData = update(this.state.taskList, {
               [socketData.taskListIndex] : {
                 tasks :{
@@ -3999,7 +4016,7 @@ class KanbanMain extends Component {
                     commentList : 
                       {$push: [socketData]} ,
                     fileList : 
-                    {$push: [socketData]} 
+                      {$push: [socketData]} 
                   }
                 }
               }
