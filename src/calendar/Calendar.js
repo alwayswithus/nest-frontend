@@ -16,10 +16,11 @@ import Setting from '../project/kanban/tasksetting/setting/Setting'
 import Comment from '../project/kanban/tasksetting/comment/Comment'
 import File from '../project/kanban/tasksetting/file/File'
 import { Route, Switch } from "react-router-dom";
-
+import ApiNotification from '../notification/ApiNotification'
 import Navigator from '../navigator/Navigator';
 import './calendar.scss';
 import ApiService from '../ApiService';
+
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
 
@@ -586,6 +587,14 @@ class myCalendar extends Component {
     const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
     
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
+      "taskCheckListInsert",
+      taskNo,
+      projectNo)
+
     let newCheckList = {
       checklistNo: null,
       checklistContents: contents,
@@ -791,20 +800,23 @@ class myCalendar extends Component {
       tagName: tagName,
       tagColor: tagColor,
       tagNo: tagNo,
-      socketType: "allTagUpdate"
+      socketType: "allTagUpdate",
     }
   }
   //task checkList check 업데이트
   callbackCheckListStateUpdate(taskListNo, taskNo, checklistNo, checklistState) {
+    
+    console.log(checklistState)
+    const {history} = this.props;
+    const projectNo =  history.location.pathname.split('/')[3];
 
-    const TaskListIndex = this.state.taskList.findIndex(
-      (taskList) => taskList.taskListNo === taskListNo
-    );
-    const taskIndex = this.state.taskList[TaskListIndex].tasks.findIndex(
-      (task) => task.taskNo === taskNo
-    );
+    const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
+    const projectMembersIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
+    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
 
-    const taskName = this.state.taskList[TaskListIndex].tasks[taskIndex].taskContents
+    const checklistIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
     let newCheckList = {
       checklistNo: checklistNo,
@@ -822,16 +834,15 @@ class myCalendar extends Component {
       .then(json => {
 
         const socketData = {
-          taskListNo: taskListNo,
-          taskNo: taskNo,
-          checklistNo: checklistNo,
           checklistState: checklistState,
           socketType: "taskCheckListUpdate",
-          projectNo: this.state.taskList[TaskListIndex].projectNo,
-          members: this.state.projectMembers
-
+          projectNo: projectNo,
+          members: this.state.projectMembers[projectMembersIndex].members,
+          taskListIndex:taskListIndex,
+          taskIndex:taskIndex,
+          checklistIndex:checklistIndex
         }
-
+        this.clientRef.sendMessage("/app/all", JSON.stringify(socketData));
       })
   }
 
@@ -961,7 +972,14 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
 
-    const taskName = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskContents;
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[taskListIndex].tasks[taskIndex].memberList,
+      "taskDateChange",
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskNo,
+      projectNo)
+
     const data = {
       from: from,
       to: to,
@@ -1093,6 +1111,14 @@ class myCalendar extends Component {
             taskList: newTaskList
           })
         })
+
+        ApiNotification.fetchInsertNotice(
+          sessionStorage.getItem("authUserNo"),
+          sessionStorage.getItem("authUserName"),
+          [newMember],
+          "taskJoin",
+          taskNo,
+          this.props.match.params.projectNo)
     } else {
 
       let newMember = {
@@ -1153,6 +1179,14 @@ class myCalendar extends Component {
     
     const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
     const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
+      "taskPointChange",
+      taskNo,
+      this.props.match.params.projectNo)
 
     let newPoint = {
       taskNo: taskNo,
@@ -1343,6 +1377,13 @@ class myCalendar extends Component {
         });
       })
 
+      ApiNotification.fetchInsertNotice(
+        sessionStorage.getItem("authUserNo"),
+        sessionStorage.getItem("authUserName"),
+        [this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]],
+        "commentLike",
+        taskNo,
+        projectNo)
 
   }
 
@@ -1417,6 +1458,14 @@ class myCalendar extends Component {
 
     const taskContents = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskContents
     const taskListName = this.state.taskList[projectIndex].allTaskList[taskListIndex].taskListName
+
+    ApiNotification.fetchInsertNotice(
+      sessionStorage.getItem("authUserNo"),
+      sessionStorage.getItem("authUserName"),
+      this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].memberList,
+      "commentInsert",
+      taskNo,
+      projectNo)
 
     let newComment = []
     if (file === null) {
@@ -2341,7 +2390,6 @@ class myCalendar extends Component {
     const {history} = this.props;
     const projectNo =  history.location.pathname.split('/')[3];
 
-    console.log("taskList", this.state.taskList)
     return (
       <div id="Calendar">
         {this.state.link}

@@ -93,7 +93,7 @@ class Setting extends Component {
 
     //click check box
     clickCheckBox(checklistNo, checklistState,taskListNo){
-        console.log(taskListNo)
+        console.log(checklistState)
         this.props.taskCallbacks.checklistStateUpdate(taskListNo, this.props.match.params.taskNo, checklistNo, checklistState);
     }
     
@@ -189,8 +189,6 @@ class Setting extends Component {
 
         const tagIndex = this.state.tags.findIndex(tag => tag.tagNo === tagNo);
         
-        
-        console.log("Setting + " + tagIndex)
         fetch(`${API_URL}/api/taglist/delete`, {
             method:'delete',
             headers:API_HEADERS,
@@ -274,7 +272,7 @@ class Setting extends Component {
             ))
             const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
             const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
-            console.log("!!!")
+
         return (
             <>
             
@@ -484,7 +482,7 @@ class Setting extends Component {
                                                                 checklist={checklist} 
                                                                 key={checklist.checklistNo}/>
                                                         {taskItem.taskState == "del" || authUserRole === 3 ? null : 
-                                                            <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo,taskListNo )} style={{float: 'right', marginTop: '3.2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
+                                                            <i onClick={this.onClickDeleteChecklist.bind(this,checklist.checklistNo,taskListNo )} style={{float: 'right', marginTop: '3.2%', marginLeft:'2%', cursor:'pointer'}} className="far fa-trash-alt"></i>
                                                         }
                                                         
                                                     </div>)}
