@@ -111,7 +111,7 @@ export default class Navigator extends React.Component {
         } else if (socketData.del&&socketData.target==sessionStorage.getItem("authUserNo")) {
             const idx = this.state.newNotices.indexOf(socketData.del)
             if (idx > -1) {
-                let arr = this.state.newNotices.splice(idx, 1);
+                this.state.newNotices.splice(idx, 1);
                 this.setState({
                     noticeCount: this.state.noticeCount - 1,
                 }); 
@@ -156,7 +156,11 @@ export default class Navigator extends React.Component {
                                         <p className="badge badge-danger" style={{ backgroundColor: "red", position: "relative", zIndex: "99", left: "22px", top: "-13px" }}>
                                             {this.state.noticeCount}
                                         </p>
-                                        <i className="far fa-bell icon" style={{ position: "relative", left: "-9px" }}></i>
+                                        {this.state.noticeCount > 10 ?
+                                            <i className="far fa-bell icon" style={{ position: "relative", left: "-14px" }}></i>
+                                            :
+                                            <i className="far fa-bell icon" style={{ position: "relative", left: "-9px" }}></i>
+                                        }
                                     </span>
                                 }
                             </div>
@@ -184,7 +188,7 @@ export default class Navigator extends React.Component {
                         </div>
                         <div className="nest-li">
                             <li className="nav-item" data-toggle="modal" data-target="#nest-introduce">
-                                <img src="/nest/assets/images/nest.png" id="nest-logo" />
+                                <img src="/nest/assets/images/nest.png" id="nest-logo" alt="nest-logo"/>
                             </li>
                         </div>
                     </ul >
@@ -199,7 +203,7 @@ export default class Navigator extends React.Component {
                             {/* Nest Introduce Modal body */}
                             <div className="modal-body mb-0 p-0">
                                 <div className="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                                    <iframe className="embed-responsive-item" src="https://www.youtube.com/embed/A3PDXmYoF5U"></iframe>
+                                    <iframe className="embed-responsive-item" src="https://www.youtube.com/embed/A3PDXmYoF5U" title="nest-mv"></iframe>
                                 </div>
                             </div>
 

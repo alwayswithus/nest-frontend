@@ -10,7 +10,7 @@ const SignUpDone = () => {
     <>
       <div className="SignUp">
         <div className="SignUpBox">
-          <InputLabel id="SignUpText" className="SignUpText">가입 완료 🎉</InputLabel>
+          <InputLabel id="SignUpText" className="SignUpText">가입 완료 <span role="img" aria-label="party popper">🎉</span></InputLabel>
 
           <br/>
           <p>
