@@ -528,7 +528,7 @@ class myCalendar extends Component {
         .then(response => response.json())
         .then(json => {
           this.setState({
-            taskList: !this.state.taskList,
+            taskListBool: !this.state.taskListBool,
             allTaskList: json.data.allTaskList
           })
         })
@@ -806,7 +806,6 @@ class myCalendar extends Component {
   //task checkList check 업데이트
   callbackCheckListStateUpdate(taskListNo, taskNo, checklistNo, checklistState) {
     
-    console.log(checklistState)
     const {history} = this.props;
     const projectNo =  history.location.pathname.split('/')[3];
 
@@ -1737,6 +1736,40 @@ class myCalendar extends Component {
     if (socketData.socketType === "taskInsert") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       if (projectIndex !== -1) {
+        const taskListIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+        const allTaskListIndex = this.state.taskList[taskListIndex].allTaskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo)
+        let task = {
+          checkList: [],
+          commentList: [],
+          fileList: [],
+          memberList: [],
+          members: socketData.members,
+          projectNo: socketData.projectNo,
+          tagList: [],
+          taskContents: socketData.taskContents,
+          taskEnd: new Date(socketData.taskEnd),
+          taskLabel: socketData.taskLabel,
+          taskListNo: socketData.taskListNo,
+          taskNo: socketData.taskNo,
+          taskOrder: socketData.taskOrder,
+          taskPoint: socketData.taskPoint,
+          taskStart: new Date(socketData.taskStart),
+          taskState: socketData.taskState,
+          taskWriter: socketData.taskWriter,
+          userName: socketData.userName
+        }
+        let taskList = update(this.state.taskList, {
+          [taskListIndex]: {
+            allTaskList: {
+              [allTaskListIndex]: {
+                tasks: {
+                  $push: [task]
+                }
+              }
+            }
+          }
+        })
+
         let taskCount = socketData.taskCount;
         let completedTask = socketData.completedTask;
 
@@ -1787,6 +1820,7 @@ class myCalendar extends Component {
         let setProcess = Array.from(new Set(Object(set).map(set => set.point)));
 
         this.setState({
+          taskList: taskList,
           projects: newProject,
           taskState: taskState,
           taskNumber: taskNumber,
