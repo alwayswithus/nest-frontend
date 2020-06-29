@@ -817,7 +817,6 @@ class myCalendar extends Component {
 
     const checklistIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
-    console.log(checklistState)
     let newCheckList = {
       checklistNo: checklistNo,
       checklistContents: null,
@@ -1774,6 +1773,8 @@ class myCalendar extends Component {
         
         const taskListIndex = this.state.taskList[projectsIndex].allTaskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
         
+        const taskIndex = this.state.taskList[projectsIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === socketData.taskNo);
+
         let newTaskList = update(this.state.taskList,{
           [projectsIndex]:{
             allTaskList:{
@@ -2001,7 +2002,7 @@ class myCalendar extends Component {
         let taskNumber = this.state.taskNumber;
         let taskPoint = this.state.taskPoint;
         let taskPointNumber = this.state.taskPointNumber;
-        this.state.taskList[taskListIndex].allTaskList.map(taskList => {
+        this.state.taskList[taskListIndex] && this.state.taskList[taskListIndex].allTaskList.map(taskList => {
           taskList.tasks.map(task => {
             let taskStateIndex = taskState.findIndex(taskState => taskState.id == task.taskNo);
             taskState.splice(taskStateIndex, 1);
