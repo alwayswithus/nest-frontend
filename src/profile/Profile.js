@@ -25,7 +25,9 @@ class Profile extends Component {
             title:null,
             number:null,
             birth:null,
-            photo:''
+
+            beforePhoto:'', // 전 사진
+            afterPhoto:'', // 후 사진
         }
     }
 
@@ -51,7 +53,7 @@ class Profile extends Component {
         console.log("!!!!")
         let userInfo = {
             userNo:sessionStorage.getItem("authUserNo"),
-            userPhoto: this.state.photo,
+            userPhoto: this.state.afterPhoto,
             userName: this.state.name,
             userDept: this.state.dept,
             userTitle: this.state.title,
@@ -67,7 +69,7 @@ class Profile extends Component {
             change:false
         })
 
-        sessionStorage.setItem("authUserPhoto", this.state.photo);
+        sessionStorage.setItem("authUserPhoto", this.state.afterPhoto);
     }
 
     //이름 변경
@@ -129,12 +131,12 @@ class Profile extends Component {
 
     //사진 업데이트 하기 클릭
     handleChange(event){
-        console.log(event.target.files[0].type)
+        console.log(this.state.photo)
         if(event.target.files[0].type === 'image/png' || event.target.files[0].type ==='image/jpeg'){
             this.setState({
-                photo:URL.createObjectURL(event.target.files[0]),
+                afterPhoto:URL.createObjectURL(event.target.files[0]),
                 photoUpdate:true,
-                selectedFile:event.target.files[0]
+                selectedFile:event.target.files[0],
             })
         } else{
             alert("지원하지 않는 파일 형식입니다.")
@@ -147,7 +149,7 @@ class Profile extends Component {
     onClickReset(){
         this.setState({
             photoUpdate:false,
-            photo:this.state.profileUser.userPhoto
+            afterPhoto:this.state.beforePhoto
         })
     }
 
@@ -168,7 +170,8 @@ class Profile extends Component {
         .then((response) => response.json())
         .then((json) => {
             this.setState({
-                photo:API_URL+json.data
+                afterPhoto:API_URL+json.data,
+                beforePhoto:API_URL+json.data,
             })
         })
     }
@@ -176,8 +179,6 @@ class Profile extends Component {
         if(!this.state.profileUser){
             return <></>
         }
-        
-        
         return (
             <>
                 <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
@@ -186,7 +187,7 @@ class Profile extends Component {
                     <ProfileNav />
                         <div className="profileLayout">
                             <div className="profileImg">
-                                <div className="userPhoto" style={{ backgroundImage: `url(${this.state.photo})` }}></div>
+                                <div className="userPhoto" style={{ backgroundImage: `url(${this.state.afterPhoto})` }}></div>
                                 {this.state.photoUpdate ? 
                                     <ul className="list-unstyled list-inline media-detail"> 
                                         <li className="photoupdate-reset" onClick={this.onClickReset.bind(this)}>취소</li>
@@ -262,7 +263,8 @@ class Profile extends Component {
                 title:response.data.data.userTitle,
                 number:response.data.data.userNumber,
                 birth:response.data.data.userBirth,
-                photo:response.data.data.userPhoto
+                afterPhoto:response.data.data.userPhoto,
+                beforePhoto:response.data.data.userPhoto,
             })
         })
     }
