@@ -468,7 +468,26 @@ class myCalendar extends Component {
           taskListNo: json.data.taskListNo,
           members: this.state.projects[projectIndex].members
         }
+        // const allProjectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == json.data.projectNo);
+        // console.log(allProjectIndex)
+        // const taskListIndex = this.state.taskList[allProjectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == json.data.taskListNo);
+        // console.log(taskListIndex)
 
+        // let newTaskList = update(this.state.taskList, {
+        //   [allProjectIndex]:{
+        //     allTaskList:{
+        //       [taskListIndex]:{
+        //         tasks:{
+        //           $push: [kanbanboardSocketData]
+        //         }
+        //       }
+        //     }
+        //   }
+        // })
+        // console.log(newTaskList[allProjectIndex].allTaskList)
+        // this.setState({
+        //   taskList:newTaskList
+        // })
         this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(dashboardSocketData));
         this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanboardSocketData));
         this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(kanbanboardSocketData));

@@ -253,7 +253,7 @@ class Setting extends Component {
         let taskList=[];
         let authUserRole = null;
         if(this.props.match.url.indexOf("calendar") !== -1){
-            
+
             const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
             taskList = this.props.task[projectIndex].allTaskList
             authUserRole = this.props.task[projectIndex].authUserRole
@@ -266,10 +266,12 @@ class Setting extends Component {
             let Indexs = []
             taskList.map( (taskList,taskListIndex) => 
                 taskList.tasks.map((task,taskIndex) => 
-                    task.taskNo === this.props.match.params.taskNo
+                    task.taskNo == this.props.match.params.taskNo
                         ?Indexs.push({taskListIndex, taskIndex})
                         :null
             ))
+            
+            console.log(Indexs)
             const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
             const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
             
