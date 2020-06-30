@@ -41,8 +41,9 @@ export default class ProjectMemberList extends React.Component {
                                     .filter(member => member.userName.indexOf(this.state.memberKeyword)  !== -1 ||
                                         member.userEmail.indexOf(this.state.memberKeyword) !== -1)
                                     .map(member =>
-                                         member.userNo == sessionStorage.getItem("authUserNo") ? "" :
-                                         <ProjectMember key={member.userNo} member={member} ProjectMemberListSetting={this.props.ProjectMemberListSetting}/>)}
+                                        member.userNo == sessionStorage.getItem("authUserNo") ? "" :
+                                        <ProjectMember userNumber={this.props.userNumber} key={member.userNo} member={member} ProjectMemberListSetting={this.props.ProjectMemberListSetting}/>)
+                                }
                             </div>
                         </div>
                     </div>
