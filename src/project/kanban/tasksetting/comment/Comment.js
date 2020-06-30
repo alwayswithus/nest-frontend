@@ -27,7 +27,7 @@ class Comment extends Component {
         let Indexs = []
         taskList.map( (taskList,taskListIndex) => 
             taskList.tasks.map((task,taskIndex) => 
-                task.taskNo === this.props.match.params.taskNo
+                task.taskNo == this.props.match.params.taskNo
                     ?Indexs.push({taskListIndex, taskIndex})
                     :null
         ))

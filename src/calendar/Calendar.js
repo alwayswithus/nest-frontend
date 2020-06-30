@@ -602,10 +602,9 @@ class myCalendar extends Component {
 
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
-    
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
-    
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
+
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
@@ -681,8 +680,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     let newTag = {
       tagNo: tagNo,
@@ -714,7 +713,7 @@ class myCalendar extends Component {
           },
         });
 
-        const tagIndex = newTagData[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo === json.data.tagNo);
+        const tagIndex = newTagData[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].tagList.findIndex((tag) => tag.tagNo == json.data.tagNo);
         newTagData = update(newTagData, {
           [projectIndex]:{
             allTaskList:{
@@ -757,8 +756,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
     
     const tagIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].tagList.findIndex(tag => tag.tagNo == tagNo);
 
@@ -831,8 +830,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMembersIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     const checklistIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
@@ -896,8 +895,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMembersIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     const checklistIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo)
 
@@ -957,8 +956,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     const checkListIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].checkList.findIndex(checkList => checkList.checklistNo == checklistNo);
    
@@ -1109,14 +1108,14 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMembersIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     const taskItem = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex]
 
-    const memberIndex = taskItem.memberList.findIndex(member => member.userNo === userNo)
+    const memberIndex = taskItem.memberList.findIndex(member => member.userNo == userNo)
 
-    const projectMemberIndex = projectMembers.findIndex(projectMember => projectMember.userNo === userNo);
+    const projectMemberIndex = projectMembers.findIndex(projectMember => projectMember.userNo == userNo);
 
     let member = {
       userNo: userNo,
@@ -1236,8 +1235,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     ApiNotification.fetchInsertNotice(
       sessionStorage.getItem("authUserNo"),
@@ -1292,8 +1291,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     let newTaskList = update(this.state.taskList, {
       [projectIndex]:{
@@ -1391,10 +1390,10 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
-    const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
+    const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo == commentNo);
 
 
     const commentLike = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex].commentLike
@@ -1459,11 +1458,11 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
     const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[
       taskIndex
-    ].commentList.findIndex((comment) => comment.commentNo === commentNo);
+    ].commentList.findIndex((comment) => comment.commentNo == commentNo);
 
     let commentData = {
       commentContents: commentContents,
@@ -1512,8 +1511,8 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     const taskContents = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].taskContents
     const taskListName = this.state.taskList[projectIndex].allTaskList[taskListIndex].taskListName
@@ -1576,7 +1575,7 @@ class myCalendar extends Component {
           }
         })
 
-        const commentIndex = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === json.data.commentNo);
+        const commentIndex = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo == json.data.commentNo);
         if (file === null) {
           newTaskList = update(newTaskList, {
             [projectIndex]:{
@@ -1651,11 +1650,11 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
-    const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo === commentNo);
-    const fileIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo === fileNo);
+    const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo == commentNo);
+    const fileIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo == fileNo);
 
     if (fileNo === null) {
       fileNo = 0;
@@ -1741,7 +1740,7 @@ class myCalendar extends Component {
     const projectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == projectNo);
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
-    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === taskListNo);
+    const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
     const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
 
     let newTaskList = update(this.state.taskList, {
@@ -1763,7 +1762,7 @@ class myCalendar extends Component {
     this.setState({
       taskList: newTaskList,
     });
-    const fileIndex = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex(file => file.fileNo === formData.fileNo)
+    const fileIndex = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex(file => file.fileNo == formData.fileNo)
     const file = newTaskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].fileList[fileIndex]
     this.callbackAddComment(
       file,
@@ -2196,8 +2195,8 @@ class myCalendar extends Component {
   
       const allProjectIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
       const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == socketData.projectNo)
-      const taskListIndex = this.state.taskList[allProjectIndex].allTaskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
-      const taskIndex = this.state.taskList[allProjectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === socketData.taskId);
+      const taskListIndex = this.state.taskList[allProjectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo);
+      const taskIndex = this.state.taskList[allProjectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == socketData.taskId);
 
       if (projectIndex !== -1) {
         let taskCount = socketData.taskCount;
