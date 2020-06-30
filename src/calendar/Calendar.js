@@ -1779,13 +1779,8 @@ class myCalendar extends Component {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
       if (projectIndex !== -1) {
         const projectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
-
-        const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == socketData.projectNo)
+        const taskListIndex = this.state.taskList[projectsIndex].allTaskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo);
         
-        const taskListIndex = this.state.taskList[projectsIndex].allTaskList.findIndex(taskList => taskList.taskListNo === socketData.taskListNo);
-        
-        const taskIndex = this.state.taskList[projectsIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === socketData.taskNo);
-
         let newTaskList = update(this.state.taskList,{
           [projectsIndex]:{
             allTaskList:{
