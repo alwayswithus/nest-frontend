@@ -15,6 +15,7 @@ export default class ProjectMember extends React.Component {
                 onClick={this.callbackImageChange.bind(this, this.props.member.userNo, this.props.member.userName, this.props.member.userPhoto)}>
                 <img src={this.props.member.userPhoto} className="img-circle" alt={this.props.member.userPhoto} />
                 <span style={{color: "black", fontSize: "14px"}}>{this.props.member.userName}</span>
+                {this.props.member.userNo === this.props.userNumber ? <i className="fas fa-check"></i> : ""}
             </div>
         )
     }

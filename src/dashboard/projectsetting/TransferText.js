@@ -15,7 +15,8 @@ export default class TransferText extends React.Component {
             projectMemberList: false,
             userNo: null,
             userName: "",
-            userPhoto: ""
+            userPhoto: "",
+            userNumber: ""
         }
     }
 
@@ -29,10 +30,12 @@ export default class TransferText extends React.Component {
     // CallBack Image Change Function
     callbackImageChange(userNo, userName, userPhoto) {
         this.setState({
+            userNumber: userNo,
             imageChange: true,
             userNo: userNo,
             userName: userName,
-            userPhoto: userPhoto
+            userPhoto: userPhoto,
+            projectMemberList: false
         })
 
         this.props.TransferTextSetting.getData(userNo, userName, userPhoto)
@@ -64,6 +67,7 @@ export default class TransferText extends React.Component {
                                 close: this.callbackProjectMemberList.bind(this),
                                 imageChange: this.callbackImageChange.bind(this)
                             }}
+                            userNumber={this.state.userNumber}
                             project={this.props.project} /> :
                         ""}
                 </div>
