@@ -13,7 +13,7 @@ import TaskMember from './TaskMember';
 import moment, { now }  from 'moment';
 import {Link} from 'react-router-dom';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     'Content-Type' : 'application/json'
 }
@@ -224,8 +224,9 @@ class Setting extends Component {
 
     //checklist delete
     onClickDeleteChecklist(checklistNo, taskListNo){
-        alert('체크리스트 항목을 삭제하시겠습니끼?')
-        this.props.taskCallbacks.deleteCheckList(checklistNo , taskListNo, this.props.match.params.taskNo);
+        if(window.confirm('체크리스트 항목을 삭제하시겠습니끼?')){
+            this.props.taskCallbacks.deleteCheckList(checklistNo , taskListNo, this.props.match.params.taskNo);
+        }
     }
 
     //tag x 버튼 클릭
