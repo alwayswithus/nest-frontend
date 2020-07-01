@@ -30,6 +30,9 @@ const SignUp = () => {
         if(response.data.data.userGrade==="정회원"){
           setMessageText("이미 가입된 이메일 입니다.");
           setEmail("");
+        }else if(response.data.data.userGrade==="비회원"){
+          setMessageText("탈퇴된 회원의 이메일 입니다.");
+          setEmail("");
         }else{
           setMessageText("확인됨.");
         }
