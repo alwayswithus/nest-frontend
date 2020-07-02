@@ -86,6 +86,13 @@
                   background-color: #efefef;
                 }
               }
+
+              .nullNotice{
+                display: grid;
+                color: lightgray;
+                margin-top: 70px;
+                line-height: 50px;
+              }
             }
             .seeAll {
               width: 450px;

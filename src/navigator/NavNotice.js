@@ -104,8 +104,9 @@ class NavNotice extends React.Component {
                                     <SimpleNotice notice={notice} callbackMessageCheck={{MessageCheck:this.callbackMessageCheck.bind(this)}} />
                                 )
                                 :
-                                <div>
-                                    <image/>
+                                <div className="nullNotice">
+                                    <i class="far fa-bell fa-5x"></i>
+                                    <b>새로운 알림이 없습니다</b>
                                 </div>
                         }
                         <div className="seeAll">
