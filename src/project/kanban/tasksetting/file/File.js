@@ -36,7 +36,7 @@ class File extends Component {
         if (event.target.files.length !== 0 && (event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || event.target.files[0].type === 'image/png' || event.target.files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             || event.target.files[0].type === 'text/plain' || event.target.files[0].type === 'image/jpeg' || event.target.files[0].type === 'application/vnd.ms-excel'
-            || event.target.files[0].type === "application/x-zip-compressed")) {
+            || event.target.files[0].type === "application/x-zip-compressed" || event.target.files[0].type === 'application/haansofthwp')) {
 
             const formData = new FormData();
             formData.append('file', event.target.files[0])
@@ -72,26 +72,36 @@ class File extends Component {
     handleDrop(files) {
         let taskList = this.props.task;
 
-        const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
-        taskList = this.props.task[projectIndex].allTaskList
+        if(this.props.match.url.indexOf("calendar") !== -1){
+            
+            const projectIndex = this.props.task.findIndex(taskList => taskList.projectNo == this.props.match.params.projectNo)
+            taskList = this.props.task[projectIndex].allTaskList
+
+        } else{
+            taskList = this.props.task;
+        }
 
         let Indexs = []
         taskList.map( (taskList,taskListIndex) => 
         taskList.tasks.map((task,taskIndex) => 
-        task.taskNo === this.props.match.params.taskNo
+        task.taskNo == this.props.match.params.taskNo
         ?Indexs.push({taskListIndex, taskIndex})
         :null
         ))
+
+
         const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
         
         this.setState({
             selectedFile: files[0]
         })
+
+        console.log(files[0].type)
         
         if (files[0].length !== 0 && (files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || files[0].type === 'image/png' || files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             || files[0].type === 'text/plain' || files[0].type === 'image/jpeg' || files[0].type === 'application/vnd.ms-excel'
-            || files[0].type === "application/x-zip-compressed")) {
+            || files[0].type === "application/x-zip-compressed" || files[0].type === 'application/haansofthwp')) {
         const formData = new FormData();
         formData.append('file', files[0])
         formData.append('taskNo', this.props.match.params.taskNo);

@@ -1656,11 +1656,13 @@ class myCalendar extends Component {
     const commentIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].commentList.findIndex((comment) => comment.commentNo == commentNo);
     const fileIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex].fileList.findIndex((file) => file.fileNo == fileNo);
 
-    if (fileNo === null) {
+    console.log(fileNo)
+
+    if (fileNo == null) {
       fileNo = 0;
     }
     fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
-      method: "post",
+      method: "delete",
       headers: API_HEADERS,
     })
       .then(json => {
@@ -1684,7 +1686,7 @@ class myCalendar extends Component {
             },
           },
         });
-        if (fileIndex !== -1) {
+        if (fileIndex != -1) {
           newTaskList = update(newTaskList, {
             [projectIndex]:{
               allTaskList:{
@@ -1741,8 +1743,9 @@ class myCalendar extends Component {
     const projectMemberIndex = this.state.projectMembers.findIndex(member => member.projectNo == projectNo)
     
     const taskListIndex = this.state.taskList[projectIndex].allTaskList.findIndex(taskList => taskList.taskListNo == taskListNo);
-    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
-
+    const taskIndex = this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
+    
+    console.log(this.state.taskList[projectIndex].allTaskList[taskListIndex].tasks[taskIndex])
     let newTaskList = update(this.state.taskList, {
       [projectIndex]:{
         allTaskList:{
