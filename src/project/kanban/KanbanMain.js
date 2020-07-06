@@ -1937,6 +1937,7 @@ class KanbanMain extends Component {
     })
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(data));
+    
   }
 
   // Project Setting button Click Function

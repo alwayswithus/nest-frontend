@@ -223,7 +223,7 @@ class SettingList extends Component {
                     </div>
                     </div>
                 </div> */}
-                <div className="panel panel-default">
+                {/* <div className="panel panel-default">
                     <div className="panel-heading">
                     <h4 className="panel-title">
                         <Link data-toggle="collapse" data-parent="#accordion" to="#collapse4">알림 설정</Link>
@@ -243,7 +243,7 @@ class SettingList extends Component {
                         </form>
                     </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="panel panel-default">
                     <div className="panel-heading">
                     <h4 className="panel-title">

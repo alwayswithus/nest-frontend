@@ -50,7 +50,7 @@ class Profile extends Component {
     }
 
     onClickprofileSave(){
-        console.log("!!!!")
+        
         let userInfo = {
             userNo:sessionStorage.getItem("authUserNo"),
             userPhoto: this.state.afterPhoto,
@@ -68,7 +68,7 @@ class Profile extends Component {
         this.setState({
             change:false
         })
-
+        this.onClickConfirm();
         sessionStorage.setItem("authUserPhoto", this.state.afterPhoto);
     }
 
@@ -159,7 +159,7 @@ class Profile extends Component {
             photoUpdate:false,
             change:true
         })
-        console.log(this.state.selectedFile)
+        
         const formData = new FormData();
         formData.append('file', this.state.selectedFile)
 
