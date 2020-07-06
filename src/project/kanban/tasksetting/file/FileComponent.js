@@ -53,7 +53,7 @@ class FileComponent extends Component {
     }
 
     onClickFile(fileNo, originName) {
-        if (window.confirm(originName + " 파일을 다운로드 하시겠습니까?")) {
+        if (window.confirm(`${originName} 파일을 다운로드 하시겠습니까?`)) {
             this.downloadEmployeeData(fileNo)
         }
     }
@@ -64,7 +64,7 @@ class FileComponent extends Component {
                 <tr key={this.props.file.fileNo} className="FileList-tr">
                     <td>
                         {this.props.file.originName.split('.')[1] === 'csv' || this.props.file.originName.split('.')[1] === 'xlxs' ?
-                            <img  src='/nest/assets/images/excel.png' alt={this.props.file.originName} onClick={this.onClickFile.bind(this, this.props.file.fileNo)}></img> :
+                            <img  src='/nest/assets/images/excel.png' alt={this.props.file.originName} onClick={this.onClickFile.bind(this, this.props.file.fileNo,this.props.file.originName )}></img> :
                             <>{this.props.file.originName.split('.')[1] === 'txt' ?
                                 <img 
                                     src='/nest/assets/images/txt.png'
@@ -77,7 +77,7 @@ class FileComponent extends Component {
                                         alt={this.props.file.originName}
 
                                         onClick={this.onClickImage.bind(this)}></img> :
-                                    <img  src='/nest/assets/images/attach.png' alt={this.props.file.originName} onClick={this.onClickFile.bind(this, this.props.file.fileNo)}></img>
+                                    <img  src='/nest/assets/images/attach.png' alt={this.props.file.originName} onClick={this.onClickFile.bind(this, this.props.file.fileNo,this.props.file.originName)}></img>
 
                                 }</>
                             }</>
