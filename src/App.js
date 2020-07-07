@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Route } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter,Switch } from "react-router-dom";
 
 import Main from "./Main";
 
@@ -29,6 +29,7 @@ import KanbanMain from "./project/kanban/KanbanMain";
 import Calendar from "./calendar/Calendar";
 
 import "./App.scss";
+// import { Switch } from "@material-ui/core";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -59,7 +60,7 @@ function App() {
 
   return (
     <BrowserRouter>
-
+      <Switch>
       <div className="App" 
             style={{backgroundImage: `url(${url == 'null' ? "/nest/assets/images/nestBackground.png" : url})`,overflow: 'hidden',position: 'relative'}}>
 
@@ -83,7 +84,7 @@ function App() {
         <Route path="/nest/sendmail/:mode" component={SendMail} />
         <Route path="/nest/signup/emailConfirm/:keys" component={SignUpEmail} />
         <Route path="/nest/pwfind/emailConfirm/:keys" component={PwFindEmail} />
-
+        {/* <Route path="/" component={NoMatchPage}/> */}
         {/* 프로필설정 */}
         <Route
           path="/nest/profile"
@@ -150,6 +151,7 @@ function App() {
         />
 
       </div>
+      </Switch>
     </BrowserRouter>
   );
 }

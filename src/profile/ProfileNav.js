@@ -18,8 +18,6 @@ class ProfileNav extends Component {
           fontSize: '1.5rem',
         }
 
-        console.log(location.pathname)
-
     return (
       <>
         <div className="ProfileNav">

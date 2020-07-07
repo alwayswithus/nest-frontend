@@ -50,7 +50,7 @@ class Profile extends Component {
     }
 
     onClickprofileSave(){
-        
+        console.log(this.state.afterPhoto)
         let userInfo = {
             userNo:sessionStorage.getItem("authUserNo"),
             userPhoto: this.state.afterPhoto,
@@ -66,9 +66,10 @@ class Profile extends Component {
             body: JSON.stringify(userInfo)
         })
         this.setState({
-            change:false
+            change:false,
+            photoUpdate:false
         })
-        this.onClickConfirm();
+
         sessionStorage.setItem("authUserPhoto", this.state.afterPhoto);
     }
 
@@ -131,7 +132,7 @@ class Profile extends Component {
 
     //사진 업데이트 하기 클릭
     handleChange(event){
-        console.log(this.state.photo)
+        console.log(event.target.files[0].type)
         if(event.target.files[0].type === 'image/png' || event.target.files[0].type ==='image/jpeg'){
             this.setState({
                 afterPhoto:URL.createObjectURL(event.target.files[0]),
@@ -147,9 +148,11 @@ class Profile extends Component {
 
     //취소 클릭
     onClickReset(){
+        console.log(this.state.beforePhoto)
         this.setState({
             photoUpdate:false,
-            afterPhoto:this.state.beforePhoto
+            afterPhoto:this.state.beforePhoto,
+            change:false
         })
     }
 
