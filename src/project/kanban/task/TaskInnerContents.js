@@ -209,7 +209,16 @@ class TaskInnerContents extends Component {
               <i className="fas fa-paperclip"> {fileListCount}</i>
             </div>
             <div className="userCocunt">
-              <i className="fas fa-user"> {memberListCount}</i>
+              {
+                taskItem.memberList.map((member,index) => 
+                index < 3  
+                  ? <img className="userPhoto" src={`${member.userPhoto}`}></img>
+                  : null
+                )
+              }
+              {/* <i className="fas fa-user"> {memberListCount}</i> */}
+              &nbsp;
+              {memberListCount > 3 ? ` +${memberListCount-3}`: null}
             </div>
           </div>
         </div>
