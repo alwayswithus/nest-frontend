@@ -26,6 +26,10 @@ class ApiService {
         return axios.get(`/nest/api/kanbanMain/${projectNo}/${authUserNo}`);
     }
 
+    fetchKanbanCK(projectNo, authUserNo){
+        return axios.get(`/nest/api/kanbanck/${projectNo}/${authUserNo}`);
+    }
+
     fetchTagList(){
         return axios.get(`/nest/api/taglist`);
     }
