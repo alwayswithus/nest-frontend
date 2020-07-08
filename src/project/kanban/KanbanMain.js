@@ -67,6 +67,8 @@ class KanbanMain extends Component {
       memberKeyword: "",                                             // member search
       loading: false,
 
+      projectck:false,
+
       history: [], //히스토리배열
       projectMembers: [] // 프로젝트 멤버
     };
@@ -76,6 +78,20 @@ class KanbanMain extends Component {
     if (!sessionStorage.getItem("authUserNo")) {
       history.push("/nest/");
       return;
+    }else{
+      ApiService.fetchKanbanCK(this.props.match.params.projectNo, sessionStorage.getItem("authUserNo")).then(
+        (response) => {
+          if(!response.data.data.ck){
+            console.log("경고!!"+response.data.data.ck)
+            this.setState({
+              projectck: true
+            })
+            const { history } = this.props;
+            history.push("/nest/dashboard");
+            console.log("작동")
+          }
+        }
+      );
     }
   }
 
