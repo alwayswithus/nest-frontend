@@ -2,26 +2,32 @@
   height: 100%;
   .kanban {
     height: 100%;
-    #projectSetArea {
-      position: absolute;
-      right: 0px;
-      display: block;
-      z-index: 3;
-    }
     .topBar {
       margin-left: 62px;
     }
-    
-
     #projectSetArea {
+      position: absolute;
+      right: 0px;
       top: 52px;
+      display: block;
+      z-index: 3;
       .ProjectSet {
         position: fixed;
         top: 172px;
         height: calc(100% - 172px);
       }
+       animation-duration: 0.7s;
+        animation-name: slidein;
+        @keyframes slidein  {
+          from {
+            right: -632px;
+          }
+        
+          to {
+            right: 0px;
+          }
+        }
     }
-
     .scroll-container {
       height: calc(100%);
       margin-left: 62px;
