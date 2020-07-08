@@ -15,6 +15,17 @@
         position: fixed;
         top: 172px;
         height: calc(100% - 172px);
+        animation-duration: 0.7s;
+        animation-name: slidein;
+        @keyframes slidein  {
+          from {
+            right: -632px;
+          }
+        
+          to {
+            right: 0px;
+          }
+        }
       }
        animation-duration: 0.7s;
         animation-name: slidein;

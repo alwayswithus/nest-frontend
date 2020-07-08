@@ -9,6 +9,17 @@
         top: 52px;
         width: 1px;
         height: calc(100% - 58px);
+        animation-duration: 0.7s;
+        animation-name: slidein;
+        @keyframes slidein  {
+          from {
+            right: -632px;
+          }
+        
+          to {
+            right: 0px;
+          }
+      }
     }
     .container-fluid {
         padding-left: 0;
