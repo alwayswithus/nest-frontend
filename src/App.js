@@ -23,13 +23,12 @@ import Dashboard from "./dashboard/Dashboard";
 import Profile from "./profile/Profile";
 import Notification from "./notification/Notification";
 import ProfileSetting from "./profile/ProfileSetting";
-// import ProjectSetting from "./dashboard/projectsetting/ProjectSetting";
 
 import KanbanMain from "./project/kanban/KanbanMain";
 import Calendar from "./calendar/Calendar";
 
 import "./App.scss";
-// import { Switch } from "@material-ui/core";
+import NotFoundErrors from "./errors/NotFoundErrors";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -84,7 +83,7 @@ function App() {
         <Route path="/nest/sendmail/:mode" component={SendMail} />
         <Route path="/nest/signup/emailConfirm/:keys" component={SignUpEmail} />
         <Route path="/nest/pwfind/emailConfirm/:keys" component={PwFindEmail} />
-        {/* <Route path="/" component={NoMatchPage}/> */}
+        <Route path="/nest/404" component={NotFoundErrors}/>
         {/* 프로필설정 */}
         <Route
           path="/nest/profile"
