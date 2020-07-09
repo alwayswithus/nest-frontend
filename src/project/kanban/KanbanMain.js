@@ -19,7 +19,7 @@ import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 import CheckList from "./task/CheckList";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -84,7 +84,6 @@ class KanbanMain extends Component {
     else{
       ApiService.fetchKanbanCK(this.props.match.params.projectNo, sessionStorage.getItem("authUserNo")).then(
         (response) => {
-          // console.log(response.data.data.ck)
           if(!response.data.data.ck){
             console.log("경고!!"+response.data.data.ck)
             this.setState({
@@ -2989,17 +2988,33 @@ class KanbanMain extends Component {
           $push: [projectMember]
         })
         
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            members: {
-              $push: [socketData.data]
-            }
-          }
-        })
+        console.log("socketData", socketData);
+        
+        let userIndex = this.state.users.findIndex(user => user.userNo === socketData.data.userNo);
+        let memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.data.userNo);
+        let users;
+        let newProject;
+        if(userIndex === -1) {
+          users = update(this.state.users, {
+            $push: [socketData.data]
+          })
+        }
+        else {
+          users = this.state.users
+        }
 
-        let users = update(this.state.users, {
-          $push: [socketData.data]
-        })
+        if(memberIndex === -1) {
+          newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $push: [socketData.data]
+              }
+            }
+          })
+        }
+        else {
+          newProject = this.state.projects
+        }
 
         if (this.state.project.projectNo !== newProject[projectIndex].projectNo) {
           this.setState({
@@ -3023,6 +3038,14 @@ class KanbanMain extends Component {
             projectMembers: projectMembers
           })
         }
+      }
+      else {
+        ApiService.fetchDashboard()
+        .then(response => {
+          this.setState({
+            projects: response.data.data.allProject
+          })
+        });
       }
     }
 

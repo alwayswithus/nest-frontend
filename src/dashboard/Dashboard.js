@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 import ApiHistory from '../project/topBar/ApiHistory';
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -439,30 +439,60 @@ export default class Dashboard extends React.Component {
     }))
       .then(response => response.json())
       .then(json => {
+        let memberIndex = membersNo.findIndex(memberNo => memberNo === json.data.userNo)
+        if(memberIndex !== -1) {
+          let socketData = {
+            projectNo: projectNo,
+            data: json.data,
+            alerts: [...this.state.alerts, newAlert],
+            socketType: "inviteUser",
+            membersNo: membersNo
+          }
 
-        let socketData = {
-          projectNo: projectNo,
-          data: json.data,
-          alerts: [...this.state.alerts, newAlert],
-          socketType: "inviteUser",
-          membersNo: membersNo
+          let kanbanSocketData = {
+            projectNo: projectNo,
+            data: json.data,
+            alerts: [...this.state.alerts, newAlert],
+            socketType: "inviteUser",
+            members: this.state.projects[projectIndex].members
+          }
+
+          this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+          this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
+
+          this.setState({
+            alerts: [...this.state.alerts, newAlert],
+            loading: false
+          })
         }
+        else {
+          let socketData = {
+            projectNo: projectNo,
+            data: json.data,
+            alerts: [...this.state.alerts, newAlert],
+            socketType: "inviteUser",
+            membersNo: [
+              ...membersNo,
+              json.data.userNo
+            ]
+          }
 
-        let kanbanSocketData = {
-          projectNo: projectNo,
-          data: json.data,
-          alerts: [...this.state.alerts, newAlert],
-          socketType: "inviteUser",
-          members: this.state.projects[projectIndex].members
+          let kanbanSocketData = {
+            projectNo: projectNo,
+            data: json.data,
+            alerts: [...this.state.alerts, newAlert],
+            socketType: "inviteUser",
+            members: this.state.projects[projectIndex].members
+          }
+
+          this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
+          this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
+
+          this.setState({
+            alerts: [...this.state.alerts, newAlert],
+            loading: false
+          })
         }
-
-        this.clientRef.sendMessage("/app/dashboard/all", JSON.stringify(socketData));
-        this.clientRef.sendMessage("/app/all", JSON.stringify(kanbanSocketData))
-
-        this.setState({
-          alerts: [...this.state.alerts, newAlert],
-          loading: false
-        })
       })
   }
 
@@ -846,13 +876,31 @@ export default class Dashboard extends React.Component {
       .then(response => response.json())
       .then(json => {
 
-        let members = update(this.state.members, {
-          $push: [json.data]
-        })
+        let userIndex = this.state.users.findIndex(user => user.userNo === json.data.userNo);
+        let memberIndex = this.state.members.findIndex(member => member.userNo === json.data.userNo);
+        let members;
+        let users;
+        if(userIndex === -1) {
+          users = update(this.state.users, {
+            $push: [json.data]
+          })
+        }
+        else {
+          members = update(this.state.members, {
+            $push: [json.data]
+          })
+          users = this.state.users;
+        }
 
-        let users = update(this.state.users, {
-          $push: [json.data]
-        })
+        if(memberIndex === -1) {
+          members = update(this.state.members, {
+            $push: [json.data]
+          })
+        }
+        else {
+          members = this.state.members;
+        }
+        
         this.setState({
           inviteMemberEmail: "",
           inviteMemberName: "",
@@ -1118,21 +1166,35 @@ export default class Dashboard extends React.Component {
       }
     }
     else if (socketData.socketType == "inviteUser") {
-
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if(projectIndex !== -1) {
-        let newProject = update(this.state.projects, {
-          [projectIndex]: {
-            members: {
-              $push: [socketData.data]
+
+        let userIndex = this.state.users.findIndex(user => user.userNo === socketData.data.userNo);
+        let memberIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo === socketData.data.userNo);
+        let users;
+        let newProject;
+        if(userIndex === -1) {
+          users = update(this.state.users, {
+            $push: [socketData.data]
+          })
+        }
+        else {
+          users = this.state.users
+        }
+
+        if(memberIndex === -1) {
+          newProject = update(this.state.projects, {
+            [projectIndex]: {
+              members: {
+                $push: [socketData.data]
+              }
             }
-          }
-        })
-  
-        let users = update(this.state.users, {
-          $push: [socketData.data]
-        })
+          })
+        }
+        else {
+          newProject = this.state.projects
+        }
 
         if(this.state.project.projectNo !== newProject[projectIndex].projectNo) {
           this.setState({
@@ -1154,6 +1216,14 @@ export default class Dashboard extends React.Component {
             project: newProject[projectIndex]
           })
         }
+      }
+      else {
+        ApiService.fetchDashboard()
+        .then(response => {
+          this.setState({
+            projects: response.data.data.allProject
+          })
+        });
       }
     }
     else if (socketData.socketType == "userDelete") {
