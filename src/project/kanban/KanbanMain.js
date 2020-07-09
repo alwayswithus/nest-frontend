@@ -19,7 +19,7 @@ import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 import CheckList from "./task/CheckList";
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -69,6 +69,7 @@ class KanbanMain extends Component {
 
       projectck:false,
 
+      popoverOpen: false,
       history: [], //히스토리배열
       projectMembers: [] // 프로젝트 멤버
     };
@@ -78,9 +79,11 @@ class KanbanMain extends Component {
     if (!sessionStorage.getItem("authUserNo")) {
       history.push("/nest/");
       return;
-    }else{
+    }
+    else{
       ApiService.fetchKanbanCK(this.props.match.params.projectNo, sessionStorage.getItem("authUserNo")).then(
         (response) => {
+          console.log(response.data.data.ck)
           if(!response.data.data.ck){
             console.log("경고!!"+response.data.data.ck)
             this.setState({
@@ -4485,6 +4488,22 @@ class KanbanMain extends Component {
     }
     
   }
+
+  onCloseEvent() {
+    window.jQuery(".wrap").removeClass('active');
+    
+    if(this.state.popoverOpen === true){
+      this.setState({
+        popoverOpen:false
+      })
+    } 
+  }
+
+  onUpdateStatePopOver(){
+    this.setState({
+      popoverOpen:!this.state.popoverOpen
+    })
+  }
   render() {
     return (
       <>
@@ -4576,7 +4595,11 @@ class KanbanMain extends Component {
         <div className="kanban">
         {/* 네비게이션바 */}
         <div className="navibar">
-          <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
+          <Navigator
+            onClosePopOver = {this.onCloseEvent.bind(this)}
+            onUpdateStatePopOver = {this.onUpdateStatePopOver.bind(this)}
+            popoverOpen = {this.state.popoverOpen} 
+            callbackChangeBackground = {this.props.callbackChangeBackground}/>
         </div>
         {/*상단바*/}
         <TopBar 
@@ -4621,7 +4644,7 @@ class KanbanMain extends Component {
 
 
                 {/* 메인 영역 */}
-                <div className="mainArea">
+                <div className="mainArea" onClick={this.onCloseEvent.bind(this)}>
                   {/*칸반보드*/}
                   <DragDropContext
                     onDragEnd={this.onDragEnd}

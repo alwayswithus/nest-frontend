@@ -7,7 +7,7 @@ import NavNotice from './NavNotice';
 import SockJsClient from "react-stomp";
 import ApiService from '../ApiService';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 
 export default class Navigator extends React.Component {
 
@@ -44,9 +44,7 @@ export default class Navigator extends React.Component {
     }
 
     onPopoverOpen() {
-        this.setState({
-            popoverOpen: !this.state.popoverOpen
-        })
+        this.props.onUpdateStatePopOver();
     }
 
     componentDidMount() {
@@ -120,6 +118,7 @@ export default class Navigator extends React.Component {
     }
 
     render() {
+        console.log(this.state.popoverOpen)
         return (
             <div className='Navigator test'>
                 <div className="navigation">
@@ -164,7 +163,7 @@ export default class Navigator extends React.Component {
                                     </span>
                                 }
                             </div>
-                            {this.state.popoverOpen ? <NavNotice /> : ""}
+                            {this.props.popoverOpen ? <NavNotice /> : ""}
 
                             {/*<!-- Calendar link -->*/}
                             <div className="nav-item button">

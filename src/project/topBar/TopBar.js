@@ -5,6 +5,7 @@ import moment from 'moment';
 
 class TopBar extends Component {
 
+
   constructor(){
     super(...arguments)
     this.state ={
@@ -29,7 +30,9 @@ class TopBar extends Component {
       searchKeyword:"",
     });
   }
-  
+
+ 
+
   render() {
     let activePath = this.props.activePath.split('/')[4];
     
@@ -41,7 +44,7 @@ class TopBar extends Component {
     
     return (
       <>
-      <div className='wrap'>
+      <div className='wrap' >
         <div className='content'>
         {this.props.history.length == 0 ? 
           <>

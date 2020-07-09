@@ -5,7 +5,7 @@ import Navigator from "../navigator/Navigator";
 import ApiService from '../ApiService';
 import moment from 'moment';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     "Content-Type": "application/json",
   };
@@ -28,6 +28,7 @@ class Profile extends Component {
 
             beforePhoto:'', // 전 사진
             afterPhoto:'', // 후 사진
+            popoverOpen:false // 알림 상태변수
         }
     }
 
@@ -178,14 +179,32 @@ class Profile extends Component {
             })
         })
     }
+    onCloseEvent() {
+        
+        if(this.state.popoverOpen === true){
+          this.setState({
+            popoverOpen:false
+          })
+        } 
+      }
+    
+      onUpdateStatePopOver(){
+        this.setState({
+          popoverOpen:!this.state.popoverOpen
+        })
+      }
     render(){
         if(!this.state.profileUser){
             return <></>
         }
         return (
             <>
-                <Navigator callbackChangeBackground = {this.props.callbackChangeBackground}/>
-                <div style={{ textAlign: 'center'}}>
+                <Navigator 
+                    onClosePopOver = {this.onCloseEvent.bind(this)}
+                    onUpdateStatePopOver = {this.onUpdateStatePopOver.bind(this)}
+                    popoverOpen = {this.state.popoverOpen} 
+                    callbackChangeBackground = {this.props.callbackChangeBackground}/>
+                <div style={{ textAlign: 'center'}} onClick={this.onCloseEvent.bind(this)}>
                     <div className="Profile">
                     <ProfileNav />
                         <div className="profileLayout">

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 import ApiHistory from '../project/topBar/ApiHistory';
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -52,7 +52,8 @@ export default class Dashboard extends React.Component {
       memberKeyword: "",                                             // member search
 
       modalState: false,
-      loading: false
+      loading: false,
+      popoverOpen:false                                               // 알림 상태변수
     }
 
     const { history } = this.props;
@@ -1719,6 +1720,21 @@ export default class Dashboard extends React.Component {
     }
   }
 
+  onCloseEvent() {
+    
+    if(this.state.popoverOpen === true){
+      this.setState({
+        popoverOpen:false
+      })
+    } 
+  }
+
+  onUpdateStatePopOver(){
+    this.setState({
+      popoverOpen:!this.state.popoverOpen
+    })
+  }
+
   render() {
     return (
       <div className="Dashboard">
@@ -1741,7 +1757,11 @@ export default class Dashboard extends React.Component {
         <div className="container-fluid">
           {/* Side Bar */}
           <div className="sidebar">
-            <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
+            <Navigator 
+              onClosePopOver = {this.onCloseEvent.bind(this)}
+              onUpdateStatePopOver = {this.onUpdateStatePopOver.bind(this)}
+              popoverOpen = {this.state.popoverOpen}
+              callbackChangeBackground={this.props.callbackChangeBackground} />
           </div>
 
           {/* Top Bar */}
@@ -1771,7 +1791,7 @@ export default class Dashboard extends React.Component {
                 projectForeverDelete: this.callbackProjectForeverDelete.bind(this)
               }} />
           </div>
-          <div className="mainArea" >
+          <div className="mainArea" onClick={this.onCloseEvent.bind(this)}>
             <div className="col-sm-24 project-list" onClick={this.onShowDetails.bind(this)}>
               {this.state.details ? <i className="fas fa-arrow-down"></i> : <i className="fas fa-arrow-right"></i>}
               <h3>내가 속한 프로젝트 ({this.state.projects && this.state.projects.length})</h3>

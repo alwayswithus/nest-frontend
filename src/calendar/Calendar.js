@@ -24,7 +24,7 @@ import ApiService from '../ApiService';
 moment.locale("ko")
 const localizer = momentLocalizer(moment);
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -89,6 +89,7 @@ class myCalendar extends Component {
       taskMemberState: false, //task memer modal 상태변수
       point: null, // 업무 중요도 상태변수
       tagModal: false, // 태그 모달 상태변수
+      popoverOpen:false // 알림 상태변수
     }
   }
 
@@ -2469,6 +2470,20 @@ class myCalendar extends Component {
     }
   }
 
+  onCloseEvent() {
+    
+    if(this.state.popoverOpen === true){
+      this.setState({
+        popoverOpen:false
+      })
+    } 
+  }
+
+  onUpdateStatePopOver(){
+    this.setState({
+      popoverOpen:!this.state.popoverOpen
+    })
+  }
   render() {
     const {history} = this.props;
     const projectNo =  history.location.pathname.split('/')[3];
@@ -2564,9 +2579,13 @@ class myCalendar extends Component {
 
         {/* 사이드바 */}
         <div className="sidebar">
-          <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
+          <Navigator 
+            onClosePopOver = {this.onCloseEvent.bind(this)}
+            onUpdateStatePopOver = {this.onUpdateStatePopOver.bind(this)}
+            popoverOpen = {this.state.popoverOpen}
+            callbackChangeBackground={this.props.callbackChangeBackground} />
         </div>
-        <div className="calendar-contents">
+        <div className="calendar-contents" onClick={this.onCloseEvent.bind(this)}>
           <div className="calendar-body-contents">
             <div className="calendar-body-contents-filter">
               <table className="filterList">

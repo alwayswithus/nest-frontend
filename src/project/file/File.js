@@ -14,7 +14,7 @@ import Viewer from 'react-viewer'
 import EachFile from "./EachFile";
 import SockJsClient from "react-stomp";
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     "Content-Type": "application/json",
 };
@@ -30,7 +30,8 @@ export default class File extends React.Component {
             visible: false,
             loading: false,
             rotatable: false,
-            history:[]
+            history:[],
+            popoverOpen:false //알림상태변수
         }
     }
 
@@ -194,6 +195,20 @@ export default class File extends React.Component {
             }
         }
     }
+    onCloseEvent() {
+        if(this.state.popoverOpen === true){
+          this.setState({
+            popoverOpen:false
+          })
+        } 
+      }
+    
+      onUpdateStatePopOver(){
+        this.setState({
+          popoverOpen:!this.state.popoverOpen
+        })
+      }
+
     render() {
 
         // if (this.state.count === 0)
@@ -210,8 +225,12 @@ export default class File extends React.Component {
                   this.clientRef = client
                 }}
              />
-            <div className="File">
-                <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
+            <div className="File" onClick={this.onCloseEvent.bind(this)}>
+                <Navigator 
+                    onClosePopOver = {this.onCloseEvent.bind(this)}
+                    onUpdateStatePopOver = {this.onUpdateStatePopOver.bind(this)}
+                    popoverOpen = {this.state.popoverOpen}
+                    callbackChangeBackground={this.props.callbackChangeBackground} />
                 <TopBar history={this.state.history} projectNo={this.props.match.params.projectNo} activePath={this.props.location.pathname} />
                 <div className="file-resource-table">
                     {this.state.count === 0 ? null : <><Table>

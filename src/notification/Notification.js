@@ -8,7 +8,7 @@ import Navigator from '../navigator/Navigator';
 import './notification.scss';
 import SockJsClient from "react-stomp";
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     'Content-Type': 'application/json'
 }
@@ -18,6 +18,7 @@ class Notification extends React.Component {
         this.state = {
             notices: [],                               // notice send Data
             dates: [],                                          // date Data
+            popoverOpen:false // 알림 상태변수
         }
     }
 
@@ -63,6 +64,20 @@ class Notification extends React.Component {
         }
     }
 
+    onCloseEvent() {
+        
+        if(this.state.popoverOpen === true){
+          this.setState({
+            popoverOpen:false
+          })
+        } 
+      }
+    
+      onUpdateStatePopOver(){
+        this.setState({
+          popoverOpen:!this.state.popoverOpen
+        })
+      }
     render() {
         let count = 0;
         this.state.notices.map(notice => 
@@ -70,10 +85,14 @@ class Notification extends React.Component {
         )
         //console.log(this.state.notices)
         return (
-            <div className="Notification" >
+            <div className="Notification" onClick={this.onCloseEvent.bind(this)}>
                 {/* 사이드바 */}
                 <div className="sidebar">
-                    <Navigator callbackChangeBackground={this.props.callbackChangeBackground} />
+                    <Navigator 
+                        onClosePopOver = {this.onCloseEvent.bind(this)}
+                        onUpdateStatePopOver = {this.onUpdateStatePopOver.bind(this)}
+                        popoverOpen = {this.state.popoverOpen}
+                        callbackChangeBackground={this.props.callbackChangeBackground} />
                 </div>
                 <div className="notice-header-background"></div>
 
