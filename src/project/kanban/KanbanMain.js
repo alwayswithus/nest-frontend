@@ -39,6 +39,7 @@ class KanbanMain extends Component {
       tagModal: false, // 태그 모달 상태변수
       taskCount: 0,
       completedTask: 0,
+      taskListInsertState: false,
 
       projects: null,                                               // projects data
       users: null,                                                  // user data
@@ -4515,9 +4516,10 @@ class KanbanMain extends Component {
   onCloseEvent() {
     window.jQuery(".wrap").removeClass('active');
     
-    if(this.state.popoverOpen === true){
+    if(this.state.popoverOpen === true || this.state.taskListInsertState === true){
       this.setState({
-        popoverOpen:false
+        popoverOpen:false,
+        taskListInsertState: false,
       })
     } 
   }
@@ -4526,6 +4528,17 @@ class KanbanMain extends Component {
     this.setState({
       popoverOpen:!this.state.popoverOpen
     })
+  }
+
+  taskListStateBtn(taskListInsertState){
+    this.setState({
+      taskListInsertState: !taskListInsertState,
+    });
+  }
+  noneTaskListAddBtn(){
+    this.setState({
+      taskListInsertState: false,
+    });
   }
   render() {
     return (
@@ -4631,7 +4644,8 @@ class KanbanMain extends Component {
           activePath={this.props.location.pathname}
           projectTitle={this.state.projectTitle}
           callbackPorjectSetting = {{
-            onProjectSetting : this.onProjectSetting.bind(this) // 프로젝트 세팅 열기
+            onProjectSetting : this.onProjectSetting.bind(this), // 프로젝트 세팅 열기
+            onCloseEvent: this.onCloseEvent.bind(this)
           }}
             />
         <div id="projectSetArea" style={{ display: this.state.setOn ? 'none'  :'block'}}>
@@ -4676,6 +4690,7 @@ class KanbanMain extends Component {
                     {this.state.taskList && this.state.taskList &&
                       <KanbanBoard
                         setOn={this.state.setOn}
+                        taskListInsertState={this.state.taskListInsertState}
                         authUserRole={this.state.authUserRole}
                         taskList={this.state.taskList}
                         projectNo={this.props.match.params.projectNo}
@@ -4688,7 +4703,9 @@ class KanbanMain extends Component {
                           deleteList: this.callbackDeleteTaskList.bind(this), // taskList 삭제
                           checklistStateUpdate: this.callbackCheckListStateUpdate.bind(this), // checklist check 업데이트
                           modalStateFalse: this.modalStateFalse.bind(this),
-                          editTaskListName: this.editTaskListName.bind(this) // taskList이름 변경 
+                          editTaskListName: this.editTaskListName.bind(this), // taskList이름 변경 
+                          taskListStateBtn:this.taskListStateBtn.bind(this),
+                          noneTaskListAddBtn:this.noneTaskListAddBtn.bind(this)
                         }}
                       />
                     }

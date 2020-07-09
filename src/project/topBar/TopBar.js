@@ -16,6 +16,7 @@ class TopBar extends Component {
   }
   onProjectSetting(){
     this.props.callbackPorjectSetting.onProjectSetting(this.props.projectNo)
+    this.props.callbackPorjectSetting.onCloseEvent()
   
   }
 

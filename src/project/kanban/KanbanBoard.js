@@ -4,7 +4,6 @@ import ReactTooltip from "react-tooltip";
 import { Droppable } from "react-beautiful-dnd";
 import update from "react-addons-update";
 import "./KanbanBoard.scss";
-import ApiService from "../../ApiService";
 
 const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
@@ -14,7 +13,7 @@ class KanbanBoard extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      taskListInsertState: false,
+      // taskListInsertState: false,
       taskListName: "",
       searchKeyword: "",
       tagSearchTaskList: {},
@@ -25,8 +24,8 @@ class KanbanBoard extends Component {
 
   //리스트 추가 버튼 UI변경
   taskListStateBtn() {
+    this.props.taskCallbacks.taskListStateBtn(this.props.taskListInsertState)
     this.setState({
-      taskListInsertState: !this.state.taskListInsertState,
       taskListName: "",
     });
   }
@@ -153,16 +152,16 @@ class KanbanBoard extends Component {
     });
   }
 
-  onClickClose = () => {
-    this.setState({
-      taskListInsertState:false
-    })
-}
-
-// componentDidMount(){
-//    //비제어
-//    document.addEventListener("click", this.onClickClose, true)
+//   onClickClose = () => {
+//     this.setState({
+//       taskListInsertState:false
+//     })
 // }
+
+// // componentDidMount(){
+// //    //비제어
+// //    document.addEventListener("click", this.onClickClose, true)
+// // }
 
   render() {
    
@@ -197,9 +196,9 @@ class KanbanBoard extends Component {
           </div>
           {/* TaskList 추가 */}
           <div className="taskListAdd">
-              {this.state.taskListInsertState ? (
+              {this.props.taskListInsertState ? (
                 <>
-                  <div className="taskListInsertForm" style={{display: this.props.setOn ?"block":"none"}}>
+                  <div className="taskListInsertForm">
                     <div className="taskListInsertInput">
                     <div>
                       <input
@@ -235,7 +234,7 @@ class KanbanBoard extends Component {
                       type="button"
                       className="btn btn-default addTaskListBtn"
                       onClick={this.taskListStateBtn.bind(this)}
-                      style={{display: this.props.setOn ?"block":"none"}}
+                      
                     >
                       + 업무 목록 추가
                     </button>
@@ -264,6 +263,7 @@ class KanbanBoard extends Component {
                       this.props.taskList.map((taskList, index) => {
                         return (
                           <TaskList
+                            showEditNameInput={this.props.showEditNameInput}
                             authUserRole={this.props.authUserRole}
                             searchKeyword={this.state.searchKeyword}
                             selectPicker={this.state.selectPicker}
@@ -282,6 +282,7 @@ class KanbanBoard extends Component {
                         this.props.taskList.map((taskList, index) => {
                           return (
                             <TaskList
+                              showEditNameInput={this.props.showEditNameInput}
                               authUserRole={this.props.authUserRole}
                               searchKeyword={this.state.searchKeyword}
                               selectPicker={this.state.selectPicker}
@@ -299,6 +300,7 @@ class KanbanBoard extends Component {
                         this.state.allTaskList.map((taskList, index) => {
                           return (
                             <TaskList
+                              showEditNameInput={this.props.showEditNameInput}
                               authUserRole={this.props.authUserRole}
                               searchKeyword={this.state.searchKeyword}
                               selectPicker={this.state.selectPicker}
