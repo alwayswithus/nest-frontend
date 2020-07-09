@@ -66,7 +66,10 @@ class ProjectSetting extends Component {
         this.props.callbackProjectSetting.inviteMember(projectNo, memberEmail, memberName);
         this.setState({
             inviteMemberEmail: "",
-            inviteMemberName: ""
+            inviteMemberName: "",
+            userListOpen: true,
+            inviteMemberButton: false,
+            isMemberEmailValid: false
         })
     }
 
@@ -465,12 +468,6 @@ class ProjectSetting extends Component {
                                     )}
                                 </div>
                             </li>
-
-                            {/* csv로 내보내기
-                            <li>
-                                <div style={{ display: 'inline-block' }}><h5><b>csv로 내보내기</b></h5></div>
-                                <div style={{ display: 'inline-block' }} className="link"><button>csv로 내보내기</button></div>
-                            </li> */}
 
                             {/* 프로젝트 나가기 */}
                             {this.props.project.members && Object.keys(this.props.project.members).length === 1 ? "" :

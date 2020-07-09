@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import update from "react-addons-update";
 import "./KanbanBoard.scss";
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };

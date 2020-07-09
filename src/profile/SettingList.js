@@ -6,7 +6,7 @@ import { displayName } from 'react-quill';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     "Content-Type": "application/json",
   };

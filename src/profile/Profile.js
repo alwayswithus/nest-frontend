@@ -5,7 +5,7 @@ import Navigator from "../navigator/Navigator";
 import ApiService from '../ApiService';
 import moment from 'moment';
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     "Content-Type": "application/json",
   };

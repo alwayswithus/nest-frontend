@@ -7,7 +7,7 @@ import ApiService from "../ApiService";
 import SockJsClient from "react-stomp";
 import update from "react-addons-update";
 
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
     'Content-Type': 'application/json'
 }

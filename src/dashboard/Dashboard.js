@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 import ApiHistory from '../project/topBar/ApiHistory';
-const API_URL = "http://localhost:8080/nest";
+const API_URL = "http://192.168.1.223:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -462,7 +462,7 @@ export default class Dashboard extends React.Component {
 
           this.setState({
             alerts: [...this.state.alerts, newAlert],
-            loading: false
+            loading: false,
           })
         }
         else {
@@ -490,7 +490,7 @@ export default class Dashboard extends React.Component {
 
           this.setState({
             alerts: [...this.state.alerts, newAlert],
-            loading: false
+            loading: false,
           })
         }
       })
@@ -904,6 +904,9 @@ export default class Dashboard extends React.Component {
         this.setState({
           inviteMemberEmail: "",
           inviteMemberName: "",
+          isMemberEmailValid: false,
+          addProjectUserButton: true,
+          inviteMember: false,
           members: members,
           users: users,
           alerts: [...this.state.alerts, newAlert],
@@ -1224,6 +1227,13 @@ export default class Dashboard extends React.Component {
             projects: response.data.data.allProject
           })
         });
+
+        ApiService.fetchUser()
+          .then(response => {
+            this.setState({
+              users: response.data.data.allUser
+            })
+          });
       }
     }
     else if (socketData.socketType == "userDelete") {
@@ -1268,27 +1278,40 @@ export default class Dashboard extends React.Component {
           })
           
           if(this.state.project.projectNo !== newProject[projectIndex].projectNo) {
-            this.setState({
-              projects: newProject
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject
+              })
+            });
           }
           else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
-            this.setState({
-              projects: newProject,
-              project: newProject[projectIndex]
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject,
+                project: newProject[projectIndex]
+              })
+            });
           }
           else {
-            this.setState({
-              projects: newProject,
-              project: newProject[projectIndex]
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject,
+                project: newProject[projectIndex]
+              })
+            });
           }
         }
       }
     }
 
     else if (socketData.socketType == "userAdd") {
+      console.log("socketData", socketData);
       if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
         socketData.newProject["roleNo"] = 3;
 
@@ -1296,9 +1319,13 @@ export default class Dashboard extends React.Component {
           $push: [socketData.newProject],
         })
 
-        this.setState({
-          projects: newProject
-        })
+        ApiService.fetchUser()
+          .then(response => {
+            this.setState({
+              users: response.data.data.allUser,
+              projects: newProject
+            })
+          });
       }
       else {
         const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo)
@@ -1313,21 +1340,33 @@ export default class Dashboard extends React.Component {
           })
           
           if(this.state.project.projectNo !== newProject[projectIndex].projectNo) {
-            this.setState({
-              projects: newProject
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject
+              })
+            });
           }
           else if(this.state.project.projectNo == newProject[projectIndex].projectNo) {
-            this.setState({
-              projects: newProject,
-              project: newProject[projectIndex]
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject,
+                project: newProject[projectIndex]
+              })
+            });
           }
           else {
-            this.setState({
-              projects: newProject,
-              project: newProject[projectIndex]
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject,
+                project: newProject[projectIndex]
+              })
+            });
           }
         } 
       }
@@ -1345,18 +1384,26 @@ export default class Dashboard extends React.Component {
               $splice: [[projectIndex, 1]]
             })
 
-            this.setState({
-              projects: newProject
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject,
+              })
+            });
           }
           else if(this.state.project.projectNo == this.state.projects[projectIndex].projectNo) {
             let newProject = update(this.state.projects, {
               $splice: [[projectIndex, 1]]
             })
 
-            this.setState({
-              projects: newProject
-            }) 
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: newProject,
+              })
+            });
             document.getElementById('projectSet').style.display = 'none'
           }
         }  
@@ -1376,21 +1423,33 @@ export default class Dashboard extends React.Component {
           })
   
           if(this.state.project.projectNo !== deleteMemberProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteMemberProject
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: deleteMemberProject
+              })
+            });
           }
           else if(this.state.project.projectNo == deleteMemberProject[projectIndex].projectNo) {
-            this.setState({
-              projects: deleteMemberProject,
-              project: deleteMemberProject[projectIndex]
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: deleteMemberProject,
+                project: deleteMemberProject[projectIndex]
+              })
+            });
           }
           else {
-            this.setState({
-              projects: deleteMemberProject,
-              project: deleteMemberProject[projectIndex]
-            })
+            ApiService.fetchUser()
+            .then(response => {
+              this.setState({
+                users: response.data.data.allUser,
+                projects: deleteMemberProject,
+                project: deleteMemberProject[projectIndex]
+              })
+            });
           }
         }
       }
@@ -1806,6 +1865,7 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
+    console.log("users", this.state.users);
     return (
       <div className="Dashboard">
         <SockJsClient
