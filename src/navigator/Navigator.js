@@ -118,7 +118,7 @@ export default class Navigator extends React.Component {
     }
 
     render() {
-        console.log(this.state.popoverOpen)
+        // console.log(this.state.popoverOpen)
         return (
             <div className='Navigator test'>
                 <div className="navigation">
