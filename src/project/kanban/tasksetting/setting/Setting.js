@@ -272,7 +272,6 @@ class Setting extends Component {
                         :null
             ))
             
-            console.log(Indexs)
             const taskItem = taskList[Indexs[0].taskListIndex].tasks[Indexs[0].taskIndex]
             const taskListNo = taskList[Indexs[0].taskListIndex].taskListNo
             

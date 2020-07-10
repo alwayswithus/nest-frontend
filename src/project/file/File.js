@@ -124,7 +124,6 @@ export default class File extends React.Component {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    console.log(a.href)
                     a.download = filename;
                     a.click();
                 });
@@ -136,7 +135,6 @@ export default class File extends React.Component {
         if (window.confirm("파일을 삭제하시겠습니까?")) {
 
             const fileIndex = this.state.projectFiles.findIndex((file) => file.fileNo === fileNo);
-            console.log(fileIndex)
             fetch(`${API_URL}/api/comment/${commentNo}/${fileNo}`, {
             method: "delete"
             })
@@ -154,11 +152,9 @@ export default class File extends React.Component {
     }
 
     receiveKanban(socketData){
-        console.log(socketData)
         if(socketData.projectNo === this.props.match.params.projectNo){
             if(socketData.socketType=="fileDelete"){
                 const fileIndex = this.state.projectFiles.findIndex(file => file.fileNo == socketData.fileNo)
-                console.log(fileIndex)
                 let newprojectFiles = update(this.state.projectFiles, {
                     [fileIndex]:{
                         fileState:{$set:'F'}
@@ -210,10 +206,6 @@ export default class File extends React.Component {
       }
 
     render() {
-
-        // if (this.state.count === 0)
-        //     return <p>There are no movies in the database.</p>
-        console.log(this.state.projectFiles)
         const files = paginate(this.state.projectFiles, this.state.currentPage, this.state.pageSize); // 페이지 별로 아이템이 속한 배열을 얻어옴
         return (
             <>
