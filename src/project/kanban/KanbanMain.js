@@ -19,7 +19,7 @@ import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 import CheckList from "./task/CheckList";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -1455,6 +1455,7 @@ class KanbanMain extends Component {
         })
 
         this.clientRef.sendMessage("/app/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
+        this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]))
         this.clientRef.sendMessage("/app/topbar/file/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex].commentList[commentIndex]));
       })
 
