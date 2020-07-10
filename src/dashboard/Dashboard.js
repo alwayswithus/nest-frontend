@@ -1864,7 +1864,6 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    console.log("users", this.state.users);
     return (
       <div className="Dashboard">
         <SockJsClient

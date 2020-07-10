@@ -95,8 +95,6 @@ class File extends Component {
         this.setState({
             selectedFile: files[0]
         })
-
-        console.log(files[0].type)
         
         if (files[0].length !== 0 && (files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             || files[0].type === 'image/png' || files[0].type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'

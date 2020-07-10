@@ -85,13 +85,11 @@ class KanbanMain extends Component {
       ApiService.fetchKanbanCK(this.props.match.params.projectNo, sessionStorage.getItem("authUserNo")).then(
         (response) => {
           if(!response.data.data.ck){
-            console.log("경고!!"+response.data.data.ck)
             this.setState({
               projectck: true
             })
             const { history } = this.props;
             history.push("/nest/dashboard");
-            console.log("작동")
           }
         }
       );
@@ -970,6 +968,8 @@ class KanbanMain extends Component {
 
   //task에 tag 삭제하기
   callbackDeleteTag(tagNo, taskListNo, taskNo) {
+
+    
     const taskListIndex = this.state.taskList.findIndex(
       (taskList) => taskList.taskListNo === taskListNo
     );
@@ -987,7 +987,7 @@ class KanbanMain extends Component {
       taskIndex: taskIndex,
       tagIndex: tagIndex,
       socketType: "taskTagDelete",
-      userNo: sessionStorage.getItem("authUserNo"),
+      authUserNo: sessionStorage.getItem("authUserNo"),
       projectNo: this.props.match.params.projectNo,
       members: this.state.projectMembers
     }
@@ -1748,6 +1748,9 @@ class KanbanMain extends Component {
         })
       )
 
+    const taskListNo = this.state.taskList[taskListIndex].taskListNo;
+    const taskNo = this.state.taskList[taskListIndex].tasks[taskIndex].taskNo;
+
     const data = {
       from: from,
       to: to,
@@ -1755,7 +1758,10 @@ class KanbanMain extends Component {
       taskIndex: taskIndex,
       socketType: "dateUpdate",
       projectNo: this.props.match.params.projectNo,
-      members: this.state.projectMembers
+      members: this.state.projectMembers,
+      authUserNo:sessionStorage.getItem("authUserNo"),
+      taskListNo:taskListNo,
+      taskNo:taskNo
     }
 
     if (from === 'Invalid date') {
@@ -1791,6 +1797,7 @@ class KanbanMain extends Component {
       body: JSON.stringify(task)
     })
     this.clientRef.sendMessage("/app/all", JSON.stringify(data));
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(data));
 
   }
 
@@ -1930,10 +1937,12 @@ class KanbanMain extends Component {
       color: color,
       taskListIndex: taskListIndex,
       taskIndex: taskIndex,
+      taskListNo:taskListNo,
       taskNo: taskNo,
       socketType: "labelUpdate",
       projectNo: this.props.match.params.projectNo,
-      members: this.state.projectMembers
+      members: this.state.projectMembers,
+      authUserNo: sessionStorage.getItem("authUserNo")
     }
 
     let newTaskList = update(this.state.taskList, {
@@ -1956,7 +1965,7 @@ class KanbanMain extends Component {
     })
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(data));
-    
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(data))
   }
 
   // Project Setting button Click Function
@@ -2999,7 +3008,6 @@ class KanbanMain extends Component {
     }
 
     if (socketData.socketType == "inviteUser") {
-      console.log("socketData", socketData);
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if (projectIndex !== -1) {
@@ -4288,6 +4296,7 @@ class KanbanMain extends Component {
           })
     
         } else if(socketData.socketType === "taskTagDelete"){
+
           fetch(`${API_URL}/api/tag/delete/${socketData.taskNo}/${socketData.tagNo}`, {
             method: "delete"
           })
@@ -4624,7 +4633,7 @@ class KanbanMain extends Component {
     });
   }
   render() {
-    console.log("projectMembers", this.state.projectMembers);
+
     return (
       <>
         <SockJsClient
