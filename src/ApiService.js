@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// const DASHBOARD_API_URL = "http://192.168.1.223:8080/nest";
+// const DASHBOARD_API_URL = "http://localhost:8080/nest";
 
 class ApiService {
     fetchDashboard() {
