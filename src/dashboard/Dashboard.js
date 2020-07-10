@@ -1311,7 +1311,6 @@ export default class Dashboard extends React.Component {
     }
 
     else if (socketData.socketType == "userAdd") {
-      console.log("socketData", socketData);
       if (sessionStorage.getItem("authUserNo") == socketData.member.userNo) {
         socketData.newProject["roleNo"] = 3;
 
