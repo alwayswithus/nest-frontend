@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ApiService from '../ApiService';
 import ApiNotification from '../notification/ApiNotification';
 import ApiHistory from '../project/topBar/ApiHistory';
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   'Content-Type': 'application/json'
 }
@@ -419,12 +419,16 @@ export default class Dashboard extends React.Component {
       membersNo.push(member.userNo);
     })
 
+    let memberInfo = {
+      memberEmail:memberEmail,
+      memberName:memberName
+    }
     ApiHistory.fetchInsertHistory(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
       this.state.project.members, 
       "projectMemberInvite", 
-      memberName, 
+      memberInfo, 
       projectNo,
       this.clientRef)
 
@@ -828,14 +832,12 @@ export default class Dashboard extends React.Component {
       this.setState({
         isMemberEmailValid: true,
         inviteMemberEmail: event.target.value,
-        isNotEmptyValid: false
       })
     }
     else {
       this.setState({
         isMemberEmailValid: false,
         inviteMemberEmail: event.target.value,
-        isNotEmptyValid: true
       })
     }
   }

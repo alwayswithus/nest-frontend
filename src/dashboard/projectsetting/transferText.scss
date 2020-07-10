@@ -4,11 +4,13 @@
 
         img {
             width:40px;
+            height: 40px;
             border-radius: 50px;
             margin:2%;
         }
         .img-authUser {
             margin-right: 20px;
+            object-fit: cover;
         }
 
         .img-roleUser {

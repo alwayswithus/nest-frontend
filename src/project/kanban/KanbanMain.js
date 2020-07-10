@@ -19,7 +19,7 @@ import '../../dashboard/projectsetting/projectset.scss';
 import ApiHistory from "../topBar/ApiHistory";
 import CheckList from "./task/CheckList";
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 const API_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -476,9 +476,9 @@ class KanbanMain extends Component {
           projectNo: projectNo,
           taskCount: this.state.taskCount,
           completedTask: this.state.completedTask,
-          members: this.state.projectMembers
+          members: this.state.projectMembers,
+          authUserNo:sessionStorage.getItem("authUserNo")
         };
-
         const taskName = json.data.taskContents
         ApiHistory.fetchInsertHistory(
           sessionStorage.getItem("authUserNo"),
@@ -2388,12 +2388,17 @@ class KanbanMain extends Component {
       membersNo.push(member.userNo);
     })
 
+    let memberInfo = {
+      memberEmail:memberEmail,
+      memberName:memberName
+    }
+
     ApiHistory.fetchInsertHistory(
       sessionStorage.getItem("authUserNo"),
       sessionStorage.getItem("authUserName"),
       this.state.project.members,
       "projectMemberInvite",
-      memberName,
+      memberInfo,
       projectNo,
       this.clientRef)
 
@@ -2999,7 +3004,6 @@ class KanbanMain extends Component {
     }
 
     if (socketData.socketType == "inviteUser") {
-      console.log("socketData", socketData);
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
       if (projectIndex !== -1) {
@@ -4450,10 +4454,12 @@ class KanbanMain extends Component {
               projectNo:socketData.projectNo
             }
   
+            let newhistoryState = update(this.state.history,{
+            })
+            newhistoryState.splice(0,0,newHistoryData)
+            
             this.setState({
-              history : update(this.state.history,{
-                $push:[newHistoryData]
-              })
+              history : newhistoryState,
             })
         } else if(socketData.historyType === "taskListInsert"){
           let newHistoryData = {
@@ -4462,10 +4468,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskListDelete"){
           let newHistoryData = {
@@ -4474,10 +4482,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskDateUpdate"){
           let newHistoryData = {
@@ -4486,10 +4496,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskMemberJoin"){
           let newHistoryData = {
@@ -4498,10 +4510,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "checklistInsert"){
           let newHistoryData = {
@@ -4510,10 +4524,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "checklistStateUpdate"){
           let newHistoryData = {
@@ -4522,10 +4538,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskDragNdrop"){
           let newHistoryData = {
@@ -4534,10 +4552,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskListDragNdrop"){
           let newHistoryData = {
@@ -4546,10 +4566,12 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskStateUpdate"){
           let newHistoryData = {
@@ -4558,22 +4580,27 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskInsert"){
+         
           let newHistoryData = {
             logContents:socketData.senderName+" 님이"+socketData.actionName+" 업무를 추가하였습니다.",
             logDate:socketData.historyDate,
             projectNo:socketData.projectNo
           }
-  
+
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
           this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+            history : newhistoryState,
           })
         } else if(socketData.historyType === "taskDelete"){
           let newHistoryData = {
@@ -4582,12 +4609,52 @@ class KanbanMain extends Component {
             projectNo:socketData.projectNo
           }
   
-          this.setState({
-            history : update(this.state.history,{
-              $push:[newHistoryData]
-            })
+          let newhistoryState = update(this.state.history,{
           })
-        } 
+          newhistoryState.splice(0,0,newHistoryData)
+          
+          this.setState({
+            history : newhistoryState,
+          })
+        } else if(socketData.historyType === "projectMemberJoin"){
+          let newHistoryData = {
+            logContents:socketData.senderName+" 님이"+socketData.actionName+" 님을 프로젝트에 참여시켰습니다.",
+            logDate:socketData.historyDate,
+            projectNo:socketData.projectNo
+          }
+
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
+          this.setState({
+            history : newhistoryState,
+          })
+        } else if(socketData.historyType === "projectMemberInvite"){
+          
+          let newHistoryData = {}
+          if(socketData.actionName.memberName == ""){
+            newHistoryData = {
+              logContents:socketData.senderName+" 님이"+ socketData.actionName.memberEmail +" 님을 프로젝트에 참여시켰습니다.",
+              logDate:socketData.historyDate,
+              projectNo:socketData.projectNo
+            }
+          } else {
+            newHistoryData = {
+              logContents:socketData.senderName+" 님이"+socketData.actionName.memberName+" 님을 프로젝트에 참여시켰습니다.",
+              logDate:socketData.historyDate,
+              projectNo:socketData.projectNo
+            }
+          }
+
+          let newhistoryState = update(this.state.history,{
+          })
+          newhistoryState.splice(0,0,newHistoryData)
+          
+          this.setState({
+            history : newhistoryState,
+          })
+        }
       }else{
         return
       }
@@ -4624,7 +4691,7 @@ class KanbanMain extends Component {
     });
   }
   render() {
-    console.log("projectMembers", this.state.projectMembers);
+    // console.log("projectMembers", this.state.projectMembers);
     return (
       <>
         <SockJsClient

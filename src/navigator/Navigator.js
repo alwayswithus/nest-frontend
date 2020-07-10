@@ -7,7 +7,7 @@ import NavNotice from './NavNotice';
 import SockJsClient from "react-stomp";
 import ApiService from '../ApiService';
 
-const API_URL = "http://192.168.1.223:8080/nest";
+const API_URL = "http://localhost:8080/nest";
 
 export default class Navigator extends React.Component {
 
