@@ -1902,8 +1902,18 @@ class myCalendar extends Component {
     }
     else if(socketData.socketType === "roleChange") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
+
       if(projectIndex !== -1) {
         const userIndex = this.state.projects[projectIndex].members.findIndex(member => member.userNo == socketData.userNo);
+
+        const projectsIndex = this.state.taskList.findIndex(taskList => taskList.projectNo == socketData.projectNo);
+
+        let newTaskList = update(this.state.taskList, {
+          [projectsIndex]: {
+            authUserRole: {$set:socketData.roleNo}
+          }
+        })
+
         let newProject = update(this.state.projects, {
           [projectIndex]: {
             roleNo: { $set: socketData.roleNo },
@@ -1916,7 +1926,8 @@ class myCalendar extends Component {
         })
 
         this.setState({
-          projects: newProject
+          projects: newProject,
+          taskList:newTaskList
         })
       }
     }
