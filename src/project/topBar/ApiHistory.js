@@ -17,7 +17,7 @@ class ApiHistory {
   ) {
     let userArray = [];
     receiver.map((user) => userArray.push(user.userNo));
-
+    console.log("????????")
     const historyData = {
       senderNo: senderNo, // 보내는사람 한명
       senderName: senderName,
@@ -26,10 +26,9 @@ class ApiHistory {
       historyDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       actionName: actionName, // 행위
       projectNo: projectNo,
+      authUserNo: sessionStorage.getItem("authUserNo")
     };
     
-    console.log(historyData.historyDate)
-
     clientRef.sendMessage("/app/history/all",JSON.stringify(historyData));
     return fetch(`${API_URL}/api/history/insertHistory`, {
       method: "post",

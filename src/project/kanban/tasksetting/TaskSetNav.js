@@ -36,7 +36,7 @@ class Navigation extends Component {
             </li>
             <li className="nav-item">
             <Link className="nav-link" to = {`/nest/dashboard/${this.props.projectNo}/kanbanboard/task/${this.props.params.taskNo}/file`}>
-              <p style={this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/file' ? StyledBottom : Styled} >파일 & 링크</p>
+              <p style={this.props.match.path === '/nest/dashboard/:projectNo/kanbanboard/task/:taskNo/file' ? StyledBottom : Styled} >파일</p>
             </Link>
             </li>
           </ul> :
