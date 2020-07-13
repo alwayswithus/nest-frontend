@@ -17,7 +17,7 @@ class ApiHistory {
   ) {
     let userArray = [];
     receiver.map((user) => userArray.push(user.userNo));
-    console.log("????????")
+
     const historyData = {
       senderNo: senderNo, // 보내는사람 한명
       senderName: senderName,

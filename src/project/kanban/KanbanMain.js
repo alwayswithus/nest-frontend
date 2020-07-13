@@ -1882,8 +1882,8 @@ class KanbanMain extends Component {
 
   //업무 내용 수정하기
   callbackUpdateTaskContents(taskContents, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     ApiHistory.fetchInsertHistory(
       sessionStorage.getItem("authUserNo"),
@@ -1910,7 +1910,9 @@ class KanbanMain extends Component {
             projectNo: {$set:this.props.match.params.projectNo},
             members: {$set:this.state.projectMembers},
             taskListIndex:{$set:taskListIndex},
-            taskIndex:{$set:taskIndex}
+            taskIndex:{$set:taskIndex},
+            taskListNo:{$set:taskListNo},
+            taskNo:{$set: taskNo}
           }
         }
       }
@@ -1920,7 +1922,7 @@ class KanbanMain extends Component {
     })
 
     this.clientRef.sendMessage("/app/all",JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex]))
-
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(newTaskList[taskListIndex].tasks[taskIndex]))
     fetch(`${API_URL}/api/tasksetting/task/${taskNo}`, {
       method: 'post',
       headers: API_HEADERS,
@@ -1931,8 +1933,11 @@ class KanbanMain extends Component {
   }
   // 라벨 색 수정하기
   callbackUpdateTaskLabel(color, taskListNo, taskNo) {
-    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo === taskListNo);
-    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo === taskNo);
+    
+    
+    const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == taskListNo);
+    
+    const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == taskNo);
 
     let data = {
       color: color,
@@ -1941,6 +1946,18 @@ class KanbanMain extends Component {
       taskListNo:taskListNo,
       taskNo: taskNo,
       socketType: "labelUpdate",
+      projectNo: this.props.match.params.projectNo,
+      members: this.state.projectMembers,
+      authUserNo: sessionStorage.getItem("authUserNo")
+    }
+
+    let calendardata = {
+      color: color,
+      taskListIndex: taskListIndex,
+      taskIndex: taskIndex,
+      taskListNo:taskListNo,
+      taskNo: taskNo,
+      socketType: "CalendarlabelUpdate",
       projectNo: this.props.match.params.projectNo,
       members: this.state.projectMembers,
       authUserNo: sessionStorage.getItem("authUserNo")
@@ -1966,7 +1983,7 @@ class KanbanMain extends Component {
     })
 
     this.clientRef.sendMessage("/app/all", JSON.stringify(data));
-    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(data))
+    this.clientRef.sendMessage("/app/calendar/all", JSON.stringify(calendardata))
   }
 
   // Project Setting button Click Function
@@ -2667,6 +2684,7 @@ class KanbanMain extends Component {
   }
 
   receiveKanban(socketData) {
+    
     if(socketData.socketType == "descChange") {
       const projectIndex = this.state.projects.findIndex(project => project.projectNo == socketData.projectNo);
 
@@ -4158,6 +4176,7 @@ class KanbanMain extends Component {
       });
   
       }else if(socketData.authUserNo !== sessionStorage.getItem("authUserNo")){
+
         if(socketData.socketType === 'comment'){
             let newData = update(this.state.taskList, {
               [socketData.taskListIndex] : {
@@ -4415,10 +4434,14 @@ class KanbanMain extends Component {
               taskList:newTaskList
             })
         } else if(socketData.socketType === "taskContentsUpdate"){
+
+          const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo);
+          const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == socketData.taskNo);
+
           let newTaskList = update(this.state.taskList, {
-            [socketData.taskListIndex]: {
+            [taskListIndex]: {
               tasks: {
-                [socketData.taskIndex]: {
+                [taskIndex]: {
                   taskContents: {$set: socketData.taskContents},
                 }
               }
@@ -4458,6 +4481,52 @@ class KanbanMain extends Component {
             this.setState({
               taskList: newTaskList,
             });
+        } else if(socketData.socketType === "CalendarlabelUpdate") {
+
+          const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo);
+          const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == socketData.taskNo);
+
+          let newTaskList = update(this.state.taskList, {
+            [taskListIndex]:{
+              tasks:{
+                [taskIndex]:{
+                  taskLabel : {$set:socketData.color}
+                }
+              }
+            }
+          })
+
+          this.setState({
+            taskList:newTaskList
+          })
+        }  else if(socketData.socketType === 'CalendardateUpdate'){
+          if(socketData.from === 'Invalid date'){
+            socketData.from = undefined;
+          }
+          if(socketData.to === 'Invalid date'){
+            socketData.to = undefined;
+          }
+          
+          const taskListIndex = this.state.taskList.findIndex(taskList => taskList.taskListNo == socketData.taskListNo);
+          const taskIndex = this.state.taskList[taskListIndex].tasks.findIndex(task => task.taskNo == socketData.taskNo);
+          
+          let newTaskList = update(this.state.taskList, {
+            [taskListIndex]: {
+              tasks: {
+                [taskIndex]: {
+                  taskStart: {
+                    $set: moment(socketData.from).format("YYYY-MM-DD HH:mm"),
+                  },
+                  taskEnd: {
+                    $set: moment(socketData.to).format("YYYY-MM-DD HH:mm"),
+                  },
+                },
+              },
+            },
+          });
+          this.setState({
+            taskList:newTaskList
+          })
         } else if(socketData.historyType === "taskContentsUpdate"){
             let newHistoryData = {
               logContents:socketData.senderName+" 님이"+socketData.actionName+" 으로 업무이름을 수정하셨습니다.",
