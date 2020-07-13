@@ -51,10 +51,8 @@ class Editor extends Component {
    */
   Editor.modules = {
     toolbar: [
-      [{size: []}],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, 
-       {'indent': '-1'}, {'indent': '+1'}],
+      [{'list': 'ordered'}, {'list': 'bullet'}, ],
     ],
     clipboard: {
       // toggle to add extra line breaks when pasting HTML:
