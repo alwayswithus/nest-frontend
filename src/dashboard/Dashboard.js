@@ -432,6 +432,14 @@ export default class Dashboard extends React.Component {
       projectNo,
       this.clientRef)
 
+      ApiNotification.fetchInsertNotice(
+        sessionStorage.getItem("authUserNo"),
+        sessionStorage.getItem("authUserName"),
+        this.state.project.members,
+        "projectJoin",
+        null,
+        projectNo
+      )
     fetch(`${API_URL}/api/settinguser/invite`, {
       method: 'post',
       headers: API_HEADERS,

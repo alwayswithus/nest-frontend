@@ -312,7 +312,7 @@ class Setting extends Component {
 
                     {/* 업무속성 리스트 */}
                     <div className="Home">
-                        <div style={{ fontSize: '1.3rem', margin: '4%', color: '#27B6BA' }}><b>설명 추가</b></div>
+                        <div style={{ fontSize: '1.3rem', margin: '4%', color: '#27B6BA' }}><b>업무 설정</b></div>
                         <hr style={{ marginBottom: '20px', color: '#555555' }} />
                         <ul> 
                             {/* 업무 마감일 */}
